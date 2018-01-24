@@ -1,6 +1,9 @@
 package com.example.jason.route_application.view;
 
 import android.annotation.SuppressLint;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
@@ -20,9 +23,13 @@ import android.widget.Toast;
 
 import com.example.jason.route_application.R;
 import com.example.jason.route_application.controller.RouteActivityController;
+import com.example.jason.route_application.model.InformationFetcher;
+import com.example.jason.route_application.model.RouteActivityJobScheduler;
+import com.example.jason.route_application.model.pojos.ApiResponse;
 import com.example.jason.route_application.model.pojos.OutGoingRoute;
 import com.example.jason.route_application.model.pojos.SingleDrive;
 import com.example.jason.route_application.model.pojos.SingleOrganizedRoute;
+import com.google.android.gms.common.api.Api;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -41,10 +48,6 @@ public class RouteActivity extends AppCompatActivity {
     private final String log_tag = "RouteActivityLog";
 
     private RouteActivityController controller;
-
-
-    private OkHttpClient okHttpClient;
-    private final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     private LayoutInflater layoutInflater;
     private RecyclerView recyclerView;
@@ -134,6 +137,7 @@ public class RouteActivity extends AppCompatActivity {
         requestError = false;
         errorMessage = "";
         controller.displayMessage("loadingBar", true, "");
+
         controller.getRoute();
 
     }
@@ -158,69 +162,21 @@ public class RouteActivity extends AppCompatActivity {
 
     };
 
-    public void sendUnOrganizedRoute(){
+    public void doSomething(ApiResponse apiResponse){
 
-        final Gson gson = new Gson();
+    }
 
-        String url = "http://217.103.231.118:8080/webapi/myresource";
+    public void beginGetRouteJob(){
 
-        okHttpClient = new OkHttpClient();
+        ComponentName scheduler = new ComponentName(this, RouteActivityJobScheduler.class);
 
-        RequestBody body = RequestBody
-                .create(JSON, gson.toJson(outGoingRoute));
+        JobInfo getRouteJobInfo = new JobInfo.Builder(1, scheduler)
+                .setPersisted(true)
+                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY).build();
 
-        Request request = new Request.Builder()
-                .url(url)
-                .post(body)
-                .build();
+        JobScheduler jobScheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
 
-        okHttpClient.newCall(request).enqueue(new Callback() {
-
-            @Override
-            public void onFailure(Call call, IOException e) {
-                requestError = true;
-                errorMessage = "Request Failed: " +e.getMessage();
-                handler.sendEmptyMessage(0);
-//                Log.d(log_tag, "No answer from api: " +e.getMessage());
-            }
-
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-
-                String routeApiResponse = response.body().string();
-
-//                Log.d(log_tag, routeApiResponse);
-
-                if (response.isSuccessful()) {
-
-                    singleOrganizedRoute = gson.fromJson(routeApiResponse, SingleOrganizedRoute.class);
-
-//                    Log.d(log_tag, singleOrganizedRoute.getRouteCode());
-//                    Log.d(log_tag, String.valueOf(singleOrganizedRoute.getPrivateAddressesCount()));
-//                    Log.d(log_tag, String.valueOf(singleOrganizedRoute.getBusinessAddressesCount()));
-//                    Log.d(log_tag, String.valueOf(singleOrganizedRoute.getWrongAddressesCount()));
-//                    Log.d(log_tag, "");
-
-//                    for(int i=0; i<singleOrganizedRoute.getRouteList().size(); i++) {
-//                        Log.d(log_tag, singleOrganizedRoute.getRouteList().get(i).getOriginFormattedAddress().getCompletedAddress());
-//                        Log.d(log_tag, singleOrganizedRoute.getRouteList().get(i).getDestinationFormattedAddress().getCompletedAddress());
-//                        Log.d(log_tag, singleOrganizedRoute.getRouteList().get(i).getDriveDurationHumanReadable());
-//                        Log.d(log_tag, "");
-//                    }
-
-                    handler.sendEmptyMessage(0);
-                }else{
-                    requestError = true;
-                    errorMessage = "Response was not successful";
-                    handler.sendEmptyMessage(0);
-//                    Log.d("RouteCalculator", "Response is not successful: " +routeApiResponse);
-                }
-
-            }
-
-        });
-
+        jobScheduler.schedule(getRouteJobInfo);
     }
 
     public void setUpAdapter() {
