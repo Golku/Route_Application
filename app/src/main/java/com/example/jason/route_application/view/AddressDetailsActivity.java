@@ -51,8 +51,8 @@ public class AddressDetailsActivity extends AppCompatActivity {
 
     @Override
     public void onStop() {
-        super.onStop();
         active = false;
+        super.onStop();
     }
 
     @Override

@@ -3,8 +3,6 @@ package com.example.jason.route_application.view;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,7 +18,6 @@ import android.widget.Toast;
 import com.example.jason.route_application.R;
 import com.example.jason.route_application.controller.RouteActivityController;
 import com.example.jason.route_application.model.InformationFetcher;
-import com.example.jason.route_application.model.pojos.ApiResponse;
 import com.example.jason.route_application.model.pojos.OutGoingRoute;
 import com.example.jason.route_application.model.pojos.SingleDrive;
 import com.example.jason.route_application.model.pojos.SingleOrganizedRoute;
@@ -51,6 +48,12 @@ public class RouteActivity extends AppCompatActivity {
     private String errorMessage;
 
     private InformationFetcher informationFetcher;
+
+    @Override
+    public void onStop() {
+        informationFetcher.cancel(true);
+        super.onStop();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,48 +125,41 @@ public class RouteActivity extends AppCompatActivity {
 
         requestError = false;
         errorMessage = "";
-        controller.displayMessage("loadingBar", true, "");
 
         controller.getRoute();
 
     }
 
-    @SuppressLint("HandlerLeak")
-    Handler handler = new Handler(){
-
-        @Override
-        public void handleMessage(Message message) {
-
-            controller.displayMessage("loadingBar", false, "");
-
-            if(requestError){
-
-                controller.displayMessage("toast", true, errorMessage);
-
-            }else{
-
-                setUpAdapter();
-            }
-        }
-
-    };
-
-
-    public void beginGetRouteJob(){
+    @SuppressLint("StaticFieldLeak")
+    public void beginGetRouteTask(){
 
         informationFetcher = new InformationFetcher(){
 
             @Override
-            protected void onPostExecute(ApiResponse apiResponse) {
-                controller.processApiResponse(apiResponse);
+            protected void onPreExecute() {
+                controller.displayMessage("loadingBar", true, "");
+            }
+
+            @Override
+            protected void onProgressUpdate(String... message) {
+                controller.displayMessage("toast", false, String.valueOf(message));
+            }
+
+            @Override
+            protected void onPostExecute(SingleOrganizedRoute singleOrganizedRoute) {
+                controller.displayMessage("loadingBar", false, "");
+                controller.setUpRoute(singleOrganizedRoute);
             }
 
         };
 
-        informationFetcher.execute();
+        informationFetcher.execute(outGoingRoute);
     }
 
-    public void setUpAdapter() {
+    public void setUpAdapter(SingleOrganizedRoute route) {
+
+        this.singleOrganizedRoute = route;
+
         recyclerView.setVisibility(View.VISIBLE);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         addressesAdapter = new CustomAdapter();

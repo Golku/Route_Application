@@ -3,6 +3,7 @@ package com.example.jason.route_application.controller;
 import com.example.jason.route_application.model.InformationFetcher;
 import com.example.jason.route_application.model.pojos.ApiResponse;
 import com.example.jason.route_application.model.pojos.FormattedAddress;
+import com.example.jason.route_application.model.pojos.SingleOrganizedRoute;
 import com.example.jason.route_application.view.RouteActivity;
 
 public class RouteActivityController {
@@ -16,11 +17,11 @@ public class RouteActivityController {
     }
 
     public void getRoute(){
-        routeActivity.beginGetRouteJob();
+        routeActivity.beginGetRouteTask();
     }
 
-    public void processApiResponse(ApiResponse apiResponse){
-
+    public void setUpRoute(SingleOrganizedRoute singleOrganizedRoute){
+        routeActivity.setUpAdapter(singleOrganizedRoute);
     }
 
     public void displayMessage(String type, boolean visible, String message){

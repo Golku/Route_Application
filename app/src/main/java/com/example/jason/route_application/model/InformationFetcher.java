@@ -2,97 +2,130 @@ package com.example.jason.route_application.model;
 
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.example.jason.route_application.model.pojos.ApiResponse;
+import com.example.jason.route_application.model.pojos.OutGoingRoute;
+import com.example.jason.route_application.model.pojos.SingleOrganizedRoute;
 import com.google.gson.Gson;
 
 import java.io.IOException;
 
-import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class InformationFetcher extends AsyncTask<Void, Void, ApiResponse> {
+public class InformationFetcher extends AsyncTask<OutGoingRoute, String, SingleOrganizedRoute> {
+
+    private final String log_tag = "InformationFetcher";
+
+    private final String submitRouteUrl = "http://217.103.231.118:8080/webapi/myresource";
+    private final String getRouteUrl = "http://217.103.231.118:8080/webapi/myresource/";
 
     private OkHttpClient okHttpClient;
+
+    private final Gson gson = new Gson();
     private final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
+    private String routeCode;
 
+    private boolean resubmitRoute;
+    private boolean organizingRoute;
+
+    private SingleOrganizedRoute singleOrganizedRoute;
 
     @Override
-    protected ApiResponse doInBackground(Void... params) {
-
-        //this method will be running on background thread so don't update UI frome here
-        //do your long running http tasks here,you dont want to pass argument and u can access the parent class' variable url over here
-
-        final Gson gson = new Gson();
-
-        ApiResponse apiResponse;
-
-        String url = "http://217.103.231.118:8080/webapi/myresource";
+    protected SingleOrganizedRoute doInBackground(OutGoingRoute... outGoingRoute) {
 
         okHttpClient = new OkHttpClient();
 
-        RequestBody body = RequestBody
+        this.routeCode = outGoingRoute[0].getRouteCode();
+
+        //keeps submitting the route for organizing.
+        do{
+            sendUnorganizedRoute(outGoingRoute[0]);
+            //add a time break here. retry every 10 second
+            //if here with counter to stop after 3 try
+        }while(resubmitRoute);
+
+        //check if route was submitted and show appropriated message
+        publishProgress("Route received by the server and it's being organized");
+
+        //keeps asking for the organized route until it's received
+        do{
+            askForOrganizedRoute();
+            //add a time break here. retry every 10 second
+            //if here with counter to stop after 3 try
+        }while(organizingRoute);
+
+        return singleOrganizedRoute;
+    }
+
+    private void sendUnorganizedRoute(OutGoingRoute outGoingRoute){
+
+        ApiResponse apiResponse = null;
+
+        RequestBody requestBody = RequestBody
                 .create(JSON, gson.toJson(outGoingRoute));
 
         Request request = new Request.Builder()
-                .url(url)
-                .post(body)
+                .url(submitRouteUrl)
+                .post(requestBody)
                 .build();
 
-        okHttpClient.newCall(request).enqueue(new Callback() {
+        Response response;
 
-            @Override
-            public void onFailure(Call call, IOException e) {
-                requestError = true;
-                errorMessage = "Request Failed: " +e.getMessage();
-                handler.sendEmptyMessage(0);
-//                Log.d(log_tag, "No answer from api: " +e.getMessage());
+        try {
+            response = okHttpClient.newCall(request).execute();
+            apiResponse = gson.fromJson(response.body().string(), ApiResponse.class);
+        } catch (IOException e) {
+            resubmitRoute = true;
+            e.printStackTrace();
+        }
+
+        if(apiResponse != null){
+            if(apiResponse.isOrganizingRoute()){
+                resubmitRoute = false;
             }
+        }else{
+            resubmitRoute = true;
+        }
 
+    }
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
+    private void askForOrganizedRoute(){
 
-                String routeApiResponse = response.body().string();
+        ApiResponse apiResponse = null;
 
-//                Log.d(log_tag, routeApiResponse);
+        String url = getRouteUrl+routeCode;
 
-                if (response.isSuccessful()) {
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
 
-                    apiResponse = gson.fromJson(routeApiResponse, ApiResponse.class);
+        Response response;
 
-//                    Log.d(log_tag, singleOrganizedRoute.getRouteCode());
-//                    Log.d(log_tag, String.valueOf(singleOrganizedRoute.getPrivateAddressesCount()));
-//                    Log.d(log_tag, String.valueOf(singleOrganizedRoute.getBusinessAddressesCount()));
-//                    Log.d(log_tag, String.valueOf(singleOrganizedRoute.getWrongAddressesCount()));
-//                    Log.d(log_tag, "");
+        try {
+            response = okHttpClient.newCall(request).execute();
+            apiResponse = gson.fromJson(response.body().string(), ApiResponse.class);
+        } catch (IOException e) {
+            organizingRoute = true;
+            e.printStackTrace();
+        }
 
-//                    for(int i=0; i<singleOrganizedRoute.getRouteList().size(); i++) {
-//                        Log.d(log_tag, singleOrganizedRoute.getRouteList().get(i).getOriginFormattedAddress().getCompletedAddress());
-//                        Log.d(log_tag, singleOrganizedRoute.getRouteList().get(i).getDestinationFormattedAddress().getCompletedAddress());
-//                        Log.d(log_tag, singleOrganizedRoute.getRouteList().get(i).getDriveDurationHumanReadable());
-//                        Log.d(log_tag, "");
-//                    }
-
-                    handler.sendEmptyMessage(0);
-                }else{
-                    requestError = true;
-                    errorMessage = "Response was not successful";
-                    handler.sendEmptyMessage(0);
-//                    Log.d("RouteCalculator", "Response is not successful: " +routeApiResponse);
-                }
-
+        if(apiResponse != null){
+            if(apiResponse.isOrganizingRoute()){
+                organizingRoute = true;
+            }else{
+                singleOrganizedRoute = apiResponse.getOrganizedRoute();
+                organizingRoute = false;
             }
+        }else{
+            organizingRoute = false;
+        }
 
-        });
-
-        return null;
     }
 
 
