@@ -1,9 +1,6 @@
 package com.example.jason.route_application.view;
 
 import android.annotation.SuppressLint;
-import android.app.job.JobInfo;
-import android.app.job.JobScheduler;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
@@ -12,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,24 +20,12 @@ import android.widget.Toast;
 import com.example.jason.route_application.R;
 import com.example.jason.route_application.controller.RouteActivityController;
 import com.example.jason.route_application.model.InformationFetcher;
-import com.example.jason.route_application.model.RouteActivityJobScheduler;
 import com.example.jason.route_application.model.pojos.ApiResponse;
 import com.example.jason.route_application.model.pojos.OutGoingRoute;
 import com.example.jason.route_application.model.pojos.SingleDrive;
 import com.example.jason.route_application.model.pojos.SingleOrganizedRoute;
-import com.google.android.gms.common.api.Api;
-import com.google.gson.Gson;
 
-import java.io.IOException;
 import java.util.ArrayList;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 public class RouteActivity extends AppCompatActivity {
 
@@ -65,6 +49,8 @@ public class RouteActivity extends AppCompatActivity {
     private ProgressBar loadingBar;
     private boolean requestError;
     private String errorMessage;
+
+    private InformationFetcher informationFetcher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,21 +148,19 @@ public class RouteActivity extends AppCompatActivity {
 
     };
 
-    public void doSomething(ApiResponse apiResponse){
-
-    }
 
     public void beginGetRouteJob(){
 
-        ComponentName scheduler = new ComponentName(this, RouteActivityJobScheduler.class);
+        informationFetcher = new InformationFetcher(){
 
-        JobInfo getRouteJobInfo = new JobInfo.Builder(1, scheduler)
-                .setPersisted(true)
-                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY).build();
+            @Override
+            protected void onPostExecute(ApiResponse apiResponse) {
+                controller.processApiResponse(apiResponse);
+            }
 
-        JobScheduler jobScheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+        };
 
-        jobScheduler.schedule(getRouteJobInfo);
+        informationFetcher.execute();
     }
 
     public void setUpAdapter() {

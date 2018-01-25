@@ -1,5 +1,6 @@
 package com.example.jason.route_application.controller;
 
+import com.example.jason.route_application.model.InformationFetcher;
 import com.example.jason.route_application.model.pojos.ApiResponse;
 import com.example.jason.route_application.model.pojos.FormattedAddress;
 import com.example.jason.route_application.view.RouteActivity;
@@ -7,18 +8,19 @@ import com.example.jason.route_application.view.RouteActivity;
 public class RouteActivityController {
 
     private RouteActivity routeActivity;
-    public static ApiResponse apiResponse;
+    public ApiResponse apiResponse;
 
     public RouteActivityController(RouteActivity routeActivity) {
         this.routeActivity = routeActivity;
+
     }
 
     public void getRoute(){
         routeActivity.beginGetRouteJob();
     }
 
-    public void processApiResponse(){
-        routeActivity.doSomething(apiResponse);
+    public void processApiResponse(ApiResponse apiResponse){
+
     }
 
     public void displayMessage(String type, boolean visible, String message){
