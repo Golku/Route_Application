@@ -6,7 +6,7 @@ import com.example.jason.route_application_kotlin.data.pojos.AddressItem;
  * Created by Jason on 07-Feb-18.
  */
 
-interface MvpRouteInput {
+public interface MvpRouteInput {
 
     interface View{
 
@@ -24,7 +24,9 @@ interface MvpRouteInput {
 
     }
 
-    interface Interactor{
+    interface Interactor {
+
+
 
     }
 

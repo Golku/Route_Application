@@ -1,5 +1,8 @@
 package com.example.jason.route_application_kotlin.features.routeInput;
 
+import com.example.jason.route_application_kotlin.interactors.RouteInputInteractor;
+
+import dagger.Binds;
 import dagger.Module;
 
 /**
@@ -7,7 +10,15 @@ import dagger.Module;
  */
 
 @Module
-public class RouteInputModule {
+public abstract class RouteInputModule {
 
+    @Binds
+    public abstract MvpRouteInput.View provideView(RouteInputActivity view);
+
+    @Binds
+    public abstract MvpRouteInput.Presenter providePresenter(RouteInputPresenter presenter);
+
+    @Binds
+    public abstract MvpRouteInput.Interactor provideInteractor(RouteInputInteractor interactor);
 
 }
