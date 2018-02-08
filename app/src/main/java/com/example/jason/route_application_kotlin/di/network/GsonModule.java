@@ -1,7 +1,9 @@
 package com.example.jason.route_application_kotlin.di.network;
 
+import com.example.jason.route_application_kotlin.di.AppScope;
 import com.google.gson.Gson;
 import dagger.Module;
+import dagger.Provides;
 import okhttp3.MediaType;
 
 /**
@@ -11,8 +13,13 @@ import okhttp3.MediaType;
 @Module
 public class GsonModule {
 
-    private final Gson gson = new Gson();
-    private final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+//    private final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
+    @Provides
+    @AppScope
+    public Gson provideGson (){
+        Gson gson = new Gson();
+        return gson;
+    }
 
 }
