@@ -14,7 +14,7 @@ import retrofit2.Retrofit;
  */
 @AppScope
 @Component(modules = {GsonModule.class, NetworkModule.class, AddressFormatterModule.class})
-public interface AppComponent {
+public interface  AppComponent {
     Retrofit getRetrofit();
     Gson getGson();
     AddressFormatter getAddressFormatter();

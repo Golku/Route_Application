@@ -13,8 +13,8 @@ public class RouteApplication extends Application {
 
     private AppComponent component;
 
-    public static Application get(Activity activity) {
-        return activity.getApplication();
+    public static RouteApplication get(Activity activity) {
+        return (RouteApplication) activity.getApplication();
     }
 
     @Override
