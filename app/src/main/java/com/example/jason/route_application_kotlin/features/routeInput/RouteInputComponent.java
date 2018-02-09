@@ -10,7 +10,6 @@ import retrofit2.Retrofit;
  * Created by Jason on 08-Feb-18.
  */
 
-@RouteInputScope
 @Component(modules = RouteInputModule.class, dependencies = AppComponent.class)
 public interface RouteInputComponent {
 
