@@ -3,6 +3,7 @@ package com.example.jason.route_application_kotlin;
 import android.app.Activity;
 import android.app.Application;
 import com.example.jason.route_application_kotlin.di.AppComponent;
+import com.example.jason.route_application_kotlin.di.AppModule;
 import com.example.jason.route_application_kotlin.di.DaggerAppComponent;
 
 /**
@@ -13,17 +14,18 @@ public class RouteApplication extends Application {
 
     private AppComponent component;
 
-    public static RouteApplication get(Activity activity) {
-        return (RouteApplication) activity.getApplication();
-    }
-
     @Override
     public void onCreate() {
+        getAppComponent().inject(this);
         super.onCreate();
-        component = DaggerAppComponent.builder().build();
     }
 
-    public AppComponent getComponent() {
+    public AppComponent getAppComponent(){
+        if(component == null){
+            component = DaggerAppComponent.builder()
+                    .appModule(new AppModule(this))
+                    .build();
+        }
         return component;
     }
 }
