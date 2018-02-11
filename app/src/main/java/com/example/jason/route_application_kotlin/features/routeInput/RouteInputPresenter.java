@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.util.Log;
 
 import com.example.jason.route_application_kotlin.data.models.AddressFormatter;
-import com.example.jason.route_application_kotlin.data.pojos.AddressItem;
+import com.example.jason.route_application_kotlin.data.pojos.SingleAddress;
 
 import javax.inject.Inject;
 
@@ -32,7 +32,7 @@ public class RouteInputPresenter implements MvpRouteInput.Presenter{
     }
 
     @Override
-    public void onItemClick(AddressItem addressItem) {
+    public void onItemClick(SingleAddress singleAddress) {
 
     }
 

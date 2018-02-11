@@ -1,6 +1,6 @@
 package com.example.jason.route_application_kotlin.features.routeInput;
 
-import com.example.jason.route_application_kotlin.data.pojos.AddressItem;
+import com.example.jason.route_application_kotlin.data.pojos.SingleAddress;
 
 /**
  * Created by Jason on 07-Feb-18.
@@ -12,7 +12,7 @@ public interface MvpRouteInput {
 
         void addAddressToList();
 
-        void showAddressDetails(AddressItem addressItem);
+        void showAddressDetails(SingleAddress singleAddress);
 
         void beginRoute();
 
@@ -20,7 +20,7 @@ public interface MvpRouteInput {
 
     interface Presenter{
 
-        void onItemClick(AddressItem addressItem);
+        void onItemClick(SingleAddress singleAddress);
 
     }
 
