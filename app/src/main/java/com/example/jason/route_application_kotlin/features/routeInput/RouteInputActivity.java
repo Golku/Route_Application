@@ -1,16 +1,13 @@
 package com.example.jason.route_application_kotlin.features.routeInput;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 
 import com.example.jason.route_application_kotlin.R;
-import com.example.jason.route_application_kotlin.RouteApplication;
 import com.example.jason.route_application_kotlin.data.models.AddressFormatter;
 import com.example.jason.route_application_kotlin.data.pojos.AddressItem;
-import com.example.jason.route_application_kotlin.di.presenters.BasePresenterComponent;
-import com.example.jason.route_application_kotlin.di.presenters.BasePresenterModule;
 import com.example.jason.route_application_kotlin.features.addressDetails.AddressDetailsActivity;
 import com.example.jason.route_application_kotlin.features.route.RouteActivity;
 import com.example.jason.route_application_kotlin.features.shared.BaseActivity;
@@ -22,8 +19,9 @@ import butterknife.OnClick;
 
 public class RouteInputActivity extends BaseActivity implements MvpRouteInput.View{
 
-    @Inject AddressFormatter addressFormatter;
-    @Inject AddressFormatter addressFormatter2;
+    private final String Tag = "RouteActivity";
+
+    @Inject RouteInputPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,12 +29,6 @@ public class RouteInputActivity extends BaseActivity implements MvpRouteInput.Vi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_input);
         ButterKnife.bind(this);
-
-        addressFormatter.doSomething();
-        addressFormatter.doSomething();
-
-        Log.d("Dagger", "First" + addressFormatter);
-        Log.d("Dagger", "Second" + addressFormatter2);
 
     }
 
@@ -49,7 +41,14 @@ public class RouteInputActivity extends BaseActivity implements MvpRouteInput.Vi
     @Override
     public void showAddressDetails(AddressItem addressItem) {
         Intent intent = new Intent(this, AddressDetailsActivity.class);
+        intent.putExtra("address", (Parcelable) addressItem);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        presenter.doSomething();
     }
 
     @OnClick(R.id.beginRouteBtn)

@@ -1,6 +1,5 @@
 package com.example.jason.route_application_kotlin;
 
-import android.app.Activity;
 import android.app.Application;
 import com.example.jason.route_application_kotlin.di.AppComponent;
 import com.example.jason.route_application_kotlin.di.AppModule;

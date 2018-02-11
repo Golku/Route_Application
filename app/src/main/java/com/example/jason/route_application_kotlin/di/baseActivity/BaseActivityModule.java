@@ -1,4 +1,4 @@
-package com.example.jason.route_application_kotlin.di.presenters;
+package com.example.jason.route_application_kotlin.di.baseActivity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,11 +12,11 @@ import dagger.Provides;
  */
 
 @Module
-public class BasePresenterModule {
+public class BaseActivityModule {
 
     private final FragmentActivity activity;
 
-    public BasePresenterModule(FragmentActivity activity) {
+    public BaseActivityModule(FragmentActivity activity) {
         this.activity = activity;
     }
 
