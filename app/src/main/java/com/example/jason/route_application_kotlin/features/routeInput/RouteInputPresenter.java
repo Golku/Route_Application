@@ -1,7 +1,5 @@
 package com.example.jason.route_application_kotlin.features.routeInput;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import javax.inject.Inject;
 

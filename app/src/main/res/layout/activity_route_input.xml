@@ -19,10 +19,10 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/routeCodeInput" />
+        app:layout_constraintTop_toBottomOf="@+id/routeCodeInputEditText" />
 
     <TextView
-        android:id="@+id/header"
+        android:id="@+id/headerTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -36,7 +36,7 @@
         app:layout_constraintTop_toBottomOf="@+id/autoCompleteTextView" />
 
     <TextView
-        android:id="@+id/address"
+        android:id="@+id/addressTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
@@ -52,10 +52,10 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/header" />
+        app:layout_constraintTop_toBottomOf="@+id/headerTextView" />
 
     <TextView
-        android:id="@+id/phone"
+        android:id="@+id/phoneTextView"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
@@ -68,10 +68,10 @@
         android:textColor="@color/colorPrimaryDark"
         android:textColorHint="@color/colorPrimary"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/address" />
+        app:layout_constraintTop_toBottomOf="@+id/addressTextView" />
 
     <TextView
-        android:id="@+id/att"
+        android:id="@+id/attTextView"
         android:layout_width="0dp"
         android:layout_height="31dp"
         android:layout_marginEnd="16dp"
@@ -86,9 +86,9 @@
         android:textColor="@color/colorPrimaryDark"
         android:textColorHint="@color/colorPrimary"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toRightOf="@+id/phone"
+        app:layout_constraintLeft_toRightOf="@+id/phoneTextView"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/address" />
+        app:layout_constraintTop_toBottomOf="@+id/addressTextView" />
 
     <Button
         android:id="@+id/addAddressToListBtn"
@@ -98,17 +98,17 @@
         android:layout_marginTop="8dp"
         android:text="Add"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/phone" />
+        app:layout_constraintTop_toBottomOf="@+id/phoneTextView" />
 
     <Button
-        android:id="@+id/beginRouteBtn"
+        android:id="@+id/startRouteBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="16dp"
         android:layout_marginTop="8dp"
         android:text="Start Route"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/att" />
+        app:layout_constraintTop_toBottomOf="@+id/attTextView" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recView"
@@ -124,10 +124,10 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toBottomOf="@+id/listSizeHeaderTextView" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/listSizeHeaderTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
@@ -142,11 +142,11 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="16dp"
-        app:layout_constraintLeft_toRightOf="@+id/textView3"
+        app:layout_constraintLeft_toRightOf="@+id/listSizeHeaderTextView"
         app:layout_constraintTop_toBottomOf="@+id/addAddressToListBtn" />
 
     <EditText
-        android:id="@+id/routeCodeInput"
+        android:id="@+id/routeCodeInputEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"

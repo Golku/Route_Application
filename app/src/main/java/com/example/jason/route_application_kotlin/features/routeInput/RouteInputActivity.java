@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.jason.route_application_kotlin.R;
@@ -27,17 +28,23 @@ public class RouteInputActivity extends DaggerAppCompatActivity implements MvpRo
 
     private final String Tag = "RouteActivity";
 
-    private RouteInputAdapter adapter;
-
-    @BindView(R.id.recView)
-    RecyclerView recyclerView;
-    @BindView(R.id.autoCompleteTextView)
-    AutoCompleteTextView autoCompleteTextView;
-    @BindView(R.id.address)
-    TextView addressTextView;
-
     @Inject
     MvpRouteInput.Presenter presenter;
+
+    @BindView(R.id.routeCodeInputEditText)
+    EditText routeCodeInputEditText;
+    @BindView(R.id.autoCompleteTextView)
+    AutoCompleteTextView autoCompleteTextView;
+    @BindView(R.id.addressTextView)
+    TextView addressTextView;
+    @BindView(R.id.phoneTextView)
+    TextView phoneTextView;
+    @BindView(R.id.attTextView)
+    TextView attTextView;
+    @BindView(R.id.recView)
+    RecyclerView recyclerView;
+
+    private RouteInputAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +73,13 @@ public class RouteInputActivity extends DaggerAppCompatActivity implements MvpRo
     }
 
     @Override
+    public void addAddressToList(int listSize) {
+        int endOfList = listSize - 1;
+        adapter.notifyItemInserted(endOfList);
+        recyclerView.smoothScrollToPosition(endOfList);
+    }
+
+    @Override
     public void onListItemClick(String address) {
         presenter.onListItemClick(address);
     }
@@ -73,13 +87,6 @@ public class RouteInputActivity extends DaggerAppCompatActivity implements MvpRo
     @Override
     public void onListItemSwipe(int position) {
         presenter.onListItemSwiped(position);
-    }
-
-    @Override
-    public void addAddressToList(int listSize) {
-        int endOfList = listSize - 1;
-        adapter.notifyItemInserted(endOfList);
-        recyclerView.smoothScrollToPosition(endOfList);
     }
 
     @Override
@@ -94,7 +101,7 @@ public class RouteInputActivity extends DaggerAppCompatActivity implements MvpRo
         startActivity(intent);
     }
 
-    @OnClick(R.id.beginRouteBtn)
+    @OnClick(R.id.startRouteBtn)
     @Override
     public void onStartRouteButtonClick() {
         presenter.startRoute();

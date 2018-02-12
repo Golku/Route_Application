@@ -8,14 +8,20 @@ public interface MvpRoute {
 
     interface View{
 
+        void setUpAdapter();
+
+
+
     }
 
     interface Presenter{
 
+        void getData();
+
     }
 
     interface Interactor{
-
+        void getRoute();
     }
 
 }
