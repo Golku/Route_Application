@@ -1,6 +1,6 @@
 package com.example.jason.route_application_kotlin.features.routeInput;
 
-import com.example.jason.route_application_kotlin.data.pojos.SingleAddress;
+import java.util.ArrayList;
 
 /**
  * Created by Jason on 07-Feb-18.
@@ -10,23 +10,33 @@ public interface MvpRouteInput {
 
     interface View{
 
-        void addAddressToList();
+        void setUpAdapter(ArrayList<String> listOfAddresses);
 
-        void showAddressDetails(SingleAddress singleAddress);
+        void onAddAddressButtonClick();
 
-        void beginRoute();
+        void onStartRouteButtonClick();
+
+        void addAddressToList(int listSize);
+
+        void removeAddressFromList(int position);
+
+        void showAddressDetails(String address);
+
+        void beginRoute(ArrayList<String> listOfAddresses);
 
     }
 
     interface Presenter{
 
-        void onItemClick(SingleAddress singleAddress);
+        void setUpView();
 
-    }
+        void startRoute();
 
-    interface Interactor {
+        void addAddressToList(String address);
 
+        void onListItemClick(String address);
 
+        void onListItemSwiped(int position);
 
     }
 

@@ -1,11 +1,8 @@
 package com.example.jason.route_application_kotlin.features.routeInput;
 
-import android.app.Activity;
 import android.util.Log;
 
-import com.example.jason.route_application_kotlin.data.models.AddressFormatter;
-import com.example.jason.route_application_kotlin.data.pojos.SingleAddress;
-
+import java.util.ArrayList;
 import javax.inject.Inject;
 
 /**
@@ -14,26 +11,40 @@ import javax.inject.Inject;
 
 public class RouteInputPresenter implements MvpRouteInput.Presenter{
 
-    private final RouteInputActivity view;
+    private final MvpRouteInput.View view;
 
-//    waarom werkt dit?
-//    @Inject AddressFormatter addressFormatter;
-
-    private AddressFormatter addressFormatter;
+    private ArrayList<String> listOfAddresses;
 
     @Inject
-    public RouteInputPresenter(Activity view, AddressFormatter addressFormatter) {
-        this.view = (RouteInputActivity) view;
-        this.addressFormatter = addressFormatter;
-    }
-
-    public void doSomething(){
-        Log.d("Dagger", "AddressFormatter: " + addressFormatter);
+    public RouteInputPresenter(MvpRouteInput.View view) {
+        this.view =  view;
+        listOfAddresses = new ArrayList<>();
     }
 
     @Override
-    public void onItemClick(SingleAddress singleAddress) {
-
+    public void setUpView() {
+        view.setUpAdapter(listOfAddresses);
     }
 
+    @Override
+    public void addAddressToList(String address) {
+        listOfAddresses.add(address);
+        view.addAddressToList(listOfAddresses.size());
+    }
+
+    @Override
+    public void onListItemClick(String address) {
+        view.showAddressDetails(address);
+    }
+
+    @Override
+    public void onListItemSwiped(int position) {
+        listOfAddresses.remove(position);
+        view.removeAddressFromList(position);
+    }
+
+    @Override
+    public void startRoute() {
+        view.beginRoute(listOfAddresses);
+    }
 }

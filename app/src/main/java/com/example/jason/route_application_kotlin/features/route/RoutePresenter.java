@@ -11,11 +11,11 @@ import javax.inject.Inject;
 
 public class RoutePresenter implements MvpRoute.Presenter {
 
-    private final RouteActivity view;
+    private final MvpRoute.View view;
 
     @Inject
-    public RoutePresenter(Activity view) {
-        this.view = (RouteActivity) view;
+    public RoutePresenter(MvpRoute.View view) {
+        this.view = view;
     }
 
 }

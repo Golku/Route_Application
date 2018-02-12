@@ -5,13 +5,15 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.AutoCompleteTextView;
+import android.widget.TextView;
 
 import com.example.jason.route_application_kotlin.R;
-import com.example.jason.route_application_kotlin.data.pojos.SingleAddress;
+import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
 import com.example.jason.route_application_kotlin.features.addressDetails.AddressDetailsActivity;
 import com.example.jason.route_application_kotlin.features.route.RouteActivity;
-import com.example.jason.route_application_kotlin.features.shared.BaseActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -19,23 +21,26 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import dagger.android.support.DaggerAppCompatActivity;
 
-public class RouteInputActivity extends BaseActivity implements MvpRouteInput.View{
+public class RouteInputActivity extends DaggerAppCompatActivity implements MvpRouteInput.View, RouteInputAdapter.AddressListFunctions{
 
     private final String Tag = "RouteActivity";
 
     private RouteInputAdapter adapter;
 
-    private List<SingleAddress> listOfAddresses;
-
     @BindView(R.id.recView)
-    private RecyclerView recyclerView;
+    RecyclerView recyclerView;
+    @BindView(R.id.autoCompleteTextView)
+    AutoCompleteTextView autoCompleteTextView;
+    @BindView(R.id.address)
+    TextView addressTextView;
 
-    @Inject RouteInputPresenter presenter;
+    @Inject
+    MvpRouteInput.Presenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        getBasePresenterComponent().inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_input);
         ButterKnife.bind(this);
@@ -43,34 +48,62 @@ public class RouteInputActivity extends BaseActivity implements MvpRouteInput.Vi
     }
 
     public void init() {
-        setUpAdapter();
+        presenter.setUpView();
     }
 
-    public void setUpAdapter() {
+    @Override
+    public void setUpAdapter(ArrayList<String> listOfAddresses) {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new RouteInputAdapter();
+        adapter = new RouteInputAdapter(listOfAddresses, this);
+        adapter.addTouchHelper(recyclerView);
         recyclerView.setAdapter(adapter);
     }
 
     @OnClick(R.id.addAddressToListBtn)
     @Override
-    public void addAddressToList() {
-//        int endOfList = listOfAddresses.size() - 1;
-//        adapter.notifyItemInserted(endOfList);
-//        recyclerView.smoothScrollToPosition(endOfList);
+    public void onAddAddressButtonClick() {
+        presenter.addAddressToList(String.valueOf(autoCompleteTextView.getText()));
     }
 
     @Override
-    public void showAddressDetails(SingleAddress singleAddress) {
+    public void onListItemClick(String address) {
+        presenter.onListItemClick(address);
+    }
+
+    @Override
+    public void onListItemSwipe(int position) {
+        presenter.onListItemSwiped(position);
+    }
+
+    @Override
+    public void addAddressToList(int listSize) {
+        int endOfList = listSize - 1;
+        adapter.notifyItemInserted(endOfList);
+        recyclerView.smoothScrollToPosition(endOfList);
+    }
+
+    @Override
+    public void removeAddressFromList(int position) {
+        adapter.notifyItemRemoved(position);
+    }
+
+    @Override
+    public void showAddressDetails(String address) {
         Intent intent = new Intent(this, AddressDetailsActivity.class);
-        intent.putExtra("address", (Parcelable) singleAddress);
+        intent.putExtra("address", address);
         startActivity(intent);
     }
 
     @OnClick(R.id.beginRouteBtn)
     @Override
-    public void beginRoute() {
+    public void onStartRouteButtonClick() {
+        presenter.startRoute();
+    }
+
+    @Override
+    public void beginRoute(ArrayList<String> listOfAddresses) {
         Intent intent = new Intent(this, RouteActivity.class);
+        intent.putStringArrayListExtra("addressesList", listOfAddresses);
         startActivity(intent);
     }
 }

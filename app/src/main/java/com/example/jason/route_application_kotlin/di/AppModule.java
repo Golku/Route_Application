@@ -1,6 +1,9 @@
 package com.example.jason.route_application_kotlin.di;
 
 import android.app.Application;
+import android.content.Context;
+
+import com.example.jason.route_application_kotlin.RouteApplication;
 
 import dagger.Module;
 import dagger.Provides;
@@ -12,16 +15,9 @@ import dagger.Provides;
 @Module
 public class AppModule {
 
-    private final Application routeApplication;
-
-    public AppModule(Application routeApplication) {
-        this.routeApplication = routeApplication;
-    }
-
-    @Provides
     @AppScope
-    Application provideApplication(){
-        return routeApplication;
+    @Provides
+    Context provideContext(RouteApplication application) {
+        return application.getApplicationContext();
     }
-
 }
