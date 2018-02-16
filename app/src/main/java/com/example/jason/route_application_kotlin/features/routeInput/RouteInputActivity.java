@@ -108,8 +108,10 @@ public class RouteInputActivity extends DaggerAppCompatActivity implements MvpRo
     }
 
     @Override
-    public void beginRoute(ArrayList<String> listOfAddresses) {
+    public void startRoute(ArrayList<String> listOfAddresses) {
         Intent intent = new Intent(this, RouteActivity.class);
+        intent.putExtra("routeCode", routeCodeInputEditText.getText().toString());
+        intent.putExtra("origin", "vrij-harnasch 21, den hoorn");
         intent.putStringArrayListExtra("addressesList", listOfAddresses);
         startActivity(intent);
     }

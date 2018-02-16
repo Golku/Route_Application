@@ -22,7 +22,7 @@ public interface MvpRouteInput {
 
         void showAddressDetails(String address);
 
-        void beginRoute(ArrayList<String> listOfAddresses);
+        void startRoute(ArrayList<String> listOfAddresses);
 
     }
 

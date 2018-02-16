@@ -17,7 +17,6 @@ import java.util.ArrayList;
 public class RouteInputAdapter extends RecyclerView.Adapter<RouteInputAdapter.CustomViewHolder>{
 
     private ArrayList<String> listOfAddresses;
-
     private AddressListFunctions addressListFunctions;
 
     public RouteInputAdapter(ArrayList<String> listOfAddresses, AddressListFunctions addressListFunctions) {

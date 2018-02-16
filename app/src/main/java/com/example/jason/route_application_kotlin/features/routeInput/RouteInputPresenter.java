@@ -43,6 +43,6 @@ public class RouteInputPresenter implements MvpRouteInput.Presenter{
 
     @Override
     public void startRoute() {
-        view.beginRoute(listOfAddresses);
+        view.startRoute(listOfAddresses);
     }
 }

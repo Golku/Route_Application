@@ -12,12 +12,12 @@ import retrofit2.Retrofit;
 @Singleton
 public class RouteFetcher {
 
+    private Retrofit retrofit;
+
     @Inject
     public RouteFetcher(Retrofit retrofit) {
         this.retrofit = retrofit;
     }
-
-    private Retrofit retrofit;
 
 
 }

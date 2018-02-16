@@ -1,5 +1,7 @@
 package com.example.jason.route_application_kotlin.di;
 
+import com.example.jason.route_application_kotlin.features.addressDetails.AddressDetailsActivity;
+import com.example.jason.route_application_kotlin.features.addressDetails.AddressDetailsModule;
 import com.example.jason.route_application_kotlin.features.route.RouteActivity;
 import com.example.jason.route_application_kotlin.features.route.RouteModule;
 import com.example.jason.route_application_kotlin.features.routeInput.RouteInputActivity;
@@ -18,7 +20,9 @@ abstract class ActivityBuilder {
     @ContributesAndroidInjector(modules = RouteInputModule.class)
     abstract RouteInputActivity bindRouteInput();
 
-
     @ContributesAndroidInjector(modules = RouteModule.class)
     abstract RouteActivity bindRoute();
+
+    @ContributesAndroidInjector(modules = AddressDetailsModule.class)
+    abstract AddressDetailsActivity bindAddressDetails();
 }
