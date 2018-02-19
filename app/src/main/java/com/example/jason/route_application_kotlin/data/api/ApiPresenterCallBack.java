@@ -6,6 +6,6 @@ import com.example.jason.route_application_kotlin.data.pojos.ApiResponse;
  * Created by Jason on 14-Feb-18.
  */
 
-public interface PresenterCallBack {
+public interface ApiPresenterCallBack {
     void processApiResponse(ApiResponse apiResponse);
 }

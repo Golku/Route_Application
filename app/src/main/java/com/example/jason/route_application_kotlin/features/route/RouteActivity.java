@@ -93,7 +93,7 @@ public class RouteActivity extends DaggerAppCompatActivity implements MvpRoute.V
     @Override
     public void showAddressDetails(String address) {
         Intent i = new Intent (this, AddressDetailsActivity.class);
-        i.putExtra("formattedAddress", address);
+        i.putExtra("address", address);
         startActivity(i);
     }
 

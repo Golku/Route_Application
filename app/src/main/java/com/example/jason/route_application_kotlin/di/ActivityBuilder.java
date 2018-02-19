@@ -1,5 +1,7 @@
 package com.example.jason.route_application_kotlin.di;
 
+import com.example.jason.route_application_kotlin.features.CommentInput.CommentInputActivity;
+import com.example.jason.route_application_kotlin.features.CommentInput.CommentInputModule;
 import com.example.jason.route_application_kotlin.features.addressDetails.AddressDetailsActivity;
 import com.example.jason.route_application_kotlin.features.addressDetails.AddressDetailsModule;
 import com.example.jason.route_application_kotlin.features.route.RouteActivity;
@@ -25,4 +27,8 @@ abstract class ActivityBuilder {
 
     @ContributesAndroidInjector(modules = AddressDetailsModule.class)
     abstract AddressDetailsActivity bindAddressDetails();
+
+    @ContributesAndroidInjector(modules = CommentInputModule.class)
+    abstract CommentInputActivity bindCommentInput();
+
 }

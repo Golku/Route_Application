@@ -1,8 +1,9 @@
 package com.example.jason.route_application_kotlin.interactors;
 
 import android.util.Log;
+
+import com.example.jason.route_application_kotlin.data.api.ApiPresenterCallBack;
 import com.example.jason.route_application_kotlin.data.api.ApiService;
-import com.example.jason.route_application_kotlin.data.api.PresenterCallBack;
 import com.example.jason.route_application_kotlin.data.pojos.ApiResponse;
 import com.example.jason.route_application_kotlin.data.pojos.OutGoingRoute;
 import com.example.jason.route_application_kotlin.features.route.MvpRoute;
@@ -25,7 +26,7 @@ public class RouteInteractor implements MvpRoute.Interactor{
     }
 
     @Override
-    public void submitRouteForOrganizing(final PresenterCallBack presenterCallBack, OutGoingRoute outGoingRoute) {
+    public void submitRouteForOrganizing(final ApiPresenterCallBack apiPresenterCallBack, OutGoingRoute outGoingRoute) {
 
         Call<ApiResponse> call = apiService.submitRoute(outGoingRoute);
 
@@ -33,7 +34,7 @@ public class RouteInteractor implements MvpRoute.Interactor{
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 Log.d("RouteInteractor", "Responded");
-                presenterCallBack.processApiResponse(response.body());
+                apiPresenterCallBack.processApiResponse(response.body());
             }
 
             @Override

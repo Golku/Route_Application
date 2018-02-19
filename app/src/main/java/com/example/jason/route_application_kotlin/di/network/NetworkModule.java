@@ -1,8 +1,11 @@
 package com.example.jason.route_application_kotlin.di.network;
 
 import com.example.jason.route_application_kotlin.data.api.ApiService;
+import com.example.jason.route_application_kotlin.data.database.DatabaseService;
 import com.example.jason.route_application_kotlin.di.AppScope;
 import com.google.gson.Gson;
+
+import javax.inject.Named;
 
 import dagger.Module;
 import dagger.Provides;
@@ -20,11 +23,8 @@ public class NetworkModule {
     @Provides
     @AppScope
     public OkHttpClient provideOkHttpClient(){
-
         return new OkHttpClient();
     }
-
-    //    private final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     @Provides
     @AppScope
@@ -35,19 +35,38 @@ public class NetworkModule {
 
     @Provides
     @AppScope
-    public Retrofit provideRetrofit(OkHttpClient okHttpClient, Gson gson){
+    @Named("api")
+    public Retrofit provideRetrofitForApi(OkHttpClient okHttpClient, Gson gson){
         return new Retrofit.Builder()
                 .client(okHttpClient)
-                .baseUrl("http://10.163.48.203:8080/webapi/")
+                .baseUrl("http://10.163.48.191:8080/webapi/")
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+    }
+
+    @Provides
+    @AppScope
+    @Named("database")
+    public Retrofit provideRetrofitForDatabase(OkHttpClient okHttpClient, Gson gson){
+        return new Retrofit.Builder()
+                .client(okHttpClient)
+                .baseUrl("http://10.163.48.191/map/v1/")
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
     }
 
     @AppScope
     @Provides
-    public ApiService provideApiService(Retrofit retrofit){
+    public ApiService provideApiService(@Named("api") Retrofit retrofit){
         ApiService apiService = retrofit.create(ApiService.class);
         return apiService;
+    }
+
+    @AppScope
+    @Provides
+    public DatabaseService provideDatabaseService(@Named("database") Retrofit retrofit){
+        DatabaseService databaseService = retrofit.create(DatabaseService.class);
+        return databaseService;
     }
 
 }

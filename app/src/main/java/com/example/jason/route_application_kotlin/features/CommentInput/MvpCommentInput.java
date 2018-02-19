@@ -5,4 +5,16 @@ package com.example.jason.route_application_kotlin.features.CommentInput;
  */
 
 public interface MvpCommentInput {
+
+    interface View{
+
+    }
+
+    interface Presenter{
+
+    }
+
+    interface Interactor{
+
+    }
 }

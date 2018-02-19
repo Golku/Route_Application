@@ -5,10 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.example.jason.route_application_kotlin.R;
 import com.example.jason.route_application_kotlin.data.pojos.AddressInformation;
-import java.util.ArrayList;
+import com.example.jason.route_application_kotlin.data.pojos.CommentInformation;
 
 /**
  * Created by Jason on 07-Feb-18.
@@ -17,17 +16,17 @@ import java.util.ArrayList;
 public class AddressDetailsAdapter extends RecyclerView.Adapter <AddressDetailsAdapter.CustomViewHolder>{
 
     private AddressInformation addressInformation;
-    private ArrayList<String> commentInformation;
     private CommentListFunctions commentListFunctions;
-
+    private CommentInformation commentInformation;
 
     public AddressDetailsAdapter(AddressInformation addressInformation, CommentListFunctions commentListFunctions) {
         this.addressInformation = addressInformation;
         this.commentListFunctions = commentListFunctions;
+        this.commentInformation = new CommentInformation();
     }
 
     public interface CommentListFunctions{
-        void onListItemClick(ArrayList<String> commentInformation);
+        void onListItemClick(CommentInformation commentInformation);
     }
 
     @Override
@@ -65,15 +64,9 @@ public class AddressDetailsAdapter extends RecyclerView.Adapter <AddressDetailsA
         }
 
         public void onClick(View v) {
-
-//                Log.d(log_tag, "Adapter position: " + this.getAdapterPosition());
-//                Log.d(log_tag, "List info at index 0: " + singelAddressDbInformation.getEmployeeId().get(0));
-//                Log.d(log_tag, "List info: " + singelAddressDbInformation.getEmployeeId().get(this.getAdapterPosition()));
-
-            commentInformation.add(0, addressInformation.getEmployeeId().get(this.getAdapterPosition()));
-            commentInformation.add(1, addressInformation.getDates().get(this.getAdapterPosition()));
-            commentInformation.add(2, addressInformation.getComments().get(this.getAdapterPosition()));
-
+            commentInformation.setEmployeeId(addressInformation.getEmployeeId().get(this.getAdapterPosition()));
+            commentInformation.setDate(addressInformation.getDates().get(this.getAdapterPosition()));
+            commentInformation.setComment(addressInformation.getComments().get(this.getAdapterPosition()));
             commentListFunctions.onListItemClick(commentInformation);
         }
     }
