@@ -7,6 +7,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 /**
  * Created by Jason on 14-Feb-18.
@@ -14,10 +15,10 @@ import retrofit2.http.POST;
 
 public interface ApiService {
 
-    @GET("myresource")
-    Call<ApiResponse> getRoute();
+    @GET("getroute/{routeCode}")
+    Call<ApiResponse> getRoute(@Path("routeCode")String routeCode);
 
-    @POST("myresource")
+    @POST("submitroute")
     Call<ApiResponse> submitRoute(@Body OutGoingRoute outGoingRoute);
 
 }

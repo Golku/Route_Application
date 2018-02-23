@@ -26,6 +26,29 @@ public class RouteInteractor implements MvpRoute.Interactor{
     }
 
     @Override
+    public void getOrganizedRouteFromApi(final ApiPresenterCallBack apiPresenterCallBack, String routeCode) {
+
+        Call<ApiResponse> call = apiService.getRoute(routeCode);
+
+        call.enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                Log.d("RouteInteractor", "Responded");
+                apiPresenterCallBack.processApiResponse(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                Log.d("RouteInteractor", "Failure");
+                Log.d("RouteInteractor", "Throwable: " + t.toString());
+                Log.d("RouteInteractor", "call: " + call.toString());
+                apiPresenterCallBack.onApiResponseFailure();
+            }
+        });
+
+    }
+
+    @Override
     public void submitRouteForOrganizing(final ApiPresenterCallBack apiPresenterCallBack, OutGoingRoute outGoingRoute) {
 
         Call<ApiResponse> call = apiService.submitRoute(outGoingRoute);

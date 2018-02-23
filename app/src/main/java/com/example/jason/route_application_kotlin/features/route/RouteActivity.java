@@ -15,7 +15,11 @@ import com.example.jason.route_application_kotlin.R;
 import com.example.jason.route_application_kotlin.data.pojos.OrganizedRoute;
 import com.example.jason.route_application_kotlin.data.pojos.OutGoingRoute;
 import com.example.jason.route_application_kotlin.features.addressDetails.AddressDetailsActivity;
+import com.example.jason.route_application_kotlin.features.correctInvalidAddresses.CorrectInvalidAddressesActivity;
+
 import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,16 +64,12 @@ public class RouteActivity extends DaggerAppCompatActivity implements MvpRoute.V
                 inputtedAddressesList
         );
 
-        messageToUserTextView.setText("Calculating Route...");
         presenter.sendRouteToApi(outGoingRoute);
 
     }
 
     @Override
     public void setUpAdapter(OrganizedRoute organizedRoute) {
-        messageToUserTextView.setVisibility(View.GONE);
-        progressBar.setVisibility(View.GONE);
-
         privateAddressesTextView.setText(String.valueOf(organizedRoute.getPrivateAddressesCount()));
         businessAddressesTextView.setText(String.valueOf(organizedRoute.getBusinessAddressesCount()));
         wrongAddressesTextView.setText(String.valueOf(organizedRoute.getWrongAddressesCount()));
@@ -91,6 +91,13 @@ public class RouteActivity extends DaggerAppCompatActivity implements MvpRoute.V
     }
 
     @Override
+    public void showInvalidAddresses(ArrayList<String> invalidAddresses) {
+        Intent i = new Intent (this, CorrectInvalidAddressesActivity.class);
+        i.putStringArrayListExtra("invalidAddresses", invalidAddresses);
+        startActivity(i);
+    }
+
+    @Override
     public void showAddressDetails(String address) {
         Intent i = new Intent (this, AddressDetailsActivity.class);
         i.putExtra("address", address);
@@ -103,7 +110,20 @@ public class RouteActivity extends DaggerAppCompatActivity implements MvpRoute.V
         startActivity(intent);
     }
 
-    public void showToast(String message){
+    @Override
+    public void onStartNetworkOperation() {
+        messageToUserTextView.setText("Calculating Route...");
+    }
+
+    @Override
+    public void onFinishNetworkOperation() {
+        messageToUserTextView.setVisibility(View.GONE);
+        progressBar.setVisibility(View.GONE);
+
+    }
+
+    @Override
+    public void showToast(String message) {
         Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
         toast.show();
     }

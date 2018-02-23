@@ -1,12 +1,9 @@
 package com.example.jason.route_application_kotlin.data.database;
 
-import com.example.jason.route_application_kotlin.data.pojos.CommentInformation;
 import com.example.jason.route_application_kotlin.data.pojos.DatabaseResponse;
 import retrofit2.Call;
-import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
-import retrofit2.http.GET;
 import retrofit2.http.POST;
 
 /**
@@ -30,7 +27,7 @@ public interface DatabaseService {
             @Field("post_code") String postCode,
             @Field("city") String city,
             @Field("employee_id") String employeeId,
-            @Field("message") String message,
+            @Field("message") String comment,
             @Field("date") String date
     );
 }

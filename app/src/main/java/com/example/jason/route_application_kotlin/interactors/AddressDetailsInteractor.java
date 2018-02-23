@@ -51,9 +51,4 @@ public class AddressDetailsInteractor implements MvpAddressDetails.Interactor {
             }
         });
     }
-
-    @Override
-    public void addCommentToAddress() {
-
-    }
 }

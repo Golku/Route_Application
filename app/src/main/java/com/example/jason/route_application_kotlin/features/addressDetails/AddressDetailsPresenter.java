@@ -1,7 +1,5 @@
 package com.example.jason.route_application_kotlin.features.addressDetails;
 
-import android.util.Log;
-
 import com.example.jason.route_application_kotlin.data.database.DatabasePresenterCallBack;
 import com.example.jason.route_application_kotlin.data.models.AddressFormatter;
 import com.example.jason.route_application_kotlin.data.pojos.CommentInformation;
@@ -18,6 +16,8 @@ public class AddressDetailsPresenter implements MvpAddressDetails.Presenter, Dat
 
     @Inject
     AddressFormatter addressFormatter;
+
+    private final String log_tag = "AddressDetails_logTag";
 
     private final MvpAddressDetails.View view;
     private MvpAddressDetails.Interactor interactor;
@@ -37,17 +37,37 @@ public class AddressDetailsPresenter implements MvpAddressDetails.Presenter, Dat
 
     @Override
     public void updateTextViews() {
-        view.updateTextViews(formattedAddress);
+        view.setUpAddressInformation(formattedAddress);
     }
 
     @Override
     public void getAddressInformation() {
+        view.onStartNetworkOperation();
         interactor.getAddressInformation(this, formattedAddress);
     }
 
     @Override
     public void processDatabaseResponse(DatabaseResponse databaseResponse) {
-        view.setUpAdapter(databaseResponse.getAddressInformation());
+        view.onFinishNetworkOperation();
+        if(databaseResponse.isError()){
+            view.showErrorMessageToUser(databaseResponse.getErrorMessage());
+        }else{
+            if(databaseResponse.getAddressInformation() == null){
+                view.updateMessageToUserTextView( true,"There are no comments");
+            }else{
+                if(databaseResponse.getAddressInformation().getCommentsCount()>0){
+                    view.updateMessageToUserTextView(false, "");
+                }else{
+                    view.updateMessageToUserTextView(true, "There are no comments");
+                }
+                if(databaseResponse.getAddressInformation().getBusiness() == 1) {
+                    view.updateBusinessTextView("Yes");
+                }else{
+                    view.updateBusinessTextView("No");
+                }
+                view.setUpAdapter(databaseResponse.getAddressInformation());
+            }
+        }
     }
 
     @Override
@@ -64,4 +84,6 @@ public class AddressDetailsPresenter implements MvpAddressDetails.Presenter, Dat
     public void onAddCommentButtonClick() {
         view.showCommentInput(formattedAddress);
     }
+
+
 }

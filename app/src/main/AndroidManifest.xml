@@ -12,6 +12,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAycv4bRa_NI4gl7WwkgLGs4EDhn44G8DY" />
+
         <activity android:name=".features.routeInput.RouteInputActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,7 +29,8 @@
         <activity android:name=".features.route.RouteActivity" />
         <activity android:name=".features.addressDetails.AddressDetailsActivity" />
         <activity android:name=".features.CommentInput.CommentInputActivity" />
-        <activity android:name=".features.CommentDisplay.CommentDisplayActivity"></activity>
+        <activity android:name=".features.CommentDisplay.CommentDisplayActivity" />
+        <activity android:name=".features.correctInvalidAddresses.CorrectInvalidAddressesActivity"></activity>
     </application>
 
 </manifest>

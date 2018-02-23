@@ -6,9 +6,11 @@ import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.jason.route_application_kotlin.R;
 import com.example.jason.route_application_kotlin.data.pojos.AddressInformation;
@@ -47,6 +49,8 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements M
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
 
+    private final String log_tag = "AddressDetails_logTag";
+
     private AddressDetailsAdapter adapter;
 
     @Override
@@ -61,13 +65,11 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements M
         String address = getIntent().getStringExtra("address");
         presenter.formatAddress(address);
         presenter.updateTextViews();
-
-        messageToUserTextView.setText("Fetching address information...");
         presenter.getAddressInformation();
     }
 
     @Override
-    public void updateTextViews(FormattedAddress formattedAddress) {
+    public void setUpAddressInformation(FormattedAddress formattedAddress) {
         streetTextView.setText(formattedAddress.getStreet());
         postcodeTextView.setText(formattedAddress.getPostCode());
         cityTextView.setText(formattedAddress.getCity());
@@ -75,9 +77,6 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements M
 
     @Override
     public void setUpAdapter(AddressInformation addressInformation) {
-        messageToUserTextView.setVisibility(View.GONE);
-        progressBar.setVisibility(View.GONE);
-
         recyclerView.setVisibility(View.VISIBLE);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new AddressDetailsAdapter(addressInformation,this);
@@ -123,4 +122,34 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements M
         startActivity(i);
     }
 
+    @Override
+    public void updateMessageToUserTextView(boolean visible, String message) {
+        if(visible){
+            messageToUserTextView.setVisibility(View.VISIBLE);
+        }else{
+            messageToUserTextView.setVisibility(View.GONE);
+        }
+        messageToUserTextView.setText(message);
+    }
+
+    @Override
+    public void updateBusinessTextView(String message) {
+        businessTextView.setText(message);
+    }
+
+    @Override
+    public void showErrorMessageToUser(String message) {
+        Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
+        toast.show();
+    }
+
+    @Override
+    public void onStartNetworkOperation() {
+        messageToUserTextView.setText("Fetching address information...");
+    }
+
+    @Override
+    public void onFinishNetworkOperation() {
+        progressBar.setVisibility(View.GONE);
+    }
 }

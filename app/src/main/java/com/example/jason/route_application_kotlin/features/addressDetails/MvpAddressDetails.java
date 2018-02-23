@@ -12,13 +12,18 @@ import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
 public interface MvpAddressDetails {
 
     interface View{
-        void updateTextViews(FormattedAddress formattedAddress);
+        void setUpAddressInformation(FormattedAddress formattedAddress);
         void setUpAdapter(AddressInformation addressInformation);
         void onGoogleLinkClick();
         void onAddCommentButtonClick();
         void showAddressInGoogle(FormattedAddress formattedAddress);
         void showCommentDisplay(CommentInformation commentInformation);
         void showCommentInput(FormattedAddress formattedAddress);
+        void showErrorMessageToUser(String message);
+        void updateMessageToUserTextView(boolean visible, String message);
+        void updateBusinessTextView(String message);
+        void onStartNetworkOperation();
+        void onFinishNetworkOperation();
     }
 
     interface Presenter{
@@ -32,7 +37,6 @@ public interface MvpAddressDetails {
 
     interface Interactor{
         void getAddressInformation(DatabasePresenterCallBack databasePresenterCallBack, FormattedAddress formattedAddress);
-        void addCommentToAddress();
     }
 
 }

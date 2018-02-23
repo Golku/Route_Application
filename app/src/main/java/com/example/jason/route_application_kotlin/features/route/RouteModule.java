@@ -16,7 +16,7 @@ public abstract class RouteModule {
     public abstract MvpRoute.View provideView(RouteActivity view);
 
     @Binds
-    public abstract MvpRoute.Presenter providePresenter(RouteApiPresenter presenter);
+    public abstract MvpRoute.Presenter providePresenter(RoutePresenter presenter);
 
     @Binds
     public abstract MvpRoute.Interactor provideInteractor(RouteInteractor interactor);
