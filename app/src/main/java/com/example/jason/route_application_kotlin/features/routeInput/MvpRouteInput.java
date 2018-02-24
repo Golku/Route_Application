@@ -14,13 +14,17 @@ public interface MvpRouteInput {
 
         void onAddAddressButtonClick();
 
-        void onStartRouteButtonClick();
+        void onSubmitRouteButtonClick();
+
+        void onGetRouteButtonClick();
 
         void addAddressToList(int listSize);
 
         void removeAddressFromList(int position);
 
         void showAddressDetails(String address);
+
+        void startRoute();
 
         void startRoute(ArrayList<String> listOfAddresses);
 
@@ -30,7 +34,9 @@ public interface MvpRouteInput {
 
         void setUpView();
 
-        void startRoute();
+        void submitRouteRoute();
+
+        void getRoute();
 
         void addAddressToList(String address);
 

@@ -1,7 +1,6 @@
 package com.example.jason.route_application_kotlin.data.pojos;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Jason on 14-Feb-18.
@@ -15,7 +14,7 @@ public class ApiResponse {
     private OrganizedRoute organizedRoute;
     private ArrayList<String> invalidAddresses;
 
-    public boolean isOrganizingInProgress() {
+    public boolean getOrganizingInProgress() {
         return organizingInProgress;
     }
 
@@ -23,7 +22,7 @@ public class ApiResponse {
         this.organizingInProgress = organizingInProgress;
     }
 
-    public boolean isRouteHasInvalidAddresses() {
+    public boolean getRouteHasInvalidAddresses() {
         return routeHasInvalidAddresses;
     }
 
@@ -31,7 +30,7 @@ public class ApiResponse {
         this.routeHasInvalidAddresses = routeHasInvalidAddresses;
     }
 
-    public boolean isRouteIsNull() {
+    public boolean getRouteIsNull() {
         return routeIsNull;
     }
 
@@ -55,3 +54,4 @@ public class ApiResponse {
         this.invalidAddresses = invalidAddresses;
     }
 }
+

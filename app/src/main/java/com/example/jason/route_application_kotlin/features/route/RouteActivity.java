@@ -54,17 +54,28 @@ public class RouteActivity extends DaggerAppCompatActivity implements MvpRoute.V
 
     private void init(){
 
+        String action = getIntent().getStringExtra("action");
         String routeCode = getIntent().getStringExtra("routeCode");
-        String origin = getIntent().getStringExtra("origin");
-        ArrayList<String> inputtedAddressesList =  getIntent().getStringArrayListExtra("addressesList");
 
-        OutGoingRoute outGoingRoute = new OutGoingRoute(
-                routeCode,
-                origin,
-                inputtedAddressesList
-        );
+        presenter.setRouteCode(routeCode);
 
-        presenter.sendRouteToApi(outGoingRoute);
+        if(action.equals("get")){
+
+            presenter.getRouteFromApi();
+
+        }else if(action.equals("send")){
+
+            String origin = getIntent().getStringExtra("origin");
+            ArrayList<String> inputtedAddressesList =  getIntent().getStringArrayListExtra("addressesList");
+
+            OutGoingRoute outGoingRoute = new OutGoingRoute(
+                    routeCode,
+                    origin,
+                    inputtedAddressesList
+            );
+
+            presenter.sendRouteToApi(outGoingRoute);
+        }
 
     }
 

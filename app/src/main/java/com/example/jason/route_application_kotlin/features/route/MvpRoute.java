@@ -30,9 +30,11 @@ public interface MvpRoute {
 
     interface Presenter{
 
-        void sendRouteToApi(OutGoingRoute outGoingRoute);
+        void setRouteCode(String routeCode);
 
         void getRouteFromApi();
+
+        void sendRouteToApi(OutGoingRoute outGoingRoute);
 
         void onListItemClick(String address);
 

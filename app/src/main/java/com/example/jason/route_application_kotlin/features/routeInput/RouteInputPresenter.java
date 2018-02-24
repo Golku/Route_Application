@@ -10,7 +10,6 @@ import javax.inject.Inject;
 public class RouteInputPresenter implements MvpRouteInput.Presenter{
 
     private final MvpRouteInput.View view;
-
     private ArrayList<String> listOfAddresses;
 
     @Inject
@@ -42,7 +41,12 @@ public class RouteInputPresenter implements MvpRouteInput.Presenter{
     }
 
     @Override
-    public void startRoute() {
+    public void submitRouteRoute() {
         view.startRoute(listOfAddresses);
+    }
+
+    @Override
+    public void getRoute() {
+        view.startRoute();
     }
 }

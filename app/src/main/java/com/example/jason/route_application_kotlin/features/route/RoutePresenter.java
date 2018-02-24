@@ -31,8 +31,12 @@ public class RoutePresenter implements MvpRoute.Presenter, ApiPresenterCallBack 
     }
 
     @Override
+    public void setRouteCode(String routeCode) {
+        this.routeCode = routeCode;
+    }
+
+    @Override
     public void sendRouteToApi(OutGoingRoute outGoingRoute) {
-        this.routeCode = outGoingRoute.getRouteCode();
         view.onStartNetworkOperation();
         interactor.submitRouteForOrganizing(this, outGoingRoute);
     }
@@ -46,9 +50,9 @@ public class RoutePresenter implements MvpRoute.Presenter, ApiPresenterCallBack 
     @Override
     public void processApiResponse(ApiResponse apiResponse) {
         //check response for errors and other messages
-        if(!apiResponse.isRouteIsNull()) {
-            if(!apiResponse.isOrganizingInProgress()){
-                if(apiResponse.isRouteHasInvalidAddresses()){
+        if(!apiResponse.getRouteIsNull()) {
+            if(!apiResponse.getOrganizingInProgress()){
+                if(apiResponse.getRouteHasInvalidAddresses()){
                     view.onFinishNetworkOperation();
                     view.showInvalidAddresses(apiResponse.getInvalidAddresses());
                 }else{
@@ -71,6 +75,7 @@ public class RoutePresenter implements MvpRoute.Presenter, ApiPresenterCallBack 
                 }else{
                     //message the user that the route was not fetch after x amount of attempts
                     //user can start the route fetching process again with a button click.
+                    view.showToast("Unable to fetch route after 5 attempts.");
                 }
             }
         }else{
@@ -89,7 +94,7 @@ public class RoutePresenter implements MvpRoute.Presenter, ApiPresenterCallBack 
     @Override
     public void onApiResponseFailure() {
         view.onFinishNetworkOperation();
-        view.showToast("Route does not exist. Try resubmitting the route.");
+        view.showToast("Connection failed");
     }
 
     @Override

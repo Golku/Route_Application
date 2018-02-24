@@ -101,13 +101,13 @@
         app:layout_constraintTop_toBottomOf="@+id/phoneTextView" />
 
     <Button
-        android:id="@+id/startRouteBtn"
+        android:id="@+id/submitRouteBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="16dp"
         android:layout_marginTop="8dp"
-        android:text="Start Route"
-        app:layout_constraintRight_toRightOf="parent"
+        android:text="Submit route"
+        app:layout_constraintEnd_toStartOf="@+id/getRouteBtn"
+        app:layout_constraintStart_toEndOf="@+id/addAddressToListBtn"
         app:layout_constraintTop_toBottomOf="@+id/attTextView" />
 
     <android.support.v7.widget.RecyclerView
@@ -157,5 +157,15 @@
         android:inputType="textPersonName"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/getRouteBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Get Route"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/attTextView" />
 
 </android.support.constraint.ConstraintLayout>
