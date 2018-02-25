@@ -56,4 +56,10 @@ public class CommentInputPresenter implements MvpCommentInput.Presenter, Databas
         }
 
     }
+
+    @Override
+    public void onApiResponseFailure() {
+        view.onFinishNetworkOperation();
+        view.showToast("Connection failed.");
+    }
 }

@@ -15,6 +15,7 @@ public interface MvpCommentInput {
         void onDatabaseResponse(String message);
         void onStartNetworkOperation();
         void onFinishNetworkOperation();
+        void showToast(String message);
     }
 
     interface Presenter{

@@ -83,4 +83,10 @@ public class CommentInputActivity extends DaggerAppCompatActivity implements Mvp
         progressBar.setVisibility(View.GONE);
         messageToUserTextView.setVisibility(View.GONE);
     }
+
+    @Override
+    public void showToast(String message) {
+        Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
+        toast.show();
+    }
 }

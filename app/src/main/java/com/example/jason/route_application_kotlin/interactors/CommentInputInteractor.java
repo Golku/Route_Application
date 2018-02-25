@@ -51,6 +51,7 @@ public class CommentInputInteractor implements MvpCommentInput.Interactor{
                 Log.d("commentInputLogTag", "Failure");
                 Log.d("commentInputLogTag", "Throwable: " + t.toString());
                 Log.d("commentInputLogTag", "call: " + call.toString());
+                databasePresenterCallBack.onApiResponseFailure();
             }
         });
 

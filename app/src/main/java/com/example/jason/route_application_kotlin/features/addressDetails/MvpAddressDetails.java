@@ -24,6 +24,7 @@ public interface MvpAddressDetails {
         void updateBusinessTextView(String message);
         void onStartNetworkOperation();
         void onFinishNetworkOperation();
+        void showToast(String message);
     }
 
     interface Presenter{

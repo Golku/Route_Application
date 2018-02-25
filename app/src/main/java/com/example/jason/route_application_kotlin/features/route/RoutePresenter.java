@@ -75,6 +75,7 @@ public class RoutePresenter implements MvpRoute.Presenter, ApiPresenterCallBack 
                 }else{
                     //message the user that the route was not fetch after x amount of attempts
                     //user can start the route fetching process again with a button click.
+                    view.onFinishNetworkOperation();
                     view.showToast("Unable to fetch route after 5 attempts.");
                 }
             }
@@ -82,13 +83,6 @@ public class RoutePresenter implements MvpRoute.Presenter, ApiPresenterCallBack 
             view.onFinishNetworkOperation();
             view.showToast("Route does not exist. Try resubmitting the route.");
         }
-//        Log.d("RoutePresenter", String.valueOf(apiResponse.isOrganizingInProgress()));
-//        Log.d("RoutePresenter", apiResponse.getOrganizedRoute().getRouteCode());
-//
-//        for(int i=0; i<apiResponse.getOrganizedRoute().getRouteList().size(); i++){
-//            Log.d("RoutePresenter", apiResponse.getOrganizedRoute().getRouteList().get(i).getOriginFormattedAddress().getFormattedAddress());
-//            Log.d("RoutePresenter", apiResponse.getOrganizedRoute().getRouteList().get(i).getDestinationFormattedAddress().getFormattedAddress());
-//        }
     }
 
     @Override

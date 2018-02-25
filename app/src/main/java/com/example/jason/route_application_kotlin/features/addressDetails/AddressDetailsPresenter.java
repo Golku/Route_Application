@@ -71,6 +71,13 @@ public class AddressDetailsPresenter implements MvpAddressDetails.Presenter, Dat
     }
 
     @Override
+    public void onApiResponseFailure() {
+        view.onFinishNetworkOperation();
+        view.updateMessageToUserTextView(false, "");
+        view.showToast("Connection Failed");
+    }
+
+    @Override
     public void onGoogleLinkClick() {
         view.showAddressInGoogle(formattedAddress);
     }

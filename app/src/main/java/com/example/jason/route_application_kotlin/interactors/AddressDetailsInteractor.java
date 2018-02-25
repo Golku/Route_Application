@@ -48,6 +48,7 @@ public class AddressDetailsInteractor implements MvpAddressDetails.Interactor {
                 Log.d("detailsLogTag", "Failure");
                 Log.d("detailsLogTag", "Throwable: " + t.toString());
                 Log.d("detailsLogTag", "call: " + call.toString());
+                databasePresenterCallBack.onApiResponseFailure();
             }
         });
     }

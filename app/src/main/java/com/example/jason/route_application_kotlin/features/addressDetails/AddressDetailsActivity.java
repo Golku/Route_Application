@@ -152,4 +152,10 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements M
     public void onFinishNetworkOperation() {
         progressBar.setVisibility(View.GONE);
     }
+
+    @Override
+    public void showToast(String message) {
+        Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
+        toast.show();
+    }
 }

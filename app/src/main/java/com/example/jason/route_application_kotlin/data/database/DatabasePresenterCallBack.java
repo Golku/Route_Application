@@ -8,5 +8,6 @@ import com.example.jason.route_application_kotlin.data.pojos.DatabaseResponse;
 
 public interface DatabasePresenterCallBack {
     void processDatabaseResponse(DatabaseResponse databaseResponse);
+    void onApiResponseFailure();
 }
 
