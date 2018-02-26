@@ -14,7 +14,7 @@ import javax.inject.Inject;
 
 public class RoutePresenter implements MvpRoute.Presenter, ApiPresenterCallBack {
 
-    private final String log_tag = "routePresenterLogTag";
+    private final String log_tag = "routeLogTag";
 
     private final MvpRoute.View view;
 
@@ -56,7 +56,7 @@ public class RoutePresenter implements MvpRoute.Presenter, ApiPresenterCallBack 
                     view.onFinishNetworkOperation();
                     view.showInvalidAddresses(apiResponse.getInvalidAddresses());
                 }else{
-                    if(apiResponse.getOrganizedRoute() != null) {
+                    if(apiResponse.getOrganizedRoute() != null){
                         view.onFinishNetworkOperation();
                         view.setUpAdapter(apiResponse.getOrganizedRoute());
                     }else{

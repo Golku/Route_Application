@@ -1,7 +1,7 @@
 package com.example.jason.route_application_kotlin.di;
 
-import com.example.jason.route_application_kotlin.features.CommentInput.CommentInputActivity;
-import com.example.jason.route_application_kotlin.features.CommentInput.CommentInputModule;
+import com.example.jason.route_application_kotlin.features.commentInput.CommentInputActivity;
+import com.example.jason.route_application_kotlin.features.commentInput.CommentInputModule;
 import com.example.jason.route_application_kotlin.features.addressDetails.AddressDetailsActivity;
 import com.example.jason.route_application_kotlin.features.addressDetails.AddressDetailsModule;
 import com.example.jason.route_application_kotlin.features.correctInvalidAddresses.CorrectInvalidAddressesActivity;

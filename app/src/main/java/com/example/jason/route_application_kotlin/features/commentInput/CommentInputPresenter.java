@@ -1,7 +1,6 @@
-package com.example.jason.route_application_kotlin.features.CommentInput;
+package com.example.jason.route_application_kotlin.features.commentInput;
 
 import com.example.jason.route_application_kotlin.data.database.DatabasePresenterCallBack;
-import com.example.jason.route_application_kotlin.data.pojos.CommentInformation;
 import com.example.jason.route_application_kotlin.data.pojos.DatabaseResponse;
 import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
 
@@ -19,7 +18,6 @@ public class CommentInputPresenter implements MvpCommentInput.Presenter, Databas
     private MvpCommentInput.Interactor interactor;
 
     private FormattedAddress formattedAddress;
-    private CommentInformation commentInformation;
 
     private String employeeId;
     private String date;

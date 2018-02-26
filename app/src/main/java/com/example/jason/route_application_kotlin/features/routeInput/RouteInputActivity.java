@@ -20,6 +20,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBuffer;
@@ -83,6 +84,7 @@ public class RouteInputActivity extends DaggerAppCompatActivity implements
 
         mGoogleApiClient = new GoogleApiClient.Builder(RouteInputActivity.this)
                 .addApi(Places.GEO_DATA_API)
+                .addApi(LocationServices.API)
                 .enableAutoManage(this, GOOGLE_API_CLIENT_ID, this)
                 .addConnectionCallbacks(this)
                 .build();
@@ -183,8 +185,9 @@ public class RouteInputActivity extends DaggerAppCompatActivity implements
     @OnClick(R.id.addAddressToListBtn)
     @Override
     public void onAddAddressButtonClick() {
-        autoCompleteTextView.setText("");
-        presenter.addAddressToList(String.valueOf(addressTextView.getText()));
+//        autoCompleteTextView.setText("");
+        //blablabla niet gebruiken als invalid address (blablabla, Au Coinat 27, 2915 Bure, Zwitserland)
+        presenter.addAddressToList(autoCompleteTextView.getText().toString());
     }
 
     @Override

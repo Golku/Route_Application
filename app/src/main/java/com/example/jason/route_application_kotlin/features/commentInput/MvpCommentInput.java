@@ -1,4 +1,4 @@
-package com.example.jason.route_application_kotlin.features.CommentInput;
+package com.example.jason.route_application_kotlin.features.commentInput;
 
 import com.example.jason.route_application_kotlin.data.database.DatabasePresenterCallBack;
 import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;

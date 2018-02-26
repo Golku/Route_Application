@@ -20,6 +20,8 @@ import retrofit2.Response;
 
 public class AddressDetailsInteractor implements MvpAddressDetails.Interactor {
 
+    private final String log_tag = "addressDetailsLogTag";
+
     private DatabaseService databaseService;
 
     @Inject

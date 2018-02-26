@@ -6,7 +6,7 @@ import com.example.jason.route_application_kotlin.data.database.DatabasePresente
 import com.example.jason.route_application_kotlin.data.database.DatabaseService;
 import com.example.jason.route_application_kotlin.data.pojos.DatabaseResponse;
 import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
-import com.example.jason.route_application_kotlin.features.CommentInput.MvpCommentInput;
+import com.example.jason.route_application_kotlin.features.commentInput.MvpCommentInput;
 
 import javax.inject.Inject;
 

@@ -1,20 +1,14 @@
-package com.example.jason.route_application_kotlin.features.CommentInput;
+package com.example.jason.route_application_kotlin.features.commentInput;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.jason.route_application_kotlin.R;
-import com.example.jason.route_application_kotlin.data.pojos.CommentInformation;
 import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
-
-import java.text.SimpleDateFormat;
 
 import javax.inject.Inject;
 

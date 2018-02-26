@@ -1,4 +1,4 @@
-package com.example.jason.route_application_kotlin.features.CommentDisplay;
+package com.example.jason.route_application_kotlin.features.commentDisplay;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

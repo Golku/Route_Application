@@ -6,7 +6,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -16,8 +15,8 @@ import com.example.jason.route_application_kotlin.R;
 import com.example.jason.route_application_kotlin.data.pojos.AddressInformation;
 import com.example.jason.route_application_kotlin.data.pojos.CommentInformation;
 import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
-import com.example.jason.route_application_kotlin.features.CommentDisplay.CommentDisplayActivity;
-import com.example.jason.route_application_kotlin.features.CommentInput.CommentInputActivity;
+import com.example.jason.route_application_kotlin.features.commentDisplay.CommentDisplayActivity;
+import com.example.jason.route_application_kotlin.features.commentInput.CommentInputActivity;
 
 import javax.inject.Inject;
 

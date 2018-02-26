@@ -1,5 +1,7 @@
 package com.example.jason.route_application_kotlin.features.addressDetails;
 
+import android.util.Log;
+
 import com.example.jason.route_application_kotlin.data.database.DatabasePresenterCallBack;
 import com.example.jason.route_application_kotlin.data.models.AddressFormatter;
 import com.example.jason.route_application_kotlin.data.pojos.CommentInformation;
@@ -17,7 +19,7 @@ public class AddressDetailsPresenter implements MvpAddressDetails.Presenter, Dat
     @Inject
     AddressFormatter addressFormatter;
 
-    private final String log_tag = "AddressDetails_logTag";
+    private final String log_tag = "addressDetailsLogTag";
 
     private final MvpAddressDetails.View view;
     private MvpAddressDetails.Interactor interactor;
@@ -48,6 +50,7 @@ public class AddressDetailsPresenter implements MvpAddressDetails.Presenter, Dat
 
     @Override
     public void processDatabaseResponse(DatabaseResponse databaseResponse) {
+
         view.onFinishNetworkOperation();
         if(databaseResponse.isError()){
             view.showErrorMessageToUser(databaseResponse.getErrorMessage());
@@ -62,8 +65,6 @@ public class AddressDetailsPresenter implements MvpAddressDetails.Presenter, Dat
                 }
                 if(databaseResponse.getAddressInformation().getBusiness() == 1) {
                     view.updateBusinessTextView("Yes");
-                }else{
-                    view.updateBusinessTextView("No");
                 }
                 view.setUpAdapter(databaseResponse.getAddressInformation());
             }

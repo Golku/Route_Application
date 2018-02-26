@@ -65,6 +65,7 @@ public class RouteInteractor implements MvpRoute.Interactor{
                 Log.d("RouteInteractor", "Failure");
                 Log.d("RouteInteractor", "Throwable: " + t.toString());
                 Log.d("RouteInteractor", "call: " + call.toString());
+                apiPresenterCallBack.onApiResponseFailure();
             }
         });
 
