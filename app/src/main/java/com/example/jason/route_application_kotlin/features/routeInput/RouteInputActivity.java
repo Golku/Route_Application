@@ -185,9 +185,9 @@ public class RouteInputActivity extends DaggerAppCompatActivity implements
     @OnClick(R.id.addAddressToListBtn)
     @Override
     public void onAddAddressButtonClick() {
-//        autoCompleteTextView.setText("");
         //blablabla niet gebruiken als invalid address (blablabla, Au Coinat 27, 2915 Bure, Zwitserland)
         presenter.addAddressToList(autoCompleteTextView.getText().toString());
+        autoCompleteTextView.setText("");
     }
 
     @Override

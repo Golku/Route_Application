@@ -53,12 +53,22 @@ public class CorrectInvalidAddressesActivity extends DaggerAppCompatActivity imp
     }
 
     @Override
-    public void onRemoveAddressButtonClick() {
-        Log.d(log_tag, "Remove address");
+    public void removeAddressFromList(int position) {
+        adapter.notifyItemRemoved(position);
     }
 
     @Override
-    public void onCorrectAddressButtonClick() {
-        Log.d(log_tag, "Correct address");
+    public void openAddressInputFragment() {
+
+    }
+
+    @Override
+    public void onRemoveAddressButtonClick(int position) {
+        presenter.onRemoveAddressButtonClick(position);
+    }
+
+    @Override
+    public void onCorrectAddressButtonClick(int position) {
+        presenter.onCorrectAddressButtonClick(position);
     }
 }

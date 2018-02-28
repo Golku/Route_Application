@@ -25,8 +25,8 @@ public class CorrectInvalidAddressesAdapter extends RecyclerView.Adapter<Correct
     }
 
     public interface AddressListFunctions{
-        void onRemoveAddressButtonClick();
-        void onCorrectAddressButtonClick();
+        void onRemoveAddressButtonClick(int position);
+        void onCorrectAddressButtonClick(int position);
     }
 
     @Override
@@ -67,9 +67,9 @@ public class CorrectInvalidAddressesAdapter extends RecyclerView.Adapter<Correct
 
         public void onClick(View v) {
             if(v == removeAddressBtn){
-                addressListFunctions.onRemoveAddressButtonClick();
+                addressListFunctions.onRemoveAddressButtonClick(this.getAdapterPosition());
             }else if(v == correctAddressBtn){
-                addressListFunctions.onCorrectAddressButtonClick();
+                addressListFunctions.onCorrectAddressButtonClick(this.getAdapterPosition());
             }
         }
 

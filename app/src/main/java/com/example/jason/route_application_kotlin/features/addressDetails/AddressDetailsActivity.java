@@ -62,7 +62,11 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements M
 
     private void init(){
         String address = getIntent().getStringExtra("address");
+
+        //If this fails everything else fails in this view! FIX THIS!!
+        //This fails when the inputted address does not have the right format : street, postcode city, country
         presenter.formatAddress(address);
+
         presenter.updateTextViews();
         presenter.getAddressInformation();
     }

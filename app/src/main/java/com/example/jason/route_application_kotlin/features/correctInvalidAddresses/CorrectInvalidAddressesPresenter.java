@@ -12,7 +12,6 @@ public class CorrectInvalidAddressesPresenter implements MvpCorrectInvalidAddres
 
     private ArrayList<String> invalidAddressesList;
 
-
     private MvpCorrectInvalidAddresses.View view;
     private MvpCorrectInvalidAddresses.Interactor interactor;
 
@@ -32,5 +31,14 @@ public class CorrectInvalidAddressesPresenter implements MvpCorrectInvalidAddres
         view.setUpAdapter(invalidAddressesList);
     }
 
+    @Override
+    public void onRemoveAddressButtonClick(int position) {
+        invalidAddressesList.remove(position);
+        view.removeAddressFromList(position);
+    }
 
+    @Override
+    public void onCorrectAddressButtonClick(int position) {
+
+    }
 }
