@@ -17,6 +17,7 @@ import com.example.jason.route_application_kotlin.data.pojos.CommentInformation;
 import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
 import com.example.jason.route_application_kotlin.features.commentDisplay.CommentDisplayActivity;
 import com.example.jason.route_application_kotlin.features.commentInput.CommentInputActivity;
+import com.google.gson.JsonSyntaxException;
 
 import javax.inject.Inject;
 
@@ -65,10 +66,16 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements M
 
         //If this fails everything else fails in this view! FIX THIS!!
         //This fails when the inputted address does not have the right format : street, postcode city, country
-        presenter.formatAddress(address);
 
-        presenter.updateTextViews();
-        presenter.getAddressInformation();
+        try{
+            presenter.formatAddress(address);
+            presenter.updateTextViews();
+            presenter.getAddressInformation();
+        }catch (ArrayIndexOutOfBoundsException e){
+            onFinishNetworkOperation();
+            showToast("Invalid Address");
+        }
+
     }
 
     @Override

@@ -38,7 +38,7 @@ public class CorrectInvalidAddressesPresenter implements MvpCorrectInvalidAddres
     }
 
     @Override
-    public void onCorrectAddressButtonClick(int position) {
-
+    public void onItemClick(int position) {
+        view.showReformAddressDialog();
     }
 }

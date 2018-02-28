@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.example.jason.route_application_kotlin.R;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class CorrectInvalidAddressesAdapter extends RecyclerView.Adapter<Correct
 
     public interface AddressListFunctions{
         void onRemoveAddressButtonClick(int position);
-        void onCorrectAddressButtonClick(int position);
+        void onListItemClick(int position);
     }
 
     @Override
@@ -48,28 +49,25 @@ public class CorrectInvalidAddressesAdapter extends RecyclerView.Adapter<Correct
 
     class CustomViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private EditText invalidAddress;
-        private Button removeAddressBtn;
-        private Button correctAddressBtn;
+        private TextView invalidAddress;
+        private ImageView deleteAddressBtn;
         private ViewGroup container;
 
 
         public CustomViewHolder(View itemView) {
             super(itemView);
-            this.invalidAddress = itemView.findViewById(R.id.invalidAddress);
-            this.removeAddressBtn = itemView.findViewById(R.id.removeAddressBtn);
-            this.correctAddressBtn = itemView.findViewById(R.id.correctAddressBtn);
+            this.invalidAddress = itemView.findViewById(R.id.invalidAddressTextView);
+            this.deleteAddressBtn = itemView.findViewById(R.id.deleteAddressBtn);
             this.container = itemView.findViewById(R.id.root_layout);
-            this.removeAddressBtn.setOnClickListener(this);
-            this.correctAddressBtn.setOnClickListener(this);
+            this.deleteAddressBtn.setOnClickListener(this);
             this.container.setOnClickListener(this);
         }
 
         public void onClick(View v) {
-            if(v == removeAddressBtn){
+            if(v == deleteAddressBtn){
                 addressListFunctions.onRemoveAddressButtonClick(this.getAdapterPosition());
-            }else if(v == correctAddressBtn){
-                addressListFunctions.onCorrectAddressButtonClick(this.getAdapterPosition());
+            }else if(v == container){
+                addressListFunctions.onListItemClick(this.getAdapterPosition());
             }
         }
 

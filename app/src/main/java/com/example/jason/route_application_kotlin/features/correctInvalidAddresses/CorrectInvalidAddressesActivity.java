@@ -1,9 +1,11 @@
 package com.example.jason.route_application_kotlin.features.correctInvalidAddresses;
 
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import com.example.jason.route_application_kotlin.R;
@@ -58,7 +60,9 @@ public class CorrectInvalidAddressesActivity extends DaggerAppCompatActivity imp
     }
 
     @Override
-    public void openAddressInputFragment() {
+    public void showReformAddressDialog() {
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(CorrectInvalidAddressesActivity.this);
+        View mview = getLayoutInflater().inflate(R.layout.reform_address_dialog, null);
 
     }
 
@@ -68,7 +72,7 @@ public class CorrectInvalidAddressesActivity extends DaggerAppCompatActivity imp
     }
 
     @Override
-    public void onCorrectAddressButtonClick(int position) {
-        presenter.onCorrectAddressButtonClick(position);
+    public void onListItemClick(int position) {
+        presenter.onItemClick(position);
     }
 }

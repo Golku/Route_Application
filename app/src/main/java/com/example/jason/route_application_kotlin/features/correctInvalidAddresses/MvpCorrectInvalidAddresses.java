@@ -11,14 +11,14 @@ public interface MvpCorrectInvalidAddresses {
     interface View{
         void setUpAdapter(ArrayList<String> invalidAddressesList);
         void removeAddressFromList(int position);
-        void openAddressInputFragment();
+        void showReformAddressDialog();
     }
 
     interface Presenter{
         void setUpInvalidAddressesList(ArrayList<String> invalidAddressesList);
         void setUpRecyclerView();
         void onRemoveAddressButtonClick(int position);
-        void onCorrectAddressButtonClick(int position);
+        void onItemClick(int position);
     }
 
     interface Interactor{
