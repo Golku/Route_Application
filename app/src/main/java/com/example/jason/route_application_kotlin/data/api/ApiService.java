@@ -21,4 +21,7 @@ public interface ApiService {
     @POST("submitroute")
     Call<ApiResponse> submitRoute(@Body OutGoingRoute outGoingRoute);
 
+    @POST("")
+    Call<ApiResponse> submitCorrectedAddresses(@Body OutGoingRoute outGoingRoute);
+
 }

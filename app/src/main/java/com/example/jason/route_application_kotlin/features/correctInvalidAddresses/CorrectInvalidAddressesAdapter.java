@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import com.example.jason.route_application_kotlin.R;
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ public class CorrectInvalidAddressesAdapter extends RecyclerView.Adapter<Correct
 
     class CustomViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private TextView invalidAddress;
+        private EditText invalidAddress;
         private Button removeAddressBtn;
         private Button correctAddressBtn;
         private ViewGroup container;
