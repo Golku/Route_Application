@@ -24,6 +24,6 @@ public interface ApiService {
     Call<ApiResponse> submitRoute(@Body OutGoingRoute outGoingRoute);
 
     @POST("invalidaddressessubmition")
-    Call<ApiResponse> submitInvalidAddresses(@Body ArrayList<String> correctedAddresses);
+    Call<ApiResponse> submitCorrectedAddresses(@Body ArrayList<String> correctedAddresses);
 
 }

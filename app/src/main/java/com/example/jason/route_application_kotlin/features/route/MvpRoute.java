@@ -13,8 +13,6 @@ public interface MvpRoute {
 
     interface View{
 
-        void showInvalidAddresses(ArrayList<String> invalidAddresses);
-
         void setUpAdapter(OrganizedRoute organizedRoute);
 
         void showAddressDetails(String address);
@@ -34,8 +32,6 @@ public interface MvpRoute {
 
         void getRouteFromApi();
 
-        void sendRouteToApi(OutGoingRoute outGoingRoute);
-
         void onListItemClick(String address);
 
         void onGoButtonClick(String address);
@@ -44,7 +40,6 @@ public interface MvpRoute {
 
     interface Interactor{
         void getOrganizedRouteFromApi(ApiPresenterCallBack apiPresenterCallBack, String routeCode);
-        void submitRouteForOrganizing(ApiPresenterCallBack apiPresenterCallBack, OutGoingRoute outGoingRoute);
     }
 
 }

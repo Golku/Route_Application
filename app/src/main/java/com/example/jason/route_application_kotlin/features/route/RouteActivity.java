@@ -53,30 +53,9 @@ public class RouteActivity extends DaggerAppCompatActivity implements MvpRoute.V
     }
 
     private void init(){
-
-        String action = getIntent().getStringExtra("action");
         String routeCode = getIntent().getStringExtra("routeCode");
-
         presenter.setRouteCode(routeCode);
-
-        if(action.equals("get")){
-
-            presenter.getRouteFromApi();
-
-        }else if(action.equals("send")){
-
-            String origin = getIntent().getStringExtra("origin");
-            ArrayList<String> inputtedAddressesList =  getIntent().getStringArrayListExtra("addressesList");
-
-            OutGoingRoute outGoingRoute = new OutGoingRoute(
-                    routeCode,
-                    origin,
-                    inputtedAddressesList
-            );
-
-            presenter.sendRouteToApi(outGoingRoute);
-        }
-
+        presenter.getRouteFromApi();
     }
 
     @Override
@@ -99,13 +78,6 @@ public class RouteActivity extends DaggerAppCompatActivity implements MvpRoute.V
     @Override
     public void onGoButtonClick(String address) {
         presenter.onGoButtonClick(address);
-    }
-
-    @Override
-    public void showInvalidAddresses(ArrayList<String> invalidAddresses) {
-        Intent i = new Intent (this, CorrectInvalidAddressesActivity.class);
-        i.putStringArrayListExtra("invalidAddresses", invalidAddresses);
-        startActivity(i);
     }
 
     @Override

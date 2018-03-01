@@ -36,12 +36,6 @@ public class RoutePresenter implements MvpRoute.Presenter, ApiPresenterCallBack 
     }
 
     @Override
-    public void sendRouteToApi(OutGoingRoute outGoingRoute) {
-        view.onStartNetworkOperation();
-        interactor.submitRouteForOrganizing(this, outGoingRoute);
-    }
-
-    @Override
     public void getRouteFromApi() {
         routeFetchAttempt++;
         interactor.getOrganizedRouteFromApi(this, routeCode);
@@ -49,22 +43,14 @@ public class RoutePresenter implements MvpRoute.Presenter, ApiPresenterCallBack 
 
     @Override
     public void processApiResponse(ApiResponse apiResponse) {
-        //check response for errors and other messages
-        if(!apiResponse.getRouteIsNull()) {
-            if(!apiResponse.getOrganizingInProgress()){
-                if(apiResponse.getRouteHasInvalidAddresses()){
-                    view.onFinishNetworkOperation();
-                    view.showInvalidAddresses(apiResponse.getInvalidAddresses());
-                }else{
-                    if(apiResponse.getOrganizedRoute() != null){
-                        view.onFinishNetworkOperation();
-                        view.setUpAdapter(apiResponse.getOrganizedRoute());
-                    }else{
-                        view.onFinishNetworkOperation();
-                        view.showToast("Api din't send the route properly. Please try again.");
-                    }
-                }
-            }else{
+
+        if(apiResponse.getRouteIsNull()) {
+            view.onFinishNetworkOperation();
+            view.showToast("Route does not exist. Try resubmitting the route.");
+        }else{
+
+            if(apiResponse.getOrganizingInProgress()){
+
                 if(routeFetchAttempt<5){
                     handler.postDelayed(new Runnable() {
                         @Override
@@ -78,10 +64,19 @@ public class RoutePresenter implements MvpRoute.Presenter, ApiPresenterCallBack 
                     view.onFinishNetworkOperation();
                     view.showToast("Unable to fetch route after 5 attempts.");
                 }
+
+            }else{
+
+                view.onFinishNetworkOperation();
+
+                if (apiResponse.getOrganizedRoute() != null) {
+                    view.setUpAdapter(apiResponse.getOrganizedRoute());
+                } else {
+                    view.showToast("Api din't send the route properly. Please try again.");
+                }
+
             }
-        }else{
-            view.onFinishNetworkOperation();
-            view.showToast("Route does not exist. Try resubmitting the route.");
+
         }
     }
 

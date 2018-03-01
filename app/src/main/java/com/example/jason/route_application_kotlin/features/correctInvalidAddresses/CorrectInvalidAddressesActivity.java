@@ -1,5 +1,6 @@
 package com.example.jason.route_application_kotlin.features.correctInvalidAddresses;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -7,10 +8,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.jason.route_application_kotlin.R;
+import com.example.jason.route_application_kotlin.data.pojos.OutGoingRoute;
+import com.example.jason.route_application_kotlin.features.route.RouteActivity;
 
 import java.util.ArrayList;
 
@@ -29,8 +33,12 @@ public class CorrectInvalidAddressesActivity extends DaggerAppCompatActivity imp
 
     @BindView(R.id.recView)
     RecyclerView recyclerView;
+    @BindView(R.id.instructionTextView)
+    TextView instructionTextView;
     @BindView(R.id.messageToUserTextView)
     TextView messageToUserTextView;
+    @BindView(R.id.progressBar)
+    ProgressBar progressBar;
 
     private CorrectInvalidAddressesAdapter adapter;
 
@@ -53,11 +61,23 @@ public class CorrectInvalidAddressesActivity extends DaggerAppCompatActivity imp
 
     private void init(){
 
-        messageToUserTextView.setText("This addresses are invalid. Here you can remove then from the route or correct them.");
+        instructionTextView.setText("This addresses are invalid. Here you can remove then from the route or correct them.");
 
-        ArrayList<String> invalidAddresses = getIntent().getStringArrayListExtra("invalidAddresses");
-        presenter.setUpInvalidAddressesList(invalidAddresses);
+        String routeCode = getIntent().getStringExtra("routeCode");
+        String origin = getIntent().getStringExtra("origin");
+        ArrayList<String> inputtedAddressesList =  getIntent().getStringArrayListExtra("addressesList");
 
+        OutGoingRoute outGoingRoute = new OutGoingRoute(
+                routeCode,
+                origin,
+                inputtedAddressesList
+        );
+
+        presenter.submitRoute(outGoingRoute);
+    }
+
+    @Override
+    public void setUpAlertDialog() {
         alertDialogBuilder = new AlertDialog.Builder(CorrectInvalidAddressesActivity.this);
         view = getLayoutInflater().inflate(R.layout.reform_address_dialog, null);
 
@@ -67,8 +87,6 @@ public class CorrectInvalidAddressesActivity extends DaggerAppCompatActivity imp
 
         alertDialogBuilder.setView(view);
         alertDialog = alertDialogBuilder.create();
-
-        presenter.setUpRecyclerView();
     }
 
     @Override
@@ -135,6 +153,24 @@ public class CorrectInvalidAddressesActivity extends DaggerAppCompatActivity imp
     @Override
     public void onListItemClick(int position) {
         presenter.onItemClick(position);
+    }
+
+    @Override
+    public void onStartNetworkOperation() {
+        messageToUserTextView.setText("Validating the addresses");
+    }
+
+    @Override
+    public void onFinishNetworkOperation() {
+        messageToUserTextView.setVisibility(View.GONE);
+        progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void startRouteActivity(String routeCode) {
+        Intent intent = new Intent(this, RouteActivity.class);
+        intent.putExtra("routeCode", routeCode);
+        startActivity(intent);
     }
 
     @Override
