@@ -4,12 +4,13 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.jason.route_application_kotlin.R;
-import com.example.jason.route_application_kotlin.features.routeInput.RouteInputAdapter;
 
 import java.util.ArrayList;
 
@@ -17,6 +18,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import dagger.android.support.DaggerAppCompatActivity;
 
 public class CorrectInvalidAddressesActivity extends DaggerAppCompatActivity implements MvpCorrectInvalidAddresses.View, CorrectInvalidAddressesAdapter.AddressListFunctions{
@@ -32,6 +34,15 @@ public class CorrectInvalidAddressesActivity extends DaggerAppCompatActivity imp
 
     private CorrectInvalidAddressesAdapter adapter;
 
+    private AlertDialog.Builder alertDialogBuilder;
+    private View view;
+    private AlertDialog alertDialog;
+
+    private EditText correctedAddressEditText;
+    private Button cancelDialogBtn;
+    private Button changeAddressBtn;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,9 +52,22 @@ public class CorrectInvalidAddressesActivity extends DaggerAppCompatActivity imp
     }
 
     private void init(){
+
         messageToUserTextView.setText("This addresses are invalid. Here you can remove then from the route or correct them.");
+
         ArrayList<String> invalidAddresses = getIntent().getStringArrayListExtra("invalidAddresses");
         presenter.setUpInvalidAddressesList(invalidAddresses);
+
+        alertDialogBuilder = new AlertDialog.Builder(CorrectInvalidAddressesActivity.this);
+        view = getLayoutInflater().inflate(R.layout.reform_address_dialog, null);
+
+        correctedAddressEditText = view.findViewById(R.id.correctedAddressEditText);
+        cancelDialogBtn = view.findViewById(R.id.cancelDialogBtn);
+        changeAddressBtn = view.findViewById(R.id.changeAddressBtn);
+
+        alertDialogBuilder.setView(view);
+        alertDialog = alertDialogBuilder.create();
+
         presenter.setUpRecyclerView();
     }
 
@@ -55,15 +79,52 @@ public class CorrectInvalidAddressesActivity extends DaggerAppCompatActivity imp
     }
 
     @Override
+    public void updateList(int position) {
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
     public void removeAddressFromList(int position) {
         adapter.notifyItemRemoved(position);
     }
 
     @Override
-    public void showReformAddressDialog() {
-        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(CorrectInvalidAddressesActivity.this);
-        View mview = getLayoutInflater().inflate(R.layout.reform_address_dialog, null);
+    public void showReformAddressDialog(final int position, String address) {
 
+        correctedAddressEditText.setText(address);
+
+        changeAddressBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!correctedAddressEditText.getText().toString().isEmpty()) {
+                    String correctedAddress = correctedAddressEditText.getText().toString();
+                    alertDialog.dismiss();
+                    onDialogChangeAddressBtnClick(position, correctedAddress);
+                }else{
+                    showToast("Fill in a address");
+                }
+            }
+        });
+
+        cancelDialogBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+            }
+        });
+
+        alertDialog.show();
+
+    }
+
+    @OnClick(R.id.submitAddressesBtn)
+    public void onSubmitAddressesBtnClick(){
+        presenter.submitCorrectedAddresses();
+    }
+
+    @Override
+    public void onDialogChangeAddressBtnClick(int position, String correctedAddress){
+        presenter.correctAddress(position, correctedAddress);
     }
 
     @Override
@@ -74,5 +135,11 @@ public class CorrectInvalidAddressesActivity extends DaggerAppCompatActivity imp
     @Override
     public void onListItemClick(int position) {
         presenter.onItemClick(position);
+    }
+
+    @Override
+    public void showToast(String message) {
+        Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
+        toast.show();
     }
 }

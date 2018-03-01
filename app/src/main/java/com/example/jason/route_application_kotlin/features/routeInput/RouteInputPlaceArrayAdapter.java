@@ -65,7 +65,11 @@ public class RouteInputPlaceArrayAdapter extends ArrayAdapter<RouteInputPlaceArr
 
     @Override
     public PlaceAutocomplete getItem(int position) {
-        return mResultList.get(position);
+        try {
+            return mResultList.get(position);
+        }catch (IndexOutOfBoundsException e){
+            return null;
+        }
     }
 
     private ArrayList<PlaceAutocomplete> getPredictions(CharSequence constraint) {

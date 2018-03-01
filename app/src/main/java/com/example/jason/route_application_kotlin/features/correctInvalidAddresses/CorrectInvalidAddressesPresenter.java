@@ -1,5 +1,8 @@
 package com.example.jason.route_application_kotlin.features.correctInvalidAddresses;
 
+import com.example.jason.route_application_kotlin.data.api.ApiPresenterCallBack;
+import com.example.jason.route_application_kotlin.data.pojos.ApiResponse;
+
 import java.util.ArrayList;
 
 import javax.inject.Inject;
@@ -8,7 +11,7 @@ import javax.inject.Inject;
  * Created by Jason on 23-Feb-18.
  */
 
-public class CorrectInvalidAddressesPresenter implements MvpCorrectInvalidAddresses.Presenter {
+public class CorrectInvalidAddressesPresenter implements MvpCorrectInvalidAddresses.Presenter, ApiPresenterCallBack{
 
     private ArrayList<String> invalidAddressesList;
 
@@ -39,6 +42,28 @@ public class CorrectInvalidAddressesPresenter implements MvpCorrectInvalidAddres
 
     @Override
     public void onItemClick(int position) {
-        view.showReformAddressDialog();
+        view.showReformAddressDialog(position, invalidAddressesList.get(position));
+    }
+
+    @Override
+    public void correctAddress(int position, String correctedAddress) {
+        invalidAddressesList.set(position, correctedAddress);
+        view.updateList(position);
+    }
+
+    @Override
+    public void submitCorrectedAddresses() {
+        interactor.submitAddresses(this, invalidAddressesList);
+    }
+
+    @Override
+    public void processApiResponse(ApiResponse apiResponse) {
+        //do nothing?
+        view.showToast("Responded");
+    }
+
+    @Override
+    public void onApiResponseFailure() {
+        view.showToast("Connection failed");
     }
 }
