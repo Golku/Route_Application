@@ -1,9 +1,11 @@
 package com.example.jason.route_application_kotlin.features.correctInvalidAddresses;
 
 import com.example.jason.route_application_kotlin.data.api.ApiPresenterCallBack;
+import com.example.jason.route_application_kotlin.data.pojos.CorrectedAddresses;
 import com.example.jason.route_application_kotlin.data.pojos.OutGoingRoute;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Created by Jason on 23-Feb-18.
@@ -12,6 +14,7 @@ import java.util.ArrayList;
 public interface MvpCorrectInvalidAddresses {
 
     interface View{
+
         void setUpAdapter(ArrayList<String> invalidAddressesList);
         void removeAddressFromList(int position);
         void showReformAddressDialog(int position, String address);
@@ -22,7 +25,7 @@ public interface MvpCorrectInvalidAddresses {
         void onStartNetworkOperation();
         void onFinishNetworkOperation();
         void startRouteActivity(String routeCode);
-        void setUpAlertDialog();
+        void setUpView();
     }
 
     interface Presenter{
@@ -30,14 +33,14 @@ public interface MvpCorrectInvalidAddresses {
         void onItemClick(int position);
         void correctAddress(int position, String correctedAddress);
         void submitRoute(OutGoingRoute outGoingRoute);
-        void getRouteFromApi();
+        void checkForInvalidAddresses();
         void submitCorrectedAddresses();
     }
 
     interface Interactor{
         void submitRoute(ApiPresenterCallBack apiPresenterCallBack, OutGoingRoute outGoingRoute);
         void getInvalidAddresses(ApiPresenterCallBack apiPresenterCallBack, String routeCode);
-        void submitCorrectedAddresses(ApiPresenterCallBack apiPresenterCallBack, ArrayList<String> correctedAddresses);
+        void submitCorrectedAddresses(ApiPresenterCallBack apiPresenterCallBack, CorrectedAddresses correctedAddresses);
     }
 
 }

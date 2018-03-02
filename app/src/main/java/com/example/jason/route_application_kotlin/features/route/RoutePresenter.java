@@ -38,6 +38,7 @@ public class RoutePresenter implements MvpRoute.Presenter, ApiPresenterCallBack 
     @Override
     public void getRouteFromApi() {
         routeFetchAttempt++;
+        view.onStartNetworkOperation();
         interactor.getOrganizedRouteFromApi(this, routeCode);
     }
 

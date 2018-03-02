@@ -1,9 +1,11 @@
 package com.example.jason.route_application_kotlin.data.api;
 
 import com.example.jason.route_application_kotlin.data.pojos.ApiResponse;
+import com.example.jason.route_application_kotlin.data.pojos.CorrectedAddresses;
 import com.example.jason.route_application_kotlin.data.pojos.OutGoingRoute;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -20,10 +22,12 @@ public interface ApiService {
     @GET("getroute/{routeCode}")
     Call<ApiResponse> getRoute(@Path("routeCode")String routeCode);
 
+    @GET("getinvalidaddresses/{routeCode}")
+    Call<ApiResponse> getInvalidAddresses(@Path("routeCode")String routeCode);
+
     @POST("submitroute")
     Call<ApiResponse> submitRoute(@Body OutGoingRoute outGoingRoute);
 
     @POST("invalidaddressessubmition")
-    Call<ApiResponse> submitCorrectedAddresses(@Body ArrayList<String> correctedAddresses);
-
+    Call<ApiResponse> submitCorrectedAddresses(@Body CorrectedAddresses correctedAddresses);
 }

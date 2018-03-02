@@ -237,15 +237,8 @@ public class RouteInputActivity extends DaggerAppCompatActivity implements
     }
 
     @OnClick(R.id.getRouteBtn)
-    @Override
-    public void onGetRouteButtonClick() {
-        presenter.getRoute();
-    }
-
-    @Override
     public void startRoute() {
         Intent intent = new Intent(this, RouteActivity.class);
-        intent.putExtra("action", "get");
         intent.putExtra("routeCode", routeCodeInputEditText.getText().toString());
         startActivity(intent);
     }

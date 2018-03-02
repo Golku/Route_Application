@@ -39,6 +39,8 @@ public class CorrectInvalidAddressesActivity extends DaggerAppCompatActivity imp
     TextView messageToUserTextView;
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
+    @BindView(R.id.submitAddressesBtn)
+    Button submitAddressesBtn;
 
     private CorrectInvalidAddressesAdapter adapter;
 
@@ -60,9 +62,6 @@ public class CorrectInvalidAddressesActivity extends DaggerAppCompatActivity imp
     }
 
     private void init(){
-
-        instructionTextView.setText("This addresses are invalid. Here you can remove then from the route or correct them.");
-
         String routeCode = getIntent().getStringExtra("routeCode");
         String origin = getIntent().getStringExtra("origin");
         ArrayList<String> inputtedAddressesList =  getIntent().getStringArrayListExtra("addressesList");
@@ -77,7 +76,11 @@ public class CorrectInvalidAddressesActivity extends DaggerAppCompatActivity imp
     }
 
     @Override
-    public void setUpAlertDialog() {
+    public void setUpView() {
+        instructionTextView.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.VISIBLE);
+        submitAddressesBtn.setVisibility(View.VISIBLE);
+
         alertDialogBuilder = new AlertDialog.Builder(CorrectInvalidAddressesActivity.this);
         view = getLayoutInflater().inflate(R.layout.reform_address_dialog, null);
 

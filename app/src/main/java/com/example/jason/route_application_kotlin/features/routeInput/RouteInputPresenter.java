@@ -44,9 +44,4 @@ public class RouteInputPresenter implements MvpRouteInput.Presenter{
     public void submitRouteRoute() {
         view.startRoute(listOfAddresses);
     }
-
-    @Override
-    public void getRoute() {
-        view.startRoute();
-    }
 }
