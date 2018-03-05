@@ -52,13 +52,13 @@ public class RoutePresenter implements MvpRoute.Presenter, ApiPresenterCallBack 
 
             if(apiResponse.getOrganizingInProgress()){
 
-                if(routeFetchAttempt<5){
+                if(routeFetchAttempt<6){
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             getRouteFromApi();
                         }
-                    }, 5000);
+                    }, 10000);
                 }else{
                     //message the user that the route was not fetch after x amount of attempts
                     //user can start the route fetching process again with a button click.

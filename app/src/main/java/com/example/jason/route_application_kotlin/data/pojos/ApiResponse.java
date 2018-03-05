@@ -6,13 +6,24 @@ import java.util.ArrayList;
  * Created by Jason on 14-Feb-18.
  */
 
+
 public class ApiResponse {
 
+    private String requestType;
     private boolean organizingInProgress;
+    private boolean addressValidatingInProgress;
     private boolean routeHasInvalidAddresses;
     private boolean routeIsNull;
     private OrganizedRoute organizedRoute;
     private ArrayList<String> invalidAddresses;
+
+    public String getRequestType() {
+        return requestType;
+    }
+
+    public void setRequestType(String requestType) {
+        this.requestType = requestType;
+    }
 
     public boolean getOrganizingInProgress() {
         return organizingInProgress;
@@ -20,6 +31,14 @@ public class ApiResponse {
 
     public void setOrganizingInProgress(boolean organizingInProgress) {
         this.organizingInProgress = organizingInProgress;
+    }
+
+    public boolean getAddressValidatingInProgress() {
+        return addressValidatingInProgress;
+    }
+
+    public void setAddressValidatingInProgress(boolean addressValidatingInProgress) {
+        this.addressValidatingInProgress = addressValidatingInProgress;
     }
 
     public boolean getRouteHasInvalidAddresses() {
@@ -54,4 +73,3 @@ public class ApiResponse {
         this.invalidAddresses = invalidAddresses;
     }
 }
-

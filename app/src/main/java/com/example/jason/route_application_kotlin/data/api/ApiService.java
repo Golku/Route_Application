@@ -5,7 +5,6 @@ import com.example.jason.route_application_kotlin.data.pojos.CorrectedAddresses;
 import com.example.jason.route_application_kotlin.data.pojos.OutGoingRoute;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.Body;

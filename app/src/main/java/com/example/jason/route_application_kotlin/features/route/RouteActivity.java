@@ -60,6 +60,7 @@ public class RouteActivity extends DaggerAppCompatActivity implements MvpRoute.V
 
     @Override
     public void setUpAdapter(OrganizedRoute organizedRoute) {
+
         privateAddressesTextView.setText(String.valueOf(organizedRoute.getPrivateAddressesCount()));
         businessAddressesTextView.setText(String.valueOf(organizedRoute.getBusinessAddressesCount()));
         wrongAddressesTextView.setText(String.valueOf(organizedRoute.getWrongAddressesCount()));

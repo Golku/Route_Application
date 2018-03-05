@@ -229,7 +229,6 @@ public class RouteInputActivity extends DaggerAppCompatActivity implements
     @Override
     public void startRoute(ArrayList<String> listOfAddresses) {
         Intent intent = new Intent(this, CorrectInvalidAddressesActivity.class);
-//        intent.putExtra("action", "send");
         intent.putExtra("routeCode", routeCodeInputEditText.getText().toString());
         intent.putExtra("origin", "vrij-harnasch 21, den hoorn");
         intent.putStringArrayListExtra("addressesList", listOfAddresses);

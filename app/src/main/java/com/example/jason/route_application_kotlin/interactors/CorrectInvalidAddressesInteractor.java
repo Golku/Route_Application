@@ -10,7 +10,6 @@ import com.example.jason.route_application_kotlin.data.pojos.OutGoingRoute;
 import com.example.jason.route_application_kotlin.features.correctInvalidAddresses.MvpCorrectInvalidAddresses;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -25,6 +24,7 @@ import retrofit2.Response;
 public class CorrectInvalidAddressesInteractor implements MvpCorrectInvalidAddresses.Interactor{
 
     private ApiService apiService;
+    private final String log_tag = "logTagDebug";
 
     @Inject
     public CorrectInvalidAddressesInteractor(ApiService apiService) {
@@ -39,15 +39,14 @@ public class CorrectInvalidAddressesInteractor implements MvpCorrectInvalidAddre
         call.enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                Log.d("RouteInteractor", "Responded");
                 apiPresenterCallBack.processApiResponse(response.body());
             }
 
             @Override
             public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Log.d("RouteInteractor", "Failure");
-                Log.d("RouteInteractor", "Throwable: " + t.toString());
-                Log.d("RouteInteractor", "call: " + call.toString());
+                Log.d(log_tag, "Failure");
+                Log.d(log_tag, "Throwable: " + t.toString());
+                Log.d(log_tag, "call: " + call.toString());
                 apiPresenterCallBack.onApiResponseFailure();
             }
         });
@@ -62,15 +61,14 @@ public class CorrectInvalidAddressesInteractor implements MvpCorrectInvalidAddre
         call.enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                Log.d("RouteInteractor", "Responded");
                 apiPresenterCallBack.processApiResponse(response.body());
             }
 
             @Override
             public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Log.d("RouteInteractor", "Failure");
-                Log.d("RouteInteractor", "Throwable: " + t.toString());
-                Log.d("RouteInteractor", "call: " + call.toString());
+                Log.d(log_tag, "Failure");
+                Log.d(log_tag, "Throwable: " + t.toString());
+                Log.d(log_tag, "call: " + call.toString());
                 apiPresenterCallBack.onApiResponseFailure();
             }
         });
@@ -85,15 +83,14 @@ public class CorrectInvalidAddressesInteractor implements MvpCorrectInvalidAddre
         call.enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                Log.d("RouteInteractor", "Responded");
                 apiPresenterCallBack.processApiResponse(response.body());
             }
 
             @Override
             public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Log.d("RouteInteractor", "Failure");
-                Log.d("RouteInteractor", "Throwable: " + t.toString());
-                Log.d("RouteInteractor", "call: " + call.toString());
+                Log.d(log_tag, "Failure");
+                Log.d(log_tag, "Throwable: " + t.toString());
+                Log.d(log_tag, "call: " + call.toString());
                 apiPresenterCallBack.onApiResponseFailure();
             }
         });

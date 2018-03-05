@@ -1,16 +1,14 @@
 package com.example.jason.route_application_kotlin.data.pojos;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 /**
- * Created by Jason on 02-Mar-18.
+ * Created by Jason on 3/3/2018.
  */
 
 public class CorrectedAddresses {
 
     private String routeCode;
-    private ArrayList<String> invalidAddressesList;
     private ArrayList<String> correctedAddressesList;
 
     public String getRouteCode() {
@@ -21,14 +19,6 @@ public class CorrectedAddresses {
         this.routeCode = routeCode;
     }
 
-    public ArrayList<String> getInvalidAddressesList() {
-        return invalidAddressesList;
-    }
-
-    public void setInvalidAddressesList(ArrayList<String> invalidAddressesList) {
-        this.invalidAddressesList = invalidAddressesList;
-    }
-
     public ArrayList<String> getCorrectedAddressesList() {
         return correctedAddressesList;
     }
@@ -36,5 +26,4 @@ public class CorrectedAddresses {
     public void setCorrectedAddressesList(ArrayList<String> correctedAddressesList) {
         this.correctedAddressesList = correctedAddressesList;
     }
-
 }

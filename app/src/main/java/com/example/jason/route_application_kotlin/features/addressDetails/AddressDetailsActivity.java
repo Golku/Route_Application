@@ -79,6 +79,14 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements M
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        //Ask Wesley why this doesn't work
+        //after back button is press you still get the toast "connection fail" if connection fails
+        finish();
+    }
+
+    @Override
     public void setUpAddressInformation(FormattedAddress formattedAddress) {
         streetTextView.setText(formattedAddress.getStreet());
         postcodeTextView.setText(formattedAddress.getPostCode());

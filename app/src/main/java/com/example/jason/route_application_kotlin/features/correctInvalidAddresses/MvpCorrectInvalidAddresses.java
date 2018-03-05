@@ -5,7 +5,6 @@ import com.example.jason.route_application_kotlin.data.pojos.CorrectedAddresses;
 import com.example.jason.route_application_kotlin.data.pojos.OutGoingRoute;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 /**
  * Created by Jason on 23-Feb-18.
@@ -26,6 +25,8 @@ public interface MvpCorrectInvalidAddresses {
         void onFinishNetworkOperation();
         void startRouteActivity(String routeCode);
         void setUpView();
+        void showScreenElements();
+        void hideScreenElements();
     }
 
     interface Presenter{

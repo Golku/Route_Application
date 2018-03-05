@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,7 +28,7 @@ import dagger.android.support.DaggerAppCompatActivity;
 
 public class CorrectInvalidAddressesActivity extends DaggerAppCompatActivity implements MvpCorrectInvalidAddresses.View, CorrectInvalidAddressesAdapter.AddressListFunctions{
 
-    private final String log_tag = "correctAddressesLogTag";
+    private final String log_tag = "logTagDebug";
 
     @Inject MvpCorrectInvalidAddresses.Presenter presenter;
 
@@ -76,11 +77,21 @@ public class CorrectInvalidAddressesActivity extends DaggerAppCompatActivity imp
     }
 
     @Override
-    public void setUpView() {
+    public void showScreenElements() {
         instructionTextView.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.VISIBLE);
         submitAddressesBtn.setVisibility(View.VISIBLE);
+    }
 
+    @Override
+    public void hideScreenElements() {
+        instructionTextView.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.GONE);
+        submitAddressesBtn.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void setUpView() {
         alertDialogBuilder = new AlertDialog.Builder(CorrectInvalidAddressesActivity.this);
         view = getLayoutInflater().inflate(R.layout.reform_address_dialog, null);
 
@@ -160,7 +171,8 @@ public class CorrectInvalidAddressesActivity extends DaggerAppCompatActivity imp
 
     @Override
     public void onStartNetworkOperation() {
-        messageToUserTextView.setText("Validating the addresses");
+        messageToUserTextView.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -174,6 +186,7 @@ public class CorrectInvalidAddressesActivity extends DaggerAppCompatActivity imp
         Intent intent = new Intent(this, RouteActivity.class);
         intent.putExtra("routeCode", routeCode);
         startActivity(intent);
+        finish();
     }
 
     @Override
