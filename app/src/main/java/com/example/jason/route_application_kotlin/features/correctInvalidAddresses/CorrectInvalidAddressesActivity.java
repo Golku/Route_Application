@@ -190,6 +190,11 @@ public class CorrectInvalidAddressesActivity extends DaggerAppCompatActivity imp
     }
 
     @Override
+    public void closeActivity() {
+        finish();
+    }
+
+    @Override
     public void showToast(String message) {
         Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
         toast.show();

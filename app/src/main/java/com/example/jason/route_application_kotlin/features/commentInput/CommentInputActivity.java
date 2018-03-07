@@ -2,6 +2,7 @@ package com.example.jason.route_application_kotlin.features.commentInput;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -27,6 +28,8 @@ public class CommentInputActivity extends DaggerAppCompatActivity implements Mvp
     TextView dateTextView;
     @BindView(R.id.commentEditText)
     EditText commentEditText;
+    @BindView(R.id.addCommentBtn)
+    Button addCommentBtn;
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
     @BindView(R.id.messageToUserTextView)
@@ -60,13 +63,13 @@ public class CommentInputActivity extends DaggerAppCompatActivity implements Mvp
     }
 
     @Override
-    public void onDatabaseResponse(String message) {
-        Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
-        toast.show();
+    public void closeActivity() {
+        finish();
     }
 
     @Override
     public void onStartNetworkOperation() {
+        addCommentBtn.setEnabled(false);
         progressBar.setVisibility(View.VISIBLE);
         messageToUserTextView.setVisibility(View.VISIBLE);
         messageToUserTextView.setText("Adding comment...");
@@ -74,6 +77,7 @@ public class CommentInputActivity extends DaggerAppCompatActivity implements Mvp
 
     @Override
     public void onFinishNetworkOperation() {
+        addCommentBtn.setEnabled(true);
         progressBar.setVisibility(View.GONE);
         messageToUserTextView.setVisibility(View.GONE);
     }

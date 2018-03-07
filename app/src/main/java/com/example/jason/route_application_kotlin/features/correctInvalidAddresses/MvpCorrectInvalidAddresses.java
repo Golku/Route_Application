@@ -25,6 +25,7 @@ public interface MvpCorrectInvalidAddresses {
         void onFinishNetworkOperation();
         void startRouteActivity(String routeCode);
         void setUpView();
+        void closeActivity();
         void showScreenElements();
         void hideScreenElements();
     }

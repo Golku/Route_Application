@@ -135,6 +135,7 @@ public class CorrectInvalidAddressesPresenter implements MvpCorrectInvalidAddres
     public void onApiResponseFailure() {
         view.onFinishNetworkOperation();
         view.showToast("Connection failed");
+        view.closeActivity();
     }
 
 }

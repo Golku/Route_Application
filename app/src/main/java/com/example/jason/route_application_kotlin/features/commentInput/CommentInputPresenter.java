@@ -18,7 +18,6 @@ public class CommentInputPresenter implements MvpCommentInput.Presenter, Databas
     private MvpCommentInput.Interactor interactor;
 
     private FormattedAddress formattedAddress;
-
     private String employeeId;
     private String date;
 
@@ -48,9 +47,10 @@ public class CommentInputPresenter implements MvpCommentInput.Presenter, Databas
         view.onFinishNetworkOperation();
 
         if(databaseResponse.isError()){
-            view.onDatabaseResponse("Fail to add comment");
+            view.showToast("Fail to add comment");
         }else{
-            view.onDatabaseResponse("Comment was added");
+            view.showToast("Comment was added");
+            view.closeActivity();
         }
 
     }
@@ -58,6 +58,6 @@ public class CommentInputPresenter implements MvpCommentInput.Presenter, Databas
     @Override
     public void onApiResponseFailure() {
         view.onFinishNetworkOperation();
-        view.showToast("Connection failed.");
+        view.showToast("Connection failed");
     }
 }

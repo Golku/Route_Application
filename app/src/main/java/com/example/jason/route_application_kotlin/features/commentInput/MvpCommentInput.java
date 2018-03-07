@@ -12,7 +12,7 @@ public interface MvpCommentInput {
     interface View{
         void updateTextViews(String employeeId, String date);
         void onAddCommentBtnClick();
-        void onDatabaseResponse(String message);
+        void closeActivity();
         void onStartNetworkOperation();
         void onFinishNetworkOperation();
         void showToast(String message);
