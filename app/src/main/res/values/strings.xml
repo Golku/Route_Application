@@ -1,3 +1,17 @@
 <resources>
-    <string name="app_name">Route_Application_kotlin</string>
+    <string name="app_name">Routes</string>
+
+
+    <!--activity_route_input-->
+    <string name="selected_place.Activity_route_input">Selected Place:</string>
+    <string name="enter_place_here.Activity_route_input">Enter Address Here</string>
+    <string name="address.Activity_route_input">Address</string>
+    <string name="phone.Activity_route_input">Phone</string>
+    <string name="add.Activity_route_input">Add</string>
+    <string name="submit_route.Activity_route_input">Submit route</string>
+    <string name="list_size.Activity_route_input">List size:</string>
+    <string name="enter_route_code_here.Activity_route_input">Enter route code here</string>
+    <string name="get_route.Activity_route_input">Get Route</string>
+
+
 </resources>

@@ -33,7 +33,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.CustomViewHo
 
     @Override
     public RouteAdapter.CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.travel_information, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_travel_information, parent, false);
         return new CustomViewHolder(v);
     }
 

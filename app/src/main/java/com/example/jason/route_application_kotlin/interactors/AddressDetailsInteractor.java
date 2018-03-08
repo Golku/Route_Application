@@ -32,7 +32,6 @@ public class AddressDetailsInteractor implements MvpAddressDetails.Interactor {
     @Override
     public void getAddressInformation(final DatabasePresenterCallBack databasePresenterCallBack, FormattedAddress formattedAddress) {
 
-        Log.d(log_tag, "address: "+ formattedAddress);
 
         Call<DatabaseResponse> call = databaseService.getAddressInformation(
                 formattedAddress.getStreet(),
