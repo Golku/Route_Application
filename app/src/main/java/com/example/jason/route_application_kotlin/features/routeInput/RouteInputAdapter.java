@@ -19,7 +19,7 @@ public class RouteInputAdapter extends RecyclerView.Adapter<RouteInputAdapter.Cu
     private ArrayList<String> listOfAddresses;
     private AddressListFunctions addressListFunctions;
 
-    public RouteInputAdapter(ArrayList<String> listOfAddresses, AddressListFunctions addressListFunctions) {
+    RouteInputAdapter(ArrayList<String> listOfAddresses, AddressListFunctions addressListFunctions) {
         this.listOfAddresses = listOfAddresses;
         this.addressListFunctions = addressListFunctions;
     }
@@ -29,7 +29,7 @@ public class RouteInputAdapter extends RecyclerView.Adapter<RouteInputAdapter.Cu
         void onListItemSwipe(int position);
     }
 
-    public void addTouchHelper(RecyclerView recyclerView){
+    void addTouchHelper(RecyclerView recyclerView){
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(createHelperCallback());
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
@@ -56,7 +56,7 @@ public class RouteInputAdapter extends RecyclerView.Adapter<RouteInputAdapter.Cu
         private TextView address;
         private ViewGroup container;
 
-        public CustomViewHolder(View itemView) {
+        CustomViewHolder(View itemView) {
             super(itemView);
             this.address = itemView.findViewById(R.id.address);
             this.container = itemView.findViewById(R.id.root_layout);
@@ -72,7 +72,7 @@ public class RouteInputAdapter extends RecyclerView.Adapter<RouteInputAdapter.Cu
 
     private ItemTouchHelper.Callback createHelperCallback(){
 
-        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0,
+        return new ItemTouchHelper.SimpleCallback(0,
                 ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 
             //not used, as the first parameter above is 0
@@ -88,8 +88,6 @@ public class RouteInputAdapter extends RecyclerView.Adapter<RouteInputAdapter.Cu
                 addressListFunctions.onListItemSwipe(position);
             }
         };
-
-        return simpleItemTouchCallback;
     }
 
 }

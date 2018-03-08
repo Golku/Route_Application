@@ -63,7 +63,7 @@ public class RoutePresenter implements MvpRoute.Presenter, ApiPresenterCallBack 
                     //message the user that the route was not fetch after x amount of attempts
                     //user can start the route fetching process again with a button click.
                     view.onFinishNetworkOperation();
-                    view.showToast("Unable to fetch route after 5 attempts.");
+                    view.showToast("Unable to fetch route after 6 attempts.");
                 }
 
             }else{

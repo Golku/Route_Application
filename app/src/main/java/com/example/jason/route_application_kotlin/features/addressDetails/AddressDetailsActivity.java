@@ -68,10 +68,18 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements M
         //This fails when the inputted address does not have the right format : street, postcode city, country
 
         try{
-            presenter.formatAddress(address);
-            presenter.updateTextViews();
-            presenter.getAddressInformation();
-        }catch (ArrayIndexOutOfBoundsException e){
+            if(address != null) {
+                if(address.equals("")) {
+                    presenter.formatAddress(address);
+                    presenter.updateTextViews();
+                    presenter.getAddressInformation();
+                }else{
+                    showToast("Invalid Address");
+                }
+            }else{
+                showToast("Invalid Address");
+            }
+        } catch (ArrayIndexOutOfBoundsException e) {
             onFinishNetworkOperation();
             showToast("Invalid Address");
         }

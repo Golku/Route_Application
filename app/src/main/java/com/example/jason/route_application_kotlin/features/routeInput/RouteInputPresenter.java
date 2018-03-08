@@ -21,23 +21,26 @@ public class RouteInputPresenter implements MvpRouteInput.Presenter{
     @Override
     public void setUpView() {
         view.setUpAdapter(listOfAddresses);
+        view.updateListSizeTextView(listOfAddresses.size());
     }
 
     @Override
     public void addAddressToList(String address) {
         listOfAddresses.add(address);
         view.addAddressToList(listOfAddresses.size());
-    }
-
-    @Override
-    public void onListItemClick(String address) {
-        view.showAddressDetails(address);
+        view.updateListSizeTextView(listOfAddresses.size());
     }
 
     @Override
     public void onListItemSwiped(int position) {
         listOfAddresses.remove(position);
         view.removeAddressFromList(position);
+        view.updateListSizeTextView(listOfAddresses.size());
+    }
+
+    @Override
+    public void onListItemClick(String address) {
+        view.showAddressDetails(address);
     }
 
     @Override

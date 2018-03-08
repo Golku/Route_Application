@@ -3,10 +3,12 @@ package com.example.jason.route_application_kotlin.features.routeInput;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
@@ -54,18 +56,16 @@ public class RouteInputActivity extends DaggerAppCompatActivity implements
     TextView addressTextView;
     @BindView(R.id.phoneTextView)
     TextView phoneTextView;
-    @BindView(R.id.attTextView)
-    TextView attTextView;
+    @BindView(R.id.listSizeTextView)
+    TextView listSizeTextView;
     @BindView(R.id.recView)
     RecyclerView recyclerView;
 
     private RouteInputAdapter adapter;
 
-    private final int GOOGLE_API_CLIENT_ID = 0;
     private final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(new LatLng(37.398160, 4.477733), new LatLng(52.070498, 4.300700));
     private GoogleApiClient mGoogleApiClient;
     private RouteInputPlaceArrayAdapter mPlaceArrayAdapter;
-    private AutocompleteFilter filter;
     private InputMethodManager imm;
 
 
@@ -83,6 +83,8 @@ public class RouteInputActivity extends DaggerAppCompatActivity implements
         autoCompleteTextView.setThreshold(3);
         autoCompleteTextView.setOnItemClickListener(mAutocompleteClickListener);
 
+        int GOOGLE_API_CLIENT_ID = 0;
+
         mGoogleApiClient = new GoogleApiClient.Builder(RouteInputActivity.this)
                 .addApi(Places.GEO_DATA_API)
                 .addApi(LocationServices.API)
@@ -90,7 +92,7 @@ public class RouteInputActivity extends DaggerAppCompatActivity implements
                 .addConnectionCallbacks(this)
                 .build();
 
-        filter = new AutocompleteFilter.Builder()
+        AutocompleteFilter filter = new AutocompleteFilter.Builder()
                 .setCountry("NL")
                 .build();
 
@@ -124,7 +126,7 @@ public class RouteInputActivity extends DaggerAppCompatActivity implements
     private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback = new ResultCallback<PlaceBuffer>() {
 
         @Override
-        public void onResult(PlaceBuffer places) {
+        public void onResult(@NonNull PlaceBuffer places) {
 
             if (!places.getStatus().isSuccess()) {
 
@@ -135,16 +137,9 @@ public class RouteInputActivity extends DaggerAppCompatActivity implements
 
             // Selecting the first object buffer.
             final Place place = places.get(0);
-            CharSequence attributions = places.getAttributions();
 
             addressTextView.setText(place.getAddress().toString());
             phoneTextView.setText(place.getPhoneNumber().toString());
-
-            if (attributions != null) {
-                attTextView.setText(attributions.toString());
-            }else{
-                attTextView.setText("No attr");
-            }
 
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         }
@@ -159,7 +154,7 @@ public class RouteInputActivity extends DaggerAppCompatActivity implements
     }
 
     @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.e(log_tag, "Google Places API connection failed with error code: "
                 + connectionResult.getErrorCode());
 
@@ -183,11 +178,16 @@ public class RouteInputActivity extends DaggerAppCompatActivity implements
         recyclerView.setAdapter(adapter);
     }
 
+    @Override
+    public void updateListSizeTextView(int listSize) {
+        listSizeTextView.setText(String.valueOf(listSize));
+    }
+
     @OnClick(R.id.addAddressToListBtn)
     @Override
     public void onAddAddressButtonClick() {
         //blablabla niet gebruiken als invalid address (blablabla, Au Coinat 27, 2915 Bure, Zwitserland)
-        presenter.addAddressToList(autoCompleteTextView.getText().toString());
+        presenter.addAddressToList(addressTextView.getText().toString());
         autoCompleteTextView.setText("");
     }
 

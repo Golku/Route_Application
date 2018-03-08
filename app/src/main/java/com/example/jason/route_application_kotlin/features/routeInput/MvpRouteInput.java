@@ -24,6 +24,8 @@ public interface MvpRouteInput {
 
         void startRoute(ArrayList<String> listOfAddresses);
 
+        void updateListSizeTextView(int listSize);
+
     }
 
     interface Presenter{

@@ -58,15 +58,13 @@ public class NetworkModule {
     @AppScope
     @Provides
     public ApiService provideApiService(@Named("api") Retrofit retrofit){
-        ApiService apiService = retrofit.create(ApiService.class);
-        return apiService;
+        return retrofit.create(ApiService.class);
     }
 
     @AppScope
     @Provides
     public DatabaseService provideDatabaseService(@Named("database") Retrofit retrofit){
-        DatabaseService databaseService = retrofit.create(DatabaseService.class);
-        return databaseService;
+        return retrofit.create(DatabaseService.class);
     }
 
 }
