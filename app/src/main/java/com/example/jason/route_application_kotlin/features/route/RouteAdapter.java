@@ -47,12 +47,15 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.CustomViewHo
         String city = currentItem.getDestinationFormattedAddress().getPostCode() + " " + currentItem.getDestinationFormattedAddress().getCity();
         String distance = "Distance: "+currentItem.getDriveDistanceHumanReadable();
         String duration = "Duration: "+currentItem.getDriveDurationHumanReadable();
+        String arrivalTime = currentItem.getDeliveryTimeHumanReadable();
+
 
         holder.positionTextView.setText(positionTracker);
         holder.streetTextView.setText(currentItem.getDestinationFormattedAddress().getStreet());
         holder.cityTextView.setText(city);
         holder.distanceTextView.setText(distance);
         holder.durationTextView.setText(duration);
+        holder.estimatedArrivalTime.setText(arrivalTime);
     }
 
     @Override
@@ -67,6 +70,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.CustomViewHo
         private TextView cityTextView;
         private TextView distanceTextView;
         private TextView durationTextView;
+        private TextView estimatedArrivalTime;
         private ImageView goButton;
         private ViewGroup container;
 
@@ -77,6 +81,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.CustomViewHo
             this.cityTextView = itemView.findViewById(R.id.cityTextView);
             this.distanceTextView = itemView.findViewById(R.id.distanceTextView);
             this.durationTextView = itemView.findViewById(R.id.durationTextView);
+            this.estimatedArrivalTime = itemView.findViewById(R.id.estimatedArrivalTimeTextView);
             this.goButton = itemView.findViewById(R.id.goBtn);
             this.container = itemView.findViewById(R.id.root_layout);
             this.goButton.setOnClickListener(this);

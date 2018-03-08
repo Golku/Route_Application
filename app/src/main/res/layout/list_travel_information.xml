@@ -13,51 +13,54 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:ellipsize="end"
         android:maxLines="1"
+        android:text="@string/street.list_travel_information"
         android:textColor="@color/colorPrimaryDark"
         android:textStyle="bold"
-        android:text="@string/street.list_travel_information"
         app:layout_constraintStart_toEndOf="@+id/positionTextView"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginLeft="8dp" />
 
     <TextView
         android:id="@+id/cityTextView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:textColor="@color/colorPrimaryDark"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:text="@string/city.list_travel_information"
+        android:textColor="@color/colorPrimaryDark"
+        app:layout_constraintEnd_toStartOf="@+id/goBtn"
         app:layout_constraintStart_toEndOf="@+id/positionTextView"
-        app:layout_constraintTop_toBottomOf="@+id/streetTextView"
-        android:layout_marginLeft="8dp" />
+        app:layout_constraintTop_toBottomOf="@+id/streetTextView" />
 
     <TextView
         android:id="@+id/distanceTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
-        android:textColor="@color/colorPrimaryDark"
         android:layout_marginTop="8dp"
         android:text="@string/distance.list_travel_information"
+        android:textColor="@color/colorPrimaryDark"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/positionTextView"
-        app:layout_constraintTop_toBottomOf="@+id/cityTextView"
-        android:layout_marginLeft="8dp" />
+        app:layout_constraintTop_toBottomOf="@+id/cityTextView" />
 
     <TextView
         android:id="@+id/positionTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/position.list_travel_information"
         android:textColor="@color/colorPrimaryDark"
         android:textStyle="bold"
-        android:layout_marginTop="8dp"
-        android:text="@string/position.list_travel_information"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginLeft="8dp" />
@@ -66,10 +69,8 @@
         android:id="@+id/goBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_go_button"
@@ -79,12 +80,26 @@
         android:id="@+id/durationTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/colorPrimaryDark"
         android:layout_marginBottom="16dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:text="@string/duration.list_travel_information"
+        android:textColor="@color/colorPrimaryDark"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/distanceTextView"
-        android:layout_marginLeft="8dp" />
+        app:layout_constraintStart_toEndOf="@+id/distanceTextView" />
+
+    <TextView
+        android:id="@+id/estimatedArrivalTimeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:text="arrival time"
+        android:textColor="@color/colorPrimaryDark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/goBtn"
+        android:layout_marginRight="16dp" />
 
 </android.support.constraint.ConstraintLayout>
