@@ -2,63 +2,89 @@
 
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/text_view_background">
 
     <TextView
-        android:id="@+id/destinationTextView"
+        android:id="@+id/streetTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:text="TextView"
+        android:textColor="@color/colorPrimaryDark"
+        android:textStyle="bold"
+        android:text="@string/street.list_travel_information"
         app:layout_constraintStart_toEndOf="@+id/positionTextView"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="8dp" />
 
     <TextView
-        android:id="@+id/travelTimeTextView"
+        android:id="@+id/cityTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintStart_toEndOf="@+id/distanceTextView"
-        app:layout_constraintTop_toBottomOf="@+id/destinationTextView"
+        android:textColor="@color/colorPrimaryDark"
+        android:text="@string/city.list_travel_information"
+        app:layout_constraintStart_toEndOf="@+id/positionTextView"
+        app:layout_constraintTop_toBottomOf="@+id/streetTextView"
         android:layout_marginLeft="8dp" />
 
     <TextView
         android:id="@+id/distanceTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toEndOf="@+id/positionTextView"
-        app:layout_constraintTop_toBottomOf="@+id/destinationTextView" />
-
-    <TextView
-        android:id="@+id/deliveryTimeTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:layout_marginStart="8dp"
+        android:textColor="@color/colorPrimaryDark"
         android:layout_marginTop="8dp"
+        android:text="@string/distance.list_travel_information"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/positionTextView"
-        app:layout_constraintTop_toBottomOf="@+id/distanceTextView"
+        app:layout_constraintTop_toBottomOf="@+id/cityTextView"
         android:layout_marginLeft="8dp" />
 
     <TextView
         android:id="@+id/positionTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
+        android:textColor="@color/colorPrimaryDark"
+        android:textStyle="bold"
         android:layout_marginTop="8dp"
+        android:text="@string/position.list_travel_information"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="8dp" />
+
+    <ImageView
+        android:id="@+id/goBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_go_button"
+        android:layout_marginRight="16dp" />
+
+    <TextView
+        android:id="@+id/durationTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="8dp"
+        android:text="@string/duration.list_travel_information"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/distanceTextView"
+        android:layout_marginLeft="8dp" />
 
 </android.support.constraint.ConstraintLayout>

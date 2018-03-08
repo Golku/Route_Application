@@ -12,6 +12,11 @@
     <string name="list_size.Activity_route_input">List size:</string>
     <string name="enter_route_code_here.Activity_route_input">Enter route code here</string>
     <string name="get_route.Activity_route_input">Get Route</string>
+    <string name="street.list_travel_information">Street</string>
+    <string name="city.list_travel_information">city</string>
+    <string name="distance.list_travel_information">distance</string>
+    <string name="position.list_travel_information">position</string>
+    <string name="duration.list_travel_information">duration</string>
 
 
 </resources>

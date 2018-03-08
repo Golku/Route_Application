@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.jason.route_application_kotlin.R;
@@ -39,13 +40,19 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.CustomViewHo
 
     @Override
     public void onBindViewHolder(RouteAdapter.CustomViewHolder holder, int position) {
+
         SingleDrive currentItem = organizedRoute.getRouteList().get(position);
-        holder.positionTextView.setText(Integer.toString(position + 1));
-        //holder.origin.setText(currentItem.getOriginFormattedAddress().getCompletedAddress());
-        holder.destinationTextView.setText(currentItem.getDestinationFormattedAddress().getFormattedAddress());
-        holder.distanceTextView.setText("Distance: "+currentItem.getDriveDistanceHumanReadable());
-        holder.travelTimeTextView.setText("Duration: "+currentItem.getDriveDurationHumanReadable());
-        holder.deliveryTimeTextView.setText("Estimated delivery time: " + currentItem.getDeliveryTimeHumanReadable());
+
+        String positionTracker = Integer.toString(position + 1);
+        String city = currentItem.getDestinationFormattedAddress().getPostCode() + " " + currentItem.getDestinationFormattedAddress().getCity();
+        String distance = "Distance: "+currentItem.getDriveDistanceHumanReadable();
+        String duration = "Duration: "+currentItem.getDriveDurationHumanReadable();
+
+        holder.positionTextView.setText(positionTracker);
+        holder.streetTextView.setText(currentItem.getDestinationFormattedAddress().getStreet());
+        holder.cityTextView.setText(city);
+        holder.distanceTextView.setText(distance);
+        holder.durationTextView.setText(duration);
     }
 
     @Override
@@ -56,23 +63,21 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.CustomViewHo
     class CustomViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView positionTextView;
-        //private TextView originTextView;
-        private TextView destinationTextView;
+        private TextView streetTextView;
+        private TextView cityTextView;
         private TextView distanceTextView;
-        private TextView travelTimeTextView;
-        private TextView deliveryTimeTextView;
-        private Button goButton;
+        private TextView durationTextView;
+        private ImageView goButton;
         private ViewGroup container;
 
-        public CustomViewHolder(View itemView) {
+        CustomViewHolder(View itemView) {
             super(itemView);
             this.positionTextView = itemView.findViewById(R.id.positionTextView);
-            //this.originTextView = itemView.findViewById(R.id.originTextView);
-            this.destinationTextView = itemView.findViewById(R.id.destinationTextView);
+            this.streetTextView = itemView.findViewById(R.id.streetTextView);
+            this.cityTextView = itemView.findViewById(R.id.cityTextView);
             this.distanceTextView = itemView.findViewById(R.id.distanceTextView);
-            this.travelTimeTextView = itemView.findViewById(R.id.travelTimeTextView);
-            this.deliveryTimeTextView = itemView.findViewById(R.id.deliveryTimeTextView);
-            this.goButton = itemView.findViewById(R.id.goButton);
+            this.durationTextView = itemView.findViewById(R.id.durationTextView);
+            this.goButton = itemView.findViewById(R.id.goBtn);
             this.container = itemView.findViewById(R.id.root_layout);
             this.goButton.setOnClickListener(this);
             this.container.setOnClickListener(this);
@@ -82,7 +87,8 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.CustomViewHo
 
             if(v == this.container){
                 routeListFunctions.onListItemClick(organizedRoute.getRouteList().get(this.getAdapterPosition()).getDestinationFormattedAddress().getFormattedAddress());
-            }else if(v == this.goButton){
+            }
+            else if(v == this.goButton){
                 routeListFunctions.onGoButtonClick(organizedRoute.getRouteList().get(this.getAdapterPosition()).getDestinationFormattedAddress().getFormattedAddress());
             }
         }
