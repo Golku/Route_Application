@@ -4,7 +4,7 @@
     android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/text_view_background">
+    android:background="@drawable/list_row_background">
 
     <TextView
         android:id="@+id/invalidAddressTextView"
@@ -14,7 +14,8 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
-        android:text="TextView"
+        android:textColor="@color/colorPrimaryDark"
+        android:text="@string/invalid_address.invalid_addresses"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/deleteAddressBtn"
         app:layout_constraintStart_toStartOf="parent"
@@ -30,7 +31,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_delete"
+        app:srcCompat="@drawable/ic_trash"
         android:layout_marginRight="16dp" />
 
 </android.support.constraint.ConstraintLayout>

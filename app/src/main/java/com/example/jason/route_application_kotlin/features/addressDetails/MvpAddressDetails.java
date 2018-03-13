@@ -21,7 +21,7 @@ public interface MvpAddressDetails {
         void showCommentInput(FormattedAddress formattedAddress);
         void showErrorMessageToUser(String message);
         void updateMessageToUserTextView(boolean visible, String message);
-        void updateBusinessTextView(String message);
+        void updateBusinessImageView(String business);
         void onStartNetworkOperation();
         void onFinishNetworkOperation();
         void showToast(String message);

@@ -56,7 +56,7 @@ public class AddressDetailsAdapter extends RecyclerView.Adapter <AddressDetailsA
 
         public CustomViewHolder(View itemView) {
             super(itemView);
-            this.employedName = itemView.findViewById(R.id.employeedNameTextView);
+            this.employedName = itemView.findViewById(R.id.employeeNameTextView);
             this.date = itemView.findViewById(R.id.dateTextView);
             this.comment = itemView.findViewById(R.id.commentTextView);
             this.container = itemView.findViewById(R.id.root_layout);

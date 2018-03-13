@@ -56,18 +56,22 @@ public class AddressDetailsPresenter implements MvpAddressDetails.Presenter, Dat
             view.showErrorMessageToUser(databaseResponse.getErrorMessage());
         }else{
             if(databaseResponse.getAddressInformation() == null){
+                view.updateBusinessImageView("");
                 view.updateMessageToUserTextView( true,"There are no comments");
             }else{
+                if(databaseResponse.getAddressInformation().getBusiness() == 1) {
+                    view.updateBusinessImageView("yes");
+                }else{
+                    view.updateBusinessImageView("");
+                }
                 if(databaseResponse.getAddressInformation().getCommentsCount()>0){
                     view.updateMessageToUserTextView(false, "");
                 }else{
                     view.updateMessageToUserTextView(true, "There are no comments");
                 }
-                if(databaseResponse.getAddressInformation().getBusiness() == 1) {
-                    view.updateBusinessTextView("Yes");
-                }
                 view.setUpAdapter(databaseResponse.getAddressInformation());
             }
+
         }
     }
 

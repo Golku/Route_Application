@@ -35,8 +35,6 @@ public class RouteActivity extends DaggerAppCompatActivity implements MvpRoute.V
     TextView privateAddressesTextView;
     @BindView(R.id.businessAddressesTextView)
     TextView businessAddressesTextView;
-    @BindView(R.id.wrongAddressesTextView)
-    TextView wrongAddressesTextView;
     @BindView(R.id.messageToUserTextView)
     TextView messageToUserTextView;
     @BindView(R.id.progressBar)
@@ -63,7 +61,6 @@ public class RouteActivity extends DaggerAppCompatActivity implements MvpRoute.V
 
         privateAddressesTextView.setText(String.valueOf(organizedRoute.getPrivateAddressesCount()));
         businessAddressesTextView.setText(String.valueOf(organizedRoute.getBusinessAddressesCount()));
-        wrongAddressesTextView.setText(String.valueOf(organizedRoute.getWrongAddressesCount()));
 
         recyclerView.setVisibility(View.VISIBLE);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

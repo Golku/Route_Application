@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,9 +27,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import dagger.android.support.DaggerAppCompatActivity;
 
-public class AddressDetailsActivity extends DaggerAppCompatActivity implements MvpAddressDetails.View, AddressDetailsAdapter.CommentListFunctions{
+public class AddressDetailsActivity extends DaggerAppCompatActivity implements MvpAddressDetails.View, AddressDetailsAdapter.CommentListFunctions {
 
-    @Inject MvpAddressDetails.Presenter presenter;
+    @Inject
+    MvpAddressDetails.Presenter presenter;
 
     @BindView(R.id.addressCommentsList)
     RecyclerView recyclerView;
@@ -38,12 +40,10 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements M
     TextView postcodeTextView;
     @BindView(R.id.cityTextView)
     TextView cityTextView;
-    @BindView(R.id.businessTextView)
-    TextView businessTextView;
+    @BindView(R.id.addressTypeImageView)
+    ImageView addressTypeImageView;
     @BindView(R.id.messageToUserTextView)
     TextView messageToUserTextView;
-    @BindView(R.id.googleAddressLinkTextView)
-    TextView googleAddressLinkTextView;
     @BindView(R.id.addCommentBtn)
     FloatingActionButton addCommentBtn;
     @BindView(R.id.progressBar)
@@ -61,13 +61,13 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements M
         init();
     }
 
-    private void init(){
+    private void init() {
         String address = getIntent().getStringExtra("address");
 
         //If this fails everything else fails in this view! FIX THIS!!
         //This fails when the inputted address does not have the right format : street, postcode city, country
 
-        try{
+        try {
             presenter.formatAddress(address);
             presenter.updateTextViews();
             presenter.getAddressInformation();
@@ -98,11 +98,11 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements M
     public void setUpAdapter(AddressInformation addressInformation) {
         recyclerView.setVisibility(View.VISIBLE);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new AddressDetailsAdapter(addressInformation,this);
+        adapter = new AddressDetailsAdapter(addressInformation, this);
         recyclerView.setAdapter(adapter);
     }
 
-    @OnClick(R.id.googleAddressLinkTextView)
+    @OnClick(R.id.googleSearchBtn)
     @Override
     public void onGoogleLinkClick() {
         presenter.onGoogleLinkClick();
@@ -143,17 +143,20 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements M
 
     @Override
     public void updateMessageToUserTextView(boolean visible, String message) {
-        if(visible){
+        if (visible) {
             messageToUserTextView.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             messageToUserTextView.setVisibility(View.GONE);
         }
         messageToUserTextView.setText(message);
     }
 
     @Override
-    public void updateBusinessTextView(String message) {
-        businessTextView.setText(message);
+    public void updateBusinessImageView(String business) {
+        addressTypeImageView.setVisibility(View.VISIBLE);
+        if (business.equals("yes")) {
+            addressTypeImageView.setImageResource(R.drawable.ic_bussiness_address);
+        }
     }
 
     @Override

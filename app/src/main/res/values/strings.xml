@@ -12,11 +12,37 @@
     <string name="list_size.Activity_route_input">List size:</string>
     <string name="enter_route_code_here.Activity_route_input">Enter route code here</string>
     <string name="get_route.Activity_route_input">Get Route</string>
+
+    <!--list_travel_information-->
     <string name="street.list_travel_information">Street</string>
     <string name="city.list_travel_information">city</string>
     <string name="distance.list_travel_information">distance</string>
-    <string name="position.list_travel_information">position</string>
+    <string name="position.list_travel_information">1</string>
     <string name="duration.list_travel_information">duration</string>
+    <string name="arrival_time.list_travel_information">arrival time</string>
+    <string name="invalid_address.invalid_addresses">invalid address</string>
+    <string name="private.activity_route">Private:</string>
+    <string name="business.activity_route">Business:</string>
+    <string name="estimated_finish_time.activity_route">estimated finish time</string>
+    <string name="addressType.list_travel_information">addressType</string>
+    <string name="goBtn.list_travel_information">goBtn</string>
+    <string name="no.activity_address_detail">No</string>
+    <string name="business.activity_address_details">Business: </string>
+    <string name="city.activity_address_details">city</string>
+    <string name="postcode.activity_address_details">postcode</string>
+    <string name="street.activity_address_details">street</string>
+    <string name="googleSearchBtn.activity_address_details">googleSearchBtn</string>
+    <string name="addressType.activity_address_details">addressType</string>
+    <string name="employee_name.comment">employee name</string>
+    <string name="date.comment">date</string>
+    <string name="comments.comment">comments</string>
+    <string name="employee_name.activity_comment_display">employee name</string>
+    <string name="date.activity_comment_display">date</string>
+    <string name="comment.activity_comment_display">comment</string>
+    <string name="cancel.reform_address_dialog">Cancel</string>
+    <string name="change.reform_address_dialog">Change</string>
+    <string name="address.reform_address_dialog">Address</string>
+    <string name="correct_the_address.reform_address_dialog">Correct the address</string>
 
 
 </resources>

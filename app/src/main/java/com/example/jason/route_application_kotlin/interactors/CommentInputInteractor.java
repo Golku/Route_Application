@@ -1,15 +1,11 @@
 package com.example.jason.route_application_kotlin.interactors;
 
-import android.util.Log;
-
 import com.example.jason.route_application_kotlin.data.database.DatabasePresenterCallBack;
 import com.example.jason.route_application_kotlin.data.database.DatabaseService;
 import com.example.jason.route_application_kotlin.data.pojos.DatabaseResponse;
 import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
 import com.example.jason.route_application_kotlin.features.commentInput.MvpCommentInput;
-
 import javax.inject.Inject;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

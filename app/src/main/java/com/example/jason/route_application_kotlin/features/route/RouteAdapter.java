@@ -4,7 +4,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -49,13 +48,19 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.CustomViewHo
         String duration = "Duration: "+currentItem.getDriveDurationHumanReadable();
         String arrivalTime = currentItem.getDeliveryTimeHumanReadable();
 
-
         holder.positionTextView.setText(positionTracker);
         holder.streetTextView.setText(currentItem.getDestinationFormattedAddress().getStreet());
         holder.cityTextView.setText(city);
         holder.distanceTextView.setText(distance);
         holder.durationTextView.setText(duration);
         holder.estimatedArrivalTime.setText(arrivalTime);
+
+        if(currentItem.getDestinationIsABusiness()){
+            holder.addressType.setImageResource(R.drawable.ic_bussiness_address);
+        }else{
+            holder.addressType.setImageResource(R.drawable.ic_private_address2);
+        }
+
     }
 
     @Override
@@ -71,6 +76,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.CustomViewHo
         private TextView distanceTextView;
         private TextView durationTextView;
         private TextView estimatedArrivalTime;
+        private ImageView addressType;
         private ImageView goButton;
         private ViewGroup container;
 
@@ -83,6 +89,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.CustomViewHo
             this.durationTextView = itemView.findViewById(R.id.durationTextView);
             this.estimatedArrivalTime = itemView.findViewById(R.id.estimatedArrivalTimeTextView);
             this.goButton = itemView.findViewById(R.id.goBtn);
+            this.addressType = itemView.findViewById(R.id.addressTypeImageView);
             this.container = itemView.findViewById(R.id.root_layout);
             this.goButton.setOnClickListener(this);
             this.container.setOnClickListener(this);
