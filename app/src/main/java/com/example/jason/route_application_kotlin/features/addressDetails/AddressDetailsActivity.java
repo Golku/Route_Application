@@ -160,14 +160,8 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements M
     }
 
     @Override
-    public void showErrorMessageToUser(String message) {
-        Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
-        toast.show();
-    }
-
-    @Override
     public void onStartNetworkOperation() {
-        messageToUserTextView.setText("Fetching address information...");
+        messageToUserTextView.setText(R.string.networkOperation_addressDetailsActivity);
     }
 
     @Override

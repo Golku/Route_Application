@@ -7,6 +7,7 @@ package com.example.jason.route_application_kotlin.data.pojos;
 public class DatabaseResponse {
 
     private AddressInformation addressInformation;
+    private boolean informationAvailable;
     private boolean error;
     private String errorMessage;
 
@@ -16,6 +17,14 @@ public class DatabaseResponse {
 
     public void setAddressInformation(AddressInformation addressInformation) {
         this.addressInformation = addressInformation;
+    }
+
+    public boolean isInformationAvailable() {
+        return informationAvailable;
+    }
+
+    public void setInformationAvailable(boolean informationAvailable) {
+        this.informationAvailable = informationAvailable;
     }
 
     public boolean isError() {

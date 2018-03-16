@@ -24,6 +24,8 @@ public interface MvpRoute {
         void onFinishNetworkOperation();
 
         void showToast(String message);
+
+        void closeActivity();
     }
 
     interface Presenter{

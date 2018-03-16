@@ -10,6 +10,8 @@ import com.example.jason.route_application_kotlin.features.route.RouteActivity;
 import com.example.jason.route_application_kotlin.features.route.RouteModule;
 import com.example.jason.route_application_kotlin.features.routeInput.RouteInputActivity;
 import com.example.jason.route_application_kotlin.features.routeInput.RouteInputModule;
+import com.example.jason.route_application_kotlin.features.routeState.RouteStateActivity;
+import com.example.jason.route_application_kotlin.features.routeState.RouteStateModule;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
@@ -23,6 +25,9 @@ abstract class ActivityBuilder {
 
     @ContributesAndroidInjector(modules = RouteInputModule.class)
     abstract RouteInputActivity bindRouteInput();
+
+    @ContributesAndroidInjector(modules = RouteStateModule.class)
+    abstract RouteStateActivity bindRouteState();
 
     @ContributesAndroidInjector(modules = RouteModule.class)
     abstract RouteActivity bindRoute();

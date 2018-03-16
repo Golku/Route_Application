@@ -19,7 +19,6 @@ public interface MvpAddressDetails {
         void showAddressInGoogle(FormattedAddress formattedAddress);
         void showCommentDisplay(CommentInformation commentInformation);
         void showCommentInput(FormattedAddress formattedAddress);
-        void showErrorMessageToUser(String message);
         void updateMessageToUserTextView(boolean visible, String message);
         void updateBusinessImageView(String business);
         void onStartNetworkOperation();

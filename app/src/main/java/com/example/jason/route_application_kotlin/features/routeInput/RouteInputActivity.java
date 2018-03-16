@@ -19,6 +19,7 @@ import com.example.jason.route_application_kotlin.R;
 import com.example.jason.route_application_kotlin.features.addressDetails.AddressDetailsActivity;
 import com.example.jason.route_application_kotlin.features.correctInvalidAddresses.CorrectInvalidAddressesActivity;
 import com.example.jason.route_application_kotlin.features.route.RouteActivity;
+import com.example.jason.route_application_kotlin.features.routeState.RouteStateActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -228,7 +229,8 @@ public class RouteInputActivity extends DaggerAppCompatActivity implements
 
     @Override
     public void startRoute(ArrayList<String> listOfAddresses) {
-        Intent intent = new Intent(this, CorrectInvalidAddressesActivity.class);
+        Intent intent = new Intent(this, RouteStateActivity.class);
+        intent.putExtra("action", "submitRoute");
         intent.putExtra("routeCode", routeCodeInputEditText.getText().toString());
         intent.putExtra("origin", "vrij-harnasch 21, den hoorn");
         intent.putStringArrayListExtra("addressesList", listOfAddresses);
@@ -237,7 +239,8 @@ public class RouteInputActivity extends DaggerAppCompatActivity implements
 
     @OnClick(R.id.getRouteBtn)
     public void startRoute() {
-        Intent intent = new Intent(this, RouteActivity.class);
+        Intent intent = new Intent(this, RouteStateActivity.class);
+        intent.putExtra("action", "getRoute");
         intent.putExtra("routeCode", routeCodeInputEditText.getText().toString());
         startActivity(intent);
     }

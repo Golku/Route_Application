@@ -21,12 +21,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
             android:contentDescription="@string/googleSearchBtn.activity_address_details"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_google_search4" />
+            app:srcCompat="@drawable/ic_google_search3"
+            android:layout_marginRight="16dp" />
 
         <TextView
             android:id="@+id/streetTextView"

@@ -38,6 +38,17 @@ public class CorrectInvalidAddressesPresenter implements MvpCorrectInvalidAddres
     }
 
     @Override
+    public void setRouteCode(String routeCode) {
+        this.routeCode = routeCode;
+    }
+
+    @Override
+    public void checkForInvalidAddresses() {
+        networkFetchAttempts++;
+        interactor.getInvalidAddresses(this, routeCode);
+    }
+
+    @Override
     public void onItemClick(int position) {
         view.showReformAddressDialog(position, invalidAddressesList.get(position));
     }
@@ -63,72 +74,52 @@ public class CorrectInvalidAddressesPresenter implements MvpCorrectInvalidAddres
         interactor.submitCorrectedAddresses(this, correctedAddresses);
     }
 
-    @Override
-    public void submitRoute(OutGoingRoute outGoingRoute) {
-        this.routeCode = outGoingRoute.getRouteCode();
-        view.onStartNetworkOperation();
-        interactor.submitRoute(this, outGoingRoute);
+    private void onValidatingAddresses(){
+        if(networkFetchAttempts<5){
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    checkForInvalidAddresses();
+                }
+            }, 5000);
+        }else{
+            view.showToast("Still validating after 5 fetch attempts");
+        }
+    }
+
+    private void onHasInvalidAddresses(ArrayList<String> invalidAddressesList){
+
+        view.onFinishNetworkOperation();
+
+        if(invalidAddressesList != null){
+            this.invalidAddressesList = invalidAddressesList;
+            networkFetchAttempts = 0;
+            this.correctedAddresses = new CorrectedAddresses();
+            view.setUpView();
+            view.showScreenElements();
+            view.setUpAdapter(this.invalidAddressesList);
+        }else {
+            view.showToast("Api din't send the addresses properly. Please try again.");
+        }
+
     }
 
     @Override
-    public void checkForInvalidAddresses() {
-        networkFetchAttempts++;
-        interactor.getInvalidAddresses(this, routeCode);
-    }
-
-    @Override
-    public void processApiResponse(ApiResponse apiResponse) {
+    public void onApiResponse(ApiResponse apiResponse) {
 
 //        If the server has an error and sends back a apiResponse with a html page
 //        the response processing will fail! FIX THIS!!!
 
-        if (!apiResponse.getRouteIsNull()) {
+        String routeState = apiResponse.getRouteState();
 
-            if (apiResponse.getAddressValidatingInProgress()) {
-
-                if (networkFetchAttempts < 5) {
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            checkForInvalidAddresses();
-                        }
-                    }, 5000);
-                } else {
-                    //message the user that the route was not fetch after x amount of attempts
-                    //user can start the route fetching process again with a button click.
-                    view.onFinishNetworkOperation();
-                    view.showToast("Unable to fetch route after 5 attempts.");
-                }
-
-            } else {
-
-                if (apiResponse.getRouteHasInvalidAddresses()) {
-
-                    view.onFinishNetworkOperation();
-
-                    if (apiResponse.getInvalidAddresses() != null) {
-//                        remove the setUpView and setUadapter from here. Otherwise they will get call multiple times when
-//                        the interactor.getInvalidAddresses return more invalid addresses after the interactor.submitCorrectedAddresses
-//                        gets called
-                        networkFetchAttempts = 0;
-                        this.invalidAddressesList = apiResponse.getInvalidAddresses();
-                        this.correctedAddresses = new CorrectedAddresses();
-                        view.setUpView();
-                        view.showScreenElements();
-                        view.setUpAdapter(this.invalidAddressesList);
-                    } else {
-                        view.showToast("Api din't send the route properly. Please try again.");
-                    }
-
-                } else {
-                    view.onFinishNetworkOperation();
-                    view.startRouteActivity(routeCode);
-                }
-            }
-        }else{
-            view.onFinishNetworkOperation();
-            view.showToast("Route does not exist. Try resubmitting the route.");
+        switch (routeState) {
+            case "validatingAddresses": onValidatingAddresses();
+                break;
+            case "hasInvalidAddresses": onHasInvalidAddresses(apiResponse.getInvalidAddresses());
+                break;
+            default: view.closeActivity();
         }
+
     }
 
     @Override

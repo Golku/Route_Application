@@ -43,6 +43,9 @@
     <string name="change.reform_address_dialog">Change</string>
     <string name="address.reform_address_dialog">Address</string>
     <string name="correct_the_address.reform_address_dialog">Correct the address</string>
+    <string name="networkOperation.addressDetailsActivity">Fetching address information...</string>
+    <string name="route_status.activity_route_state">Route Status</string>
+    <string name="retry.activity_route_state">Retry</string>
 
 
 </resources>

@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.example.jason.route_application_kotlin.data.api.ApiPresenterCallBack;
 import com.example.jason.route_application_kotlin.data.pojos.ApiResponse;
+import com.example.jason.route_application_kotlin.data.pojos.OrganizedRoute;
 import com.example.jason.route_application_kotlin.data.pojos.OutGoingRoute;
 import javax.inject.Inject;
 
@@ -16,13 +17,10 @@ public class RoutePresenter implements MvpRoute.Presenter, ApiPresenterCallBack 
 
     private final String log_tag = "routeLogTag";
 
-    private final MvpRoute.View view;
-
+    private MvpRoute.View view;
     private MvpRoute.Interactor interactor;
 
     private String routeCode;
-    private int routeFetchAttempt;
-    private final Handler handler = new Handler();
 
     @Inject
     public RoutePresenter(MvpRoute.View view, MvpRoute.Interactor interactor) {
@@ -37,54 +35,8 @@ public class RoutePresenter implements MvpRoute.Presenter, ApiPresenterCallBack 
 
     @Override
     public void getRouteFromApi() {
-        routeFetchAttempt++;
         view.onStartNetworkOperation();
         interactor.getOrganizedRouteFromApi(this, routeCode);
-    }
-
-    @Override
-    public void processApiResponse(ApiResponse apiResponse) {
-
-        if(apiResponse.getRouteIsNull()) {
-            view.onFinishNetworkOperation();
-            view.showToast("Route does not exist. Try resubmitting the route.");
-        }else{
-
-            if(apiResponse.getOrganizingInProgress()){
-
-                if(routeFetchAttempt<6){
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            getRouteFromApi();
-                        }
-                    }, 10000);
-                }else{
-                    //message the user that the route was not fetch after x amount of attempts
-                    //user can start the route fetching process again with a button click.
-                    view.onFinishNetworkOperation();
-                    view.showToast("Unable to fetch route after 6 attempts.");
-                }
-
-            }else{
-
-                view.onFinishNetworkOperation();
-
-                if (apiResponse.getOrganizedRoute() != null) {
-                    view.setUpAdapter(apiResponse.getOrganizedRoute());
-                } else {
-                    view.showToast("Api din't send the route properly. Please try again.");
-                }
-
-            }
-
-        }
-    }
-
-    @Override
-    public void onApiResponseFailure() {
-        view.onFinishNetworkOperation();
-        view.showToast("Connection failed");
     }
 
     @Override
@@ -95,5 +47,37 @@ public class RoutePresenter implements MvpRoute.Presenter, ApiPresenterCallBack 
     @Override
     public void onGoButtonClick(String address) {
         view.navigateToDestination(address);
+    }
+
+    private void onRouteOrganized(OrganizedRoute organizedRoute) {
+
+        if(organizedRoute != null){
+            view.onFinishNetworkOperation();
+            view.setUpAdapter(organizedRoute);
+        }else{
+            view.showToast("Api din't send the route properly. Please try again.");
+        }
+
+    }
+
+    @Override
+    public void onApiResponse(ApiResponse apiResponse) {
+
+//        If the server has an error and sends back a apiResponse with a html page
+//        the response processing will fail! FIX THIS!!!
+
+        String routeState = apiResponse.getRouteState();
+
+        switch (routeState) {
+            case "routeOrganized": onRouteOrganized(apiResponse.getOrganizedRoute());
+                break;
+            default: view.closeActivity();
+        }
+    }
+
+    @Override
+    public void onApiResponseFailure() {
+        view.onFinishNetworkOperation();
+        view.showToast("Connection failed");
     }
 }

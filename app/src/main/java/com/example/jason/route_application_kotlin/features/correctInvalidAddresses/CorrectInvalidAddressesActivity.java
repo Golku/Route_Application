@@ -64,16 +64,9 @@ public class CorrectInvalidAddressesActivity extends DaggerAppCompatActivity imp
 
     private void init(){
         String routeCode = getIntent().getStringExtra("routeCode");
-        String origin = getIntent().getStringExtra("origin");
-        ArrayList<String> inputtedAddressesList =  getIntent().getStringArrayListExtra("addressesList");
-
-        OutGoingRoute outGoingRoute = new OutGoingRoute(
-                routeCode,
-                origin,
-                inputtedAddressesList
-        );
-
-        presenter.submitRoute(outGoingRoute);
+        presenter.setRouteCode(routeCode);
+        onStartNetworkOperation();
+        presenter.checkForInvalidAddresses();
     }
 
     @Override
@@ -181,13 +174,6 @@ public class CorrectInvalidAddressesActivity extends DaggerAppCompatActivity imp
         progressBar.setVisibility(View.GONE);
     }
 
-    @Override
-    public void startRouteActivity(String routeCode) {
-        Intent intent = new Intent(this, RouteActivity.class);
-        intent.putExtra("routeCode", routeCode);
-        startActivity(intent);
-        finish();
-    }
 
     @Override
     public void closeActivity() {

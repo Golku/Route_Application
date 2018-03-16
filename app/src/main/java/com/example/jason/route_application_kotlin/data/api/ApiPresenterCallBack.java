@@ -7,6 +7,6 @@ import com.example.jason.route_application_kotlin.data.pojos.ApiResponse;
  */
 
 public interface ApiPresenterCallBack {
-    void processApiResponse(ApiResponse apiResponse);
+    void onApiResponse(ApiResponse apiResponse);
     void onApiResponseFailure();
 }

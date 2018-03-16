@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.example.jason.route_application_kotlin.R;
 import com.example.jason.route_application_kotlin.data.pojos.OrganizedRoute;
 import com.example.jason.route_application_kotlin.data.pojos.SingleDrive;
@@ -20,7 +19,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.CustomViewHo
     private OrganizedRoute organizedRoute;
     private RouteListFunctions routeListFunctions;
 
-    public RouteAdapter(OrganizedRoute organizedRoute, RouteListFunctions routeListFunctions) {
+    RouteAdapter(OrganizedRoute organizedRoute, RouteListFunctions routeListFunctions) {
         this.organizedRoute = organizedRoute;
         this.routeListFunctions = routeListFunctions;
     }

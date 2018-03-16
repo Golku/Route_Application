@@ -5,9 +5,8 @@ import android.util.Log;
 import com.example.jason.route_application_kotlin.data.api.ApiPresenterCallBack;
 import com.example.jason.route_application_kotlin.data.api.ApiService;
 import com.example.jason.route_application_kotlin.data.pojos.ApiResponse;
-import com.example.jason.route_application_kotlin.data.pojos.CorrectedAddresses;
 import com.example.jason.route_application_kotlin.data.pojos.OutGoingRoute;
-import com.example.jason.route_application_kotlin.features.correctInvalidAddresses.MvpCorrectInvalidAddresses;
+import com.example.jason.route_application_kotlin.features.routeState.MvpRouteState;
 
 import javax.inject.Inject;
 
@@ -16,23 +15,23 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * Created by Jason on 23-Feb-18.
+ * Created by Jason on 3/15/2018.
  */
 
-public class CorrectInvalidAddressesInteractor implements MvpCorrectInvalidAddresses.Interactor{
+public class RouteStateInteractor implements MvpRouteState.Interactor{
 
     private ApiService apiService;
     private final String log_tag = "logTagDebug";
 
     @Inject
-    public CorrectInvalidAddressesInteractor(ApiService apiService) {
+    public RouteStateInteractor(ApiService apiService) {
         this.apiService = apiService;
     }
 
     @Override
-    public void getInvalidAddresses(final ApiPresenterCallBack apiPresenterCallBack, String routeCode) {
+    public void sendRoute(final ApiPresenterCallBack apiPresenterCallBack, OutGoingRoute outGoingRoute) {
 
-        Call<ApiResponse> call = apiService.getRoute(routeCode);
+        Call<ApiResponse> call = apiService.submitRoute(outGoingRoute);
 
         call.enqueue(new Callback<ApiResponse>() {
             @Override
@@ -52,9 +51,9 @@ public class CorrectInvalidAddressesInteractor implements MvpCorrectInvalidAddre
     }
 
     @Override
-    public void submitCorrectedAddresses(final ApiPresenterCallBack apiPresenterCallBack, CorrectedAddresses correctedAddresses) {
+    public void getRouteState(final ApiPresenterCallBack apiPresenterCallBack, String routeCode) {
 
-        Call<ApiResponse> call = apiService.submitCorrectedAddresses(correctedAddresses);
+        Call<ApiResponse> call = apiService.getRouteState(routeCode);
 
         call.enqueue(new Callback<ApiResponse>() {
             @Override

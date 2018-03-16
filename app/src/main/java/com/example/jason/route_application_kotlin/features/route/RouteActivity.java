@@ -93,7 +93,7 @@ public class RouteActivity extends DaggerAppCompatActivity implements MvpRoute.V
 
     @Override
     public void onStartNetworkOperation() {
-        messageToUserTextView.setText("Calculating Route...");
+        messageToUserTextView.setText("Fetching route...");
     }
 
     @Override
@@ -107,5 +107,10 @@ public class RouteActivity extends DaggerAppCompatActivity implements MvpRoute.V
     public void showToast(String message) {
         Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
         toast.show();
+    }
+
+    @Override
+    public void closeActivity() {
+        finish();
     }
 }

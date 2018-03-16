@@ -27,7 +27,7 @@ public class AddressDetailsPresenter implements MvpAddressDetails.Presenter, Dat
     private FormattedAddress formattedAddress;
 
     @Inject
-    public AddressDetailsPresenter(MvpAddressDetails.View view, MvpAddressDetails.Interactor interactor) {
+    AddressDetailsPresenter(MvpAddressDetails.View view, MvpAddressDetails.Interactor interactor) {
         this.view = view;
         this.interactor = interactor;
     }
@@ -52,26 +52,40 @@ public class AddressDetailsPresenter implements MvpAddressDetails.Presenter, Dat
     public void processDatabaseResponse(DatabaseResponse databaseResponse) {
 
         view.onFinishNetworkOperation();
+
         if(databaseResponse.isError()){
-            view.showErrorMessageToUser(databaseResponse.getErrorMessage());
+            view.showToast(databaseResponse.getErrorMessage());
         }else{
-            if(databaseResponse.getAddressInformation() == null){
+
+            if(databaseResponse.isInformationAvailable()){
+
+                if(databaseResponse.getAddressInformation() == null){
+
+                    view.updateBusinessImageView("");
+                    view.updateMessageToUserTextView( true,"There are no comments");
+
+                }else{
+
+                    if(databaseResponse.getAddressInformation().getBusiness() == 1) {
+                        view.updateBusinessImageView("yes");
+                    }else{
+                        view.updateBusinessImageView("");
+                    }
+
+                    if(databaseResponse.getAddressInformation().getCommentsCount()>0){
+                        view.updateMessageToUserTextView(false, "");
+                    }else{
+                        view.updateMessageToUserTextView(true, "There are no comments");
+                    }
+
+                    view.setUpAdapter(databaseResponse.getAddressInformation());
+
+                }
+
+            }else{
                 view.updateBusinessImageView("");
                 view.updateMessageToUserTextView( true,"There are no comments");
-            }else{
-                if(databaseResponse.getAddressInformation().getBusiness() == 1) {
-                    view.updateBusinessImageView("yes");
-                }else{
-                    view.updateBusinessImageView("");
-                }
-                if(databaseResponse.getAddressInformation().getCommentsCount()>0){
-                    view.updateMessageToUserTextView(false, "");
-                }else{
-                    view.updateMessageToUserTextView(true, "There are no comments");
-                }
-                view.setUpAdapter(databaseResponse.getAddressInformation());
             }
-
         }
     }
 

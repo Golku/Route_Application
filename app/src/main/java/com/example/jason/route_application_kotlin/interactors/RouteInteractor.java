@@ -5,7 +5,6 @@ import android.util.Log;
 import com.example.jason.route_application_kotlin.data.api.ApiPresenterCallBack;
 import com.example.jason.route_application_kotlin.data.api.ApiService;
 import com.example.jason.route_application_kotlin.data.pojos.ApiResponse;
-import com.example.jason.route_application_kotlin.data.pojos.OutGoingRoute;
 import com.example.jason.route_application_kotlin.features.route.MvpRoute;
 import javax.inject.Inject;
 import retrofit2.Call;
@@ -34,7 +33,7 @@ public class RouteInteractor implements MvpRoute.Interactor{
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 Log.d("RouteInteractor", "Responded");
-                apiPresenterCallBack.processApiResponse(response.body());
+                apiPresenterCallBack.onApiResponse(response.body());
             }
 
             @Override

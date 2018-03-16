@@ -23,24 +23,23 @@ public interface MvpCorrectInvalidAddresses {
 
         void onStartNetworkOperation();
         void onFinishNetworkOperation();
-        void startRouteActivity(String routeCode);
         void setUpView();
         void closeActivity();
         void showScreenElements();
         void hideScreenElements();
+
     }
 
     interface Presenter{
-        void onRemoveAddressButtonClick(int position);
-        void onItemClick(int position);
-        void correctAddress(int position, String correctedAddress);
-        void submitRoute(OutGoingRoute outGoingRoute);
+        void setRouteCode(String routeCode);
         void checkForInvalidAddresses();
+        void onItemClick(int position);
+        void onRemoveAddressButtonClick(int position);
+        void correctAddress(int position, String correctedAddress);
         void submitCorrectedAddresses();
     }
 
     interface Interactor{
-        void submitRoute(ApiPresenterCallBack apiPresenterCallBack, OutGoingRoute outGoingRoute);
         void getInvalidAddresses(ApiPresenterCallBack apiPresenterCallBack, String routeCode);
         void submitCorrectedAddresses(ApiPresenterCallBack apiPresenterCallBack, CorrectedAddresses correctedAddresses);
     }

@@ -32,7 +32,8 @@
         <activity android:name=".features.addressDetails.AddressDetailsActivity" />
         <activity android:name=".features.commentInput.CommentInputActivity" />
         <activity android:name=".features.commentDisplay.CommentDisplayActivity" />
-        <activity android:name=".features.correctInvalidAddresses.CorrectInvalidAddressesActivity"></activity>
+        <activity android:name=".features.correctInvalidAddresses.CorrectInvalidAddressesActivity" />
+        <activity android:name=".features.routeState.RouteStateActivity" />
     </application>
 
 </manifest>
