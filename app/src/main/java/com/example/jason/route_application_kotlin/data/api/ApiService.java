@@ -21,9 +21,6 @@ public interface ApiService {
     @GET("getroute/{routeCode}")
     Call<ApiResponse> getRoute(@Path("routeCode")String routeCode);
 
-    @GET("getroutestate/{routeCode}")
-    Call<ApiResponse> getRouteState(@Path("routeCode")String routeCode);
-
     @POST("submitroute")
     Call<ApiResponse> submitRoute(@Body OutGoingRoute outGoingRoute);
 

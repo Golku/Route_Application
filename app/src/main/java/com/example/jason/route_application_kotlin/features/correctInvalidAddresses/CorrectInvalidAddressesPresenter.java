@@ -44,6 +44,7 @@ public class CorrectInvalidAddressesPresenter implements MvpCorrectInvalidAddres
 
     @Override
     public void checkForInvalidAddresses() {
+        view.onStartNetworkOperation();
         networkFetchAttempts++;
         interactor.getInvalidAddresses(this, routeCode);
     }
@@ -87,8 +88,7 @@ public class CorrectInvalidAddressesPresenter implements MvpCorrectInvalidAddres
         }
     }
 
-    private void onHasInvalidAddresses(ArrayList<String> invalidAddressesList){
-
+    private void onHasInvalidAddresses(ArrayList<String> invalidAddressesList) {
         view.onFinishNetworkOperation();
 
         if(invalidAddressesList != null){
@@ -101,7 +101,6 @@ public class CorrectInvalidAddressesPresenter implements MvpCorrectInvalidAddres
         }else {
             view.showToast("Api din't send the addresses properly. Please try again.");
         }
-
     }
 
     @Override
@@ -110,12 +109,12 @@ public class CorrectInvalidAddressesPresenter implements MvpCorrectInvalidAddres
 //        If the server has an error and sends back a apiResponse with a html page
 //        the response processing will fail! FIX THIS!!!
 
-        String routeState = apiResponse.getRouteState();
+        int routeState = apiResponse.getRouteState();
 
         switch (routeState) {
-            case "validatingAddresses": onValidatingAddresses();
+            case 1 : onValidatingAddresses();
                 break;
-            case "hasInvalidAddresses": onHasInvalidAddresses(apiResponse.getInvalidAddresses());
+            case 4 : onHasInvalidAddresses(apiResponse.getInvalidAddresses());
                 break;
             default: view.closeActivity();
         }
@@ -124,8 +123,7 @@ public class CorrectInvalidAddressesPresenter implements MvpCorrectInvalidAddres
 
     @Override
     public void onApiResponseFailure() {
-        view.onFinishNetworkOperation();
-        view.showToast("Connection failed");
+        view.showToast("Unable to connect to the api");
         view.closeActivity();
     }
 

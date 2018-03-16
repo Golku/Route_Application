@@ -174,4 +174,9 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements M
         Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
         toast.show();
     }
+
+    @Override
+    public void closeActivity() {
+        finish();
+    }
 }

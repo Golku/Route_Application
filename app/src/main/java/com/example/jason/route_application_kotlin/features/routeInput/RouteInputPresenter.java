@@ -9,7 +9,7 @@ import javax.inject.Inject;
 
 public class RouteInputPresenter implements MvpRouteInput.Presenter{
 
-    private final MvpRouteInput.View view;
+    private MvpRouteInput.View view;
     private ArrayList<String> listOfAddresses;
 
     @Inject

@@ -65,7 +65,6 @@ public class CorrectInvalidAddressesActivity extends DaggerAppCompatActivity imp
     private void init(){
         String routeCode = getIntent().getStringExtra("routeCode");
         presenter.setRouteCode(routeCode);
-        onStartNetworkOperation();
         presenter.checkForInvalidAddresses();
     }
 

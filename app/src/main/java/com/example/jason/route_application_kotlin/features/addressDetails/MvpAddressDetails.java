@@ -24,6 +24,7 @@ public interface MvpAddressDetails {
         void onStartNetworkOperation();
         void onFinishNetworkOperation();
         void showToast(String message);
+        void closeActivity();
     }
 
     interface Presenter{

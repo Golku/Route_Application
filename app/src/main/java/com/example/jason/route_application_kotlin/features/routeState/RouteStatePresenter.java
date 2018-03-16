@@ -4,7 +4,10 @@ import android.os.Handler;
 
 import com.example.jason.route_application_kotlin.data.api.ApiPresenterCallBack;
 import com.example.jason.route_application_kotlin.data.pojos.ApiResponse;
+import com.example.jason.route_application_kotlin.data.pojos.OrganizedRoute;
 import com.example.jason.route_application_kotlin.data.pojos.OutGoingRoute;
+
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -59,12 +62,11 @@ public class RouteStatePresenter implements MvpRouteState.Presenter, ApiPresente
 
         }else{
             view.showToast("Still validating after 5 fetch attempts");
+            view.closeActivity();
+//            show retry button. This button will call a function to reset networkFetchAttempts
+//            and start trying to get the route again
         }
 
-    }
-
-    private void onHasInvalidAddresses() {
-        view.startCorrectInvalidAddressesActivity(routeCode);
     }
 
     private void onOrganizingRoute() {
@@ -82,6 +84,9 @@ public class RouteStatePresenter implements MvpRouteState.Presenter, ApiPresente
 
         }else{
             view.showToast("Still organizing after 5 fetch attempts");
+            view.closeActivity();
+//            show retry button. This button will call a function to reset networkFetchAttempts
+//            and start trying to get the route again
         }
 
     }
@@ -90,26 +95,30 @@ public class RouteStatePresenter implements MvpRouteState.Presenter, ApiPresente
         view.startRouteActivity(routeCode);
     }
 
+    private void onHasInvalidAddresses() {
+        view.startCorrectInvalidAddressesActivity(routeCode);
+    }
+
     private void onInvalidRoute() {
-        view.updateRouteStateTextView("This route does not exist");
+        view.showToast("This route does not exist");
         view.closeActivity();
     }
 
     @Override
     public void onApiResponse(ApiResponse apiResponse) {
 
-        String routeState = apiResponse.getRouteState();
+        int routeState = apiResponse.getRouteState();
 
         switch (routeState) {
-            case "validatingAddresses": onValidatingAddresses();
+            case 1 : onValidatingAddresses();
                 break;
-            case "hasInvalidAddresses": onHasInvalidAddresses();
+            case 2 : onOrganizingRoute();
                 break;
-            case "organizingRoute": onOrganizingRoute();
+            case 3 : onRouteOrganized();
                 break;
-            case "routeOrganized": onRouteOrganized();
+            case 4 : onHasInvalidAddresses();
                 break;
-            case "invalidRoute": onInvalidRoute();
+            case 5 : onInvalidRoute();
                 break;
             default: view.closeActivity();
         }
@@ -118,6 +127,7 @@ public class RouteStatePresenter implements MvpRouteState.Presenter, ApiPresente
 
     @Override
     public void onApiResponseFailure() {
-
+        view.showToast("Unable to connect to the api");
+        view.closeActivity();
     }
 }

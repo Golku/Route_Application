@@ -1,7 +1,10 @@
 package com.example.jason.route_application_kotlin.features.routeState;
 
 import com.example.jason.route_application_kotlin.data.api.ApiPresenterCallBack;
+import com.example.jason.route_application_kotlin.data.pojos.OrganizedRoute;
 import com.example.jason.route_application_kotlin.data.pojos.OutGoingRoute;
+
+import java.util.ArrayList;
 
 /**
  * Created by Jason on 3/15/2018.

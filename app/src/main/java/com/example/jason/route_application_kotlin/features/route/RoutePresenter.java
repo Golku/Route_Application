@@ -56,6 +56,7 @@ public class RoutePresenter implements MvpRoute.Presenter, ApiPresenterCallBack 
             view.setUpAdapter(organizedRoute);
         }else{
             view.showToast("Api din't send the route properly. Please try again.");
+            view.closeActivity();
         }
 
     }
@@ -66,10 +67,10 @@ public class RoutePresenter implements MvpRoute.Presenter, ApiPresenterCallBack 
 //        If the server has an error and sends back a apiResponse with a html page
 //        the response processing will fail! FIX THIS!!!
 
-        String routeState = apiResponse.getRouteState();
+        int routeState = apiResponse.getRouteState();
 
         switch (routeState) {
-            case "routeOrganized": onRouteOrganized(apiResponse.getOrganizedRoute());
+            case 3 : onRouteOrganized(apiResponse.getOrganizedRoute());
                 break;
             default: view.closeActivity();
         }
@@ -77,7 +78,7 @@ public class RoutePresenter implements MvpRoute.Presenter, ApiPresenterCallBack 
 
     @Override
     public void onApiResponseFailure() {
-        view.onFinishNetworkOperation();
-        view.showToast("Connection failed");
+        view.showToast("Unable to connect to the api");
+        view.closeActivity();
     }
 }

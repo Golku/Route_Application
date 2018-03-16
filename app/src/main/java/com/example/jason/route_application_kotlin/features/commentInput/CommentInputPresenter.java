@@ -57,7 +57,7 @@ public class CommentInputPresenter implements MvpCommentInput.Presenter, Databas
 
     @Override
     public void onApiResponseFailure() {
-        view.onFinishNetworkOperation();
-        view.showToast("Connection failed");
+        view.showToast("Unable to connect to the database");
+        view.closeActivity();
     }
 }

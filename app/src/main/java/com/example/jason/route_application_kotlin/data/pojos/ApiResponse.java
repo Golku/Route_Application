@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class ApiResponse {
 
     private String requestType;
-    private String routeState;
+    private int routeState;
     private OrganizedRoute organizedRoute;
     private ArrayList<String> invalidAddresses;
 
@@ -22,11 +22,11 @@ public class ApiResponse {
         this.requestType = requestType;
     }
 
-    public String getRouteState() {
+    public int getRouteState() {
         return routeState;
     }
 
-    public void setRouteState(String routeState) {
+    public void setRouteState(int routeState) {
         this.routeState = routeState;
     }
 

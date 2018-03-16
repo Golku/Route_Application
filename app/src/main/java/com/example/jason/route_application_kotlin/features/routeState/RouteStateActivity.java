@@ -3,12 +3,14 @@ package com.example.jason.route_application_kotlin.features.routeState;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.jason.route_application_kotlin.R;
+import com.example.jason.route_application_kotlin.data.pojos.OrganizedRoute;
 import com.example.jason.route_application_kotlin.data.pojos.OutGoingRoute;
 import com.example.jason.route_application_kotlin.features.correctInvalidAddresses.CorrectInvalidAddressesActivity;
 import com.example.jason.route_application_kotlin.features.correctInvalidAddresses.MvpCorrectInvalidAddresses;
@@ -20,8 +22,9 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import dagger.android.support.DaggerAppCompatActivity;
 
-public class RouteStateActivity extends AppCompatActivity implements MvpRouteState.View {
+public class RouteStateActivity extends DaggerAppCompatActivity implements MvpRouteState.View {
 
     private final String log_tag = "logTagDebug";
 
@@ -48,7 +51,13 @@ public class RouteStateActivity extends AppCompatActivity implements MvpRouteSta
         String action = getIntent().getStringExtra("action");
         String routeCode = getIntent().getStringExtra("routeCode");
 
-        presenter.setRouteCode(routeCode);
+        if(routeCode != null && !routeCode.isEmpty()){
+            presenter.setRouteCode(routeCode);
+        }else{
+            showToast("No route code provided");
+            closeActivity();
+            return;
+        }
 
         if(action.equals("submitRoute")){
 
@@ -86,6 +95,7 @@ public class RouteStateActivity extends AppCompatActivity implements MvpRouteSta
         Intent intent = new Intent(this, RouteActivity.class);
         intent.putExtra("routeCode", routeCode);
         startActivity(intent);
+        closeActivity();
     }
 
     @Override

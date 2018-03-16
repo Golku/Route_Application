@@ -6,21 +6,13 @@ import java.util.List;
  * Created by Jason on 16-Feb-18.
  */
 
-public class OrganizedRoute {
+public class OrganizedRoute{
 
     private String routeCode;
     private int privateAddressesCount;
     private int businessAddressesCount;
     private int wrongAddressesCount;
     private List<SingleDrive> routeList;
-
-    public OrganizedRoute(String routeCode, int privateAddressesCount, int businessAddressesCount, int wrongAddressesCount, List<SingleDrive> routeList) {
-        this.routeCode = routeCode;
-        this.privateAddressesCount = privateAddressesCount;
-        this.businessAddressesCount = businessAddressesCount;
-        this.wrongAddressesCount = wrongAddressesCount;
-        this.routeList = routeList;
-    }
 
     public String getRouteCode() {
         return routeCode;
@@ -61,5 +53,4 @@ public class OrganizedRoute {
     public void setRouteList(List<SingleDrive> routeList) {
         this.routeList = routeList;
     }
-
 }

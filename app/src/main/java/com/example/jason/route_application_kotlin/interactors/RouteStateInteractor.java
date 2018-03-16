@@ -53,7 +53,7 @@ public class RouteStateInteractor implements MvpRouteState.Interactor{
     @Override
     public void getRouteState(final ApiPresenterCallBack apiPresenterCallBack, String routeCode) {
 
-        Call<ApiResponse> call = apiService.getRouteState(routeCode);
+        Call<ApiResponse> call = apiService.getRoute(routeCode);
 
         call.enqueue(new Callback<ApiResponse>() {
             @Override

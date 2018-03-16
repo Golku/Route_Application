@@ -10,22 +10,17 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.jason.route_application_kotlin.R;
 import com.example.jason.route_application_kotlin.data.pojos.OrganizedRoute;
-import com.example.jason.route_application_kotlin.data.pojos.OutGoingRoute;
 import com.example.jason.route_application_kotlin.features.addressDetails.AddressDetailsActivity;
-import com.example.jason.route_application_kotlin.features.correctInvalidAddresses.CorrectInvalidAddressesActivity;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.support.DaggerAppCompatActivity;
 
 public class RouteActivity extends DaggerAppCompatActivity implements MvpRoute.View, RouteAdapter.RouteListFunctions{
+
+    private final String logTag = "logDebugTag";
 
     @Inject MvpRoute.Presenter presenter;
 
@@ -39,8 +34,6 @@ public class RouteActivity extends DaggerAppCompatActivity implements MvpRoute.V
     TextView messageToUserTextView;
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
-
-    private RouteAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +57,7 @@ public class RouteActivity extends DaggerAppCompatActivity implements MvpRoute.V
 
         recyclerView.setVisibility(View.VISIBLE);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new RouteAdapter(organizedRoute, this);
+        RouteAdapter adapter = new RouteAdapter(organizedRoute, this);
         recyclerView.setAdapter(adapter);
     }
 
@@ -100,7 +93,6 @@ public class RouteActivity extends DaggerAppCompatActivity implements MvpRoute.V
     public void onFinishNetworkOperation() {
         messageToUserTextView.setVisibility(View.GONE);
         progressBar.setVisibility(View.GONE);
-
     }
 
     @Override

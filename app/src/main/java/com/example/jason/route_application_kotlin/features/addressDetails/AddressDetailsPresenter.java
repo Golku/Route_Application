@@ -91,9 +91,8 @@ public class AddressDetailsPresenter implements MvpAddressDetails.Presenter, Dat
 
     @Override
     public void onApiResponseFailure() {
-        view.onFinishNetworkOperation();
-        view.updateMessageToUserTextView(false, "");
-        view.showToast("Connection Failed");
+        view.showToast("Unable to connect to the database");
+        view.closeActivity();
     }
 
     @Override
