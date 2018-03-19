@@ -21,7 +21,9 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAycv4bRa_NI4gl7WwkgLGs4EDhn44G8DY" />
 
-        <activity android:name=".features.routeInput.RouteInputActivity">
+        <activity
+            android:name=".features.routeInput.RouteInputActivity"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,9 +32,9 @@
         </activity>
         <activity android:name=".features.route.RouteActivity" />
         <activity android:name=".features.addressDetails.AddressDetailsActivity" />
-        <activity android:name=".features.commentInput.CommentInputActivity" />
+        <activity android:name=".features.commentInput.CommentInputActivity" android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".features.commentDisplay.CommentDisplayActivity" />
-        <activity android:name=".features.correctInvalidAddresses.CorrectInvalidAddressesActivity" />
+        <activity android:name=".features.correctInvalidAddresses.CorrectInvalidAddressesActivity" android:windowSoftInputMode="adjustPan" />
         <activity android:name=".features.routeState.RouteStateActivity" />
     </application>
 

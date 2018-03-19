@@ -23,6 +23,7 @@ public interface MvpAddressDetails {
         void updateBusinessImageView(String business);
         void onStartNetworkOperation();
         void onFinishNetworkOperation();
+        boolean isActive();
         void showToast(String message);
         void closeActivity();
     }

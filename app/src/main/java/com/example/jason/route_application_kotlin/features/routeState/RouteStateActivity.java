@@ -1,19 +1,15 @@
 package com.example.jason.route_application_kotlin.features.routeState;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.jason.route_application_kotlin.R;
-import com.example.jason.route_application_kotlin.data.pojos.OrganizedRoute;
 import com.example.jason.route_application_kotlin.data.pojos.OutGoingRoute;
 import com.example.jason.route_application_kotlin.features.correctInvalidAddresses.CorrectInvalidAddressesActivity;
-import com.example.jason.route_application_kotlin.features.correctInvalidAddresses.MvpCorrectInvalidAddresses;
 import com.example.jason.route_application_kotlin.features.route.RouteActivity;
 
 import java.util.ArrayList;
@@ -38,12 +34,29 @@ public class RouteStateActivity extends DaggerAppCompatActivity implements MvpRo
     @BindView(R.id.retryBtn)
     Button retryBtn;
 
+    private boolean returning;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_state);
         ButterKnife.bind(this);
+        returning = false;
         init();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        returning = true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(returning){
+            presenter.getRouteState();
+        }
     }
 
     private void init(){

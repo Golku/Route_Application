@@ -38,8 +38,8 @@ public class NetworkModule {
     @Named("api")
     public Retrofit provideRetrofitForApi(OkHttpClient okHttpClient, Gson gson){
         return new Retrofit.Builder()
-                .client(okHttpClient)
-                .baseUrl("http://10.163.49.22:8080/webapi/")
+                .client(okHttpClient)//192.168.0.16
+                .baseUrl("http://192.168.0.16:8080/webapi/")
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
     }
@@ -50,7 +50,7 @@ public class NetworkModule {
     public Retrofit provideRetrofitForDatabase(OkHttpClient okHttpClient, Gson gson){
         return new Retrofit.Builder()
                 .client(okHttpClient)
-                .baseUrl("http://10.163.49.22/map/v1/")
+                .baseUrl("http://192.168.0.16/map/v1/")
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
     }

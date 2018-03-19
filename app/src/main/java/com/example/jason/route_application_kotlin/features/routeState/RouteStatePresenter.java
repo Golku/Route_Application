@@ -61,7 +61,7 @@ public class RouteStatePresenter implements MvpRouteState.Presenter, ApiPresente
             }, 10000);
 
         }else{
-            view.showToast("Still validating after 5 fetch attempts");
+            view.showToast("Still validating after 6 fetch attempts");
             view.closeActivity();
 //            show retry button. This button will call a function to reset networkFetchAttempts
 //            and start trying to get the route again
@@ -83,7 +83,7 @@ public class RouteStatePresenter implements MvpRouteState.Presenter, ApiPresente
             }, 10000);
 
         }else{
-            view.showToast("Still organizing after 5 fetch attempts");
+            view.showToast("Still organizing after 6 fetch attempts");
             view.closeActivity();
 //            show retry button. This button will call a function to reset networkFetchAttempts
 //            and start trying to get the route again
@@ -96,6 +96,7 @@ public class RouteStatePresenter implements MvpRouteState.Presenter, ApiPresente
     }
 
     private void onHasInvalidAddresses() {
+        networkFetchAttempts = 0;
         view.startCorrectInvalidAddressesActivity(routeCode);
     }
 
@@ -108,6 +109,8 @@ public class RouteStatePresenter implements MvpRouteState.Presenter, ApiPresente
     public void onApiResponse(ApiResponse apiResponse) {
 
         int routeState = apiResponse.getRouteState();
+
+        view.showToast("route state: "+String.valueOf(routeState));
 
         switch (routeState) {
             case 1 : onValidatingAddresses();

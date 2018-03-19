@@ -50,15 +50,31 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements M
     ProgressBar progressBar;
 
     private final String log_tag = "AddressDetails_logTag";
-
-    private AddressDetailsAdapter adapter;
+    private boolean returning;
+    private boolean active;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_address_details);
         ButterKnife.bind(this);
+        active = true;
+        returning = false;
         init();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(returning){
+            presenter.getAddressInformation();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        active = false;
     }
 
     private void init() {
@@ -71,10 +87,10 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements M
             presenter.formatAddress(address);
             presenter.updateTextViews();
             presenter.getAddressInformation();
-
         } catch (NullPointerException | ArrayIndexOutOfBoundsException e) {
             onFinishNetworkOperation();
             showToast("Invalid Address");
+            closeActivity();
         }
 
     }
@@ -98,7 +114,7 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements M
     public void setUpAdapter(AddressInformation addressInformation) {
         recyclerView.setVisibility(View.VISIBLE);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new AddressDetailsAdapter(addressInformation, this);
+        AddressDetailsAdapter adapter = new AddressDetailsAdapter(addressInformation, this);
         recyclerView.setAdapter(adapter);
     }
 
@@ -128,20 +144,6 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements M
     }
 
     @Override
-    public void showCommentDisplay(CommentInformation commentInformation) {
-        Intent i = new Intent(this, CommentDisplayActivity.class);
-        i.putExtra("commentInformation", commentInformation);
-        startActivity(i);
-    }
-
-    @Override
-    public void showCommentInput(FormattedAddress formattedAddress) {
-        Intent i = new Intent(this, CommentInputActivity.class);
-        i.putExtra("formattedAddress", formattedAddress);
-        startActivity(i);
-    }
-
-    @Override
     public void updateMessageToUserTextView(boolean visible, String message) {
         if (visible) {
             messageToUserTextView.setVisibility(View.VISIBLE);
@@ -167,6 +169,27 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements M
     @Override
     public void onFinishNetworkOperation() {
         progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showCommentDisplay(CommentInformation commentInformation) {
+        returning = false;
+        Intent i = new Intent(this, CommentDisplayActivity.class);
+        i.putExtra("commentInformation", commentInformation);
+        startActivity(i);
+    }
+
+    @Override
+    public void showCommentInput(FormattedAddress formattedAddress) {
+        returning = true;
+        Intent i = new Intent(this, CommentInputActivity.class);
+        i.putExtra("formattedAddress", formattedAddress);
+        startActivity(i);
+    }
+
+    @Override
+    public boolean isActive() {
+        return active;
     }
 
     @Override

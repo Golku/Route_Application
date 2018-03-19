@@ -13,9 +13,10 @@
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="TextView"
+        android:text="@string/employee_name.activity_comment_input"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:textColor="@color/colorPrimaryDark"/>
 
     <TextView
         android:id="@+id/dateTextView"
@@ -24,7 +25,8 @@
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="TextView"
+        android:textColor="@color/colorPrimaryDark"
+        android:text="@string/date.activity_comment_input"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/employeeNameTextView" />
 
@@ -37,9 +39,11 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:ems="10"
-        android:maxLines="1"
-        android:hint="Write a comment here"
+        android:hint="@string/write_a_comment_here.activity_comment_input"
         android:inputType="textShortMessage"
+        android:maxLines="1"
+        android:textColor="@color/colorPrimaryDark"
+        android:textColorHint="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dateTextView" />
@@ -65,10 +69,13 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
-        android:text="add comment"
+        android:layout_marginRight="16dp"
+        android:background="@drawable/buttons_style"
+        android:padding="10dp"
+        android:text="@string/add_comment.activity_comment_input"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/commentEditText"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginRight="16dp" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/messageToUserTextView"

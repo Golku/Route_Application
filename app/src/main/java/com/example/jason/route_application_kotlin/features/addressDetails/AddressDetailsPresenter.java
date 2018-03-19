@@ -51,6 +51,10 @@ public class AddressDetailsPresenter implements MvpAddressDetails.Presenter, Dat
     @Override
     public void processDatabaseResponse(DatabaseResponse databaseResponse) {
 
+        if(!view.isActive()){
+            return;
+        }
+
         view.onFinishNetworkOperation();
 
         if(databaseResponse.isError()){
@@ -91,6 +95,9 @@ public class AddressDetailsPresenter implements MvpAddressDetails.Presenter, Dat
 
     @Override
     public void onApiResponseFailure() {
+        if(!view.isActive()){
+            return;
+        }
         view.showToast("Unable to connect to the database");
         view.closeActivity();
     }

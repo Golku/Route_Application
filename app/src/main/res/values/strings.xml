@@ -46,6 +46,12 @@
     <string name="networkOperation.addressDetailsActivity">Fetching address information…</string>
     <string name="route_status.activity_route_state">Fetching route state…</string>
     <string name="retry.activity_route_state">Retry</string>
+    <string name="write_a_comment_here.activity_comment_input">Write a comment here</string>
+    <string name="add_comment.activity_comment_input">add comment</string>
+    <string name="submit_addresses.activity_correct_invalid_addresses">Submit addresses</string>
+    <string name="this_addresses_are_invalid_here_you_can_remove_then_from_the_route_or_correct_them.activity_correct_invalid_addresses">This addresses are invalid. Here you can remove then from the route or correct them.</string>
+    <string name="employee_name.activity_comment_input">employee name</string>
+    <string name="date.activity_comment_input">date</string>
 
 
 </resources>
