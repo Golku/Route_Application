@@ -19,10 +19,6 @@ public interface MvpRoute {
 
         void navigateToDestination(String address);
 
-        void onStartNetworkOperation();
-
-        void onFinishNetworkOperation();
-
         void showToast(String message);
 
         void closeActivity();

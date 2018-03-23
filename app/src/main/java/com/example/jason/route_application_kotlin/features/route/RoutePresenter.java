@@ -35,7 +35,6 @@ public class RoutePresenter implements MvpRoute.Presenter, ApiPresenterCallBack 
 
     @Override
     public void getRouteFromApi() {
-        view.onStartNetworkOperation();
         interactor.getOrganizedRouteFromApi(this, routeCode);
     }
 
@@ -52,7 +51,6 @@ public class RoutePresenter implements MvpRoute.Presenter, ApiPresenterCallBack 
     private void onRouteOrganized(OrganizedRoute organizedRoute) {
 
         if(organizedRoute != null){
-            view.onFinishNetworkOperation();
             view.setUpAdapter(organizedRoute);
         }else{
             view.showToast("Api din't send the route properly. Please try again.");
