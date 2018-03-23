@@ -22,24 +22,23 @@ public class NetworkModule {
 
     @Provides
     @AppScope
-    public OkHttpClient provideOkHttpClient(){
+    OkHttpClient provideOkHttpClient(){
         return new OkHttpClient();
     }
 
     @Provides
     @AppScope
-    public Gson provideGson (){
-        Gson gson = new Gson();
-        return gson;
+    Gson provideGson (){
+        return new Gson();
     }
 
     @Provides
     @AppScope
     @Named("api")
-    public Retrofit provideRetrofitForApi(OkHttpClient okHttpClient, Gson gson){
+    Retrofit provideRetrofitForApi(OkHttpClient okHttpClient, Gson gson){
         return new Retrofit.Builder()
                 .client(okHttpClient)//192.168.0.16
-                .baseUrl("http://192.168.0.16:8080/webapi/")
+                .baseUrl("http://217.103.231.118:8080/webapi/")
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
     }
@@ -47,23 +46,23 @@ public class NetworkModule {
     @Provides
     @AppScope
     @Named("database")
-    public Retrofit provideRetrofitForDatabase(OkHttpClient okHttpClient, Gson gson){
+    Retrofit provideRetrofitForDatabase(OkHttpClient okHttpClient, Gson gson){
         return new Retrofit.Builder()
                 .client(okHttpClient)
-                .baseUrl("http://192.168.0.16/map/v1/")
+                .baseUrl("http://217.103.231.118/map/v1/")
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
     }
 
     @AppScope
     @Provides
-    public ApiService provideApiService(@Named("api") Retrofit retrofit){
+    ApiService provideApiService(@Named("api") Retrofit retrofit){
         return retrofit.create(ApiService.class);
     }
 
     @AppScope
     @Provides
-    public DatabaseService provideDatabaseService(@Named("database") Retrofit retrofit){
+    DatabaseService provideDatabaseService(@Named("database") Retrofit retrofit){
         return retrofit.create(DatabaseService.class);
     }
 

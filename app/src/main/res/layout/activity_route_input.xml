@@ -30,7 +30,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/routeCodeInputEditText" />
+            app:layout_constraintTop_toBottomOf="@+id/routeCodeInputEditText"/>
 
         <TextView
             android:id="@+id/headerTextView"
@@ -143,16 +143,16 @@
             android:id="@+id/routeCodeInputEditText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:ems="10"
             android:hint="@string/enter_route_code_here.Activity_route_input"
             android:inputType="textPersonName"
             android:textColor="@color/colorPrimaryDark"
             android:textColorHint="@color/colorPrimary"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginLeft="16dp"/>
 
         <Button
             android:id="@+id/getRouteBtn"

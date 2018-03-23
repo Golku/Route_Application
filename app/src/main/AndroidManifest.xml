@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.jason.route_application_kotlin">
+          package="com.example.jason.route_application_kotlin">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
     <application
         android:name=".RouteApplication"
@@ -16,26 +16,30 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
+            android:value="@integer/google_play_services_version"/>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAycv4bRa_NI4gl7WwkgLGs4EDhn44G8DY" />
+            android:value="AIzaSyAycv4bRa_NI4gl7WwkgLGs4EDhn44G8DY"/>
 
         <activity
             android:name=".features.routeInput.RouteInputActivity"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".features.route.RouteActivity" />
-        <activity android:name=".features.addressDetails.AddressDetailsActivity" />
-        <activity android:name=".features.commentInput.CommentInputActivity" android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".features.commentDisplay.CommentDisplayActivity" />
-        <activity android:name=".features.correctInvalidAddresses.CorrectInvalidAddressesActivity" android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".features.routeState.RouteStateActivity" />
+        <activity android:name=".features.route.RouteActivity"/>
+        <activity android:name=".features.addressDetails.AddressDetailsActivity"/>
+        <activity
+            android:name=".features.commentInput.CommentInputActivity"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".features.commentDisplay.CommentDisplayActivity"/>
+        <activity
+            android:name=".features.correctInvalidAddresses.CorrectInvalidAddressesActivity"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".features.routeState.RouteStateActivity"/>
     </application>
 
 </manifest>

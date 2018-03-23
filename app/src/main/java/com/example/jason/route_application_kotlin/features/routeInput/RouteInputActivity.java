@@ -8,7 +8,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
@@ -17,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.example.jason.route_application_kotlin.R;
 import com.example.jason.route_application_kotlin.features.addressDetails.AddressDetailsActivity;
-import com.example.jason.route_application_kotlin.features.correctInvalidAddresses.CorrectInvalidAddressesActivity;
 import com.example.jason.route_application_kotlin.features.route.RouteActivity;
 import com.example.jason.route_application_kotlin.features.routeState.RouteStateActivity;
 import com.google.android.gms.common.ConnectionResult;
@@ -110,7 +108,11 @@ public class RouteInputActivity extends DaggerAppCompatActivity implements
 
             final RouteInputPlaceArrayAdapter.PlaceAutocomplete item = mPlaceArrayAdapter.getItem(position);
 
-            autoCompleteTextView.setText(item.primaryText.toString());
+            if (item != null) {
+                autoCompleteTextView.setText(item.primaryText.toString());
+            }else{
+                showToast("place array adapter null");
+            }
 
             final String placeId = String.valueOf(item.placeId);
 
@@ -224,7 +226,13 @@ public class RouteInputActivity extends DaggerAppCompatActivity implements
     @OnClick(R.id.submitRouteBtn)
     @Override
     public void onSubmitRouteButtonClick() {
-        presenter.submitRouteRoute();
+        startRouteActivity();
+//        presenter.submitRouteRoute();
+    }
+
+    private void startRouteActivity(){
+        Intent intent = new Intent(this, RouteActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -243,5 +251,9 @@ public class RouteInputActivity extends DaggerAppCompatActivity implements
         intent.putExtra("action", "getRoute");
         intent.putExtra("routeCode", routeCodeInputEditText.getText().toString());
         startActivity(intent);
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }

@@ -3,6 +3,8 @@ package com.example.jason.route_application_kotlin.features.route;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -24,16 +26,16 @@ public class RouteActivity extends DaggerAppCompatActivity implements MvpRoute.V
 
     @Inject MvpRoute.Presenter presenter;
 
-    @BindView(R.id.routeRecView)
-    RecyclerView recyclerView;
-    @BindView(R.id.privateAddressesTextView)
-    TextView privateAddressesTextView;
-    @BindView(R.id.businessAddressesTextView)
-    TextView businessAddressesTextView;
-    @BindView(R.id.messageToUserTextView)
-    TextView messageToUserTextView;
-    @BindView(R.id.progressBar)
-    ProgressBar progressBar;
+//    @BindView(R.id.routeRecView)
+//    RecyclerView recyclerView;
+//    @BindView(R.id.privateAddressesTextView)
+//    TextView privateAddressesTextView;
+//    @BindView(R.id.businessAddressesTextView)
+//    TextView businessAddressesTextView;
+//    @BindView(R.id.messageToUserTextView)
+//    TextView messageToUserTextView;
+//    @BindView(R.id.progressBar)
+//    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,20 +47,31 @@ public class RouteActivity extends DaggerAppCompatActivity implements MvpRoute.V
 
     private void init(){
         String routeCode = getIntent().getStringExtra("routeCode");
-        presenter.setRouteCode(routeCode);
-        presenter.getRouteFromApi();
+
+        RouteSectionPagerAdapter routeSectionPagerAdapter = new RouteSectionPagerAdapter(getSupportFragmentManager());
+        routeSectionPagerAdapter.addFragment("Map", new RouteMapFragment());
+        routeSectionPagerAdapter.addFragment("Route List", new RouteListFragment());
+
+        ViewPager viewPager = findViewById(R.id.container);
+        viewPager.setAdapter(routeSectionPagerAdapter);
+
+        TabLayout tabLayout = findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+
+//        presenter.setRouteCode(routeCode);
+//        presenter.getRouteFromApi();
     }
 
     @Override
     public void setUpAdapter(OrganizedRoute organizedRoute) {
-
-        privateAddressesTextView.setText(String.valueOf(organizedRoute.getPrivateAddressesCount()));
-        businessAddressesTextView.setText(String.valueOf(organizedRoute.getBusinessAddressesCount()));
-
-        recyclerView.setVisibility(View.VISIBLE);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        RouteAdapter adapter = new RouteAdapter(organizedRoute, this);
-        recyclerView.setAdapter(adapter);
+//
+//        privateAddressesTextView.setText(String.valueOf(organizedRoute.getPrivateAddressesCount()));
+//        businessAddressesTextView.setText(String.valueOf(organizedRoute.getBusinessAddressesCount()));
+//
+//        recyclerView.setVisibility(View.VISIBLE);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        RouteAdapter adapter = new RouteAdapter(organizedRoute, this);
+//        recyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -86,13 +99,13 @@ public class RouteActivity extends DaggerAppCompatActivity implements MvpRoute.V
 
     @Override
     public void onStartNetworkOperation() {
-        messageToUserTextView.setText("Fetching route...");
+//        messageToUserTextView.setText("Fetching route...");
     }
 
     @Override
     public void onFinishNetworkOperation() {
-        messageToUserTextView.setVisibility(View.GONE);
-        progressBar.setVisibility(View.GONE);
+//        messageToUserTextView.setVisibility(View.GONE);
+//        progressBar.setVisibility(View.GONE);
     }
 
     @Override

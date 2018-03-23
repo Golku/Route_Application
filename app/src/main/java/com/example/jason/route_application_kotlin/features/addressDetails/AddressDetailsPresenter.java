@@ -99,7 +99,6 @@ public class AddressDetailsPresenter implements MvpAddressDetails.Presenter, Dat
             return;
         }
         view.showToast("Unable to connect to the database");
-        view.closeActivity();
     }
 
     @Override

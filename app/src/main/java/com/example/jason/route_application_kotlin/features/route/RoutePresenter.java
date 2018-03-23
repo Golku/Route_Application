@@ -61,6 +61,11 @@ public class RoutePresenter implements MvpRoute.Presenter, ApiPresenterCallBack 
 
     }
 
+    private void onInvalidState() {
+        view.showToast("Invalid route state");
+        view.closeActivity();
+    }
+
     @Override
     public void onApiResponse(ApiResponse apiResponse) {
 
@@ -70,9 +75,9 @@ public class RoutePresenter implements MvpRoute.Presenter, ApiPresenterCallBack 
         int routeState = apiResponse.getRouteState();
 
         switch (routeState) {
-            case 3 : onRouteOrganized(apiResponse.getOrganizedRoute());
+            case 7 : onRouteOrganized(apiResponse.getOrganizedRoute());
                 break;
-            default: view.closeActivity();
+            default: onInvalidState();
         }
     }
 

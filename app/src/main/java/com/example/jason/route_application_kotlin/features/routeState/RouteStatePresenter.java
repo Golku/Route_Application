@@ -4,10 +4,7 @@ import android.os.Handler;
 
 import com.example.jason.route_application_kotlin.data.api.ApiPresenterCallBack;
 import com.example.jason.route_application_kotlin.data.pojos.ApiResponse;
-import com.example.jason.route_application_kotlin.data.pojos.OrganizedRoute;
 import com.example.jason.route_application_kotlin.data.pojos.OutGoingRoute;
-
-import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -47,52 +44,43 @@ public class RouteStatePresenter implements MvpRouteState.Presenter, ApiPresente
         interactor.getRouteState(this, routeCode);
     }
 
+    private void requestTimer(String message){
+
+        if(networkFetchAttempts<12){
+
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    getRouteState();
+                }
+            }, 10000);
+
+        }else{
+            view.showToast(message);
+            view.closeActivity();
+//            show retry button. This button will call a function to reset networkFetchAttempts
+//            and start trying to get the route again
+        }
+    }
+
+    private void onRouteIsNull() {
+        view.showToast("This route does not exist");
+        view.closeActivity();
+    }
+
+    private void onInvalidRouteSubmitted() {
+        view.showToast("The route was submitted with no addresses");
+        view.closeActivity();
+    }
+
+    private void onInQueue() {
+        view.updateRouteStateTextView("Route is in queue...");
+        requestTimer("Still in queue after 6 fetch attempts");
+    }
+
     private void onValidatingAddresses() {
-
         view.updateRouteStateTextView("Validating the addresses...");
-
-        if(networkFetchAttempts<12){
-
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    getRouteState();
-                }
-            }, 10000);
-
-        }else{
-            view.showToast("Still validating after 6 fetch attempts");
-            view.closeActivity();
-//            show retry button. This button will call a function to reset networkFetchAttempts
-//            and start trying to get the route again
-        }
-
-    }
-
-    private void onOrganizingRoute() {
-
-        view.updateRouteStateTextView("The route is being organized...");
-
-        if(networkFetchAttempts<12){
-
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    getRouteState();
-                }
-            }, 10000);
-
-        }else{
-            view.showToast("Still organizing after 6 fetch attempts");
-            view.closeActivity();
-//            show retry button. This button will call a function to reset networkFetchAttempts
-//            and start trying to get the route again
-        }
-
-    }
-
-    private void onRouteOrganized() {
-        view.startRouteActivity(routeCode);
+        requestTimer("Still validating after 6 fetch attempts");
     }
 
     private void onHasInvalidAddresses() {
@@ -100,9 +88,18 @@ public class RouteStatePresenter implements MvpRouteState.Presenter, ApiPresente
         view.startCorrectInvalidAddressesActivity(routeCode);
     }
 
-    private void onInvalidRoute() {
-        view.showToast("This route does not exist");
+    private void onOrganizingRoute() {
+        view.updateRouteStateTextView("The route is being organized...");
+        requestTimer("Still organizing after 6 fetch attempts");
+    }
+
+    private void onOrganizingError() {
+        view.showToast("Unable to organized route");
         view.closeActivity();
+    }
+
+    private void onRouteOrganized() {
+        view.startRouteActivity(routeCode);
     }
 
     @Override
@@ -110,20 +107,26 @@ public class RouteStatePresenter implements MvpRouteState.Presenter, ApiPresente
 
         int routeState = apiResponse.getRouteState();
 
-        view.showToast("route state: "+String.valueOf(routeState));
+//        view.showToast("route state: "+String.valueOf(routeState));
 
         switch (routeState) {
-            case 1 : onValidatingAddresses();
+            case 0 : onRouteIsNull();
                 break;
-            case 2 : onOrganizingRoute();
+            case 1 : onInvalidRouteSubmitted();
                 break;
-            case 3 : onRouteOrganized();
+            case 2 : onInQueue();
+                break;
+            case 3 : onValidatingAddresses();
                 break;
             case 4 : onHasInvalidAddresses();
                 break;
-            case 5 : onInvalidRoute();
+            case 5 : onOrganizingRoute();
                 break;
-            default: view.closeActivity();
+            case 6 : onOrganizingError();
+                break;
+            case 7 : onRouteOrganized();
+                break;
+            default: view.closeActivity();//Make a function where you handle a non existent state
         }
 
     }
