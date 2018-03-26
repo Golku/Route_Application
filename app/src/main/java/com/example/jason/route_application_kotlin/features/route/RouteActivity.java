@@ -103,6 +103,7 @@ public class RouteActivity extends DaggerAppCompatActivity implements
     public void showToast(String message) {
         Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
         toast.show();
+
     }
 
     @Override
