@@ -2,31 +2,26 @@ package com.example.jason.route_application_kotlin.features.route;
 
 import com.example.jason.route_application_kotlin.R;
 import com.example.jason.route_application_kotlin.data.pojos.OrganizedRoute;
-
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by Jason on 3/22/2018.
  */
 
 public class RouteListFragment extends Fragment implements RouteAdapter.RouteListFunctions{
+
+    private final String logTag = "logDebugTag";
 
     private RouteActivity routeActivityCallback;
 
@@ -35,7 +30,6 @@ public class RouteListFragment extends Fragment implements RouteAdapter.RouteLis
     private TextView businessAddressesTextView;
     private TextView messageToUserTextView;
     private ProgressBar progressBar;
-    private Button btn;
 
     public interface RouteListListener{
         void onListItemClick(String address);
@@ -50,13 +44,8 @@ public class RouteListFragment extends Fragment implements RouteAdapter.RouteLis
             routeActivityCallback = (RouteActivity) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
-                    + " must implement OnHeadlineSelectedListener");
+                    + " routeActivityCallback error");
         }
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     @Nullable
@@ -69,17 +58,22 @@ public class RouteListFragment extends Fragment implements RouteAdapter.RouteLis
         this.businessAddressesTextView = view.findViewById(R.id.businessAddressesTextView);
         this.messageToUserTextView = view.findViewById(R.id.messageToUserTextView);
         this.progressBar = view.findViewById(R.id.progressBar);
-        this.btn = view.findViewById(R.id.testBtn);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onListItemClick("Ets 4, capelle aan den ijssel");
-            }
-        });
+
         return view;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            OrganizedRoute organizedRoute = bundle.getParcelable("organizedRoute");
+            setUpAdapter(organizedRoute);
+        }
+    }
+
     public void setUpAdapter(OrganizedRoute organizedRoute) {
+        onFinishNetworkOperation();
         privateAddressesTextView.setText(String.valueOf(organizedRoute.getPrivateAddressesCount()));
         businessAddressesTextView.setText(String.valueOf(organizedRoute.getBusinessAddressesCount()));
         recyclerView.setVisibility(View.VISIBLE);
@@ -89,12 +83,12 @@ public class RouteListFragment extends Fragment implements RouteAdapter.RouteLis
     }
 
     @Override
-    public void onListItemClick(String address) {
+    public void onAdapterListItemClick(String address) {
         routeActivityCallback.onListItemClick(address);
     }
 
     @Override
-    public void onGoButtonClick(String address) {
+    public void onAdapterGoButtonClick(String address) {
         routeActivityCallback.onGoButtonClick(address);
     }
 

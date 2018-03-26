@@ -13,7 +13,7 @@ public interface MvpRoute {
 
     interface View{
 
-        void setUpAdapter(OrganizedRoute organizedRoute);
+        void setupFragments(OrganizedRoute organizedRoute);
 
         void showAddressDetails(String address);
 

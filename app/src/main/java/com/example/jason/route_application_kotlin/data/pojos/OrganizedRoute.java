@@ -17,7 +17,7 @@ public class OrganizedRoute implements Parcelable{
     private int wrongAddressesCount;
     private List<SingleDrive> routeList;
 
-    protected OrganizedRoute(Parcel in) {
+    private OrganizedRoute(Parcel in) {
         routeCode = in.readString();
         privateAddressesCount = in.readInt();
         businessAddressesCount = in.readInt();

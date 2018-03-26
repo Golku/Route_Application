@@ -1,12 +1,9 @@
 package com.example.jason.route_application_kotlin.features.route;
 
-import android.os.Handler;
-import android.util.Log;
-
 import com.example.jason.route_application_kotlin.data.api.ApiPresenterCallBack;
 import com.example.jason.route_application_kotlin.data.pojos.ApiResponse;
 import com.example.jason.route_application_kotlin.data.pojos.OrganizedRoute;
-import com.example.jason.route_application_kotlin.data.pojos.OutGoingRoute;
+
 import javax.inject.Inject;
 
 /**
@@ -49,14 +46,12 @@ public class RoutePresenter implements MvpRoute.Presenter, ApiPresenterCallBack 
     }
 
     private void onRouteOrganized(OrganizedRoute organizedRoute) {
-
         if(organizedRoute != null){
-            view.setUpAdapter(organizedRoute);
+            view.setupFragments(organizedRoute);
         }else{
             view.showToast("Api din't send the route properly. Please try again.");
             view.closeActivity();
         }
-
     }
 
     private void onInvalidState() {

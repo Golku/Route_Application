@@ -25,8 +25,8 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.CustomViewHo
     }
 
     public interface RouteListFunctions{
-        void onListItemClick(String address);
-        void onGoButtonClick(String address);
+        void onAdapterListItemClick(String address);
+        void onAdapterGoButtonClick(String address);
 //        void onListItemSwipe(int position);
     }
 
@@ -97,10 +97,10 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.CustomViewHo
         public void onClick(View v) {
 
             if(v == this.container){
-                routeListFunctions.onListItemClick(organizedRoute.getRouteList().get(this.getAdapterPosition()).getDestinationFormattedAddress().getFormattedAddress());
+                routeListFunctions.onAdapterListItemClick(organizedRoute.getRouteList().get(this.getAdapterPosition()).getDestinationFormattedAddress().getFormattedAddress());
             }
             else if(v == this.goButton){
-                routeListFunctions.onGoButtonClick(organizedRoute.getRouteList().get(this.getAdapterPosition()).getDestinationFormattedAddress().getFormattedAddress());
+                routeListFunctions.onAdapterGoButtonClick(organizedRoute.getRouteList().get(this.getAdapterPosition()).getDestinationFormattedAddress().getFormattedAddress());
             }
         }
 

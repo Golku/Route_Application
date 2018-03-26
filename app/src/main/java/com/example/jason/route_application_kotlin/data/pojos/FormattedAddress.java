@@ -15,6 +15,8 @@ public class FormattedAddress implements Parcelable{
     private String postCode;
     private String city;
     private String country;
+    private double lat;
+    private double lng;
     private boolean isBusiness;
 
     public FormattedAddress(){
@@ -28,7 +30,14 @@ public class FormattedAddress implements Parcelable{
         postCode = in.readString();
         city = in.readString();
         country = in.readString();
+        lat = in.readDouble();
+        lng = in.readDouble();
         isBusiness = in.readByte() != 0;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     @Override
@@ -39,12 +48,9 @@ public class FormattedAddress implements Parcelable{
         parcel.writeString(postCode);
         parcel.writeString(city);
         parcel.writeString(country);
+        parcel.writeDouble(lat);
+        parcel.writeDouble(lng);
         parcel.writeByte((byte) (isBusiness ? 1 : 0));
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
     }
 
     public static final Creator<FormattedAddress> CREATOR = new Creator<FormattedAddress>() {
@@ -107,6 +113,22 @@ public class FormattedAddress implements Parcelable{
         this.country = country;
     }
 
+    public double getLat() {
+        return lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public double getLng() {
+        return lng;
+    }
+
+    public void setLng(double lng) {
+        this.lng = lng;
+    }
+
     public boolean getIsBusiness() {
         return isBusiness;
     }
@@ -114,5 +136,4 @@ public class FormattedAddress implements Parcelable{
     public void setIsBusiness(boolean business) {
         isBusiness = business;
     }
-
 }

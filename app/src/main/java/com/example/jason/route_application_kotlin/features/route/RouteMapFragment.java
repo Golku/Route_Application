@@ -1,15 +1,20 @@
 package com.example.jason.route_application_kotlin.features.route;
 
 import com.example.jason.route_application_kotlin.R;
+import com.example.jason.route_application_kotlin.data.pojos.OrganizedRoute;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -28,6 +33,8 @@ public class RouteMapFragment extends Fragment implements OnMapReadyCallback {
     GoogleMap mGoogleMap;
     MapView mapView;
     View view;
+
+    OrganizedRoute organizedRoute;
 
     public RouteMapFragment() {
         //Required empty constructor
@@ -50,6 +57,15 @@ public class RouteMapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            this.organizedRoute = bundle.getParcelable("organizedRoute");
+        }
+    }
+
+    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -69,10 +85,21 @@ public class RouteMapFragment extends Fragment implements OnMapReadyCallback {
         this.mGoogleMap = googleMap;
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
-        googleMap.addMarker(new MarkerOptions().position(new LatLng(51.96272159999999, 4.5482584999999744)).title("My house"));
+        //get phone location
+        googleMap.addMarker(new MarkerOptions().position(new LatLng(52.008234, 4.312999)).title("My Location"));
 
-        CameraPosition cameraPosition = CameraPosition.builder().target(new LatLng(51.96272159999999, 4.5482584999999744)).zoom(14f).build();
-
+        if(organizedRoute != null) {
+            for (int i=0; i<organizedRoute.getRouteList().size(); i++) {
+                String address = organizedRoute.getRouteList().get(i).getDestinationFormattedAddress().getFormattedAddress();
+                double lat = organizedRoute.getRouteList().get(i).getDestinationFormattedAddress().getLat();
+                double lng = organizedRoute.getRouteList().get(i).getDestinationFormattedAddress().getLng();
+                googleMap.addMarker(
+                        new MarkerOptions()
+                                .position(new LatLng(lat, lng))
+                                .title(address));
+            }
+        }
+        CameraPosition cameraPosition = CameraPosition.builder().target(new LatLng(52.008234, 4.312999)).zoom(9f).build();
         googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 }
