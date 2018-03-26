@@ -1,14 +1,15 @@
-package com.example.jason.route_application_kotlin.features.route;
+package com.example.jason.route_application_kotlin.features.route.listFragment;
 
 import com.example.jason.route_application_kotlin.R;
 import com.example.jason.route_application_kotlin.data.pojos.OrganizedRoute;
+import com.example.jason.route_application_kotlin.features.route.RouteActivity;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,7 @@ import android.widget.TextView;
  * Created by Jason on 3/22/2018.
  */
 
-public class RouteListFragment extends Fragment implements RouteAdapter.RouteListFunctions{
+public class RouteListFragment extends Fragment implements RouteAdapter.RouteListFunctions {
 
     private final String logTag = "logDebugTag";
 

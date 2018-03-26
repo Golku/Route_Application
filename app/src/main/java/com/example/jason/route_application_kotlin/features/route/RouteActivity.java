@@ -11,6 +11,9 @@ import android.widget.Toast;
 import com.example.jason.route_application_kotlin.R;
 import com.example.jason.route_application_kotlin.data.pojos.OrganizedRoute;
 import com.example.jason.route_application_kotlin.features.addressDetails.AddressDetailsActivity;
+import com.example.jason.route_application_kotlin.features.route.listFragment.RouteListFragment;
+import com.example.jason.route_application_kotlin.features.route.mapFragment.RouteMapFragment;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;

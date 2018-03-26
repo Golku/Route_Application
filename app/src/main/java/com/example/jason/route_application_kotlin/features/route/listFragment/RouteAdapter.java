@@ -1,4 +1,4 @@
-package com.example.jason.route_application_kotlin.features.route;
+package com.example.jason.route_application_kotlin.features.route.listFragment;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
