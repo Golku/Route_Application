@@ -26,8 +26,6 @@ public class RouteListFragment extends Fragment implements RouteAdapter.RouteLis
     private RouteActivity routeActivityCallback;
 
     private RecyclerView recyclerView;
-    private TextView privateAddressesTextView;
-    private TextView businessAddressesTextView;
     private TextView messageToUserTextView;
     private ProgressBar progressBar;
 
@@ -54,8 +52,6 @@ public class RouteListFragment extends Fragment implements RouteAdapter.RouteLis
         View view = inflater.inflate(R.layout.fragment_route_list, container, false);
 
         this.recyclerView = view.findViewById(R.id.routeRecView);
-        this.privateAddressesTextView = view.findViewById(R.id.privateAddressesTextView);
-        this.businessAddressesTextView = view.findViewById(R.id.businessAddressesTextView);
         this.messageToUserTextView = view.findViewById(R.id.messageToUserTextView);
         this.progressBar = view.findViewById(R.id.progressBar);
 
@@ -74,8 +70,6 @@ public class RouteListFragment extends Fragment implements RouteAdapter.RouteLis
 
     public void setUpAdapter(OrganizedRoute organizedRoute) {
         onFinishNetworkOperation();
-        privateAddressesTextView.setText(String.valueOf(organizedRoute.getPrivateAddressesCount()));
-        businessAddressesTextView.setText(String.valueOf(organizedRoute.getBusinessAddressesCount()));
         recyclerView.setVisibility(View.VISIBLE);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         RouteAdapter adapter = new RouteAdapter(organizedRoute, this);

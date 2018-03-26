@@ -75,7 +75,6 @@ public class RouteMapFragment extends Fragment implements OnMapReadyCallback {
             mapView.onResume();
             mapView.getMapAsync(this);
         }
-
     }
 
     @Override
