@@ -109,5 +109,6 @@ public class RouteActivity extends DaggerAppCompatActivity implements
     @Override
     public void closeActivity() {
         finish();
+
     }
 }
