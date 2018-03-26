@@ -8,11 +8,13 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
@@ -85,17 +87,36 @@ public class RouteMapFragment extends Fragment implements OnMapReadyCallback {
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
         //get phone location
-        googleMap.addMarker(new MarkerOptions().position(new LatLng(52.008234, 4.312999)).title("My Location"));
+        googleMap.addMarker(
+                new MarkerOptions()
+                        .position(new LatLng(52.008234, 4.312999))
+                        .title("My Location").icon(BitmapDescriptorFactory
+                        .fromResource(R.drawable.marker2)));
+
+        Resources res = this.getResources();
+        String iconName = "";
 
         if(organizedRoute != null) {
             for (int i=0; i<organizedRoute.getRouteList().size(); i++) {
                 String address = organizedRoute.getRouteList().get(i).getDestinationFormattedAddress().getFormattedAddress();
                 double lat = organizedRoute.getRouteList().get(i).getDestinationFormattedAddress().getLat();
                 double lng = organizedRoute.getRouteList().get(i).getDestinationFormattedAddress().getLng();
+
+//                if(organizedRoute.getRouteList().get(i).getDestinationIsABusiness()){
+//                    iconName = "box";
+//                }else{
+//                    iconName = "box";
+//                }
+
+                iconName = "ic_"+String.valueOf(i+1);
+
+                int resID = res.getIdentifier(iconName, "drawable", getContext().getPackageName());
+
                 googleMap.addMarker(
                         new MarkerOptions()
                                 .position(new LatLng(lat, lng))
-                                .title(address));
+                                .title(address)
+                                .icon(BitmapDescriptorFactory.fromResource(resID)));
             }
         }
         CameraPosition cameraPosition = CameraPosition.builder().target(new LatLng(52.008234, 4.312999)).zoom(9f).build();
