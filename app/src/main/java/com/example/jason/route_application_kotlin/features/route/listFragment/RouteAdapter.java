@@ -10,17 +10,19 @@ import com.example.jason.route_application_kotlin.R;
 import com.example.jason.route_application_kotlin.data.pojos.OrganizedRoute;
 import com.example.jason.route_application_kotlin.data.pojos.SingleDrive;
 
+import java.util.ArrayList;
+
 /**
  * Created by Jason on 07-Feb-18.
  */
 
 public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.CustomViewHolder>{
 
-    private OrganizedRoute organizedRoute;
+    private ArrayList<SingleDrive> singleDrives;
     private RouteListFunctions routeListFunctions;
 
-    RouteAdapter(OrganizedRoute organizedRoute, RouteListFunctions routeListFunctions) {
-        this.organizedRoute = organizedRoute;
+    RouteAdapter(ArrayList<SingleDrive> singleDrives, RouteListFunctions routeListFunctions) {
+        this.singleDrives = singleDrives;
         this.routeListFunctions = routeListFunctions;
     }
 
@@ -28,6 +30,14 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.CustomViewHo
         void onAdapterListItemClick(String address);
         void onAdapterGoButtonClick(String address);
 //        void onListItemSwipe(int position);
+    }
+
+    void addToList(SingleDrive singleDrive){
+        this.singleDrives.add(singleDrive);
+    }
+
+    ArrayList<SingleDrive> getList(){
+        return this.singleDrives;
     }
 
     @Override
@@ -39,7 +49,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.CustomViewHo
     @Override
     public void onBindViewHolder(RouteAdapter.CustomViewHolder holder, int position) {
 
-        SingleDrive currentItem = organizedRoute.getRouteList().get(position);
+        SingleDrive currentItem = singleDrives.get(position);
 
         String positionTracker = Integer.toString(position + 1);
         String city = currentItem.getDestinationFormattedAddress().getPostCode() + " " + currentItem.getDestinationFormattedAddress().getCity();
@@ -55,7 +65,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.CustomViewHo
         holder.estimatedArrivalTime.setText(arrivalTime);
 
         if(currentItem.getDestinationIsABusiness()){
-            holder.addressType.setImageResource(R.drawable.ic_bussiness_address);
+            holder.addressType.setImageResource(R.drawable.ic_business_address);
         }else{
             holder.addressType.setImageResource(R.drawable.ic_private_address2);
         }
@@ -64,7 +74,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.CustomViewHo
 
     @Override
     public int getItemCount() {
-        return organizedRoute.getRouteList().size();
+        return singleDrives.size();
     }
 
     class CustomViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -97,10 +107,10 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.CustomViewHo
         public void onClick(View v) {
 
             if(v == this.container){
-                routeListFunctions.onAdapterListItemClick(organizedRoute.getRouteList().get(this.getAdapterPosition()).getDestinationFormattedAddress().getFormattedAddress());
+                routeListFunctions.onAdapterListItemClick(singleDrives.get(this.getAdapterPosition()).getDestinationFormattedAddress().getFormattedAddress());
             }
             else if(v == this.goButton){
-                routeListFunctions.onAdapterGoButtonClick(organizedRoute.getRouteList().get(this.getAdapterPosition()).getDestinationFormattedAddress().getFormattedAddress());
+                routeListFunctions.onAdapterGoButtonClick(singleDrives.get(this.getAdapterPosition()).getDestinationFormattedAddress().getFormattedAddress());
             }
         }
 

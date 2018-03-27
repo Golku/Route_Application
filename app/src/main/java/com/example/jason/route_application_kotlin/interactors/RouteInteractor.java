@@ -5,6 +5,7 @@ import android.util.Log;
 import com.example.jason.route_application_kotlin.data.api.ApiPresenterCallBack;
 import com.example.jason.route_application_kotlin.data.api.ApiService;
 import com.example.jason.route_application_kotlin.data.pojos.ApiResponse;
+import com.example.jason.route_application_kotlin.data.pojos.TravelInformationRequest;
 import com.example.jason.route_application_kotlin.features.route.MvpRoute;
 import javax.inject.Inject;
 import retrofit2.Call;
@@ -22,6 +23,27 @@ public class RouteInteractor implements MvpRoute.Interactor{
     @Inject
     public RouteInteractor(ApiService apiService) {
         this.apiService = apiService;
+    }
+
+    @Override
+    public void getTravelInformation(final ApiPresenterCallBack apiPresenterCallBack, TravelInformationRequest request) {
+        Call<ApiResponse> call = apiService.getTravelInformation(request);
+
+        call.enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                Log.d("RouteInteractor", "Responded");
+                apiPresenterCallBack.onApiResponse(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                Log.d("RouteInteractor", "Failure");
+                Log.d("RouteInteractor", "Throwable: " + t.toString());
+                Log.d("RouteInteractor", "call: " + call.toString());
+                apiPresenterCallBack.onApiResponseFailure();
+            }
+        });
     }
 
     @Override

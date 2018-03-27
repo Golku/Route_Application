@@ -3,6 +3,7 @@ package com.example.jason.route_application_kotlin.data.api;
 import com.example.jason.route_application_kotlin.data.pojos.ApiResponse;
 import com.example.jason.route_application_kotlin.data.pojos.CorrectedAddresses;
 import com.example.jason.route_application_kotlin.data.pojos.OutGoingRoute;
+import com.example.jason.route_application_kotlin.data.pojos.TravelInformationRequest;
 
 import java.util.ArrayList;
 
@@ -20,6 +21,9 @@ public interface ApiService {
 
     @GET("getroute/{routeCode}")
     Call<ApiResponse> getRoute(@Path("routeCode")String routeCode);
+
+    @POST("gettravelinformation")
+    Call<ApiResponse> getTravelInformation(@Body TravelInformationRequest request);
 
     @POST("submitroute")
     Call<ApiResponse> submitRoute(@Body OutGoingRoute outGoingRoute);

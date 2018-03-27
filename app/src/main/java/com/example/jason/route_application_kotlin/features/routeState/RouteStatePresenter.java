@@ -5,6 +5,7 @@ import android.os.Handler;
 import com.example.jason.route_application_kotlin.data.api.ApiPresenterCallBack;
 import com.example.jason.route_application_kotlin.data.pojos.ApiResponse;
 import com.example.jason.route_application_kotlin.data.pojos.OutGoingRoute;
+import com.example.jason.route_application_kotlin.data.pojos.UnOrganizedRoute;
 
 import javax.inject.Inject;
 
@@ -88,6 +89,10 @@ public class RouteStatePresenter implements MvpRouteState.Presenter, ApiPresente
         view.startCorrectInvalidAddressesActivity(routeCode);
     }
 
+    private void onReadyToBeBuild() {
+        view.startRouteActivity(routeCode);
+    }
+
     private void onOrganizingRoute() {
         view.updateRouteStateTextView("The route is being organized...");
         requestTimer("Still organizing after 6 fetch attempts");
@@ -120,11 +125,13 @@ public class RouteStatePresenter implements MvpRouteState.Presenter, ApiPresente
                 break;
             case 4 : onHasInvalidAddresses();
                 break;
-            case 5 : onOrganizingRoute();
+            case 5 : onReadyToBeBuild();
                 break;
-            case 6 : onOrganizingError();
+            case 6 : onOrganizingRoute();
                 break;
-            case 7 : onRouteOrganized();
+            case 7 : onOrganizingError();
+                break;
+            case 8 : onRouteOrganized();
                 break;
             default: view.closeActivity();//Make a function where you handle a non existent state
         }

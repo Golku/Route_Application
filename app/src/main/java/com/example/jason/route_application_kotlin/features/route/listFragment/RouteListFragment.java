@@ -1,8 +1,16 @@
 package com.example.jason.route_application_kotlin.features.route.listFragment;
 
 import com.example.jason.route_application_kotlin.R;
+import com.example.jason.route_application_kotlin.data.models.FragmentCommunication;
+import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
 import com.example.jason.route_application_kotlin.data.pojos.OrganizedRoute;
+import com.example.jason.route_application_kotlin.data.pojos.SingleDrive;
+import com.example.jason.route_application_kotlin.data.pojos.UnOrganizedRoute;
 import com.example.jason.route_application_kotlin.features.route.RouteActivity;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -15,6 +23,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Jason on 3/22/2018.
@@ -29,6 +40,8 @@ public class RouteListFragment extends Fragment implements RouteAdapter.RouteLis
     private RecyclerView recyclerView;
     private TextView messageToUserTextView;
     private ProgressBar progressBar;
+
+    private RouteAdapter adapter;
 
     public interface RouteListListener{
         void onListItemClick(String address);
@@ -59,21 +72,37 @@ public class RouteListFragment extends Fragment implements RouteAdapter.RouteLis
         return view;
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(FragmentCommunication fragmentCommunication){
+        adapter.addToList(fragmentCommunication.getSingleDrive());
+        adapter.notifyItemInserted(adapter.getList().size()-1);
+    }
+
     @Override
     public void onStart() {
         super.onStart();
+        EventBus.getDefault().register(this);
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            OrganizedRoute organizedRoute = bundle.getParcelable("organizedRoute");
-            setUpAdapter(organizedRoute);
+            ArrayList<FormattedAddress> validAddresses = bundle.getParcelable("validAddresses");
+            setUpAdapter();
         }
     }
 
-    public void setUpAdapter(OrganizedRoute organizedRoute) {
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    public void setUpAdapter() {
+
+        ArrayList<SingleDrive> driveList = new ArrayList<>();
+
         onFinishNetworkOperation();
         recyclerView.setVisibility(View.VISIBLE);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        RouteAdapter adapter = new RouteAdapter(organizedRoute, this);
+        this.adapter = new RouteAdapter(driveList, this);
         recyclerView.setAdapter(adapter);
     }
 
@@ -95,5 +124,7 @@ public class RouteListFragment extends Fragment implements RouteAdapter.RouteLis
         messageToUserTextView.setVisibility(View.GONE);
         progressBar.setVisibility(View.GONE);
     }
+
+
 
 }

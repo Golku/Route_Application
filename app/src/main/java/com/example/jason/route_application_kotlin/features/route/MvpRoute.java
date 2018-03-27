@@ -1,8 +1,13 @@
 package com.example.jason.route_application_kotlin.features.route;
 
 import com.example.jason.route_application_kotlin.data.api.ApiPresenterCallBack;
+import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
 import com.example.jason.route_application_kotlin.data.pojos.OrganizedRoute;
 import com.example.jason.route_application_kotlin.data.pojos.OutGoingRoute;
+import com.example.jason.route_application_kotlin.data.pojos.SingleDrive;
+import com.example.jason.route_application_kotlin.data.pojos.TravelInformationRequest;
+import com.example.jason.route_application_kotlin.data.pojos.UnOrganizedRoute;
+
 import java.util.ArrayList;
 
 /**
@@ -13,7 +18,9 @@ public interface MvpRoute {
 
     interface View{
 
-        void setupFragments(OrganizedRoute organizedRoute);
+        void setupFragments(ArrayList<FormattedAddress> validAddresses);
+
+        void passSingleDrive(SingleDrive singleDrive);
 
         void showAddressDetails(String address);
 
@@ -30,6 +37,8 @@ public interface MvpRoute {
 
         void getRouteFromApi();
 
+        void getTravelInformation(TravelInformationRequest travelInformationRequest);
+
         void onListItemClick(String address);
 
         void onGoButtonClick(String address);
@@ -37,6 +46,7 @@ public interface MvpRoute {
     }
 
     interface Interactor{
+        void getTravelInformation(ApiPresenterCallBack apiPresenterCallBack, TravelInformationRequest request);
         void getOrganizedRouteFromApi(ApiPresenterCallBack apiPresenterCallBack, String routeCode);
     }
 

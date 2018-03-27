@@ -18,7 +18,6 @@ import com.example.jason.route_application_kotlin.data.pojos.CommentInformation;
 import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
 import com.example.jason.route_application_kotlin.features.commentDisplay.CommentDisplayActivity;
 import com.example.jason.route_application_kotlin.features.commentInput.CommentInputActivity;
-import com.google.gson.JsonSyntaxException;
 
 import javax.inject.Inject;
 
@@ -157,7 +156,7 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements M
     public void updateBusinessImageView(String business) {
         addressTypeImageView.setVisibility(View.VISIBLE);
         if (business.equals("yes")) {
-            addressTypeImageView.setImageResource(R.drawable.ic_bussiness_address);
+            addressTypeImageView.setImageResource(R.drawable.ic_business_address);
         }
     }
 

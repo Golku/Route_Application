@@ -11,6 +11,8 @@ public class ApiResponse {
 
     private String requestType;
     private int routeState;
+    private SingleDrive singleDrive;
+    private ArrayList<FormattedAddress> validAddresses;
     private OrganizedRoute organizedRoute;
     private ArrayList<String> invalidAddresses;
 
@@ -28,6 +30,22 @@ public class ApiResponse {
 
     public void setRouteState(int routeState) {
         this.routeState = routeState;
+    }
+
+    public SingleDrive getSingleDrive() {
+        return singleDrive;
+    }
+
+    public void setSingleDrive(SingleDrive singleDrive) {
+        this.singleDrive = singleDrive;
+    }
+
+    public ArrayList<FormattedAddress> getValidAddresses() {
+        return validAddresses;
+    }
+
+    public void setValidAddresses(ArrayList<FormattedAddress> validAddresses) {
+        this.validAddresses = validAddresses;
     }
 
     public OrganizedRoute getOrganizedRoute() {

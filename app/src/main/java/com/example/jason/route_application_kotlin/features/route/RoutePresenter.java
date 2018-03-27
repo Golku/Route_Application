@@ -2,9 +2,14 @@ package com.example.jason.route_application_kotlin.features.route;
 
 import com.example.jason.route_application_kotlin.data.api.ApiPresenterCallBack;
 import com.example.jason.route_application_kotlin.data.pojos.ApiResponse;
+import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
 import com.example.jason.route_application_kotlin.data.pojos.OrganizedRoute;
+import com.example.jason.route_application_kotlin.data.pojos.TravelInformationRequest;
+import com.example.jason.route_application_kotlin.data.pojos.UnOrganizedRoute;
 
 import javax.inject.Inject;
+
+import java.util.ArrayList;
 
 /**
  * Created by Jason on 07-Feb-18.
@@ -36,6 +41,11 @@ public class RoutePresenter implements MvpRoute.Presenter, ApiPresenterCallBack 
     }
 
     @Override
+    public void getTravelInformation(TravelInformationRequest travelInformationRequest) {
+        interactor.getTravelInformation(this, travelInformationRequest);
+    }
+
+    @Override
     public void onListItemClick(String address) {
         view.showAddressDetails(address);
     }
@@ -45,9 +55,18 @@ public class RoutePresenter implements MvpRoute.Presenter, ApiPresenterCallBack 
         view.navigateToDestination(address);
     }
 
+    private void onReadyToBeBuild(ArrayList<FormattedAddress> validAddresses) {
+        if(validAddresses != null){
+            view.setupFragments(validAddresses);
+        }else{
+            view.showToast("Api din't send the route properly. Please try again.");
+            view.closeActivity();
+        }
+    }
+
     private void onRouteOrganized(OrganizedRoute organizedRoute) {
         if(organizedRoute != null){
-            view.setupFragments(organizedRoute);
+//            view.setupFragments(organizedRoute);
         }else{
             view.showToast("Api din't send the route properly. Please try again.");
             view.closeActivity();
@@ -65,10 +84,17 @@ public class RoutePresenter implements MvpRoute.Presenter, ApiPresenterCallBack 
 //        If the server has an error and sends back a apiResponse with a html page
 //        the response processing will fail! FIX THIS!!!
 
+        if(apiResponse.getSingleDrive() != null){
+            view.passSingleDrive(apiResponse.getSingleDrive());
+            return;
+        }
+
         int routeState = apiResponse.getRouteState();
 
         switch (routeState) {
-            case 7 : onRouteOrganized(apiResponse.getOrganizedRoute());
+            case 5 : onReadyToBeBuild(apiResponse.getValidAddresses());
+                break;
+            case 8 : onRouteOrganized(apiResponse.getOrganizedRoute());
                 break;
             default: onInvalidState();
         }
