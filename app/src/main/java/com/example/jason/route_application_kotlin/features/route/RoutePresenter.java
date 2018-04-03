@@ -120,8 +120,7 @@ public class RoutePresenter implements MvpRoute.Presenter, ApiPresenterCallBack 
 //        the response processing will fail! FIX THIS!!!
 
         if(apiResponse.getSingleDrive() != null){
-            this.organizedRoute.getRouteList().add(apiResponse.getSingleDrive());
-            view.passSingleDrive(this.organizedRoute);
+            view.passSingleDrive(apiResponse.getSingleDrive());
             return;
         }
 

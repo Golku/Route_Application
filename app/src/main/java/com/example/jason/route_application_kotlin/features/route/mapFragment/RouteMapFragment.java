@@ -2,7 +2,6 @@ package com.example.jason.route_application_kotlin.features.route.mapFragment;
 
 import com.example.jason.route_application_kotlin.R;
 import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
-import com.example.jason.route_application_kotlin.data.pojos.OrganizedRoute;
 import com.example.jason.route_application_kotlin.data.pojos.TravelInformationRequest;
 import com.example.jason.route_application_kotlin.data.pojos.UnOrganizedRoute;
 import com.example.jason.route_application_kotlin.features.route.RouteActivity;
@@ -12,7 +11,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
@@ -21,20 +19,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import dagger.android.support.DaggerAppCompatActivity;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,7 +35,7 @@ import java.util.List;
 
 public class RouteMapFragment extends Fragment implements MvpRouteMap.View, OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
-    GoogleMap mGoogleMap;
+    GoogleMap googleMap;
     MapView mapView;
     View view;
 
@@ -60,6 +52,17 @@ public class RouteMapFragment extends Fragment implements MvpRouteMap.View, OnMa
 
     public interface RouteMapListener{
         void onMarkerClick(TravelInformationRequest travelInformationRequest);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            routeActivityCallback = (RouteActivity) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " routeActivityCallback error");
+        }
     }
 
     @Override
@@ -84,18 +87,6 @@ public class RouteMapFragment extends Fragment implements MvpRouteMap.View, OnMa
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        try {
-            routeActivityCallback = (RouteActivity) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString()
-                    + " routeActivityCallback error");
-        }
-    }
-
-    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -111,30 +102,30 @@ public class RouteMapFragment extends Fragment implements MvpRouteMap.View, OnMa
     public void onMapReady(GoogleMap googleMap) {
         MapsInitializer.initialize(getContext());
 
-        List<FormattedAddress> addressesLIst = presenter.getAddressesList();
+        List<FormattedAddress> addressesList = presenter.getAddressesList();
 
-        this.mGoogleMap = googleMap;
+        this.googleMap = googleMap;
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
+        Resources res = this.getResources();
+        String iconName;
 
         //get phone location
         googleMap.addMarker(
                 new MarkerOptions()
                         .position(new LatLng(52.008234, 4.312999))
-                        .title("My Location").icon(BitmapDescriptorFactory
-                        .fromResource(R.drawable.marker2)));
+                        .title("My Location")
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker2)));
 
-        Resources res = this.getResources();
-        String iconName;
+        if(addressesList != null) {
 
-        if(addressesLIst != null) {
+            for (FormattedAddress formattedAddress : addressesList) {
 
-            for (int i=0; i<addressesLIst.size(); i++) {
+                String address = formattedAddress.getFormattedAddress();
+                double lat = formattedAddress.getLat();
+                double lng = formattedAddress.getLng();
 
-                String address = addressesLIst.get(i).getFormattedAddress();
-                double lat = addressesLIst.get(i).getLat();
-                double lng = addressesLIst.get(i).getLng();
-
-                if(addressesLIst.get(i).getIsBusiness()){
+                if(formattedAddress.getIsBusiness()){
                     iconName = "ic_business_address";
                 }else{
                     iconName = "ic_private_address2";
@@ -155,7 +146,7 @@ public class RouteMapFragment extends Fragment implements MvpRouteMap.View, OnMa
         CameraPosition cameraPosition = CameraPosition.builder().target(new LatLng(52.008234, 4.312999)).zoom(9f).build();
         googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
-        this.mGoogleMap.setOnMarkerClickListener(this);
+        this.googleMap.setOnMarkerClickListener(this);
     }
 
     @Override

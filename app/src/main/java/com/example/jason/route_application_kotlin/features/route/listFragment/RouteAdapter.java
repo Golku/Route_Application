@@ -7,10 +7,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.example.jason.route_application_kotlin.R;
-import com.example.jason.route_application_kotlin.data.pojos.OrganizedRoute;
 import com.example.jason.route_application_kotlin.data.pojos.SingleDrive;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Jason on 07-Feb-18.
@@ -18,11 +17,11 @@ import java.util.ArrayList;
 
 public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.CustomViewHolder>{
 
-    private ArrayList<SingleDrive> singleDrives;
+    private List<SingleDrive> routeList;
     private RouteListFunctions routeListFunctions;
 
-    RouteAdapter(ArrayList<SingleDrive> singleDrives, RouteListFunctions routeListFunctions) {
-        this.singleDrives = singleDrives;
+    RouteAdapter(List<SingleDrive> routeList, RouteListFunctions routeListFunctions) {
+        this.routeList = routeList;
         this.routeListFunctions = routeListFunctions;
     }
 
@@ -33,11 +32,11 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.CustomViewHo
     }
 
     void addToList(SingleDrive singleDrive){
-        this.singleDrives.add(singleDrive);
+        this.routeList.add(singleDrive);
     }
 
-    ArrayList<SingleDrive> getList(){
-        return this.singleDrives;
+    List<SingleDrive> getList(){
+        return this.routeList;
     }
 
     @Override
@@ -49,7 +48,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.CustomViewHo
     @Override
     public void onBindViewHolder(RouteAdapter.CustomViewHolder holder, int position) {
 
-        SingleDrive currentItem = singleDrives.get(position);
+        SingleDrive currentItem = routeList.get(position);
 
         String positionTracker = Integer.toString(position + 1);
         String city = currentItem.getDestinationFormattedAddress().getPostCode() + " " + currentItem.getDestinationFormattedAddress().getCity();
@@ -74,7 +73,7 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.CustomViewHo
 
     @Override
     public int getItemCount() {
-        return singleDrives.size();
+        return routeList.size();
     }
 
     class CustomViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -107,10 +106,10 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.CustomViewHo
         public void onClick(View v) {
 
             if(v == this.container){
-                routeListFunctions.onAdapterListItemClick(singleDrives.get(this.getAdapterPosition()).getDestinationFormattedAddress().getFormattedAddress());
+                routeListFunctions.onAdapterListItemClick(routeList.get(this.getAdapterPosition()).getDestinationFormattedAddress().getFormattedAddress());
             }
             else if(v == this.goButton){
-                routeListFunctions.onAdapterGoButtonClick(singleDrives.get(this.getAdapterPosition()).getDestinationFormattedAddress().getFormattedAddress());
+                routeListFunctions.onAdapterGoButtonClick(routeList.get(this.getAdapterPosition()).getDestinationFormattedAddress().getFormattedAddress());
             }
         }
 

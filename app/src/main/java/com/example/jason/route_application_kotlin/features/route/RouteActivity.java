@@ -103,10 +103,10 @@ public class RouteActivity extends DaggerAppCompatActivity implements
     }
 
     @Override
-    public void passSingleDrive(OrganizedRoute organizedRoute) {
+    public void passSingleDrive(SingleDrive singleDrive) {
 //        Log.d(logTag, singleDrive.getOriginFormattedAddress().getFormattedAddress());
 //        Log.d(logTag, singleDrive.getDestinationFormattedAddress().getFormattedAddress());
-        EventBus.getDefault().post(new FragmentCommunication(organizedRoute));
+        EventBus.getDefault().post(new FragmentCommunication(singleDrive));
     }
 
     @Override

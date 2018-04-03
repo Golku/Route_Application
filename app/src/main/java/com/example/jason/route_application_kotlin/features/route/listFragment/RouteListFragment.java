@@ -28,12 +28,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Jason on 3/22/2018.
+ * Created by Jason on 3/22/2018.,
  */
 
-public class RouteListFragment extends Fragment implements RouteAdapter.RouteListFunctions {
+public class RouteListFragment extends Fragment implements RouteAdapter.RouteListFunctions, MvpRouteList.View{
 
     private final String logTag = "logDebugTag";
+
+    private MvpRouteList.Presenter presenter;
 
     private RouteActivity routeActivityCallback;
 
@@ -51,13 +53,18 @@ public class RouteListFragment extends Fragment implements RouteAdapter.RouteLis
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
         try {
             routeActivityCallback = (RouteActivity) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " routeActivityCallback error");
         }
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.presenter = new RouteListPresenter(this);
     }
 
     @Nullable
@@ -72,21 +79,11 @@ public class RouteListFragment extends Fragment implements RouteAdapter.RouteLis
         return view;
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEvent(FragmentCommunication fragmentCommunication){
-        adapter.addToList(fragmentCommunication.getSingleDrive());
-        adapter.notifyItemInserted(adapter.getList().size()-1);
-    }
-
     @Override
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
-        Bundle bundle = this.getArguments();
-        if (bundle != null) {
-            ArrayList<FormattedAddress> validAddresses = bundle.getParcelable("validAddresses");
-            setUpAdapter();
-        }
+        presenter.setupList();
     }
 
     @Override
@@ -95,15 +92,19 @@ public class RouteListFragment extends Fragment implements RouteAdapter.RouteLis
         EventBus.getDefault().unregister(this);
     }
 
-    public void setUpAdapter() {
-
-        ArrayList<SingleDrive> driveList = new ArrayList<>();
-
+    @Override
+    public void setupAdapter(List<SingleDrive> routeList) {
         onFinishNetworkOperation();
         recyclerView.setVisibility(View.VISIBLE);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        this.adapter = new RouteAdapter(driveList, this);
+        this.adapter = new RouteAdapter(routeList, this);
         recyclerView.setAdapter(adapter);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(FragmentCommunication fragmentCommunication){
+        adapter.addToList(fragmentCommunication.getSingleDrive());
+        adapter.notifyItemInserted(adapter.getList().size()-1);
     }
 
     @Override

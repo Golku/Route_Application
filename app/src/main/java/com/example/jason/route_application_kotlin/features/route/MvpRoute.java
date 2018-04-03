@@ -24,7 +24,7 @@ public interface MvpRoute {
 
         void setupFragments(UnOrganizedRoute unOrganizedRoute);
 
-        void passSingleDrive(OrganizedRoute organizedRoute);
+        void passSingleDrive(SingleDrive singleDrive);
 
         void showAddressDetails(String address);
 

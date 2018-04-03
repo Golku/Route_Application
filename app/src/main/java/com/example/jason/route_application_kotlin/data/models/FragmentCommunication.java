@@ -9,17 +9,17 @@ import com.example.jason.route_application_kotlin.data.pojos.SingleDrive;
 
 public class FragmentCommunication {
 
-    private OrganizedRoute organizedRoute;
+    private SingleDrive singleDrive;
 
-    public FragmentCommunication(OrganizedRoute organizedRoute) {
-        this.organizedRoute = organizedRoute;
+    public FragmentCommunication(SingleDrive singleDrive) {
+        this.singleDrive = singleDrive;
     }
 
-    public OrganizedRoute getOrganizedRoute() {
-        return organizedRoute;
+    public SingleDrive getSingleDrive() {
+        return singleDrive;
     }
 
-    public void setOrganizedRoute(OrganizedRoute organizedRoute) {
-        this.organizedRoute = organizedRoute;
+    public void setSingleDrive(SingleDrive singleDrive) {
+        this.singleDrive = singleDrive;
     }
 }
