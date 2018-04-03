@@ -11,7 +11,7 @@ public class OutGoingRoute {
 
     private String routeCode;
     private String origin;
-    private ArrayList<String> addressList;
+    private List<String> addressList;
 
     public OutGoingRoute(String routeCode, String origin, ArrayList<String> addressList) {
         this.routeCode = routeCode;
@@ -39,8 +39,7 @@ public class OutGoingRoute {
         return addressList;
     }
 
-    public void setAddressList(ArrayList<String> addressList) {
+    public void setAddressList(List<String> addressList) {
         this.addressList = addressList;
     }
-
 }

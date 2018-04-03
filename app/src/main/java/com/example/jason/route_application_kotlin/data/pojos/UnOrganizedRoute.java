@@ -15,14 +15,14 @@ public class UnOrganizedRoute implements Parcelable{
     private String routeCode;
     private String origin;
     private int routeState;
-    private ArrayList<String> addressList;
+    private List<String> addressList;
 
     private List<FormattedAddress> validAddressesList;
     private List<FormattedAddress> privateAddressList;
     private List<FormattedAddress> businessAddressList;
     private List<FormattedAddress> invalidAddressesList;
 
-    protected UnOrganizedRoute(Parcel in) {
+    private UnOrganizedRoute(Parcel in) {
         routeCode = in.readString();
         origin = in.readString();
         routeState = in.readInt();
@@ -31,6 +31,23 @@ public class UnOrganizedRoute implements Parcelable{
         privateAddressList = in.createTypedArrayList(FormattedAddress.CREATOR);
         businessAddressList = in.createTypedArrayList(FormattedAddress.CREATOR);
         invalidAddressesList = in.createTypedArrayList(FormattedAddress.CREATOR);
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(routeCode);
+        dest.writeString(origin);
+        dest.writeInt(routeState);
+        dest.writeStringList(addressList);
+        dest.writeTypedList(validAddressesList);
+        dest.writeTypedList(privateAddressList);
+        dest.writeTypedList(businessAddressList);
+        dest.writeTypedList(invalidAddressesList);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<UnOrganizedRoute> CREATOR = new Creator<UnOrganizedRoute>() {
@@ -69,11 +86,11 @@ public class UnOrganizedRoute implements Parcelable{
         this.routeState = routeState;
     }
 
-    public ArrayList<String> getAddressList() {
+    public List<String> getAddressList() {
         return addressList;
     }
 
-    public void setAddressList(ArrayList<String> addressList) {
+    public void setAddressList(List<String> addressList) {
         this.addressList = addressList;
     }
 
@@ -81,8 +98,8 @@ public class UnOrganizedRoute implements Parcelable{
         return validAddressesList;
     }
 
-    public void setValidAddressesList(List<FormattedAddress> allValidAddressesList) {
-        this.validAddressesList = allValidAddressesList;
+    public void setValidAddressesList(List<FormattedAddress> validAddressesList) {
+        this.validAddressesList = validAddressesList;
     }
 
     public List<FormattedAddress> getPrivateAddressList() {
@@ -107,22 +124,5 @@ public class UnOrganizedRoute implements Parcelable{
 
     public void setInvalidAddressesList(List<FormattedAddress> invalidAddressesList) {
         this.invalidAddressesList = invalidAddressesList;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(routeCode);
-        parcel.writeString(origin);
-        parcel.writeInt(routeState);
-        parcel.writeStringList(addressList);
-        parcel.writeTypedList(validAddressesList);
-        parcel.writeTypedList(privateAddressList);
-        parcel.writeTypedList(businessAddressList);
-        parcel.writeTypedList(invalidAddressesList);
     }
 }

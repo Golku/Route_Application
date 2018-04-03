@@ -1,5 +1,6 @@
 package com.example.jason.route_application_kotlin.features.route;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import com.example.jason.route_application_kotlin.data.models.FragmentCommunicat
 import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
 import com.example.jason.route_application_kotlin.data.pojos.SingleDrive;
 import com.example.jason.route_application_kotlin.data.pojos.TravelInformationRequest;
+import com.example.jason.route_application_kotlin.data.pojos.UnOrganizedRoute;
 import com.example.jason.route_application_kotlin.features.addressDetails.AddressDetailsActivity;
 import com.example.jason.route_application_kotlin.features.route.listFragment.RouteListFragment;
 import com.example.jason.route_application_kotlin.features.route.mapFragment.RouteMapFragment;
@@ -25,6 +27,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.support.DaggerAppCompatActivity;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class RouteActivity extends DaggerAppCompatActivity implements
         MvpRoute.View,
@@ -39,6 +43,10 @@ public class RouteActivity extends DaggerAppCompatActivity implements
     TextView privateAddressesTextView;
     @BindView(R.id.businessAddressesTextView)
     TextView businessAddressesTextView;
+    @BindView(R.id.container)
+    ViewPager viewPager;
+    @BindView(R.id.tabs)
+    TabLayout tabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,29 +62,37 @@ public class RouteActivity extends DaggerAppCompatActivity implements
         presenter.getRouteFromApi();
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
-    public void setupFragments(ArrayList<FormattedAddress> validAddresses) {
+    public void updateRouteInformation(Map<String, Integer> counters) {
+        String privateCurrentSize = String.valueOf(counters.get("privateCurrentSize"));
+        String privateMaxSize = String.valueOf(counters.get("privateMaxSize"));
+        String businessCurrentSize = String.valueOf(counters.get("businessCurrentSize"));
+        String businessMaxSize = String.valueOf(counters.get("businessMaxSize"));
+        privateAddressesTextView.setText(privateCurrentSize+"/"+privateMaxSize);
+        businessAddressesTextView.setText(businessCurrentSize+"/"+businessMaxSize);
+    }
+
+    @Override
+    public void setupFragments(UnOrganizedRoute unOrganizedRoute) {
 
 //        privateAddressesTextView.setText(String.valueOf(organizedRoute.getPrivateAddressesCount()));
 //        businessAddressesTextView.setText(String.valueOf(organizedRoute.getBusinessAddressesCount()));
 
         Bundle organizedRouteBundle = new Bundle();
-        organizedRouteBundle.putParcelableArrayList("validAddresses", validAddresses);
+        organizedRouteBundle.putParcelable("unOrganizedRoute", unOrganizedRoute);
 
         Fragment routeMapFragment = new RouteMapFragment();
         Fragment routeListFragment = new RouteListFragment();
 
-        routeListFragment.setArguments(organizedRouteBundle);
         routeMapFragment.setArguments(organizedRouteBundle);
 
         RouteSectionPagerAdapter routeSectionPagerAdapter = new RouteSectionPagerAdapter(getSupportFragmentManager());
         routeSectionPagerAdapter.addFragment("Map", routeMapFragment);
         routeSectionPagerAdapter.addFragment("Route List", routeListFragment);
 
-        ViewPager viewPager = findViewById(R.id.container);
         viewPager.setAdapter(routeSectionPagerAdapter);
 
-        TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
     }
 
@@ -89,7 +105,6 @@ public class RouteActivity extends DaggerAppCompatActivity implements
     public void passSingleDrive(SingleDrive singleDrive) {
 //        Log.d(logTag, singleDrive.getOriginFormattedAddress().getFormattedAddress());
 //        Log.d(logTag, singleDrive.getDestinationFormattedAddress().getFormattedAddress());
-
         EventBus.getDefault().post(new FragmentCommunication(singleDrive));
     }
 
@@ -120,7 +135,6 @@ public class RouteActivity extends DaggerAppCompatActivity implements
     public void showToast(String message) {
         Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
         toast.show();
-
     }
 
     @Override

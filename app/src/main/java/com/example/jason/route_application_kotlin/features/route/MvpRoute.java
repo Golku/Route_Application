@@ -9,6 +9,8 @@ import com.example.jason.route_application_kotlin.data.pojos.TravelInformationRe
 import com.example.jason.route_application_kotlin.data.pojos.UnOrganizedRoute;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Jason on 07-Feb-18.
@@ -18,7 +20,9 @@ public interface MvpRoute {
 
     interface View{
 
-        void setupFragments(ArrayList<FormattedAddress> validAddresses);
+        void updateRouteInformation(Map<String, Integer> counters);
+
+        void setupFragments(UnOrganizedRoute unOrganizedRoute);
 
         void passSingleDrive(SingleDrive singleDrive);
 
@@ -36,6 +40,8 @@ public interface MvpRoute {
         void setRouteCode(String routeCode);
 
         void getRouteFromApi();
+
+        void updateRouteInformation(Map<String, Integer> counters);
 
         void getTravelInformation(TravelInformationRequest travelInformationRequest);
 

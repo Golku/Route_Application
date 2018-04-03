@@ -31,22 +31,25 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import dagger.android.support.DaggerAppCompatActivity;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Jason on 3/22/2018.
  */
 
-public class RouteMapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+public class RouteMapFragment extends Fragment implements MvpRouteMap.View, OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     GoogleMap mGoogleMap;
     MapView mapView;
     View view;
 
-    private RouteActivity routeActivityCallback;
+    private MvpRouteMap.Presenter presenter;
 
-    ArrayList<FormattedAddress> validAddresses;
+    private RouteActivity routeActivityCallback;
 
     private int tracker = 0;
     private String destination = "";
@@ -60,20 +63,17 @@ public class RouteMapFragment extends Fragment implements OnMapReadyCallback, Go
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        try {
-            routeActivityCallback = (RouteActivity) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString()
-                    + " routeActivityCallback error");
-        }
-    }
-
-    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        this.presenter = new RouteMapPresenter(this);
+
+        Bundle bundle = this.getArguments();
+
+        if (bundle != null) {
+            UnOrganizedRoute unOrganizedRoute = bundle.getParcelable("unOrganizedRoute");
+            presenter.setRoute(unOrganizedRoute);
+        }
     }
 
     @Nullable
@@ -84,11 +84,14 @@ public class RouteMapFragment extends Fragment implements OnMapReadyCallback, Go
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        Bundle bundle = this.getArguments();
-        if (bundle != null) {
-            this.validAddresses = bundle.getParcelableArrayList("validAddresses");
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        try {
+            routeActivityCallback = (RouteActivity) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " routeActivityCallback error");
         }
     }
 
@@ -108,6 +111,8 @@ public class RouteMapFragment extends Fragment implements OnMapReadyCallback, Go
     public void onMapReady(GoogleMap googleMap) {
         MapsInitializer.initialize(getContext());
 
+        List<FormattedAddress> addressesLIst = presenter.getAddressesList();
+
         this.mGoogleMap = googleMap;
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
@@ -121,13 +126,15 @@ public class RouteMapFragment extends Fragment implements OnMapReadyCallback, Go
         Resources res = this.getResources();
         String iconName;
 
-        if(validAddresses != null) {
-            for (int i=0; i<validAddresses.size(); i++) {
-                String address = validAddresses.get(i).getFormattedAddress();
-                double lat = validAddresses.get(i).getLat();
-                double lng = validAddresses.get(i).getLng();
+        if(addressesLIst != null) {
 
-                if(validAddresses.get(i).getIsBusiness()){
+            for (int i=0; i<addressesLIst.size(); i++) {
+
+                String address = addressesLIst.get(i).getFormattedAddress();
+                double lat = addressesLIst.get(i).getLat();
+                double lng = addressesLIst.get(i).getLng();
+
+                if(addressesLIst.get(i).getIsBusiness()){
                     iconName = "ic_business_address";
                 }else{
                     iconName = "ic_private_address2";
@@ -144,6 +151,7 @@ public class RouteMapFragment extends Fragment implements OnMapReadyCallback, Go
                                 .icon(BitmapDescriptorFactory.fromResource(resID)));
             }
         }
+
         CameraPosition cameraPosition = CameraPosition.builder().target(new LatLng(52.008234, 4.312999)).zoom(9f).build();
         googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
@@ -154,6 +162,8 @@ public class RouteMapFragment extends Fragment implements OnMapReadyCallback, Go
     public boolean onMarkerClick(Marker marker) {
 
         TravelInformationRequest travelInformationRequest = new TravelInformationRequest();
+
+        Toast.makeText(getContext(), "", Toast.LENGTH_SHORT).show();
 
         if(tracker == 0) {
             travelInformationRequest.setOrigin("vrij harnasch 21 den hoorn");
