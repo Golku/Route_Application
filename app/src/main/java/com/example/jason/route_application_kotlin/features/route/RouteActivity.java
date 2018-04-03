@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.example.jason.route_application_kotlin.R;
 import com.example.jason.route_application_kotlin.data.models.FragmentCommunication;
 import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
+import com.example.jason.route_application_kotlin.data.pojos.OrganizedRoute;
 import com.example.jason.route_application_kotlin.data.pojos.SingleDrive;
 import com.example.jason.route_application_kotlin.data.pojos.TravelInformationRequest;
 import com.example.jason.route_application_kotlin.data.pojos.UnOrganizedRoute;
@@ -102,10 +103,10 @@ public class RouteActivity extends DaggerAppCompatActivity implements
     }
 
     @Override
-    public void passSingleDrive(SingleDrive singleDrive) {
+    public void passSingleDrive(OrganizedRoute organizedRoute) {
 //        Log.d(logTag, singleDrive.getOriginFormattedAddress().getFormattedAddress());
 //        Log.d(logTag, singleDrive.getDestinationFormattedAddress().getFormattedAddress());
-        EventBus.getDefault().post(new FragmentCommunication(singleDrive));
+        EventBus.getDefault().post(new FragmentCommunication(organizedRoute));
     }
 
     @Override
