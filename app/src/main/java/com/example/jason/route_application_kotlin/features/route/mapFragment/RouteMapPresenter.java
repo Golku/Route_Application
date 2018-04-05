@@ -75,6 +75,12 @@ public class RouteMapPresenter implements MvpRouteMap.Presenter {
 
                 boolean newMarker = true;
 
+                int index = routeOrder.indexOf(clickedMarker);
+
+                if(index>=0){
+                    newMarker = false;
+                }
+
                 for (Marker orderedMarker : routeOrder) {
                     if (orderedMarker.getId().equals(clickedMarker.getId())) {
                         newMarker = false;
