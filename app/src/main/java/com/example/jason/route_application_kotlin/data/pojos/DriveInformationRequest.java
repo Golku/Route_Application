@@ -4,7 +4,7 @@ package com.example.jason.route_application_kotlin.data.pojos;
  * Created by Jason on 3/26/2018.
  */
 
-public class TravelInformationRequest {
+public class DriveInformationRequest {
 
     private String origin;
     private String destination;

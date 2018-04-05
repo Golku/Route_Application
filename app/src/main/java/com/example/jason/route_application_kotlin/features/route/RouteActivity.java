@@ -11,10 +11,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.example.jason.route_application_kotlin.R;
 import com.example.jason.route_application_kotlin.data.models.FragmentCommunication;
-import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
-import com.example.jason.route_application_kotlin.data.pojos.OrganizedRoute;
+import com.example.jason.route_application_kotlin.data.pojos.DriveInformationRequest;
 import com.example.jason.route_application_kotlin.data.pojos.SingleDrive;
-import com.example.jason.route_application_kotlin.data.pojos.TravelInformationRequest;
 import com.example.jason.route_application_kotlin.data.pojos.UnOrganizedRoute;
 import com.example.jason.route_application_kotlin.features.addressDetails.AddressDetailsActivity;
 import com.example.jason.route_application_kotlin.features.route.listFragment.RouteListFragment;
@@ -27,8 +25,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.support.DaggerAppCompatActivity;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class RouteActivity extends DaggerAppCompatActivity implements
@@ -98,8 +94,8 @@ public class RouteActivity extends DaggerAppCompatActivity implements
     }
 
     @Override
-    public void onMarkerClick(TravelInformationRequest travelInformationRequest) {
-        presenter.getTravelInformation(travelInformationRequest);
+    public void onMarkerClick(DriveInformationRequest driveInformationRequest) {
+        presenter.getTravelInformation(driveInformationRequest);
     }
 
     @Override

@@ -1,8 +1,8 @@
 package com.example.jason.route_application_kotlin.features.route.mapFragment;
 
 import com.example.jason.route_application_kotlin.R;
+import com.example.jason.route_application_kotlin.data.pojos.DriveInformationRequest;
 import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
-import com.example.jason.route_application_kotlin.data.pojos.TravelInformationRequest;
 import com.example.jason.route_application_kotlin.data.pojos.UnOrganizedRoute;
 import com.example.jason.route_application_kotlin.features.route.RouteActivity;
 
@@ -35,30 +35,21 @@ import java.util.List;
 
 public class RouteMapFragment extends Fragment implements MvpRouteMap.View, OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
-    GoogleMap googleMap;
-    MapView mapView;
-    View view;
+    private GoogleMap googleMap;
 
     private MvpRouteMap.Presenter presenter;
 
-    private RouteActivity routeActivityCallback;
+    private RouteActivity routeActivityCallBack;
 
-    private int tracker = 0;
-    private String destination = "";
-
-    public RouteMapFragment() {
-        //Required empty constructor
-    }
-
-    public interface RouteMapListener{
-        void onMarkerClick(TravelInformationRequest travelInformationRequest);
+    public interface RouteMapListener {
+        void onMarkerClick(DriveInformationRequest driveInformationRequest);
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            routeActivityCallback = (RouteActivity) context;
+            this.routeActivityCallBack = (RouteActivity) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " routeActivityCallback error");
@@ -82,16 +73,15 @@ public class RouteMapFragment extends Fragment implements MvpRouteMap.View, OnMa
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_route_map, container, false);
-        return view;
+        return inflater.inflate(R.layout.fragment_route_map, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mapView = view.findViewById(R.id.mapView);
-        if(mapView != null){
+        MapView mapView = view.findViewById(R.id.mapView);
+        if (mapView != null) {
             mapView.onCreate(null);
             mapView.onResume();
             mapView.getMapAsync(this);
@@ -111,13 +101,15 @@ public class RouteMapFragment extends Fragment implements MvpRouteMap.View, OnMa
         String iconName;
 
         //get phone location
-        googleMap.addMarker(
+        Marker originMarker = googleMap.addMarker(
                 new MarkerOptions()
                         .position(new LatLng(52.008234, 4.312999))
                         .title("My Location")
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker2)));
 
-        if(addressesList != null) {
+        originMarker.setTag("origin");
+
+        if (addressesList != null) {
 
             for (FormattedAddress formattedAddress : addressesList) {
 
@@ -125,9 +117,9 @@ public class RouteMapFragment extends Fragment implements MvpRouteMap.View, OnMa
                 double lat = formattedAddress.getLat();
                 double lng = formattedAddress.getLng();
 
-                if(formattedAddress.getIsBusiness()){
+                if (formattedAddress.getIsBusiness()) {
                     iconName = "ic_business_address";
-                }else{
+                } else {
                     iconName = "ic_private_address2";
                 }
 
@@ -152,23 +144,25 @@ public class RouteMapFragment extends Fragment implements MvpRouteMap.View, OnMa
     @Override
     public boolean onMarkerClick(Marker marker) {
 
-        TravelInformationRequest travelInformationRequest = new TravelInformationRequest();
-
-        Toast.makeText(getContext(), "", Toast.LENGTH_SHORT).show();
-
-        if(tracker == 0) {
-            travelInformationRequest.setOrigin("vrij harnasch 21 den hoorn");
-            travelInformationRequest.setDestination(marker.getTitle());
-            destination = marker.getTitle();
-            tracker++;
-        }else{
-            travelInformationRequest.setOrigin(destination);
-            travelInformationRequest.setDestination(marker.getTitle());
-            destination = marker.getTitle();
+        if(marker.getTag() != null) {
+            if (marker.getTag().equals("origin")) {
+                showToast("origin");
+                return false;
+            }
         }
 
-        routeActivityCallback.onMarkerClick(travelInformationRequest);
+        presenter.orderMaker(marker);
 
         return false;
+    }
+
+    @Override
+    public void getDriveInformation(DriveInformationRequest request) {
+        routeActivityCallBack.onMarkerClick(request);
+    }
+
+    @Override
+    public void showToast(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
 }

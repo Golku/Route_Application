@@ -5,7 +5,7 @@ import android.util.Log;
 import com.example.jason.route_application_kotlin.data.api.ApiPresenterCallBack;
 import com.example.jason.route_application_kotlin.data.api.ApiService;
 import com.example.jason.route_application_kotlin.data.pojos.ApiResponse;
-import com.example.jason.route_application_kotlin.data.pojos.TravelInformationRequest;
+import com.example.jason.route_application_kotlin.data.pojos.DriveInformationRequest;
 import com.example.jason.route_application_kotlin.features.route.MvpRoute;
 import javax.inject.Inject;
 import retrofit2.Call;
@@ -26,7 +26,7 @@ public class RouteInteractor implements MvpRoute.Interactor{
     }
 
     @Override
-    public void getTravelInformation(final ApiPresenterCallBack apiPresenterCallBack, TravelInformationRequest request) {
+    public void getTravelInformation(final ApiPresenterCallBack apiPresenterCallBack, DriveInformationRequest request) {
         Call<ApiResponse> call = apiService.getTravelInformation(request);
 
         call.enqueue(new Callback<ApiResponse>() {

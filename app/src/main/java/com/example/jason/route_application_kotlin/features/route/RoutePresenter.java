@@ -2,16 +2,13 @@ package com.example.jason.route_application_kotlin.features.route;
 
 import com.example.jason.route_application_kotlin.data.api.ApiPresenterCallBack;
 import com.example.jason.route_application_kotlin.data.pojos.ApiResponse;
-import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
+import com.example.jason.route_application_kotlin.data.pojos.DriveInformationRequest;
 import com.example.jason.route_application_kotlin.data.pojos.OrganizedRoute;
-import com.example.jason.route_application_kotlin.data.pojos.TravelInformationRequest;
 import com.example.jason.route_application_kotlin.data.pojos.UnOrganizedRoute;
 
 import javax.inject.Inject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -52,8 +49,8 @@ public class RoutePresenter implements MvpRoute.Presenter, ApiPresenterCallBack 
     }
 
     @Override
-    public void getTravelInformation(TravelInformationRequest travelInformationRequest) {
-        interactor.getTravelInformation(this, travelInformationRequest);
+    public void getTravelInformation(DriveInformationRequest driveInformationRequest) {
+        interactor.getTravelInformation(this, driveInformationRequest);
     }
 
     private void setupRouteInformation() {
