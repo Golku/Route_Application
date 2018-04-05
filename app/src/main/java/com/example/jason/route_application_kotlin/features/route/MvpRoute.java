@@ -15,7 +15,9 @@ public interface MvpRoute {
 
     interface View{
 
-        void updateRouteInformation(Map<String, Integer> counters);
+        void setupAddressTracker(int privateAddress, int businessAddress);
+
+        void updateAddressTracker(int privateAddress, int businessAddress);
 
         void setupFragments(UnOrganizedRoute unOrganizedRoute);
 
@@ -36,9 +38,7 @@ public interface MvpRoute {
 
         void getRouteFromApi();
 
-        void updateRouteInformation(Map<String, Integer> counters);
-
-        void getTravelInformation(DriveInformationRequest driveInformationRequest);
+        void getDriveInformation(DriveInformationRequest request);
 
         void onListItemClick(String address);
 
@@ -47,7 +47,7 @@ public interface MvpRoute {
     }
 
     interface Interactor{
-        void getTravelInformation(ApiPresenterCallBack apiPresenterCallBack, DriveInformationRequest request);
+        void getDriveInformation(ApiPresenterCallBack apiPresenterCallBack, DriveInformationRequest request);
         void getOrganizedRouteFromApi(ApiPresenterCallBack apiPresenterCallBack, String routeCode);
     }
 

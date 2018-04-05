@@ -127,11 +127,12 @@ public class RouteMapFragment extends Fragment implements MvpRouteMap.View, OnMa
 
                 int resID = res.getIdentifier(iconName, "drawable", getContext().getPackageName());
 
-                googleMap.addMarker(
+                Marker marker = googleMap.addMarker(
                         new MarkerOptions()
                                 .position(new LatLng(lat, lng))
                                 .title(address)
                                 .icon(BitmapDescriptorFactory.fromResource(resID)));
+                marker.setTag(true);
             }
         }
 

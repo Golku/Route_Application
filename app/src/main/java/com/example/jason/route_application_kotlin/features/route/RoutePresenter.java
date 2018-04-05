@@ -8,9 +8,6 @@ import com.example.jason.route_application_kotlin.data.pojos.UnOrganizedRoute;
 
 import javax.inject.Inject;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Created by Jason on 07-Feb-18.
  */
@@ -23,6 +20,7 @@ public class RoutePresenter implements MvpRoute.Presenter, ApiPresenterCallBack 
     private MvpRoute.Interactor interactor;
 
     private String routeCode;
+
     private UnOrganizedRoute unOrganizedRoute;
     private OrganizedRoute organizedRoute;
 
@@ -49,30 +47,8 @@ public class RoutePresenter implements MvpRoute.Presenter, ApiPresenterCallBack 
     }
 
     @Override
-    public void getTravelInformation(DriveInformationRequest driveInformationRequest) {
-        interactor.getTravelInformation(this, driveInformationRequest);
-    }
-
-    private void setupRouteInformation() {
-
-        Map<String, Integer> counters = new HashMap<>();
-
-        int privateAddressListSize = this.unOrganizedRoute.getPrivateAddressList().size();
-        this.organizedRoute.setPrivateAddressesCount(privateAddressListSize);
-        int businessAddressListSize = this.unOrganizedRoute.getBusinessAddressList().size();
-        this.organizedRoute.setBusinessAddressesCount(businessAddressListSize);
-
-        counters.put("privateCurrentSize", this.selectedPrivateAddressesCount);
-        counters.put("privateMaxSize", privateAddressListSize);
-        counters.put("businessCurrentSize", this.selectedBusinessAddressesCount);
-        counters.put("businessMaxSize", businessAddressListSize);
-
-        view.updateRouteInformation(counters);
-    }
-
-    @Override
-    public void updateRouteInformation(Map<String, Integer> counters) {
-
+    public void getDriveInformation(DriveInformationRequest request) {
+        interactor.getDriveInformation(this, request);
     }
 
     @Override
@@ -88,7 +64,9 @@ public class RoutePresenter implements MvpRoute.Presenter, ApiPresenterCallBack 
     private void onReadyToBeBuild(UnOrganizedRoute unOrganizedRoute) {
         if(unOrganizedRoute != null){
             this.unOrganizedRoute = unOrganizedRoute;
-            setupRouteInformation();
+            int privateAddressListSize = unOrganizedRoute.getPrivateAddressList().size();
+            int businessAddressListSize = unOrganizedRoute.getBusinessAddressList().size();
+            view.setupAddressTracker(privateAddressListSize, businessAddressListSize);
             view.setupFragments(unOrganizedRoute);
         }else{
             view.showToast("Api din't send the route properly. Please try again.");
@@ -117,6 +95,12 @@ public class RoutePresenter implements MvpRoute.Presenter, ApiPresenterCallBack 
 //        the response processing will fail! FIX THIS!!!
 
         if(apiResponse.getSingleDrive() != null){
+            if(apiResponse.getSingleDrive().getDestinationIsABusiness()){
+                selectedBusinessAddressesCount++;
+            }else{
+                selectedPrivateAddressesCount++;
+            }
+            view.updateAddressTracker(selectedPrivateAddressesCount, selectedBusinessAddressesCount);
             view.passSingleDrive(apiResponse.getSingleDrive());
             return;
         }

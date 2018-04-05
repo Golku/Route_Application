@@ -1,6 +1,5 @@
 package com.example.jason.route_application_kotlin.features.route;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,7 +24,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.support.DaggerAppCompatActivity;
-import java.util.Map;
 
 public class RouteActivity extends DaggerAppCompatActivity implements
         MvpRoute.View,
@@ -36,10 +34,14 @@ public class RouteActivity extends DaggerAppCompatActivity implements
 
     @Inject MvpRoute.Presenter presenter;
 
-    @BindView(R.id.privateAddressesTextView)
-    TextView privateAddressesTextView;
-    @BindView(R.id.businessAddressesTextView)
-    TextView businessAddressesTextView;
+    @BindView(R.id.privateCurrentSizeTv)
+    TextView privateCurrentSizeTv;
+    @BindView(R.id.businessCurrentSizeTv)
+    TextView businessCurrentSizeTv;
+    @BindView(R.id.privateMaxSizeTv)
+    TextView privateMaxSizeTv;
+    @BindView(R.id.businessMaxSizeTv)
+    TextView businessMaxSizeTv;
     @BindView(R.id.container)
     ViewPager viewPager;
     @BindView(R.id.tabs)
@@ -59,22 +61,20 @@ public class RouteActivity extends DaggerAppCompatActivity implements
         presenter.getRouteFromApi();
     }
 
-    @SuppressLint("SetTextI18n")
     @Override
-    public void updateRouteInformation(Map<String, Integer> counters) {
-        String privateCurrentSize = String.valueOf(counters.get("privateCurrentSize"));
-        String privateMaxSize = String.valueOf(counters.get("privateMaxSize"));
-        String businessCurrentSize = String.valueOf(counters.get("businessCurrentSize"));
-        String businessMaxSize = String.valueOf(counters.get("businessMaxSize"));
-        privateAddressesTextView.setText(privateCurrentSize+"/"+privateMaxSize);
-        businessAddressesTextView.setText(businessCurrentSize+"/"+businessMaxSize);
+    public void setupAddressTracker(int privateAddress, int businessAddress) {
+        privateMaxSizeTv.setText(String.valueOf(privateAddress));
+        businessMaxSizeTv.setText(String.valueOf(businessAddress));
+    }
+
+    @Override
+    public void updateAddressTracker(int privateAddress, int businessAddress) {
+        privateCurrentSizeTv.setText(String.valueOf(privateAddress));
+        businessCurrentSizeTv.setText(String.valueOf(businessAddress));
     }
 
     @Override
     public void setupFragments(UnOrganizedRoute unOrganizedRoute) {
-
-//        privateAddressesTextView.setText(String.valueOf(organizedRoute.getPrivateAddressesCount()));
-//        businessAddressesTextView.setText(String.valueOf(organizedRoute.getBusinessAddressesCount()));
 
         Bundle organizedRouteBundle = new Bundle();
         organizedRouteBundle.putParcelable("unOrganizedRoute", unOrganizedRoute);
@@ -95,13 +95,11 @@ public class RouteActivity extends DaggerAppCompatActivity implements
 
     @Override
     public void onMarkerClick(DriveInformationRequest driveInformationRequest) {
-        presenter.getTravelInformation(driveInformationRequest);
+        presenter.getDriveInformation(driveInformationRequest);
     }
 
     @Override
     public void passSingleDrive(SingleDrive singleDrive) {
-//        Log.d(logTag, singleDrive.getOriginFormattedAddress().getFormattedAddress());
-//        Log.d(logTag, singleDrive.getDestinationFormattedAddress().getFormattedAddress());
         EventBus.getDefault().post(new FragmentCommunication(singleDrive));
     }
 

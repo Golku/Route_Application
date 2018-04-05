@@ -28,8 +28,6 @@ public class RouteMapPresenter implements MvpRouteMap.Presenter {
 
     private Marker previousSelectedMarker;
 
-    private Marker originMarker;
-
     RouteMapPresenter(MvpRouteMap.View view) {
         this.view = view;
         this.routeOrder = new ArrayList<>();
@@ -48,16 +46,14 @@ public class RouteMapPresenter implements MvpRouteMap.Presenter {
 
     @Override
     public void orderMaker(Marker clickedMarker) {
-
         DriveInformationRequest request = new DriveInformationRequest();
 
         String origin = null;
         String destination = null;
 
         if (previousSelectedMarker != null) {
-
             if (clickedMarker.equals(previousSelectedMarker)) {
-
+                clickedMarker.setTag(true);
                 routeOrder.remove(clickedMarker);
 
                 int routeSize = routeOrder.size();
@@ -68,46 +64,37 @@ public class RouteMapPresenter implements MvpRouteMap.Presenter {
                 } else {
                     previousSelectedMarker = null;
                 }
-
 //                change the clickedMarker icon to the unselected icon
 //                clickedMarker.setIcon();
             } else {
-
-                boolean newMarker = true;
-
-                int index = routeOrder.indexOf(clickedMarker);
-
-                if(index>=0){
-                    newMarker = false;
-                }
-
-                for (Marker orderedMarker : routeOrder) {
-                    if (orderedMarker.getId().equals(clickedMarker.getId())) {
-                        newMarker = false;
-                        //remove all markers in the list after this one
-                    }
-                }
+                boolean newMarker = (boolean) clickedMarker.getTag();
 
                 if (newMarker) {
                     origin = previousSelectedMarker.getTitle();
                     destination = clickedMarker.getTitle();
+                    clickedMarker.setTag(false);
                     routeOrder.add(clickedMarker);
                     previousSelectedMarker = clickedMarker;
+                }else{
+//                    ask the user if he wants to remove all after this one.
                 }
-
             }
-
         } else {
             //use phone location for origin.
             origin = "Vrij-Harnasch 21, Den Hoorn";
             destination = clickedMarker.getTitle();
+            clickedMarker.setTag(false);
             routeOrder.add(clickedMarker);
             previousSelectedMarker = clickedMarker;
         }
 
-        request.setOrigin(origin);
-        request.setDestination(destination);
+        Log.d(logTag, "Origin: "+origin);
+        Log.d(logTag, "Destination: "+destination);
 
-        view.getDriveInformation(request);
+        if(origin != null && destination != null) {
+            request.setOrigin(origin);
+            request.setDestination(destination);
+            view.getDriveInformation(request);
+        }
     }
 }

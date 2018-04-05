@@ -26,7 +26,7 @@ public class RouteInteractor implements MvpRoute.Interactor{
     }
 
     @Override
-    public void getTravelInformation(final ApiPresenterCallBack apiPresenterCallBack, DriveInformationRequest request) {
+    public void getDriveInformation(final ApiPresenterCallBack apiPresenterCallBack, DriveInformationRequest request) {
         Call<ApiResponse> call = apiService.getTravelInformation(request);
 
         call.enqueue(new Callback<ApiResponse>() {

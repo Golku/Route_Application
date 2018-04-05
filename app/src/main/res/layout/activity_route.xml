@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.jason.route_application_kotlin.features.route.RouteActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -59,26 +59,26 @@
             app:layout_constraintTop_toBottomOf="@+id/textView1" />
 
         <TextView
-            android:id="@+id/privateAddressesTextView"
+            android:id="@+id/privateCurrentSizeTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
+            android:text="current size"
             android:textColor="@color/colorPrimaryDark"
             app:layout_constraintStart_toEndOf="@+id/textView1"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/businessAddressesTextView"
+            android:id="@+id/businessCurrentSizeTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:text="current size"
             android:textColor="@color/colorPrimaryDark"
             app:layout_constraintStart_toEndOf="@+id/textView2"
-            app:layout_constraintTop_toBottomOf="@+id/privateAddressesTextView" />
+            app:layout_constraintTop_toBottomOf="@+id/privateCurrentSizeTv" />
 
         <TextView
             android:id="@+id/estimatedRouteCompletedTimeTextView"
@@ -86,11 +86,31 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:text="@string/estimated_finish_time.activity_route"
+            android:text="end time"
             android:textColor="@color/colorPrimaryDark"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginRight="16dp" />
+
+        <TextView
+            android:id="@+id/privateMaxSizeTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:text="/ max size"
+            app:layout_constraintStart_toEndOf="@+id/privateCurrentSizeTv"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/businessMaxSizeTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="/ max size"
+            app:layout_constraintStart_toEndOf="@+id/businessCurrentSizeTv"
+            app:layout_constraintTop_toBottomOf="@+id/privateMaxSizeTv" />
 
     </android.support.constraint.ConstraintLayout>
 
