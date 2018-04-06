@@ -15,14 +15,21 @@ import java.util.List;
 public interface MvpRouteMap {
 
     interface View{
-        void showToast(String message);
+
+        void addMarkersToMap(List<FormattedAddress> addresses);
+
         void getDriveInformation(SingleDriveRequest request);
+
+        void showToast(String message);
+
     }
 
     interface Presenter{
-        void setRoute(UnOrganizedRoute unOrganizedRoute);
-        List<FormattedAddress> getAddressesList();
-        void orderMaker(Marker marker);
+
+        void setMarkers(UnOrganizedRoute unOrganizedRoute);
+
+        void processMarker(Marker marker);
+
     }
 
 }

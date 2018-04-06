@@ -35,8 +35,6 @@ public class RouteListFragment extends Fragment implements RouteAdapter.RouteLis
     private RouteActivity routeActivityCallback;
 
     private RecyclerView recyclerView;
-    private TextView messageToUserTextView;
-    private ProgressBar progressBar;
 
     private RouteAdapter adapter;
 
@@ -59,7 +57,7 @@ public class RouteListFragment extends Fragment implements RouteAdapter.RouteLis
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.presenter = new RouteListPresenter(this);
+        presenter = new RouteListPresenter(this);
     }
 
     @Nullable
@@ -68,17 +66,20 @@ public class RouteListFragment extends Fragment implements RouteAdapter.RouteLis
         View view = inflater.inflate(R.layout.fragment_route_list, container, false);
 
         this.recyclerView = view.findViewById(R.id.routeRecView);
-        this.messageToUserTextView = view.findViewById(R.id.messageToUserTextView);
-        this.progressBar = view.findViewById(R.id.progressBar);
 
         return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        presenter.setupFragment();
     }
 
     @Override
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
-        presenter.setupList();
     }
 
     @Override
@@ -89,17 +90,20 @@ public class RouteListFragment extends Fragment implements RouteAdapter.RouteLis
 
     @Override
     public void setupAdapter(List<SingleDrive> routeList) {
-        onFinishNetworkOperation();
         recyclerView.setVisibility(View.VISIBLE);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        this.adapter = new RouteAdapter(routeList, this);
+        adapter = new RouteAdapter(routeList, this);
         recyclerView.setAdapter(adapter);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(SingleDrive singleDrive){
-        adapter.addToList(singleDrive);
-        adapter.notifyItemInserted(adapter.getList().size()-1);
+        presenter.singleDriveReceive(singleDrive);
+    }
+
+    @Override
+    public void addDriveToList(int position) {
+        adapter.notifyItemInserted(position);
     }
 
     @Override
@@ -111,16 +115,4 @@ public class RouteListFragment extends Fragment implements RouteAdapter.RouteLis
     public void onAdapterGoButtonClick(String address) {
         routeActivityCallback.onGoButtonClick(address);
     }
-
-    public void onStartNetworkOperation() {
-        messageToUserTextView.setText("Fetching route...");
-    }
-
-    public void onFinishNetworkOperation() {
-        messageToUserTextView.setVisibility(View.GONE);
-        progressBar.setVisibility(View.GONE);
-    }
-
-
-
 }

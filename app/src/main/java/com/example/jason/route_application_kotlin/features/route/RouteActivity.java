@@ -55,41 +55,33 @@ public class RouteActivity extends DaggerAppCompatActivity implements
     }
 
     private void init(){
+        setupFragments();
         String routeCode = getIntent().getStringExtra("routeCode");
         presenter.setRouteCode(routeCode);
         presenter.getRouteFromApi();
     }
 
-    @Override
-    public void setupAddressTracker(int privateAddress, int businessAddress) {
-        privateMaxSizeTv.setText(String.valueOf(privateAddress));
-        businessMaxSizeTv.setText(String.valueOf(businessAddress));
-    }
-
-    @Override
-    public void updateAddressTracker(int privateAddress, int businessAddress) {
-        privateCurrentSizeTv.setText(String.valueOf(privateAddress));
-        businessCurrentSizeTv.setText(String.valueOf(businessAddress));
-    }
-
-    @Override
-    public void setupFragments(UnOrganizedRoute unOrganizedRoute) {
-
-        Bundle organizedRouteBundle = new Bundle();
-        organizedRouteBundle.putParcelable("unOrganizedRoute", unOrganizedRoute);
-
+    public void setupFragments() {
         Fragment routeMapFragment = new RouteMapFragment();
         Fragment routeListFragment = new RouteListFragment();
 
-        routeMapFragment.setArguments(organizedRouteBundle);
-
         RouteSectionPagerAdapter routeSectionPagerAdapter = new RouteSectionPagerAdapter(getSupportFragmentManager());
         routeSectionPagerAdapter.addFragment("Map", routeMapFragment);
-        routeSectionPagerAdapter.addFragment("RoutePresenter List", routeListFragment);
+        routeSectionPagerAdapter.addFragment("Route", routeListFragment);
 
         viewPager.setAdapter(routeSectionPagerAdapter);
 
         tabLayout.setupWithViewPager(viewPager);
+    }
+
+    @Override
+    public void mapReady() {
+        presenter.onMapReady();
+    }
+
+    @Override
+    public void delegateUnorganizedRoute(UnOrganizedRoute unOrganizedRoute) {
+        EventBus.getDefault().post(unOrganizedRoute);
     }
 
     @Override
@@ -139,6 +131,17 @@ public class RouteActivity extends DaggerAppCompatActivity implements
     @Override
     public void closeActivity() {
         finish();
+    }
 
+    @Override
+    public void setupAddressTracker(int privateAddress, int businessAddress) {
+        privateMaxSizeTv.setText(String.valueOf(privateAddress));
+        businessMaxSizeTv.setText(String.valueOf(businessAddress));
+    }
+
+    @Override
+    public void updateAddressTracker(int privateAddress, int businessAddress) {
+        privateCurrentSizeTv.setText(String.valueOf(privateAddress));
+        businessCurrentSizeTv.setText(String.valueOf(businessAddress));
     }
 }

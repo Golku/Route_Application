@@ -17,7 +17,7 @@ public interface MvpRoute {
 
         void updateAddressTracker(int privateAddress, int businessAddress);
 
-        void setupFragments(UnOrganizedRoute unOrganizedRoute);
+        void delegateUnorganizedRoute(UnOrganizedRoute unOrganizedRoute);
 
         void addAddressToRouteList(SingleDrive singleDrive);
 
@@ -33,6 +33,8 @@ public interface MvpRoute {
     interface Presenter{
 
         void setRouteCode(String routeCode);
+
+        void onMapReady();
 
         void getRouteFromApi();
 

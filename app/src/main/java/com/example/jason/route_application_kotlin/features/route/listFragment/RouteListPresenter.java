@@ -21,7 +21,14 @@ public class RouteListPresenter implements MvpRouteList.Presenter{
     }
 
     @Override
-    public void setupList() {
+    public void setupFragment() {
         view.setupAdapter(this.routeList);
+    }
+
+    @Override
+    public void singleDriveReceive(SingleDrive singleDrive) {
+        routeList.add(singleDrive);
+        int position = routeList.indexOf(singleDrive);
+        view.addDriveToList(position);
     }
 }

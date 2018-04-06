@@ -27,6 +27,6 @@ public interface ApiService {
     @POST("correctedaddressessubmition")
     Call<RouteResponse> submitCorrectedAddresses(@Body CorrectedAddresses correctedAddresses);
 
-    @POST("gettravelinformation")
+    @POST("getdriveinformation")
     Call<SingleDriveResponse> getDriveInformation(@Body SingleDriveRequest request);
 }

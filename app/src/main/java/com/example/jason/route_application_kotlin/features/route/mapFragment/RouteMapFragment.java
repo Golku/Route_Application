@@ -27,6 +27,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.List;
 
 /**
@@ -39,9 +43,10 @@ public class RouteMapFragment extends Fragment implements MvpRouteMap.View, OnMa
 
     private MvpRouteMap.Presenter presenter;
 
-    private RouteActivity routeActivityCallBack;
+    private RouteActivity routeActivityCallback;
 
     public interface RouteMapListener {
+        void mapReady();
         void getDriveInformation(SingleDriveRequest request);
         void removeAddressFromRouteList();
     }
@@ -50,7 +55,7 @@ public class RouteMapFragment extends Fragment implements MvpRouteMap.View, OnMa
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            this.routeActivityCallBack = (RouteActivity) context;
+            this.routeActivityCallback = (RouteActivity) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " routeActivityCallback error");
@@ -60,15 +65,7 @@ public class RouteMapFragment extends Fragment implements MvpRouteMap.View, OnMa
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         this.presenter = new RouteMapPresenter(this);
-
-        Bundle bundle = this.getArguments();
-
-        if (bundle != null) {
-            UnOrganizedRoute unOrganizedRoute = bundle.getParcelable("unOrganizedRoute");
-            presenter.setRoute(unOrganizedRoute);
-        }
     }
 
     @Nullable
@@ -82,6 +79,7 @@ public class RouteMapFragment extends Fragment implements MvpRouteMap.View, OnMa
         super.onViewCreated(view, savedInstanceState);
 
         MapView mapView = view.findViewById(R.id.mapView);
+
         if (mapView != null) {
             mapView.onCreate(null);
             mapView.onResume();
@@ -90,14 +88,35 @@ public class RouteMapFragment extends Fragment implements MvpRouteMap.View, OnMa
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(UnOrganizedRoute unOrganizedRoute){
+        presenter.setMarkers(unOrganizedRoute);
+    }
+
+    @Override
     public void onMapReady(GoogleMap googleMap) {
         MapsInitializer.initialize(getContext());
 
-        List<FormattedAddress> addressesList = presenter.getAddressesList();
-
         this.googleMap = googleMap;
-        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        this.googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        this.googleMap.setOnMarkerClickListener(this);
 
+        routeActivityCallback.mapReady();
+    }
+
+    @Override
+    public void addMarkersToMap(List<FormattedAddress> addresses) {
         Resources res = this.getResources();
         String iconName;
 
@@ -110,15 +129,15 @@ public class RouteMapFragment extends Fragment implements MvpRouteMap.View, OnMa
 
         originMarker.setTag("origin");
 
-        if (addressesList != null) {
+        if (addresses != null) {
 
-            for (FormattedAddress formattedAddress : addressesList) {
+            for (FormattedAddress address : addresses) {
 
-                String address = formattedAddress.getFormattedAddress();
-                double lat = formattedAddress.getLat();
-                double lng = formattedAddress.getLng();
+                String formattedAddress = address.getFormattedAddress();
+                double lat = address.getLat();
+                double lng = address.getLng();
 
-                if (formattedAddress.getIsBusiness()) {
+                if (address.getIsBusiness()) {
                     iconName = "ic_business_address";
                 } else {
                     iconName = "ic_private_address2";
@@ -131,7 +150,7 @@ public class RouteMapFragment extends Fragment implements MvpRouteMap.View, OnMa
                 Marker marker = googleMap.addMarker(
                         new MarkerOptions()
                                 .position(new LatLng(lat, lng))
-                                .title(address)
+                                .title(formattedAddress)
                                 .icon(BitmapDescriptorFactory.fromResource(resID)));
                 marker.setTag(true);
             }
@@ -139,28 +158,17 @@ public class RouteMapFragment extends Fragment implements MvpRouteMap.View, OnMa
 
         CameraPosition cameraPosition = CameraPosition.builder().target(new LatLng(52.008234, 4.312999)).zoom(9f).build();
         googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
-        this.googleMap.setOnMarkerClickListener(this);
     }
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-
-        if(marker.getTag() != null) {
-            if (marker.getTag().equals("origin")) {
-                showToast("origin");
-                return false;
-            }
-        }
-
-        presenter.orderMaker(marker);
-
+        presenter.processMarker(marker);
         return false;
     }
 
     @Override
     public void getDriveInformation(SingleDriveRequest request) {
-        routeActivityCallBack.getDriveInformation(request);
+        routeActivityCallback.getDriveInformation(request);
     }
 
     @Override

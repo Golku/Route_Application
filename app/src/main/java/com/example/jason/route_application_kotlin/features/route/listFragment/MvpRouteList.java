@@ -11,11 +11,19 @@ import java.util.List;
 public interface MvpRouteList {
 
     interface View{
+
         void setupAdapter(List<SingleDrive> routeList);
+
+        void addDriveToList(int position);
+
     }
 
     interface Presenter{
-        void setupList();
+
+        void setupFragment();
+
+        void singleDriveReceive(SingleDrive singleDrive);
+
     }
 
 }

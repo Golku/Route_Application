@@ -103,6 +103,7 @@ public class RouteStatePresenter implements MvpRouteState.Presenter, ApiCallback
         view.startRouteActivity(routeCode);
     }
 
+//    if the server has an error and returns a html page the application crashes. FIX THIS!!
     @Override
     public void onRouteResponse(RouteResponse response) {
         int routeState = response.getRouteState();

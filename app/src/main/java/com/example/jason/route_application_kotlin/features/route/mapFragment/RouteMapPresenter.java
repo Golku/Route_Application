@@ -19,8 +19,6 @@ public class RouteMapPresenter implements MvpRouteMap.Presenter {
 
     private MvpRouteMap.View view;
 
-    private UnOrganizedRoute unOrganizedRoute;
-
     private List<Marker> routeOrder;
 
     private Marker previousSelectedMarker;
@@ -32,17 +30,20 @@ public class RouteMapPresenter implements MvpRouteMap.Presenter {
     }
 
     @Override
-    public void setRoute(UnOrganizedRoute unOrganizedRoute) {
-        this.unOrganizedRoute = unOrganizedRoute;
+    public void setMarkers(UnOrganizedRoute unOrganizedRoute) {
+        view.addMarkersToMap(unOrganizedRoute.getValidAddressesList());
     }
 
     @Override
-    public List<FormattedAddress> getAddressesList() {
-        return this.unOrganizedRoute.getValidAddressesList();
-    }
+    public void processMarker(Marker clickedMarker) {
 
-    @Override
-    public void orderMaker(Marker clickedMarker) {
+        if(clickedMarker.getTag() != null) {
+            if (clickedMarker.getTag().equals("origin")) {
+                view.showToast("origin");
+                return;
+            }
+        }
+
         SingleDriveRequest request = new SingleDriveRequest();
 
         String origin = null;

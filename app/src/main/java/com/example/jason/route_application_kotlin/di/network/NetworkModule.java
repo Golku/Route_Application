@@ -37,7 +37,7 @@ public class NetworkModule {
     @Named("api")
     Retrofit provideRetrofitForApi(OkHttpClient okHttpClient, Gson gson){
         return new Retrofit.Builder()
-                .client(okHttpClient)//192.168.0.16
+                .client(okHttpClient)//192.168.0.16 - 217.103.231.118
                 .baseUrl("http://217.103.231.118:8080/webapi/")
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();

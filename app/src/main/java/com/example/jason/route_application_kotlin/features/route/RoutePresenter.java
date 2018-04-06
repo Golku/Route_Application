@@ -36,14 +36,18 @@ public class RoutePresenter implements
     public RoutePresenter(MvpRoute.View view, MvpRoute.Interactor interactor) {
         this.view = view;
         this.interactor = interactor;
-        this.organizedRoute = new OrganizedRoute();
-        this.selectedPrivateAddressesCount = 0;
-        this.selectedBusinessAddressesCount = 0;
     }
 
     @Override
     public void setRouteCode(String routeCode) {
         this.routeCode = routeCode;
+    }
+
+    @Override
+    public void onMapReady() {
+        if(unOrganizedRoute != null) {
+            view.delegateUnorganizedRoute(unOrganizedRoute);
+        }
     }
 
     @Override
@@ -69,7 +73,6 @@ public class RoutePresenter implements
     private void onRouteUnorganized(UnOrganizedRoute unOrganizedRoute) {
         if(unOrganizedRoute != null){
             this.unOrganizedRoute = unOrganizedRoute;
-            view.setupFragments(unOrganizedRoute);
         }else{
             view.showToast("Api din't send the route properly. Please try again.");
             view.closeActivity();

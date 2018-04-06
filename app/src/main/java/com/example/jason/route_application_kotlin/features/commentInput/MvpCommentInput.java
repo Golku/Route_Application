@@ -10,17 +10,27 @@ import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
 public interface MvpCommentInput {
 
     interface View{
+
         void updateTextViews(String employeeId, String date);
+
         void onAddCommentBtnClick();
+
         void closeActivity();
+
         void onStartNetworkOperation();
+
         void onFinishNetworkOperation();
+
         void showToast(String message);
+
     }
 
     interface Presenter{
+
         void setUpInfo(String employeeId, FormattedAddress formattedAddress);
+
         void onAddCommentBtnClick(String comment);
+
     }
 
     interface Interactor{

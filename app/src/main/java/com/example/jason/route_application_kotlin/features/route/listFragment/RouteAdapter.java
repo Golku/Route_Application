@@ -31,10 +31,6 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.CustomViewHo
 //        void onListItemSwipe(int position);
     }
 
-    void addToList(SingleDrive singleDrive){
-        this.routeList.add(singleDrive);
-    }
-
     List<SingleDrive> getList(){
         return this.routeList;
     }
