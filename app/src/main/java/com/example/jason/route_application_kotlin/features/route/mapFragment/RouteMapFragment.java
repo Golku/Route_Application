@@ -42,7 +42,8 @@ public class RouteMapFragment extends Fragment implements MvpRouteMap.View, OnMa
     private RouteActivity routeActivityCallBack;
 
     public interface RouteMapListener {
-        void onMarkerClick(DriveInformationRequest driveInformationRequest);
+        void getDriveInformation(DriveInformationRequest request);
+        void removeAddressFromRouteList();
     }
 
     @Override
@@ -159,7 +160,7 @@ public class RouteMapFragment extends Fragment implements MvpRouteMap.View, OnMa
 
     @Override
     public void getDriveInformation(DriveInformationRequest request) {
-        routeActivityCallBack.onMarkerClick(request);
+        routeActivityCallBack.getDriveInformation(request);
     }
 
     @Override

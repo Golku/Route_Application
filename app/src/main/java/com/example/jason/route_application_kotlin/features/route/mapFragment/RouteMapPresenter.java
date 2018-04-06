@@ -88,9 +88,6 @@ public class RouteMapPresenter implements MvpRouteMap.Presenter {
             previousSelectedMarker = clickedMarker;
         }
 
-        Log.d(logTag, "Origin: "+origin);
-        Log.d(logTag, "Destination: "+destination);
-
         if(origin != null && destination != null) {
             request.setOrigin(origin);
             request.setDestination(destination);

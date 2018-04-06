@@ -101,7 +101,7 @@ public class RoutePresenter implements MvpRoute.Presenter, ApiPresenterCallBack 
                 selectedPrivateAddressesCount++;
             }
             view.updateAddressTracker(selectedPrivateAddressesCount, selectedBusinessAddressesCount);
-            view.passSingleDrive(apiResponse.getSingleDrive());
+            view.addAddressToRouteList(apiResponse.getSingleDrive());
             return;
         }
 

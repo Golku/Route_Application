@@ -5,7 +5,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.example.jason.route_application_kotlin.data.pojos.DriveInformationRequest;
 import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
 import com.example.jason.route_application_kotlin.data.pojos.UnOrganizedRoute;
-import com.example.jason.route_application_kotlin.features.route.RouteActivity;
 
 import java.util.List;
 

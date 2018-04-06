@@ -94,13 +94,18 @@ public class RouteActivity extends DaggerAppCompatActivity implements
     }
 
     @Override
-    public void onMarkerClick(DriveInformationRequest driveInformationRequest) {
-        presenter.getDriveInformation(driveInformationRequest);
+    public void getDriveInformation(DriveInformationRequest request) {
+        presenter.getDriveInformation(request);
     }
 
     @Override
-    public void passSingleDrive(SingleDrive singleDrive) {
-        EventBus.getDefault().post(new FragmentCommunication(singleDrive));
+    public void removeAddressFromRouteList() {
+//        EventBus.getDefault().post();
+    }
+
+    @Override
+    public void addAddressToRouteList(SingleDrive singleDrive) {
+        EventBus.getDefault().post(singleDrive);
     }
 
     @Override

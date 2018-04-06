@@ -102,8 +102,8 @@ public class RouteListFragment extends Fragment implements RouteAdapter.RouteLis
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEvent(FragmentCommunication fragmentCommunication){
-        adapter.addToList(fragmentCommunication.getSingleDrive());
+    public void onEvent(SingleDrive singleDrive){
+        adapter.addToList(singleDrive);
         adapter.notifyItemInserted(adapter.getList().size()-1);
     }
 
