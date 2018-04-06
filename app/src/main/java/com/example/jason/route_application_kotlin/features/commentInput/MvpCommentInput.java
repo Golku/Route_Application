@@ -1,6 +1,6 @@
 package com.example.jason.route_application_kotlin.features.commentInput;
 
-import com.example.jason.route_application_kotlin.data.database.DatabasePresenterCallBack;
+import com.example.jason.route_application_kotlin.data.database.DatabaseCallback;
 import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
 
 /**
@@ -24,7 +24,7 @@ public interface MvpCommentInput {
     }
 
     interface Interactor{
-        void addCommentToAddress(DatabasePresenterCallBack databasePresenterCallBack,
+        void addCommentToAddress(DatabaseCallback databaseCallback,
                                  FormattedAddress formattedAddress,
                                  String employeeId,
                                  String comment,

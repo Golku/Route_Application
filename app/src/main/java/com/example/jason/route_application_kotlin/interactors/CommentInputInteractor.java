@@ -1,8 +1,8 @@
 package com.example.jason.route_application_kotlin.interactors;
 
-import com.example.jason.route_application_kotlin.data.database.DatabasePresenterCallBack;
+import com.example.jason.route_application_kotlin.data.database.DatabaseCallback;
 import com.example.jason.route_application_kotlin.data.database.DatabaseService;
-import com.example.jason.route_application_kotlin.data.pojos.DatabaseResponse;
+import com.example.jason.route_application_kotlin.data.pojos.database.DatabaseResponse;
 import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
 import com.example.jason.route_application_kotlin.features.commentInput.MvpCommentInput;
 import javax.inject.Inject;
@@ -24,7 +24,7 @@ public class CommentInputInteractor implements MvpCommentInput.Interactor{
     }
 
     @Override
-    public void addCommentToAddress(final DatabasePresenterCallBack databasePresenterCallBack, FormattedAddress formattedAddress, String employeeId, String comment, String date) {
+    public void addCommentToAddress(final DatabaseCallback databaseCallback, FormattedAddress formattedAddress, String employeeId, String comment, String date) {
 
         Call<DatabaseResponse> call = databaseService.addCommentToAddress(
                 formattedAddress.getStreet(),
@@ -38,12 +38,12 @@ public class CommentInputInteractor implements MvpCommentInput.Interactor{
         call.enqueue(new Callback<DatabaseResponse>() {
             @Override
             public void onResponse(Call<DatabaseResponse> call, Response<DatabaseResponse> response) {
-                databasePresenterCallBack.processDatabaseResponse(response.body());
+                databaseCallback.onDatabaseResponse(response.body());
             }
 
             @Override
             public void onFailure(Call<DatabaseResponse> call, Throwable t) {
-                databasePresenterCallBack.onApiResponseFailure();
+                databaseCallback.onApiResponseFailure();
             }
         });
 

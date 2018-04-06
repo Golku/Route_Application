@@ -1,16 +1,12 @@
 package com.example.jason.route_application_kotlin.interactors;
 
-import android.util.Log;
-
-import com.example.jason.route_application_kotlin.data.api.ApiPresenterCallBack;
+import android.support.annotation.NonNull;
+import com.example.jason.route_application_kotlin.data.api.ApiCallback;
 import com.example.jason.route_application_kotlin.data.api.ApiService;
-import com.example.jason.route_application_kotlin.data.pojos.ApiResponse;
-import com.example.jason.route_application_kotlin.data.pojos.CorrectedAddresses;
-import com.example.jason.route_application_kotlin.data.pojos.OutGoingRoute;
+import com.example.jason.route_application_kotlin.data.pojos.api.CorrectedAddresses;
+import com.example.jason.route_application_kotlin.data.pojos.api.RouteResponse;
 import com.example.jason.route_application_kotlin.features.correctInvalidAddresses.MvpCorrectInvalidAddresses;
-
 import javax.inject.Inject;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -30,48 +26,36 @@ public class CorrectInvalidAddressesInteractor implements MvpCorrectInvalidAddre
     }
 
     @Override
-    public void getInvalidAddresses(final ApiPresenterCallBack apiPresenterCallBack, String routeCode) {
+    public void getInvalidAddresses(final ApiCallback.RouteResponseCallback callback, String routeCode) {
+        Call<RouteResponse> call = apiService.getRoute(routeCode);
 
-        Call<ApiResponse> call = apiService.getRoute(routeCode);
-
-        call.enqueue(new Callback<ApiResponse>() {
+        call.enqueue(new Callback<RouteResponse>() {
             @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                apiPresenterCallBack.onApiResponse(response.body());
+            public void onResponse(@NonNull Call<RouteResponse> call, @NonNull Response<RouteResponse> response) {
+                callback.onRouteResponse(response.body());
             }
 
             @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Log.d(log_tag, "Failure");
-                Log.d(log_tag, "Throwable: " + t.toString());
-                Log.d(log_tag, "call: " + call.toString());
-                apiPresenterCallBack.onApiResponseFailure();
+            public void onFailure(@NonNull Call<RouteResponse> call, @NonNull Throwable t) {
+                callback.onRouteResponseFailure();
             }
         });
-
     }
 
     @Override
-    public void submitCorrectedAddresses(final ApiPresenterCallBack apiPresenterCallBack, CorrectedAddresses correctedAddresses) {
+    public void submitCorrectedAddresses(final ApiCallback.RouteResponseCallback callback, CorrectedAddresses correctedAddresses) {
+        Call<RouteResponse> call = apiService.submitCorrectedAddresses(correctedAddresses);
 
-        Call<ApiResponse> call = apiService.submitCorrectedAddresses(correctedAddresses);
-
-        call.enqueue(new Callback<ApiResponse>() {
+        call.enqueue(new Callback<RouteResponse>() {
             @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                apiPresenterCallBack.onApiResponse(response.body());
+            public void onResponse(@NonNull Call<RouteResponse> call, @NonNull Response<RouteResponse> response) {
+                callback.onRouteResponse(response.body());
             }
 
             @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Log.d(log_tag, "Failure");
-                Log.d(log_tag, "Throwable: " + t.toString());
-                Log.d(log_tag, "call: " + call.toString());
-                apiPresenterCallBack.onApiResponseFailure();
+            public void onFailure(@NonNull Call<RouteResponse> call, @NonNull Throwable t) {
+                callback.onRouteResponseFailure();
             }
         });
-
     }
-
-
 }

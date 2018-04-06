@@ -1,6 +1,6 @@
 package com.example.jason.route_application_kotlin.data.database;
 
-import com.example.jason.route_application_kotlin.data.pojos.DatabaseResponse;
+import com.example.jason.route_application_kotlin.data.pojos.database.DatabaseResponse;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;

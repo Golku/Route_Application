@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.example.jason.route_application_kotlin.R;
-import com.example.jason.route_application_kotlin.data.pojos.SingleDrive;
+import com.example.jason.route_application_kotlin.data.pojos.api.SingleDrive;
 
 import java.util.List;
 

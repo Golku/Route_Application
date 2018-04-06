@@ -1,4 +1,6 @@
-package com.example.jason.route_application_kotlin.data.pojos;
+package com.example.jason.route_application_kotlin.data.pojos.api;
+
+import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
 
 /**
  * Created by Jason on 14-Feb-18.

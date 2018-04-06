@@ -1,13 +1,10 @@
 package com.example.jason.route_application_kotlin.features.route.mapFragment;
 
-import com.example.jason.route_application_kotlin.data.pojos.DriveInformationRequest;
 import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
-import com.example.jason.route_application_kotlin.data.pojos.UnOrganizedRoute;
-import com.example.jason.route_application_kotlin.features.route.RouteActivity;
+import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveRequest;
+import com.example.jason.route_application_kotlin.data.pojos.api.UnOrganizedRoute;
 
 import com.google.android.gms.maps.model.Marker;
-
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +43,7 @@ public class RouteMapPresenter implements MvpRouteMap.Presenter {
 
     @Override
     public void orderMaker(Marker clickedMarker) {
-        DriveInformationRequest request = new DriveInformationRequest();
+        SingleDriveRequest request = new SingleDriveRequest();
 
         String origin = null;
         String destination = null;

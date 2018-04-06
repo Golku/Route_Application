@@ -1,11 +1,10 @@
-package com.example.jason.route_application_kotlin.data.pojos;
+package com.example.jason.route_application_kotlin.data.pojos.api;
 
 /**
- * Created by Jason on 3/26/2018.
+ * Created by Jason on 06-Apr-18.
  */
 
-public class DriveInformationRequest {
-
+public class SingleDriveRequest {
     private String origin;
     private String destination;
 

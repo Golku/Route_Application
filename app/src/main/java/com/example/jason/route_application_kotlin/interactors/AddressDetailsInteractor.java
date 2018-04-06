@@ -2,9 +2,9 @@ package com.example.jason.route_application_kotlin.interactors;
 
 import android.util.Log;
 
-import com.example.jason.route_application_kotlin.data.database.DatabasePresenterCallBack;
+import com.example.jason.route_application_kotlin.data.database.DatabaseCallback;
 import com.example.jason.route_application_kotlin.data.database.DatabaseService;
-import com.example.jason.route_application_kotlin.data.pojos.DatabaseResponse;
+import com.example.jason.route_application_kotlin.data.pojos.database.DatabaseResponse;
 import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
 import com.example.jason.route_application_kotlin.features.addressDetails.MvpAddressDetails;
 
@@ -30,7 +30,7 @@ public class AddressDetailsInteractor implements MvpAddressDetails.Interactor {
     }
 
     @Override
-    public void getAddressInformation(final DatabasePresenterCallBack databasePresenterCallBack, FormattedAddress formattedAddress) {
+    public void getAddressInformation(final DatabaseCallback databaseCallback, FormattedAddress formattedAddress) {
 
 
         Call<DatabaseResponse> call = databaseService.getAddressInformation(
@@ -43,7 +43,7 @@ public class AddressDetailsInteractor implements MvpAddressDetails.Interactor {
             @Override
             public void onResponse(Call<DatabaseResponse> call, Response<DatabaseResponse> response) {
                 Log.d("detailsLogTag", "Responded");
-                databasePresenterCallBack.processDatabaseResponse(response.body());
+                databaseCallback.onDatabaseResponse(response.body());
             }
 
             @Override
@@ -51,7 +51,7 @@ public class AddressDetailsInteractor implements MvpAddressDetails.Interactor {
                 Log.d("detailsLogTag", "Failure");
                 Log.d("detailsLogTag", "Throwable: " + t.toString());
                 Log.d("detailsLogTag", "call: " + call.toString());
-                databasePresenterCallBack.onApiResponseFailure();
+                databaseCallback.onApiResponseFailure();
             }
         });
     }

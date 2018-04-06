@@ -1,4 +1,4 @@
-package com.example.jason.route_application_kotlin.data.pojos;
+package com.example.jason.route_application_kotlin.data.pojos.api;
 
 import java.util.ArrayList;
 import java.util.List;

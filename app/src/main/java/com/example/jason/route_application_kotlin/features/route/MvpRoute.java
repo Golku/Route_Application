@@ -1,11 +1,9 @@
 package com.example.jason.route_application_kotlin.features.route;
 
-import com.example.jason.route_application_kotlin.data.api.ApiPresenterCallBack;
-import com.example.jason.route_application_kotlin.data.pojos.DriveInformationRequest;
-import com.example.jason.route_application_kotlin.data.pojos.SingleDrive;
-import com.example.jason.route_application_kotlin.data.pojos.UnOrganizedRoute;
-
-import java.util.Map;
+import com.example.jason.route_application_kotlin.data.api.ApiCallback;
+import com.example.jason.route_application_kotlin.data.pojos.api.SingleDrive;
+import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveRequest;
+import com.example.jason.route_application_kotlin.data.pojos.api.UnOrganizedRoute;
 
 /**
  * Created by Jason on 07-Feb-18.
@@ -38,7 +36,7 @@ public interface MvpRoute {
 
         void getRouteFromApi();
 
-        void getDriveInformation(DriveInformationRequest request);
+        void getDriveInformation(SingleDriveRequest request);
 
         void onListItemClick(String address);
 
@@ -47,8 +45,11 @@ public interface MvpRoute {
     }
 
     interface Interactor{
-        void getDriveInformation(ApiPresenterCallBack apiPresenterCallBack, DriveInformationRequest request);
-        void getOrganizedRouteFromApi(ApiPresenterCallBack apiPresenterCallBack, String routeCode);
+
+        void getRoute(ApiCallback.RouteResponseCallback callback, String routeCode);
+
+        void getDriveInformation(ApiCallback.SingleDriveResponseCallback callback, SingleDriveRequest request);
+
     }
 
 }

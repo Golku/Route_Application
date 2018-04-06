@@ -1,11 +1,11 @@
 package com.example.jason.route_application_kotlin.interactors;
 
-import android.util.Log;
+import android.support.annotation.NonNull;
 
-import com.example.jason.route_application_kotlin.data.api.ApiPresenterCallBack;
+import com.example.jason.route_application_kotlin.data.api.ApiCallback;
 import com.example.jason.route_application_kotlin.data.api.ApiService;
-import com.example.jason.route_application_kotlin.data.pojos.ApiResponse;
-import com.example.jason.route_application_kotlin.data.pojos.OutGoingRoute;
+import com.example.jason.route_application_kotlin.data.pojos.api.OutGoingRoute;
+import com.example.jason.route_application_kotlin.data.pojos.api.RouteResponse;
 import com.example.jason.route_application_kotlin.features.routeState.MvpRouteState;
 
 import javax.inject.Inject;
@@ -21,7 +21,6 @@ import retrofit2.Response;
 public class RouteStateInteractor implements MvpRouteState.Interactor{
 
     private ApiService apiService;
-    private final String log_tag = "logTagDebug";
 
     @Inject
     public RouteStateInteractor(ApiService apiService) {
@@ -29,44 +28,38 @@ public class RouteStateInteractor implements MvpRouteState.Interactor{
     }
 
     @Override
-    public void sendRoute(final ApiPresenterCallBack apiPresenterCallBack, OutGoingRoute outGoingRoute) {
+    public void sendRoute(final ApiCallback.RouteResponseCallback callback, OutGoingRoute outGoingRoute) {
 
-        Call<ApiResponse> call = apiService.submitRoute(outGoingRoute);
+        Call<RouteResponse> call = apiService.submitRoute(outGoingRoute);
 
-        call.enqueue(new Callback<ApiResponse>() {
+        call.enqueue(new Callback<RouteResponse>() {
             @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                apiPresenterCallBack.onApiResponse(response.body());
+            public void onResponse(@NonNull Call<RouteResponse> call, @NonNull Response<RouteResponse> response) {
+                callback.onRouteResponse(response.body());
             }
 
             @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Log.d(log_tag, "Failure");
-                Log.d(log_tag, "Throwable: " + t.toString());
-                Log.d(log_tag, "call: " + call.toString());
-                apiPresenterCallBack.onApiResponseFailure();
+            public void onFailure(@NonNull Call<RouteResponse> call, @NonNull Throwable t) {
+                callback.onRouteResponseFailure();
             }
         });
 
     }
 
     @Override
-    public void getRouteState(final ApiPresenterCallBack apiPresenterCallBack, String routeCode) {
+    public void getRouteState(final ApiCallback.RouteResponseCallback callback, String routeCode) {
 
-        Call<ApiResponse> call = apiService.getRoute(routeCode);
+        Call<RouteResponse> call = apiService.getRoute(routeCode);
 
-        call.enqueue(new Callback<ApiResponse>() {
+        call.enqueue(new Callback<RouteResponse>() {
             @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                apiPresenterCallBack.onApiResponse(response.body());
+            public void onResponse(@NonNull Call<RouteResponse> call, @NonNull Response<RouteResponse> response) {
+                callback.onRouteResponse(response.body());
             }
 
             @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Log.d(log_tag, "Failure");
-                Log.d(log_tag, "Throwable: " + t.toString());
-                Log.d(log_tag, "call: " + call.toString());
-                apiPresenterCallBack.onApiResponseFailure();
+            public void onFailure(@NonNull Call<RouteResponse> call, @NonNull Throwable t) {
+                callback.onRouteResponseFailure();
             }
         });
 

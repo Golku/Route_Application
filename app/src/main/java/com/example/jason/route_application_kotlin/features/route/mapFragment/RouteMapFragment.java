@@ -1,9 +1,9 @@
 package com.example.jason.route_application_kotlin.features.route.mapFragment;
 
 import com.example.jason.route_application_kotlin.R;
-import com.example.jason.route_application_kotlin.data.pojos.DriveInformationRequest;
 import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
-import com.example.jason.route_application_kotlin.data.pojos.UnOrganizedRoute;
+import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveRequest;
+import com.example.jason.route_application_kotlin.data.pojos.api.UnOrganizedRoute;
 import com.example.jason.route_application_kotlin.features.route.RouteActivity;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -42,7 +42,7 @@ public class RouteMapFragment extends Fragment implements MvpRouteMap.View, OnMa
     private RouteActivity routeActivityCallBack;
 
     public interface RouteMapListener {
-        void getDriveInformation(DriveInformationRequest request);
+        void getDriveInformation(SingleDriveRequest request);
         void removeAddressFromRouteList();
     }
 
@@ -159,7 +159,7 @@ public class RouteMapFragment extends Fragment implements MvpRouteMap.View, OnMa
     }
 
     @Override
-    public void getDriveInformation(DriveInformationRequest request) {
+    public void getDriveInformation(SingleDriveRequest request) {
         routeActivityCallBack.getDriveInformation(request);
     }
 

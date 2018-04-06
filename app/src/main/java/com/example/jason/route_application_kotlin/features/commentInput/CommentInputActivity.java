@@ -20,7 +20,8 @@ import dagger.android.support.DaggerAppCompatActivity;
 
 public class CommentInputActivity extends DaggerAppCompatActivity implements MvpCommentInput.View{
 
-    @Inject CommentInputPresenter presenter;
+    @Inject
+    CommentInputPresenter presenter;
 
     @BindView(R.id.employeeNameTextView)
     TextView employeeNameTextView;

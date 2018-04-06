@@ -1,11 +1,9 @@
 package com.example.jason.route_application_kotlin.features.addressDetails;
 
-import android.util.Log;
-
-import com.example.jason.route_application_kotlin.data.database.DatabasePresenterCallBack;
+import com.example.jason.route_application_kotlin.data.database.DatabaseCallback;
 import com.example.jason.route_application_kotlin.data.models.AddressFormatter;
-import com.example.jason.route_application_kotlin.data.pojos.CommentInformation;
-import com.example.jason.route_application_kotlin.data.pojos.DatabaseResponse;
+import com.example.jason.route_application_kotlin.data.pojos.database.CommentInformation;
+import com.example.jason.route_application_kotlin.data.pojos.database.DatabaseResponse;
 import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
 
 import javax.inject.Inject;
@@ -14,7 +12,7 @@ import javax.inject.Inject;
  * Created by Jason on 07-Feb-18.
  */
 
-public class AddressDetailsPresenter implements MvpAddressDetails.Presenter, DatabasePresenterCallBack {
+public class AddressDetailsPresenter implements MvpAddressDetails.Presenter, DatabaseCallback {
 
     @Inject
     AddressFormatter addressFormatter;
@@ -49,7 +47,7 @@ public class AddressDetailsPresenter implements MvpAddressDetails.Presenter, Dat
     }
 
     @Override
-    public void processDatabaseResponse(DatabaseResponse databaseResponse) {
+    public void onDatabaseResponse(DatabaseResponse databaseResponse) {
 
         if(!view.isActive()){
             return;

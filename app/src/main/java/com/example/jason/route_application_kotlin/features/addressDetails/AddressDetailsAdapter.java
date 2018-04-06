@@ -6,8 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.example.jason.route_application_kotlin.R;
-import com.example.jason.route_application_kotlin.data.pojos.AddressInformation;
-import com.example.jason.route_application_kotlin.data.pojos.CommentInformation;
+import com.example.jason.route_application_kotlin.data.pojos.database.AddressInformation;
+import com.example.jason.route_application_kotlin.data.pojos.database.CommentInformation;
 
 /**
  * Created by Jason on 07-Feb-18.

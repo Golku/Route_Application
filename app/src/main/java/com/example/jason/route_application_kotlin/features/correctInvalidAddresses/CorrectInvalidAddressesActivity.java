@@ -1,11 +1,9 @@
 package com.example.jason.route_application_kotlin.features.correctInvalidAddresses;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,10 +12,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.jason.route_application_kotlin.R;
-import com.example.jason.route_application_kotlin.data.pojos.OutGoingRoute;
-import com.example.jason.route_application_kotlin.features.route.RouteActivity;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -45,8 +41,6 @@ public class CorrectInvalidAddressesActivity extends DaggerAppCompatActivity imp
 
     private CorrectInvalidAddressesAdapter adapter;
 
-    private AlertDialog.Builder alertDialogBuilder;
-    private View view;
     private AlertDialog alertDialog;
 
     private EditText correctedAddressEditText;
@@ -69,23 +63,16 @@ public class CorrectInvalidAddressesActivity extends DaggerAppCompatActivity imp
     }
 
     @Override
-    public void showScreenElements() {
-        instructionTextView.setVisibility(View.VISIBLE);
-        recyclerView.setVisibility(View.VISIBLE);
-        submitAddressesBtn.setVisibility(View.VISIBLE);
+    public void setupAdapter(List<String> invalidAddressesList) {
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new CorrectInvalidAddressesAdapter(invalidAddressesList, this);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
-    public void hideScreenElements() {
-        instructionTextView.setVisibility(View.GONE);
-        recyclerView.setVisibility(View.GONE);
-        submitAddressesBtn.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void setUpView() {
-        alertDialogBuilder = new AlertDialog.Builder(CorrectInvalidAddressesActivity.this);
-        view = getLayoutInflater().inflate(R.layout.reform_address_dialog, null);
+    public void setupAlertDialog() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(CorrectInvalidAddressesActivity.this);
+        View view = getLayoutInflater().inflate(R.layout.reform_address_dialog, null);
 
         correctedAddressEditText = view.findViewById(R.id.correctedAddressEditText);
         cancelDialogBtn = view.findViewById(R.id.cancelDialogBtn);
@@ -96,25 +83,7 @@ public class CorrectInvalidAddressesActivity extends DaggerAppCompatActivity imp
     }
 
     @Override
-    public void setUpAdapter(ArrayList<String> invalidAddressesList) {
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new CorrectInvalidAddressesAdapter(invalidAddressesList, this);
-        recyclerView.setAdapter(adapter);
-    }
-
-    @Override
-    public void updateList(int position) {
-        adapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void removeAddressFromList(int position) {
-        adapter.notifyItemRemoved(position);
-    }
-
-    @Override
-    public void showReformAddressDialog(final int position, String address) {
-
+    public void showAlertDialog(final int position, String address) {
         correctedAddressEditText.setText(address);
 
         changeAddressBtn.setOnClickListener(new View.OnClickListener() {
@@ -123,7 +92,7 @@ public class CorrectInvalidAddressesActivity extends DaggerAppCompatActivity imp
                 if(!correctedAddressEditText.getText().toString().isEmpty()) {
                     String correctedAddress = correctedAddressEditText.getText().toString();
                     alertDialog.dismiss();
-                    onDialogChangeAddressBtnClick(position, correctedAddress);
+                    presenter.correctAddress(position, correctedAddress);
                 }else{
                     showToast("Fill in a address");
                 }
@@ -138,17 +107,21 @@ public class CorrectInvalidAddressesActivity extends DaggerAppCompatActivity imp
         });
 
         alertDialog.show();
+    }
 
+    @Override
+    public void updateList(int position) {
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void removeAddressFromList(int position) {
+        adapter.notifyItemRemoved(position);
     }
 
     @OnClick(R.id.submitAddressesBtn)
     public void onSubmitAddressesBtnClick(){
         presenter.submitCorrectedAddresses();
-    }
-
-    @Override
-    public void onDialogChangeAddressBtnClick(int position, String correctedAddress){
-        presenter.correctAddress(position, correctedAddress);
     }
 
     @Override
@@ -171,6 +144,20 @@ public class CorrectInvalidAddressesActivity extends DaggerAppCompatActivity imp
     public void onFinishNetworkOperation() {
         messageToUserTextView.setVisibility(View.GONE);
         progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showScreenElements() {
+        instructionTextView.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.VISIBLE);
+        submitAddressesBtn.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideScreenElements() {
+        instructionTextView.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.GONE);
+        submitAddressesBtn.setVisibility(View.GONE);
     }
 
 

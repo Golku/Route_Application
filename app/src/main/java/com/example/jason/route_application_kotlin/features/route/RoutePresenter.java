@@ -1,10 +1,12 @@
 package com.example.jason.route_application_kotlin.features.route;
 
-import com.example.jason.route_application_kotlin.data.api.ApiPresenterCallBack;
-import com.example.jason.route_application_kotlin.data.pojos.ApiResponse;
-import com.example.jason.route_application_kotlin.data.pojos.DriveInformationRequest;
-import com.example.jason.route_application_kotlin.data.pojos.OrganizedRoute;
-import com.example.jason.route_application_kotlin.data.pojos.UnOrganizedRoute;
+import com.example.jason.route_application_kotlin.data.api.ApiCallback;
+import com.example.jason.route_application_kotlin.data.pojos.api.OrganizedRoute;
+import com.example.jason.route_application_kotlin.data.pojos.api.RouteResponse;
+import com.example.jason.route_application_kotlin.data.pojos.api.SingleDrive;
+import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveRequest;
+import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveResponse;
+import com.example.jason.route_application_kotlin.data.pojos.api.UnOrganizedRoute;
 
 import javax.inject.Inject;
 
@@ -12,7 +14,10 @@ import javax.inject.Inject;
  * Created by Jason on 07-Feb-18.
  */
 
-public class RoutePresenter implements MvpRoute.Presenter, ApiPresenterCallBack {
+public class RoutePresenter implements
+        MvpRoute.Presenter,
+        ApiCallback.RouteResponseCallback,
+        ApiCallback.SingleDriveResponseCallback {
 
     private final String log_tag = "routeLogTag";
 
@@ -43,11 +48,11 @@ public class RoutePresenter implements MvpRoute.Presenter, ApiPresenterCallBack 
 
     @Override
     public void getRouteFromApi() {
-        interactor.getOrganizedRouteFromApi(this, routeCode);
+        interactor.getRoute(this, routeCode);
     }
 
     @Override
-    public void getDriveInformation(DriveInformationRequest request) {
+    public void getDriveInformation(SingleDriveRequest request) {
         interactor.getDriveInformation(this, request);
     }
 
@@ -61,12 +66,9 @@ public class RoutePresenter implements MvpRoute.Presenter, ApiPresenterCallBack 
         view.navigateToDestination(address);
     }
 
-    private void onReadyToBeBuild(UnOrganizedRoute unOrganizedRoute) {
+    private void onRouteUnorganized(UnOrganizedRoute unOrganizedRoute) {
         if(unOrganizedRoute != null){
             this.unOrganizedRoute = unOrganizedRoute;
-            int privateAddressListSize = unOrganizedRoute.getPrivateAddressList().size();
-            int businessAddressListSize = unOrganizedRoute.getBusinessAddressList().size();
-            view.setupAddressTracker(privateAddressListSize, businessAddressListSize);
             view.setupFragments(unOrganizedRoute);
         }else{
             view.showToast("Api din't send the route properly. Please try again.");
@@ -88,37 +90,38 @@ public class RoutePresenter implements MvpRoute.Presenter, ApiPresenterCallBack 
         view.closeActivity();
     }
 
-    @Override
-    public void onApiResponse(ApiResponse apiResponse) {
-
-//        If the server has an error and sends back a apiResponse with a html page
+//        If the server has an error and sends back a routeResponse with a html page
 //        the response processing will fail! FIX THIS!!!
 
-        if(apiResponse.getSingleDrive() != null){
-            if(apiResponse.getSingleDrive().getDestinationIsABusiness()){
-                selectedBusinessAddressesCount++;
-            }else{
-                selectedPrivateAddressesCount++;
-            }
-            view.updateAddressTracker(selectedPrivateAddressesCount, selectedBusinessAddressesCount);
-            view.addAddressToRouteList(apiResponse.getSingleDrive());
-            return;
-        }
-
-        int routeState = apiResponse.getRouteState();
+    @Override
+    public void onRouteResponse(RouteResponse response) {
+        int routeState = response.getRouteState();
 
         switch (routeState) {
-            case 5 : onReadyToBeBuild(apiResponse.getUnOrganizedRoute());
+            case 5 : onRouteUnorganized(response.getUnOrganizedRoute());
                 break;
-            case 8 : onRouteOrganized(apiResponse.getOrganizedRoute());
+            case 8 : onRouteOrganized(response.getOrganizedRoute());
                 break;
             default: onInvalidState();
         }
     }
 
     @Override
-    public void onApiResponseFailure() {
-        view.showToast("Unable to connect to the api");
+    public void onRouteResponseFailure() {
+        view.showToast("Unable to fetch route from api");
         view.closeActivity();
+    }
+
+    @Override
+    public void onSingleDriveResponse(SingleDriveResponse response) {
+        SingleDrive singleDrive = response.getSingleDrive();
+        if(singleDrive != null){
+            view.addAddressToRouteList(singleDrive);
+        }
+    }
+
+    @Override
+    public void onSingleDriveResponseFailure() {
+        view.showToast("Unable to fetch drive information from api");
     }
 }

@@ -1,4 +1,4 @@
-package com.example.jason.route_application_kotlin.data.pojos;
+package com.example.jason.route_application_kotlin.data.pojos.database;
 
 import android.os.Parcel;
 import android.os.Parcelable;

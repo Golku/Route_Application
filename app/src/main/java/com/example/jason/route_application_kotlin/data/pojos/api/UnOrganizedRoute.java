@@ -1,9 +1,10 @@
-package com.example.jason.route_application_kotlin.data.pojos;
+package com.example.jason.route_application_kotlin.data.pojos.api;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.ArrayList;
+import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
+
 import java.util.List;
 
 /**

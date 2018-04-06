@@ -1,6 +1,6 @@
-package com.example.jason.route_application_kotlin.data.pojos;
+package com.example.jason.route_application_kotlin.data.pojos.api;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Jason on 3/3/2018.
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class CorrectedAddresses {
 
     private String routeCode;
-    private ArrayList<String> correctedAddressesList;
+    private List<String> correctedAddressesList;
 
     public String getRouteCode() {
         return routeCode;
@@ -19,11 +19,11 @@ public class CorrectedAddresses {
         this.routeCode = routeCode;
     }
 
-    public ArrayList<String> getCorrectedAddressesList() {
+    public List<String> getCorrectedAddressesList() {
         return correctedAddressesList;
     }
 
-    public void setCorrectedAddressesList(ArrayList<String> correctedAddressesList) {
+    public void setCorrectedAddressesList(List<String> correctedAddressesList) {
         this.correctedAddressesList = correctedAddressesList;
     }
 }

@@ -8,7 +8,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.jason.route_application_kotlin.R;
-import com.example.jason.route_application_kotlin.data.pojos.OutGoingRoute;
+import com.example.jason.route_application_kotlin.data.pojos.api.OutGoingRoute;
 import com.example.jason.route_application_kotlin.features.correctInvalidAddresses.CorrectInvalidAddressesActivity;
 import com.example.jason.route_application_kotlin.features.route.RouteActivity;
 

@@ -13,8 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.jason.route_application_kotlin.R;
-import com.example.jason.route_application_kotlin.data.pojos.AddressInformation;
-import com.example.jason.route_application_kotlin.data.pojos.CommentInformation;
+import com.example.jason.route_application_kotlin.data.pojos.database.AddressInformation;
+import com.example.jason.route_application_kotlin.data.pojos.database.CommentInformation;
 import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
 import com.example.jason.route_application_kotlin.features.commentDisplay.CommentDisplayActivity;
 import com.example.jason.route_application_kotlin.features.commentInput.CommentInputActivity;

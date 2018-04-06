@@ -1,7 +1,7 @@
 package com.example.jason.route_application_kotlin.features.commentInput;
 
-import com.example.jason.route_application_kotlin.data.database.DatabasePresenterCallBack;
-import com.example.jason.route_application_kotlin.data.pojos.DatabaseResponse;
+import com.example.jason.route_application_kotlin.data.database.DatabaseCallback;
+import com.example.jason.route_application_kotlin.data.pojos.database.DatabaseResponse;
 import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
 
 import java.text.SimpleDateFormat;
@@ -12,7 +12,7 @@ import javax.inject.Inject;
  * Created by Jason on 19-Feb-18.
  */
 
-public class CommentInputPresenter implements MvpCommentInput.Presenter, DatabasePresenterCallBack{
+public class CommentInputPresenter implements MvpCommentInput.Presenter, DatabaseCallback {
 
     private final MvpCommentInput.View view;
     private MvpCommentInput.Interactor interactor;
@@ -43,7 +43,7 @@ public class CommentInputPresenter implements MvpCommentInput.Presenter, Databas
     }
 
     @Override
-    public void processDatabaseResponse(DatabaseResponse databaseResponse) {
+    public void onDatabaseResponse(DatabaseResponse databaseResponse) {
         view.onFinishNetworkOperation();
 
         if(databaseResponse.isError()){

@@ -1,14 +1,12 @@
 package com.example.jason.route_application_kotlin.features.correctInvalidAddresses;
 
 import android.os.Handler;
-import android.util.Log;
 
-import com.example.jason.route_application_kotlin.data.api.ApiPresenterCallBack;
-import com.example.jason.route_application_kotlin.data.pojos.ApiResponse;
-import com.example.jason.route_application_kotlin.data.pojos.CorrectedAddresses;
-import com.example.jason.route_application_kotlin.data.pojos.OutGoingRoute;
+import com.example.jason.route_application_kotlin.data.api.ApiCallback;
+import com.example.jason.route_application_kotlin.data.pojos.api.CorrectedAddresses;
+import com.example.jason.route_application_kotlin.data.pojos.api.RouteResponse;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -16,11 +14,11 @@ import javax.inject.Inject;
  * Created by Jason on 23-Feb-18.
  */
 
-public class CorrectInvalidAddressesPresenter implements MvpCorrectInvalidAddresses.Presenter, ApiPresenterCallBack{
+public class CorrectInvalidAddressesPresenter implements MvpCorrectInvalidAddresses.Presenter, ApiCallback.RouteResponseCallback {
 
     private final String log_tag = "logTagDebug";
 
-    private ArrayList<String> invalidAddressesList;
+    private List<String> invalidAddressesList;
     private CorrectedAddresses correctedAddresses;
 
     private MvpCorrectInvalidAddresses.View view;
@@ -51,7 +49,7 @@ public class CorrectInvalidAddressesPresenter implements MvpCorrectInvalidAddres
 
     @Override
     public void onItemClick(int position) {
-        view.showReformAddressDialog(position, invalidAddressesList.get(position));
+        view.showAlertDialog(position, invalidAddressesList.get(position));
     }
 
     @Override
@@ -88,41 +86,36 @@ public class CorrectInvalidAddressesPresenter implements MvpCorrectInvalidAddres
         }
     }
 
-    private void onHasInvalidAddresses(ArrayList<String> invalidAddressesList) {
+    private void onHasInvalidAddresses(List<String> invalidAddressesList) {
         view.onFinishNetworkOperation();
 
         if(invalidAddressesList != null){
             this.invalidAddressesList = invalidAddressesList;
             networkFetchAttempts = 0;
             this.correctedAddresses = new CorrectedAddresses();
-            view.setUpView();
+            view.setupAlertDialog();
             view.showScreenElements();
-            view.setUpAdapter(this.invalidAddressesList);
+            view.setupAdapter(this.invalidAddressesList);
         }else {
             view.showToast("Api din't send the addresses properly. Please try again.");
         }
     }
 
     @Override
-    public void onApiResponse(ApiResponse apiResponse) {
-
-//        If the server has an error and sends back a apiResponse with a html page
-//        the response processing will fail! FIX THIS!!!
-
-        int routeState = apiResponse.getRouteState();
+    public void onRouteResponse(RouteResponse response) {
+        int routeState = response.getRouteState();
 
         switch (routeState) {
             case 1 : onValidatingAddresses();
                 break;
-            case 4 : onHasInvalidAddresses(apiResponse.getInvalidAddresses());
+            case 4 : onHasInvalidAddresses(response.getInvalidAddresses());
                 break;
             default: view.closeActivity();
         }
-
     }
 
     @Override
-    public void onApiResponseFailure() {
+    public void onRouteResponseFailure() {
         view.showToast("Unable to connect to the api");
         view.closeActivity();
     }

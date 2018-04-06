@@ -1,28 +1,17 @@
-package com.example.jason.route_application_kotlin.data.pojos;
+package com.example.jason.route_application_kotlin.data.pojos.api;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Created by Jason on 14-Feb-18.
+ * Created by Jason on 06-Apr-18.
  */
 
+public class RouteResponse {
 
-public class ApiResponse {
-
-    private String requestType;
     private int routeState;
-    private SingleDrive singleDrive;
     private UnOrganizedRoute unOrganizedRoute;
     private OrganizedRoute organizedRoute;
-    private ArrayList<String> invalidAddresses;
-
-    public String getRequestType() {
-        return requestType;
-    }
-
-    public void setRequestType(String requestType) {
-        this.requestType = requestType;
-    }
+    private List<String> invalidAddresses;
 
     public int getRouteState() {
         return routeState;
@@ -30,14 +19,6 @@ public class ApiResponse {
 
     public void setRouteState(int routeState) {
         this.routeState = routeState;
-    }
-
-    public SingleDrive getSingleDrive() {
-        return singleDrive;
-    }
-
-    public void setSingleDrive(SingleDrive singleDrive) {
-        this.singleDrive = singleDrive;
     }
 
     public UnOrganizedRoute getUnOrganizedRoute() {
@@ -56,11 +37,12 @@ public class ApiResponse {
         this.organizedRoute = organizedRoute;
     }
 
-    public ArrayList<String> getInvalidAddresses() {
+    public List<String> getInvalidAddresses() {
         return invalidAddresses;
     }
 
-    public void setInvalidAddresses(ArrayList<String> invalidAddresses) {
+    public void setInvalidAddresses(List<String> invalidAddresses) {
         this.invalidAddresses = invalidAddresses;
     }
+
 }

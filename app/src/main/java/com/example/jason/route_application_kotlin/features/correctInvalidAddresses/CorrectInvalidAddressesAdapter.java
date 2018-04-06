@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.example.jason.route_application_kotlin.R;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Jason on 26-Feb-18.
@@ -17,10 +18,10 @@ import java.util.ArrayList;
 
 public class CorrectInvalidAddressesAdapter extends RecyclerView.Adapter<CorrectInvalidAddressesAdapter.CustomViewHolder> {
 
-    private ArrayList<String> invalidAddressesList;
+    private List<String> invalidAddressesList;
     private AddressListFunctions addressListFunctions;
 
-    public CorrectInvalidAddressesAdapter(ArrayList<String> invalidAddressesList, AddressListFunctions addressListFunctions) {
+    CorrectInvalidAddressesAdapter(List<String> invalidAddressesList, AddressListFunctions addressListFunctions) {
         this.invalidAddressesList = invalidAddressesList;
         this.addressListFunctions = addressListFunctions;
     }
@@ -54,7 +55,7 @@ public class CorrectInvalidAddressesAdapter extends RecyclerView.Adapter<Correct
         private ViewGroup container;
 
 
-        public CustomViewHolder(View itemView) {
+        CustomViewHolder(View itemView) {
             super(itemView);
             this.invalidAddress = itemView.findViewById(R.id.invalidAddressTextView);
             this.deleteAddressBtn = itemView.findViewById(R.id.deleteAddressBtn);

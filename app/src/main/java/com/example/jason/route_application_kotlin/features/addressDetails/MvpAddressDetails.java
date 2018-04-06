@@ -1,8 +1,8 @@
 package com.example.jason.route_application_kotlin.features.addressDetails;
 
-import com.example.jason.route_application_kotlin.data.database.DatabasePresenterCallBack;
-import com.example.jason.route_application_kotlin.data.pojos.AddressInformation;
-import com.example.jason.route_application_kotlin.data.pojos.CommentInformation;
+import com.example.jason.route_application_kotlin.data.database.DatabaseCallback;
+import com.example.jason.route_application_kotlin.data.pojos.database.AddressInformation;
+import com.example.jason.route_application_kotlin.data.pojos.database.CommentInformation;
 import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
 
 /**
@@ -38,7 +38,7 @@ public interface MvpAddressDetails {
     }
 
     interface Interactor{
-        void getAddressInformation(DatabasePresenterCallBack databasePresenterCallBack, FormattedAddress formattedAddress);
+        void getAddressInformation(DatabaseCallback databaseCallback, FormattedAddress formattedAddress);
     }
 
 }

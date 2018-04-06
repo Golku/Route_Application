@@ -2,10 +2,9 @@ package com.example.jason.route_application_kotlin.features.routeState;
 
 import android.os.Handler;
 
-import com.example.jason.route_application_kotlin.data.api.ApiPresenterCallBack;
-import com.example.jason.route_application_kotlin.data.pojos.ApiResponse;
-import com.example.jason.route_application_kotlin.data.pojos.OutGoingRoute;
-import com.example.jason.route_application_kotlin.data.pojos.UnOrganizedRoute;
+import com.example.jason.route_application_kotlin.data.api.ApiCallback;
+import com.example.jason.route_application_kotlin.data.pojos.api.OutGoingRoute;
+import com.example.jason.route_application_kotlin.data.pojos.api.RouteResponse;
 
 import javax.inject.Inject;
 
@@ -13,14 +12,14 @@ import javax.inject.Inject;
  * Created by Jason on 3/15/2018.
  */
 
-public class RouteStatePresenter implements MvpRouteState.Presenter, ApiPresenterCallBack {
+public class RouteStatePresenter implements MvpRouteState.Presenter, ApiCallback.RouteResponseCallback {
 
     private MvpRouteState.View view;
     private MvpRouteState.Interactor interactor;
-    private final Handler handler;
 
-    private int networkFetchAttempts;
+    private final Handler handler;
     private String routeCode;
+    private int networkFetchAttempts;
 
     @Inject
     public RouteStatePresenter(MvpRouteState.View view, MvpRouteState.Interactor interactor) {
@@ -46,16 +45,13 @@ public class RouteStatePresenter implements MvpRouteState.Presenter, ApiPresente
     }
 
     private void requestTimer(String message){
-
         if(networkFetchAttempts<12){
-
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     getRouteState();
                 }
             }, 10000);
-
         }else{
             view.showToast(message);
             view.closeActivity();
@@ -75,7 +71,7 @@ public class RouteStatePresenter implements MvpRouteState.Presenter, ApiPresente
     }
 
     private void onInQueue() {
-        view.updateRouteStateTextView("Route is in queue...");
+        view.updateRouteStateTextView("RoutePresenter is in queue...");
         requestTimer("Still in queue after 6 fetch attempts");
     }
 
@@ -108,11 +104,8 @@ public class RouteStatePresenter implements MvpRouteState.Presenter, ApiPresente
     }
 
     @Override
-    public void onApiResponse(ApiResponse apiResponse) {
-
-        int routeState = apiResponse.getRouteState();
-
-//        view.showToast("route state: "+String.valueOf(routeState));
+    public void onRouteResponse(RouteResponse response) {
+        int routeState = response.getRouteState();
 
         switch (routeState) {
             case 0 : onRouteIsNull();
@@ -135,11 +128,10 @@ public class RouteStatePresenter implements MvpRouteState.Presenter, ApiPresente
                 break;
             default: view.closeActivity();//Make a function where you handle a non existent state
         }
-
     }
 
     @Override
-    public void onApiResponseFailure() {
+    public void onRouteResponseFailure() {
         view.showToast("Unable to connect to the api");
         view.closeActivity();
     }

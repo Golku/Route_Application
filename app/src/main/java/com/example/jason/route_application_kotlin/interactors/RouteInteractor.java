@@ -2,10 +2,11 @@ package com.example.jason.route_application_kotlin.interactors;
 
 import android.util.Log;
 
-import com.example.jason.route_application_kotlin.data.api.ApiPresenterCallBack;
+import com.example.jason.route_application_kotlin.data.api.ApiCallback;
 import com.example.jason.route_application_kotlin.data.api.ApiService;
-import com.example.jason.route_application_kotlin.data.pojos.ApiResponse;
-import com.example.jason.route_application_kotlin.data.pojos.DriveInformationRequest;
+import com.example.jason.route_application_kotlin.data.pojos.api.RouteResponse;
+import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveRequest;
+import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveResponse;
 import com.example.jason.route_application_kotlin.features.route.MvpRoute;
 import javax.inject.Inject;
 import retrofit2.Call;
@@ -26,46 +27,36 @@ public class RouteInteractor implements MvpRoute.Interactor{
     }
 
     @Override
-    public void getDriveInformation(final ApiPresenterCallBack apiPresenterCallBack, DriveInformationRequest request) {
-        Call<ApiResponse> call = apiService.getTravelInformation(request);
+    public void getRoute(final ApiCallback.RouteResponseCallback callback, String routeCode) {
+        Call<RouteResponse> call = apiService.getRoute(routeCode);
 
-        call.enqueue(new Callback<ApiResponse>() {
+        call.enqueue(new Callback<RouteResponse>() {
             @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                Log.d("RouteInteractor", "Responded");
-                apiPresenterCallBack.onApiResponse(response.body());
+            public void onResponse(Call<RouteResponse> call, Response<RouteResponse> response) {
+                callback.onRouteResponse(response.body());
             }
 
             @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Log.d("RouteInteractor", "Failure");
-                Log.d("RouteInteractor", "Throwable: " + t.toString());
-                Log.d("RouteInteractor", "call: " + call.toString());
-                apiPresenterCallBack.onApiResponseFailure();
+            public void onFailure(Call<RouteResponse> call, Throwable t) {
+                callback.onRouteResponseFailure();
             }
         });
     }
 
     @Override
-    public void getOrganizedRouteFromApi(final ApiPresenterCallBack apiPresenterCallBack, String routeCode) {
+    public void getDriveInformation(final ApiCallback.SingleDriveResponseCallback callback, SingleDriveRequest request) {
+        Call<SingleDriveResponse> call = apiService.getDriveInformation(request);
 
-        Call<ApiResponse> call = apiService.getRoute(routeCode);
-
-        call.enqueue(new Callback<ApiResponse>() {
+        call.enqueue(new Callback<SingleDriveResponse>() {
             @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                Log.d("RouteInteractor", "Responded");
-                apiPresenterCallBack.onApiResponse(response.body());
+            public void onResponse(Call<SingleDriveResponse> call, Response<SingleDriveResponse> response) {
+                callback.onSingleDriveResponse(response.body());
             }
 
             @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Log.d("RouteInteractor", "Failure");
-                Log.d("RouteInteractor", "Throwable: " + t.toString());
-                Log.d("RouteInteractor", "call: " + call.toString());
-                apiPresenterCallBack.onApiResponseFailure();
+            public void onFailure(Call<SingleDriveResponse> call, Throwable t) {
+                callback.onSingleDriveResponseFailure();
             }
         });
-
     }
 }

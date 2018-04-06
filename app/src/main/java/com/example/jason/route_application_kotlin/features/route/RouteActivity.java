@@ -9,10 +9,9 @@ import android.support.v4.view.ViewPager;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.jason.route_application_kotlin.R;
-import com.example.jason.route_application_kotlin.data.models.FragmentCommunication;
-import com.example.jason.route_application_kotlin.data.pojos.DriveInformationRequest;
-import com.example.jason.route_application_kotlin.data.pojos.SingleDrive;
-import com.example.jason.route_application_kotlin.data.pojos.UnOrganizedRoute;
+import com.example.jason.route_application_kotlin.data.pojos.api.SingleDrive;
+import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveRequest;
+import com.example.jason.route_application_kotlin.data.pojos.api.UnOrganizedRoute;
 import com.example.jason.route_application_kotlin.features.addressDetails.AddressDetailsActivity;
 import com.example.jason.route_application_kotlin.features.route.listFragment.RouteListFragment;
 import com.example.jason.route_application_kotlin.features.route.mapFragment.RouteMapFragment;
@@ -86,7 +85,7 @@ public class RouteActivity extends DaggerAppCompatActivity implements
 
         RouteSectionPagerAdapter routeSectionPagerAdapter = new RouteSectionPagerAdapter(getSupportFragmentManager());
         routeSectionPagerAdapter.addFragment("Map", routeMapFragment);
-        routeSectionPagerAdapter.addFragment("Route List", routeListFragment);
+        routeSectionPagerAdapter.addFragment("RoutePresenter List", routeListFragment);
 
         viewPager.setAdapter(routeSectionPagerAdapter);
 
@@ -94,7 +93,7 @@ public class RouteActivity extends DaggerAppCompatActivity implements
     }
 
     @Override
-    public void getDriveInformation(DriveInformationRequest request) {
+    public void getDriveInformation(SingleDriveRequest request) {
         presenter.getDriveInformation(request);
     }
 

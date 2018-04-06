@@ -1,11 +1,7 @@
 package com.example.jason.route_application_kotlin.features.route.listFragment;
 
 import com.example.jason.route_application_kotlin.R;
-import com.example.jason.route_application_kotlin.data.models.FragmentCommunication;
-import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
-import com.example.jason.route_application_kotlin.data.pojos.OrganizedRoute;
-import com.example.jason.route_application_kotlin.data.pojos.SingleDrive;
-import com.example.jason.route_application_kotlin.data.pojos.UnOrganizedRoute;
+import com.example.jason.route_application_kotlin.data.pojos.api.SingleDrive;
 import com.example.jason.route_application_kotlin.features.route.RouteActivity;
 
 import org.greenrobot.eventbus.EventBus;
@@ -24,7 +20,6 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
