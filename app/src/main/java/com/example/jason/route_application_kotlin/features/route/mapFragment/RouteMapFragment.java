@@ -100,8 +100,8 @@ public class RouteMapFragment extends Fragment implements MvpRouteMap.View, OnMa
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEvent(UnOrganizedRoute unOrganizedRoute){
-        presenter.setMarkers(unOrganizedRoute);
+    public void onEvent(List<FormattedAddress> addressList){
+        presenter.setMarkers(addressList);
     }
 
     @Override
@@ -116,7 +116,7 @@ public class RouteMapFragment extends Fragment implements MvpRouteMap.View, OnMa
     }
 
     @Override
-    public void addMarkersToMap(List<FormattedAddress> addresses) {
+    public void addMarkersToMap(List<FormattedAddress> addressList) {
         Resources res = this.getResources();
         String iconName;
 
@@ -129,9 +129,9 @@ public class RouteMapFragment extends Fragment implements MvpRouteMap.View, OnMa
 
         originMarker.setTag("origin");
 
-        if (addresses != null) {
+        if (addressList != null) {
 
-            for (FormattedAddress address : addresses) {
+            for (FormattedAddress address : addressList) {
 
                 String formattedAddress = address.getFormattedAddress();
                 double lat = address.getLat();

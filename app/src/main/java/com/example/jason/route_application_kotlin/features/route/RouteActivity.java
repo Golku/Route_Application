@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.jason.route_application_kotlin.R;
+import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDrive;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveRequest;
 import com.example.jason.route_application_kotlin.data.pojos.api.UnOrganizedRoute;
@@ -23,6 +24,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.support.DaggerAppCompatActivity;
+import java.util.List;
 
 public class RouteActivity extends DaggerAppCompatActivity implements
         MvpRoute.View,
@@ -80,8 +82,8 @@ public class RouteActivity extends DaggerAppCompatActivity implements
     }
 
     @Override
-    public void delegateUnorganizedRoute(UnOrganizedRoute unOrganizedRoute) {
-        EventBus.getDefault().post(unOrganizedRoute);
+    public void delegateUnorganizedRoute(List<FormattedAddress> addressList) {
+        EventBus.getDefault().post(addressList);
     }
 
     @Override

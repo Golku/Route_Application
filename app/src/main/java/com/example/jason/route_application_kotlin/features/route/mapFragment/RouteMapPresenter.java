@@ -6,6 +6,7 @@ import com.example.jason.route_application_kotlin.data.pojos.api.UnOrganizedRout
 
 import com.google.android.gms.maps.model.Marker;
 
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,8 +31,8 @@ public class RouteMapPresenter implements MvpRouteMap.Presenter {
     }
 
     @Override
-    public void setMarkers(UnOrganizedRoute unOrganizedRoute) {
-        view.addMarkersToMap(unOrganizedRoute.getValidAddressesList());
+    public void setMarkers(List<FormattedAddress> addressList) {
+        view.addMarkersToMap(addressList);
     }
 
     @Override

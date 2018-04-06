@@ -26,7 +26,7 @@ public interface MvpRouteMap {
 
     interface Presenter{
 
-        void setMarkers(UnOrganizedRoute unOrganizedRoute);
+        void setMarkers(List<FormattedAddress> addressList);
 
         void processMarker(Marker marker);
 

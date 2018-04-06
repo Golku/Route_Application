@@ -46,7 +46,7 @@ public class RoutePresenter implements
     @Override
     public void onMapReady() {
         if(unOrganizedRoute != null) {
-            view.delegateUnorganizedRoute(unOrganizedRoute);
+            view.delegateUnorganizedRoute(unOrganizedRoute.getValidAddressesList());
         }
     }
 

@@ -1,9 +1,12 @@
 package com.example.jason.route_application_kotlin.features.route;
 
 import com.example.jason.route_application_kotlin.data.api.ApiCallback;
+import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDrive;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveRequest;
 import com.example.jason.route_application_kotlin.data.pojos.api.UnOrganizedRoute;
+
+import java.util.List;
 
 /**
  * Created by Jason on 07-Feb-18.
@@ -17,7 +20,7 @@ public interface MvpRoute {
 
         void updateAddressTracker(int privateAddress, int businessAddress);
 
-        void delegateUnorganizedRoute(UnOrganizedRoute unOrganizedRoute);
+        void delegateUnorganizedRoute(List<FormattedAddress> addressList);
 
         void addAddressToRouteList(SingleDrive singleDrive);
 
