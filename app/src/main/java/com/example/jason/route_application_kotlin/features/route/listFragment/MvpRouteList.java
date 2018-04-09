@@ -1,5 +1,6 @@
 package com.example.jason.route_application_kotlin.features.route.listFragment;
 
+import com.example.jason.route_application_kotlin.data.pojos.RouteListFragmentDelegation;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDrive;
 
 import java.util.List;
@@ -14,7 +15,13 @@ public interface MvpRouteList {
 
         void setupAdapter(List<SingleDrive> routeList);
 
-        void addDriveToList(int position);
+        void addAddress(int position);
+
+        void removeAddress(int position);
+
+        void removeMultipleAddress();
+
+        void showToast(String message);
 
     }
 
@@ -22,7 +29,7 @@ public interface MvpRouteList {
 
         void setupFragment();
 
-        void singleDriveReceive(SingleDrive singleDrive);
+        void onDelegation(RouteListFragmentDelegation delegation);
 
     }
 

@@ -3,13 +3,17 @@ package com.example.jason.route_application_kotlin.features.route;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.jason.route_application_kotlin.R;
 import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
+import com.example.jason.route_application_kotlin.data.pojos.RouteListFragmentDelegation;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDrive;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveRequest;
 import com.example.jason.route_application_kotlin.data.pojos.api.UnOrganizedRoute;
@@ -47,6 +51,8 @@ public class RouteActivity extends DaggerAppCompatActivity implements
     ViewPager viewPager;
     @BindView(R.id.tabs)
     TabLayout tabLayout;
+    @BindView(R.id.loadingScreen)
+    ConstraintLayout loadingScreen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,10 +63,11 @@ public class RouteActivity extends DaggerAppCompatActivity implements
     }
 
     private void init(){
-        setupFragments();
+        loadingScreen.bringToFront();
         String routeCode = getIntent().getStringExtra("routeCode");
         presenter.setRouteCode(routeCode);
         presenter.getRouteFromApi();
+        setupFragments();
     }
 
     public void setupFragments() {
@@ -79,10 +86,11 @@ public class RouteActivity extends DaggerAppCompatActivity implements
     @Override
     public void mapReady() {
         presenter.onMapReady();
+        loadingScreen.setVisibility(View.GONE);
     }
 
     @Override
-    public void delegateUnorganizedRoute(List<FormattedAddress> addressList) {
+    public void delegateAddressList(List<FormattedAddress> addressList) {
         EventBus.getDefault().post(addressList);
     }
 
@@ -92,13 +100,28 @@ public class RouteActivity extends DaggerAppCompatActivity implements
     }
 
     @Override
-    public void removeAddressFromRouteList() {
-//        EventBus.getDefault().post();
+    public void delegateDriveInformation(RouteListFragmentDelegation delegation) {
+        EventBus.getDefault().post(delegation);
     }
 
     @Override
-    public void addAddressToRouteList(SingleDrive singleDrive) {
-        EventBus.getDefault().post(singleDrive);
+    public void onMarkerRemoved(String destination) {
+        presenter.onMarkerRemoved(destination);
+    }
+
+    @Override
+    public void delegateDestination(RouteListFragmentDelegation delegation) {
+        EventBus.getDefault().post(delegation);
+    }
+
+    @Override
+    public void onRemoveMultipleMarkers(String destination) {
+        presenter.onRemoveMultipleMarkers(destination);
+    }
+
+    @Override
+    public void delegateMultipleDestination(RouteListFragmentDelegation delegation) {
+        EventBus.getDefault().post(delegation);
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.example.jason.route_application_kotlin.features.route;
 
 import com.example.jason.route_application_kotlin.data.api.ApiCallback;
 import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
+import com.example.jason.route_application_kotlin.data.pojos.RouteListFragmentDelegation;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDrive;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveRequest;
 import com.example.jason.route_application_kotlin.data.pojos.api.UnOrganizedRoute;
@@ -20,9 +21,13 @@ public interface MvpRoute {
 
         void updateAddressTracker(int privateAddress, int businessAddress);
 
-        void delegateUnorganizedRoute(List<FormattedAddress> addressList);
+        void delegateAddressList(List<FormattedAddress> addressList);
 
-        void addAddressToRouteList(SingleDrive singleDrive);
+        void delegateDriveInformation(RouteListFragmentDelegation delegation);
+
+        void delegateDestination(RouteListFragmentDelegation delegation);
+
+        void delegateMultipleDestination(RouteListFragmentDelegation delegation);
 
         void showAddressDetails(String address);
 
@@ -43,10 +48,13 @@ public interface MvpRoute {
 
         void getDriveInformation(SingleDriveRequest request);
 
+        void onMarkerRemoved(String destination);
+
+        void onRemoveMultipleMarkers(String destination);
+
         void onListItemClick(String address);
 
         void onGoButtonClick(String address);
-
     }
 
     interface Interactor{

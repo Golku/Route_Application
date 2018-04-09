@@ -71,7 +71,7 @@ public class RouteStatePresenter implements MvpRouteState.Presenter, ApiCallback
     }
 
     private void onInQueue() {
-        view.updateRouteStateTextView("RoutePresenter is in queue...");
+        view.updateRouteStateTextView("Route is in queue...");
         requestTimer("Still in queue after 6 fetch attempts");
     }
 

@@ -1,6 +1,7 @@
 package com.example.jason.route_application_kotlin.features.route.listFragment;
 
 import com.example.jason.route_application_kotlin.R;
+import com.example.jason.route_application_kotlin.data.pojos.RouteListFragmentDelegation;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDrive;
 import com.example.jason.route_application_kotlin.features.route.RouteActivity;
 
@@ -17,8 +18,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -97,13 +97,25 @@ public class RouteListFragment extends Fragment implements RouteAdapter.RouteLis
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEvent(SingleDrive singleDrive){
-        presenter.singleDriveReceive(singleDrive);
+    public void delegation(RouteListFragmentDelegation delegation){
+        presenter.onDelegation(delegation);
     }
 
     @Override
-    public void addDriveToList(int position) {
+    public void addAddress(int position) {
         adapter.notifyItemInserted(position);
+        recyclerView.smoothScrollToPosition(position);
+    }
+
+    @Override
+    public void removeAddress(int position) {
+        adapter.notifyItemRemoved(position);
+        recyclerView.smoothScrollToPosition(position-1);
+    }
+
+    @Override
+    public void removeMultipleAddress() {
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -114,5 +126,10 @@ public class RouteListFragment extends Fragment implements RouteAdapter.RouteLis
     @Override
     public void onAdapterGoButtonClick(String address) {
         routeActivityCallback.onGoButtonClick(address);
+    }
+
+    @Override
+    public void showToast(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
 }

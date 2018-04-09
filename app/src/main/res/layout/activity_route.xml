@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     tools:context="com.example.jason.route_application_kotlin.features.route.RouteActivity">
 
+    <include android:id="@+id/loadingScreen" layout="@layout/loading_screen"/>
+
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
@@ -67,7 +69,8 @@
             android:text="current size"
             android:textColor="@color/colorPrimaryDark"
             app:layout_constraintStart_toEndOf="@+id/textView1"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginLeft="8dp"/>
 
         <TextView
             android:id="@+id/businessCurrentSizeTv"
@@ -78,7 +81,8 @@
             android:text="current size"
             android:textColor="@color/colorPrimaryDark"
             app:layout_constraintStart_toEndOf="@+id/textView2"
-            app:layout_constraintTop_toBottomOf="@+id/privateCurrentSizeTv" />
+            app:layout_constraintTop_toBottomOf="@+id/privateCurrentSizeTv"
+            android:layout_marginLeft="8dp"/>
 
         <TextView
             android:id="@+id/estimatedRouteCompletedTimeTextView"
@@ -98,9 +102,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
+            android:textColor="@color/colorPrimaryDark"
             android:text="/ max size"
             app:layout_constraintStart_toEndOf="@+id/privateCurrentSizeTv"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginLeft="8dp"/>
 
         <TextView
             android:id="@+id/businessMaxSizeTv"
@@ -109,8 +115,10 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="/ max size"
+            android:textColor="@color/colorPrimaryDark"
             app:layout_constraintStart_toEndOf="@+id/businessCurrentSizeTv"
-            app:layout_constraintTop_toBottomOf="@+id/privateMaxSizeTv" />
+            app:layout_constraintTop_toBottomOf="@+id/privateMaxSizeTv"
+            android:layout_marginLeft="8dp"/>
 
     </android.support.constraint.ConstraintLayout>
 

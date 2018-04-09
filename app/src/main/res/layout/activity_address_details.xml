@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootLayout"
@@ -21,12 +22,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
             android:contentDescription="@string/googleSearchBtn.activity_address_details"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_google_search3"
-            android:layout_marginRight="16dp" />
+            app:srcCompat="@drawable/ic_google_search3"/>
 
         <TextView
             android:id="@+id/streetTextView"
@@ -42,7 +43,7 @@
             android:textColor="@color/colorPrimaryDark"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/addressTypeImageView"
-            app:layout_constraintTop_toTopOf="@+id/subLayout" />
+            app:layout_constraintTop_toTopOf="@+id/subLayout"/>
 
         <TextView
             android:id="@+id/postcodeTextView"
@@ -56,7 +57,7 @@
             android:textColor="@color/colorPrimaryDark"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/addressTypeImageView"
-            app:layout_constraintTop_toBottomOf="@+id/streetTextView" />
+            app:layout_constraintTop_toBottomOf="@+id/streetTextView"/>
 
         <TextView
             android:id="@+id/cityTextView"
@@ -70,32 +71,22 @@
             android:textColor="@color/colorPrimaryDark"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/postcodeTextView"
-            app:layout_constraintTop_toBottomOf="@+id/streetTextView" />
+            app:layout_constraintTop_toBottomOf="@+id/streetTextView"/>
 
         <ImageView
             android:id="@+id/addressTypeImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
             android:contentDescription="@string/addressType.activity_address_details"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_private_address2"
-            android:layout_marginLeft="8dp" />
+            app:srcCompat="@drawable/ic_private_address2"/>
 
     </android.support.constraint.ConstraintLayout>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/addressCommentsList"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/subLayout" />
 
     <TextView
         android:id="@+id/messageToUserTextView"
@@ -106,7 +97,7 @@
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/progressBar" />
+        app:layout_constraintTop_toBottomOf="@+id/progressBar"/>
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -121,7 +112,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/subLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/subLayout"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/addCommentBtn"
@@ -129,13 +120,24 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
         android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
         android:clickable="true"
         android:focusable="true"
         app:backgroundTint="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/ic_plus2"
-        android:layout_marginRight="32dp" />
+        app:srcCompat="@drawable/ic_plus2"/>
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/addressCommentsList"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/subLayout"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintVertical_bias="0.0"/>
 
 </android.support.constraint.ConstraintLayout>

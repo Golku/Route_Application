@@ -1,9 +1,9 @@
 package com.example.jason.route_application_kotlin.features.route;
 
 import com.example.jason.route_application_kotlin.data.api.ApiCallback;
+import com.example.jason.route_application_kotlin.data.pojos.RouteListFragmentDelegation;
 import com.example.jason.route_application_kotlin.data.pojos.api.OrganizedRoute;
 import com.example.jason.route_application_kotlin.data.pojos.api.RouteResponse;
-import com.example.jason.route_application_kotlin.data.pojos.api.SingleDrive;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveRequest;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveResponse;
 import com.example.jason.route_application_kotlin.data.pojos.api.UnOrganizedRoute;
@@ -46,7 +46,7 @@ public class RoutePresenter implements
     @Override
     public void onMapReady() {
         if(unOrganizedRoute != null) {
-            view.delegateUnorganizedRoute(unOrganizedRoute.getValidAddressesList());
+            view.delegateAddressList(unOrganizedRoute.getValidAddressesList());
         }
     }
 
@@ -58,6 +58,22 @@ public class RoutePresenter implements
     @Override
     public void getDriveInformation(SingleDriveRequest request) {
         interactor.getDriveInformation(this, request);
+    }
+
+    @Override
+    public void onMarkerRemoved(String destination) {
+        RouteListFragmentDelegation delegation = new RouteListFragmentDelegation();
+        delegation.setOperation("remove");
+        delegation.setDestination(destination);
+        view.delegateDestination(delegation);
+    }
+
+    @Override
+    public void onRemoveMultipleMarkers(String destination) {
+        RouteListFragmentDelegation delegation = new RouteListFragmentDelegation();
+        delegation.setOperation("removeMultiple");
+        delegation.setDestination(destination);
+        view.delegateMultipleDestination(delegation);
     }
 
     @Override
@@ -117,9 +133,11 @@ public class RoutePresenter implements
 
     @Override
     public void onSingleDriveResponse(SingleDriveResponse response) {
-        SingleDrive singleDrive = response.getSingleDrive();
-        if(singleDrive != null){
-            view.addAddressToRouteList(singleDrive);
+        if(response.getSingleDrive() != null){
+            RouteListFragmentDelegation delegation = new RouteListFragmentDelegation();
+            delegation.setOperation("add");
+            delegation.setSingleDrive(response.getSingleDrive());
+            view.delegateDriveInformation(delegation);
         }
     }
 
