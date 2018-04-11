@@ -8,7 +8,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.jason.route_application_kotlin.R;
+import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
+import com.example.jason.route_application_kotlin.data.pojos.api.OrganizedRoute;
 import com.example.jason.route_application_kotlin.data.pojos.api.OutGoingRoute;
+import com.example.jason.route_application_kotlin.data.pojos.api.SingleDrive;
 import com.example.jason.route_application_kotlin.features.correctInvalidAddresses.CorrectInvalidAddressesActivity;
 import com.example.jason.route_application_kotlin.features.route.RouteActivity;
 
@@ -19,6 +22,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.support.DaggerAppCompatActivity;
+import java.util.List;
 
 public class RouteStateActivity extends DaggerAppCompatActivity implements MvpRouteState.View {
 
@@ -104,9 +108,21 @@ public class RouteStateActivity extends DaggerAppCompatActivity implements MvpRo
     }
 
     @Override
-    public void startRouteActivity(String routeCode) {
+    public void startRouteUnorganized(String routeCode, ArrayList<FormattedAddress> addressList) {
         Intent intent = new Intent(this, RouteActivity.class);
         intent.putExtra("routeCode", routeCode);
+        intent.putExtra("organized", false);
+        intent.putParcelableArrayListExtra("addressList", addressList);
+        startActivity(intent);
+        closeActivity();
+    }
+
+    @Override
+    public void startRouteOrganized(String routeCode, ArrayList<SingleDrive> routeList) {
+        Intent intent = new Intent(this, RouteActivity.class);
+        intent.putExtra("routeCode", routeCode);
+        intent.putExtra("organized", true);
+        intent.putParcelableArrayListExtra("routeList", routeList);
         startActivity(intent);
         closeActivity();
     }

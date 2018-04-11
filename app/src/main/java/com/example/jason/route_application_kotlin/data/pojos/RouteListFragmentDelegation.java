@@ -1,12 +1,9 @@
 package com.example.jason.route_application_kotlin.data.pojos;
 
-import com.example.jason.route_application_kotlin.data.pojos.api.SingleDrive;
-
 public class RouteListFragmentDelegation {
 
     private String operation;
-    private String destination;
-    private SingleDrive singleDrive;
+    private int position;
 
     public String getOperation() {
         return operation;
@@ -16,19 +13,11 @@ public class RouteListFragmentDelegation {
         this.operation = operation;
     }
 
-    public String getDestination() {
-        return destination;
+    public int getPosition() {
+        return position;
     }
 
-    public void setDestination(String destination) {
-        this.destination = destination;
-    }
-
-    public SingleDrive getSingleDrive() {
-        return singleDrive;
-    }
-
-    public void setSingleDrive(SingleDrive singleDrive) {
-        this.singleDrive = singleDrive;
+    public void setPosition(int position) {
+        this.position = position;
     }
 }

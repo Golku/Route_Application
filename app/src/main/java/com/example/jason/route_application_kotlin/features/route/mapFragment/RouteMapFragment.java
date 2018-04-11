@@ -7,6 +7,7 @@ import com.directions.route.Routing;
 import com.directions.route.RoutingListener;
 import com.example.jason.route_application_kotlin.R;
 import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
+import com.example.jason.route_application_kotlin.data.pojos.RouteInfoHolder;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveRequest;
 import com.example.jason.route_application_kotlin.features.route.RouteActivity;
 
@@ -28,16 +29,14 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,22 +51,23 @@ public class RouteMapFragment extends Fragment implements
         GoogleMap.OnMarkerClickListener,
         RoutingListener {
 
-    private GoogleMap googleMap;
+    private final String debugTag = "debugTag";
 
     private MvpRouteMap.Presenter presenter;
 
-    private RouteActivity routeActivityCallback;
+    private GoogleMap googleMap;
 
+    private RouteActivity routeActivityCallback;
 
     private List<Polyline> polylines;
 
-    private static final int[] COLORS = new int[]{R.color.primary_dark_material_light};
+    private static final int[] COLORS = new int[]{R.color.colorAccent};
 
     public interface RouteMapListener {
-        void mapReady();
+
         void getDriveInformation(SingleDriveRequest request);
+
         void onMarkerRemoved(String destination);
-        void onRemoveMultipleMarkers(String destination);
     }
 
     @Override
@@ -84,8 +84,11 @@ public class RouteMapFragment extends Fragment implements
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.presenter = new RouteMapPresenter(this);
+        presenter = new RouteMapPresenter(this);
         polylines = new ArrayList<>();
+
+        RouteInfoHolder routeInfoHolder = getArguments().getParcelable("routeInfoHolder");
+        presenter.setAddressList(routeInfoHolder.getAddressList());
     }
 
     @Nullable
@@ -108,23 +111,6 @@ public class RouteMapFragment extends Fragment implements
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEvent(List<FormattedAddress> addressList) {
-        presenter.setMarkers(addressList);
-    }
-
-    @Override
     public void onMapReady(GoogleMap googleMap) {
         MapsInitializer.initialize(getContext());
 
@@ -132,7 +118,7 @@ public class RouteMapFragment extends Fragment implements
         this.googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         this.googleMap.setOnMarkerClickListener(this);
 
-        routeActivityCallback.mapReady();
+        presenter.setMarkers();
     }
 
     @Override
@@ -181,7 +167,8 @@ public class RouteMapFragment extends Fragment implements
     @Override
     public boolean onMarkerClick(Marker marker) {
         presenter.processMarker(marker);
-        return false;
+        marker.showInfoWindow();
+        return true;
     }
 
     @Override
@@ -207,9 +194,9 @@ public class RouteMapFragment extends Fragment implements
 
     @Override
     public void onRoutingFailure(RouteException e) {
-        if(e != null) {
+        if (e != null) {
             showToast(e.getMessage());
-        }else {
+        } else {
             showToast("Routing failed");
         }
     }
@@ -221,7 +208,7 @@ public class RouteMapFragment extends Fragment implements
 
     @Override
     public void onRoutingSuccess(ArrayList<Route> route, int shortestRouteIndex) {
-        if(polylines.size()>0) {
+        if (polylines.size() > 0) {
             for (Polyline poly : polylines) {
                 poly.remove();
             }
@@ -229,7 +216,7 @@ public class RouteMapFragment extends Fragment implements
 
         polylines = new ArrayList<>();
         //add route(s) to the map.
-        for (int i = 0; i <route.size(); i++) {
+        for (int i = 0; i < route.size(); i++) {
 
             //In case of more than 5 alternative routes
             int colorIndex = i % COLORS.length;
@@ -251,13 +238,8 @@ public class RouteMapFragment extends Fragment implements
     }
 
     @Override
-    public void showSnackBar(String destination) {
-        routeActivityCallback.onRemoveMultipleMarkers(destination);
-    }
-
-    @Override
     public void removePolyLine() {
-        for(Polyline polyline : polylines){
+        for (Polyline polyline : polylines) {
             polyline.remove();
         }
         polylines.clear();

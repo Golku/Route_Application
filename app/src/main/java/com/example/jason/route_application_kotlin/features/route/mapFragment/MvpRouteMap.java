@@ -27,18 +27,17 @@ public interface MvpRouteMap {
 
         void removePolyLine();
 
-        void showSnackBar(String destination);
-
         void showToast(String message);
 
     }
 
     interface Presenter{
 
-        void setMarkers(List<FormattedAddress> addressList);
+        void setAddressList(List<FormattedAddress> addressList);
+
+        void setMarkers();
 
         void processMarker(Marker marker);
-
     }
 
 }

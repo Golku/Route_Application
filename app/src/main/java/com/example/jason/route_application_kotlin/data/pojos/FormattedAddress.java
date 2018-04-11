@@ -7,7 +7,7 @@ import android.os.Parcelable;
  * Created by Jason on 07-Feb-18.
  */
 
-public class FormattedAddress implements Parcelable{
+public class FormattedAddress implements Parcelable {
 
     private String rawAddress;
     private String formattedAddress;
@@ -19,8 +19,7 @@ public class FormattedAddress implements Parcelable{
     private double lng;
     private boolean isBusiness;
 
-    public FormattedAddress(){
-
+    public FormattedAddress() {
     }
 
     protected FormattedAddress(Parcel in) {
@@ -36,21 +35,21 @@ public class FormattedAddress implements Parcelable{
     }
 
     @Override
-    public int describeContents() {
-        return 0;
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(rawAddress);
+        dest.writeString(formattedAddress);
+        dest.writeString(street);
+        dest.writeString(postCode);
+        dest.writeString(city);
+        dest.writeString(country);
+        dest.writeDouble(lat);
+        dest.writeDouble(lng);
+        dest.writeByte((byte) (isBusiness ? 1 : 0));
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(rawAddress);
-        parcel.writeString(formattedAddress);
-        parcel.writeString(street);
-        parcel.writeString(postCode);
-        parcel.writeString(city);
-        parcel.writeString(country);
-        parcel.writeDouble(lat);
-        parcel.writeDouble(lng);
-        parcel.writeByte((byte) (isBusiness ? 1 : 0));
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<FormattedAddress> CREATOR = new Creator<FormattedAddress>() {

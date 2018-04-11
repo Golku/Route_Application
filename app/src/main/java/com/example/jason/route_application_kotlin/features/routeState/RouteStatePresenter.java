@@ -1,18 +1,25 @@
 package com.example.jason.route_application_kotlin.features.routeState;
 
 import android.os.Handler;
+import android.util.Log;
 
 import com.example.jason.route_application_kotlin.data.api.ApiCallback;
+import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
 import com.example.jason.route_application_kotlin.data.pojos.api.OutGoingRoute;
 import com.example.jason.route_application_kotlin.data.pojos.api.RouteResponse;
+import com.example.jason.route_application_kotlin.data.pojos.api.SingleDrive;
 
 import javax.inject.Inject;
+
+import java.util.ArrayList;
 
 /**
  * Created by Jason on 3/15/2018.
  */
 
 public class RouteStatePresenter implements MvpRouteState.Presenter, ApiCallback.RouteResponseCallback {
+
+    private final String debugTag = "debugTag";
 
     private MvpRouteState.View view;
     private MvpRouteState.Interactor interactor;
@@ -85,8 +92,8 @@ public class RouteStatePresenter implements MvpRouteState.Presenter, ApiCallback
         view.startCorrectInvalidAddressesActivity(routeCode);
     }
 
-    private void onReadyToBeBuild() {
-        view.startRouteActivity(routeCode);
+    private void onReadyToBeBuild(ArrayList<FormattedAddress> addressList) {
+        view.startRouteUnorganized(routeCode, addressList);
     }
 
     private void onOrganizingRoute() {
@@ -99,8 +106,8 @@ public class RouteStatePresenter implements MvpRouteState.Presenter, ApiCallback
         view.closeActivity();
     }
 
-    private void onRouteOrganized() {
-        view.startRouteActivity(routeCode);
+    private void onRouteOrganized(ArrayList<SingleDrive> routeList) {
+        view.startRouteOrganized(routeCode, routeList);
     }
 
 //    if the server has an error and returns a html page the application crashes. FIX THIS!!
@@ -119,13 +126,13 @@ public class RouteStatePresenter implements MvpRouteState.Presenter, ApiCallback
                 break;
             case 4 : onHasInvalidAddresses();
                 break;
-            case 5 : onReadyToBeBuild();
+            case 5 : onReadyToBeBuild(response.getAddressList());
                 break;
             case 6 : onOrganizingRoute();
                 break;
             case 7 : onOrganizingError();
                 break;
-            case 8 : onRouteOrganized();
+            case 8 : onRouteOrganized(response.getRouteList());
                 break;
             default: view.closeActivity();//Make a function where you handle a non existent state
         }

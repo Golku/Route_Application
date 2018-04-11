@@ -2,10 +2,10 @@ package com.example.jason.route_application_kotlin.features.route;
 
 import com.example.jason.route_application_kotlin.data.api.ApiCallback;
 import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
+import com.example.jason.route_application_kotlin.data.pojos.RouteInfoHolder;
 import com.example.jason.route_application_kotlin.data.pojos.RouteListFragmentDelegation;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDrive;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveRequest;
-import com.example.jason.route_application_kotlin.data.pojos.api.UnOrganizedRoute;
 
 import java.util.List;
 
@@ -17,17 +17,11 @@ public interface MvpRoute {
 
     interface View{
 
-        void setupAddressTracker(int privateAddress, int businessAddress);
+        void setupFragments(RouteInfoHolder routeInfoHolder);
 
-        void updateAddressTracker(int privateAddress, int businessAddress);
+        void updateRouteEndTime(String endTime);
 
-        void delegateAddressList(List<FormattedAddress> addressList);
-
-        void delegateDriveInformation(RouteListFragmentDelegation delegation);
-
-        void delegateDestination(RouteListFragmentDelegation delegation);
-
-        void delegateMultipleDestination(RouteListFragmentDelegation delegation);
+        void delegatePosition(RouteListFragmentDelegation delegation);
 
         void showAddressDetails(String address);
 
@@ -42,15 +36,13 @@ public interface MvpRoute {
 
         void setRouteCode(String routeCode);
 
-        void onMapReady();
+        void unorganizedRoute(List<FormattedAddress> addressList);
 
-        void getRouteFromApi();
+        void organizedRoute(List<SingleDrive> routeList);
 
         void getDriveInformation(SingleDriveRequest request);
 
         void onMarkerRemoved(String destination);
-
-        void onRemoveMultipleMarkers(String destination);
 
         void onListItemClick(String address);
 

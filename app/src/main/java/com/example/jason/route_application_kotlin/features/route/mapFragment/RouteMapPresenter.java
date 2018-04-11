@@ -25,6 +25,8 @@ public class RouteMapPresenter implements MvpRouteMap.Presenter {
 
     private Marker previousSelectedMarker;
 
+    private List<FormattedAddress> addressList;
+
     RouteMapPresenter(MvpRouteMap.View view) {
         this.view = view;
         this.routeOrder = new ArrayList<>();
@@ -32,7 +34,12 @@ public class RouteMapPresenter implements MvpRouteMap.Presenter {
     }
 
     @Override
-    public void setMarkers(List<FormattedAddress> addressList) {
+    public void setAddressList(List<FormattedAddress> addressList) {
+        this.addressList = addressList;
+    }
+
+    @Override
+    public void setMarkers() {
         view.addMarkersToMap(addressList);
     }
 

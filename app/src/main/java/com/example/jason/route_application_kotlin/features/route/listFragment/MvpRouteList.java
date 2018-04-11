@@ -15,11 +15,9 @@ public interface MvpRouteList {
 
         void setupAdapter(List<SingleDrive> routeList);
 
-        void addAddress(int position);
+        void addDriveToList(int position);
 
-        void removeAddress(int position);
-
-        void removeMultipleAddress();
+        void removeDriveFromList(int position);
 
         void showToast(String message);
 
@@ -27,7 +25,7 @@ public interface MvpRouteList {
 
     interface Presenter{
 
-        void setupFragment();
+        void initializeAdapter(List<SingleDrive> routeList);
 
         void onDelegation(RouteListFragmentDelegation delegation);
 

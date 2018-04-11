@@ -1,6 +1,7 @@
 package com.example.jason.route_application_kotlin.features.route.listFragment;
 
 import com.example.jason.route_application_kotlin.R;
+import com.example.jason.route_application_kotlin.data.pojos.RouteInfoHolder;
 import com.example.jason.route_application_kotlin.data.pojos.RouteListFragmentDelegation;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDrive;
 import com.example.jason.route_application_kotlin.features.route.RouteActivity;
@@ -28,7 +29,7 @@ import java.util.List;
 
 public class RouteListFragment extends Fragment implements RouteAdapter.RouteListFunctions, MvpRouteList.View{
 
-    private final String logTag = "logDebugTag";
+    private final String debugTag = "debugTag";
 
     private MvpRouteList.Presenter presenter;
 
@@ -64,16 +65,16 @@ public class RouteListFragment extends Fragment implements RouteAdapter.RouteLis
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_route_list, container, false);
-
         this.recyclerView = view.findViewById(R.id.routeRecView);
-
         return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        presenter.setupFragment();
+
+        RouteInfoHolder routeInfoHolder = getArguments().getParcelable("routeInfoHolder");
+        presenter.initializeAdapter(routeInfoHolder.getRouteList());
     }
 
     @Override
@@ -102,20 +103,15 @@ public class RouteListFragment extends Fragment implements RouteAdapter.RouteLis
     }
 
     @Override
-    public void addAddress(int position) {
+    public void addDriveToList(int position) {
         adapter.notifyItemInserted(position);
         recyclerView.smoothScrollToPosition(position);
     }
 
     @Override
-    public void removeAddress(int position) {
+    public void removeDriveFromList(int position) {
         adapter.notifyItemRemoved(position);
         recyclerView.smoothScrollToPosition(position-1);
-    }
-
-    @Override
-    public void removeMultipleAddress() {
-        adapter.notifyDataSetChanged();
     }
 
     @Override

@@ -7,16 +7,15 @@ import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.view.View;
-import android.widget.ProgressBar;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.jason.route_application_kotlin.R;
 import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
+import com.example.jason.route_application_kotlin.data.pojos.RouteInfoHolder;
 import com.example.jason.route_application_kotlin.data.pojos.RouteListFragmentDelegation;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDrive;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveRequest;
-import com.example.jason.route_application_kotlin.data.pojos.api.UnOrganizedRoute;
 import com.example.jason.route_application_kotlin.features.addressDetails.AddressDetailsActivity;
 import com.example.jason.route_application_kotlin.features.route.listFragment.RouteListFragment;
 import com.example.jason.route_application_kotlin.features.route.mapFragment.RouteMapFragment;
@@ -28,6 +27,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.support.DaggerAppCompatActivity;
+import java.util.ArrayList;
 import java.util.List;
 
 public class RouteActivity extends DaggerAppCompatActivity implements
@@ -35,7 +35,7 @@ public class RouteActivity extends DaggerAppCompatActivity implements
         RouteListFragment.RouteListListener,
         RouteMapFragment.RouteMapListener{
 
-    private final String logTag = "logDebugTag";
+    private final String debugTag = "debugTag";
 
     @Inject MvpRoute.Presenter presenter;
 
@@ -51,8 +51,8 @@ public class RouteActivity extends DaggerAppCompatActivity implements
     ViewPager viewPager;
     @BindView(R.id.tabs)
     TabLayout tabLayout;
-    @BindView(R.id.loadingScreen)
-    ConstraintLayout loadingScreen;
+    @BindView(R.id.routeEndTimeTv)
+    TextView routeEndTimeTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,16 +63,30 @@ public class RouteActivity extends DaggerAppCompatActivity implements
     }
 
     private void init(){
-        loadingScreen.bringToFront();
         String routeCode = getIntent().getStringExtra("routeCode");
+        boolean organized = getIntent().getBooleanExtra("organized", false);
+
         presenter.setRouteCode(routeCode);
-        presenter.getRouteFromApi();
-        setupFragments();
+
+        if(organized){
+            List<SingleDrive> routeList = getIntent().getParcelableArrayListExtra("routeList");
+            presenter.organizedRoute(routeList);
+        }else{
+            List<FormattedAddress> addressList = getIntent().getParcelableArrayListExtra("addressList");
+            presenter.unorganizedRoute(addressList);
+        }
     }
 
-    public void setupFragments() {
+    @Override
+    public void setupFragments(RouteInfoHolder routeInfoHolder) {
+        Bundle bundle = new Bundle();
         Fragment routeMapFragment = new RouteMapFragment();
         Fragment routeListFragment = new RouteListFragment();
+
+        bundle.putParcelable("routeInfoHolder", routeInfoHolder);
+
+        routeMapFragment.setArguments(bundle);
+        routeListFragment.setArguments(bundle);
 
         RouteSectionPagerAdapter routeSectionPagerAdapter = new RouteSectionPagerAdapter(getSupportFragmentManager());
         routeSectionPagerAdapter.addFragment("Map", routeMapFragment);
@@ -84,24 +98,8 @@ public class RouteActivity extends DaggerAppCompatActivity implements
     }
 
     @Override
-    public void mapReady() {
-        presenter.onMapReady();
-        loadingScreen.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void delegateAddressList(List<FormattedAddress> addressList) {
-        EventBus.getDefault().post(addressList);
-    }
-
-    @Override
     public void getDriveInformation(SingleDriveRequest request) {
         presenter.getDriveInformation(request);
-    }
-
-    @Override
-    public void delegateDriveInformation(RouteListFragmentDelegation delegation) {
-        EventBus.getDefault().post(delegation);
     }
 
     @Override
@@ -110,17 +108,12 @@ public class RouteActivity extends DaggerAppCompatActivity implements
     }
 
     @Override
-    public void delegateDestination(RouteListFragmentDelegation delegation) {
-        EventBus.getDefault().post(delegation);
+    public void updateRouteEndTime(String endTime) {
+        routeEndTimeTv.setText(endTime);
     }
 
     @Override
-    public void onRemoveMultipleMarkers(String destination) {
-        presenter.onRemoveMultipleMarkers(destination);
-    }
-
-    @Override
-    public void delegateMultipleDestination(RouteListFragmentDelegation delegation) {
+    public void delegatePosition(RouteListFragmentDelegation delegation) {
         EventBus.getDefault().post(delegation);
     }
 
@@ -156,17 +149,5 @@ public class RouteActivity extends DaggerAppCompatActivity implements
     @Override
     public void closeActivity() {
         finish();
-    }
-
-    @Override
-    public void setupAddressTracker(int privateAddress, int businessAddress) {
-        privateMaxSizeTv.setText(String.valueOf(privateAddress));
-        businessMaxSizeTv.setText(String.valueOf(businessAddress));
-    }
-
-    @Override
-    public void updateAddressTracker(int privateAddress, int businessAddress) {
-        privateCurrentSizeTv.setText(String.valueOf(privateAddress));
-        businessCurrentSizeTv.setText(String.valueOf(businessAddress));
     }
 }

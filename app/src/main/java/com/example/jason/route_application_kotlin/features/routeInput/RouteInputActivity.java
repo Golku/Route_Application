@@ -226,7 +226,7 @@ public class RouteInputActivity extends DaggerAppCompatActivity implements
     @OnClick(R.id.submitRouteBtn)
     @Override
     public void onSubmitRouteButtonClick() {
-//        startRouteActivity();
+//        startRouteOrganized();
         presenter.submitRouteRoute();
     }
 
