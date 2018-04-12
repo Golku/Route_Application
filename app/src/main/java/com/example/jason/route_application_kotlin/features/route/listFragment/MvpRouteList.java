@@ -19,6 +19,8 @@ public interface MvpRouteList {
 
         void removeDriveFromList(int position);
 
+        void removeMultipleDriveFromList(int position);
+
         void showToast(String message);
 
     }

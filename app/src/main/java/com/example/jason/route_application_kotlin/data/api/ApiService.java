@@ -1,7 +1,7 @@
 package com.example.jason.route_application_kotlin.data.api;
 
 import com.example.jason.route_application_kotlin.data.pojos.api.CorrectedAddresses;
-import com.example.jason.route_application_kotlin.data.pojos.api.OutGoingRoute;
+import com.example.jason.route_application_kotlin.data.pojos.api.RouteRequest;
 import com.example.jason.route_application_kotlin.data.pojos.api.RouteResponse;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveRequest;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveResponse;
@@ -22,7 +22,7 @@ public interface ApiService {
     Call<RouteResponse> getRoute(@Path("routeCode")String routeCode);
 
     @POST("submitroute")
-    Call<RouteResponse> submitRoute(@Body OutGoingRoute outGoingRoute);
+    Call<RouteResponse> submitRoute(@Body RouteRequest routeRequest);
 
     @POST("correctedaddressessubmition")
     Call<RouteResponse> submitCorrectedAddresses(@Body CorrectedAddresses correctedAddresses);

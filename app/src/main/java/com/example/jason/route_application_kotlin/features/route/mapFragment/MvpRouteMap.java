@@ -23,7 +23,11 @@ public interface MvpRouteMap {
 
         void getPolylineToMarker(LatLng start, LatLng end);
 
-        void removeAddress(String destination);
+        void deselectMarker(String destination);
+
+        void deselectMultipleMarker(String destination);
+
+        void showSnackBar(Marker marker);
 
         void removePolyLine();
 
@@ -36,6 +40,8 @@ public interface MvpRouteMap {
         void setAddressList(List<FormattedAddress> addressList);
 
         void setMarkers();
+
+        void multipleMarkersDeselected(Marker marker);
 
         void processMarker(Marker marker);
     }

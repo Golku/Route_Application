@@ -29,14 +29,14 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.Toast;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,13 +61,18 @@ public class RouteMapFragment extends Fragment implements
 
     private List<Polyline> polylines;
 
+    private FrameLayout rootLayout;
+
     private static final int[] COLORS = new int[]{R.color.colorAccent};
 
     public interface RouteMapListener {
 
         void getDriveInformation(SingleDriveRequest request);
 
-        void onMarkerRemoved(String destination);
+        void onDeselectMarker(String destination);
+
+        void onDeselectMultipleMarkers(String destination);
+
     }
 
     @Override
@@ -94,7 +99,9 @@ public class RouteMapFragment extends Fragment implements
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_route_map, container, false);
+        View view = inflater.inflate(R.layout.fragment_route_map, container, false);
+        this.rootLayout = view.findViewById(R.id.root_layout);
+        return view;
     }
 
     @Override
@@ -177,8 +184,25 @@ public class RouteMapFragment extends Fragment implements
     }
 
     @Override
-    public void removeAddress(String destination) {
-        routeActivityCallback.onMarkerRemoved(destination);
+    public void deselectMarker(String destination) {
+        routeActivityCallback.onDeselectMarker(destination);
+    }
+
+    @Override
+    public void deselectMultipleMarker(final String destination) {
+        routeActivityCallback.onDeselectMultipleMarkers(destination);
+    }
+
+    @Override
+    public void showSnackBar(final Marker marker) {
+        Snackbar snackbar = Snackbar.make(rootLayout, "Deselect until here?", Snackbar.LENGTH_LONG);
+        snackbar.setAction("yes", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.multipleMarkersDeselected(marker);
+            }
+        });
+        snackbar.show();
     }
 
     @Override
@@ -195,7 +219,8 @@ public class RouteMapFragment extends Fragment implements
     @Override
     public void onRoutingFailure(RouteException e) {
         if (e != null) {
-            showToast(e.getMessage());
+//            showToast(e.getMessage());
+            showToast("polyline error");
         } else {
             showToast("Routing failed");
         }

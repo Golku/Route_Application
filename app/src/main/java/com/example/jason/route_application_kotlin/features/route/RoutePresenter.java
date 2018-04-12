@@ -1,9 +1,9 @@
 package com.example.jason.route_application_kotlin.features.route;
 
 import com.example.jason.route_application_kotlin.data.api.ApiCallback;
-import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
 import com.example.jason.route_application_kotlin.data.pojos.RouteInfoHolder;
 import com.example.jason.route_application_kotlin.data.pojos.RouteListFragmentDelegation;
+import com.example.jason.route_application_kotlin.data.pojos.api.Route;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDrive;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveRequest;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveResponse;
@@ -27,10 +27,8 @@ public class RoutePresenter implements
     private MvpRoute.View view;
     private MvpRoute.Interactor interactor;
 
-    private String routeCode;
+    private Route route;
     private List<SingleDrive> routeList;
-    private List<FormattedAddress> addressList;
-
 
     private SimpleDateFormat sdf;
     private long deliveryTimeSum;
@@ -44,27 +42,23 @@ public class RoutePresenter implements
     }
 
     @Override
-    public void setRouteCode(String routeCode) {
-        this.routeCode = routeCode;
-    }
+    public void initializeRoute(Route route) {
+        this.route = route;
 
-    @Override
-    public void unorganizedRoute(List<FormattedAddress> addressList) {
-        this.addressList = addressList;
-        this.routeList = new ArrayList<>();
         RouteInfoHolder routeInfoHolder = new RouteInfoHolder();
-        routeInfoHolder.setOrganized(false);
-        routeInfoHolder.setAddressList(this.addressList);
+
+        routeInfoHolder.setAddressList(route.getAddressList());
+
+        if(route.getRouteList() != null && !route.getRouteList().isEmpty()){
+            routeList = route.getRouteList();
+            routeInfoHolder.setOrganized(true);
+        }else{
+            routeList = new ArrayList<>();
+            routeInfoHolder.setOrganized(false);
+        }
+
         routeInfoHolder.setRouteList(routeList);
-        view.setupFragments(routeInfoHolder);
-    }
 
-    @Override
-    public void organizedRoute(List<SingleDrive> routeList) {
-        this.routeList = routeList;
-        RouteInfoHolder routeInfoHolder = new RouteInfoHolder();
-        routeInfoHolder.setOrganized(true);
-        routeInfoHolder.setRouteList(this.routeList);
         view.setupFragments(routeInfoHolder);
     }
 
@@ -86,7 +80,7 @@ public class RoutePresenter implements
     }
 
     @Override
-    public void onMarkerRemoved(String destination) {
+    public void markerDeselected(String destination) {
 
         int position = -1;
 
@@ -104,6 +98,35 @@ public class RoutePresenter implements
 
         RouteListFragmentDelegation delegation = new RouteListFragmentDelegation();
         delegation.setOperation("remove");
+        delegation.setPosition(position);
+
+        view.delegatePosition(delegation);
+    }
+
+    @Override
+    public void multipleMarkersDeselected(String destination) {
+
+        int position = -1;
+        int size = routeList.size();
+
+        for(SingleDrive singleDrive : routeList){
+
+            String driveDestination = singleDrive.getDestinationFormattedAddress().getFormattedAddress();
+
+            if(destination.equals(driveDestination)){
+                position = routeList.indexOf(singleDrive);
+                deliveryTimeSum = singleDrive.getDeliveryTimeInMillis();
+                break;
+            }
+        }
+
+        for(int i = position; i<size; i++){
+            routeList.remove(i);
+        }
+
+
+        RouteListFragmentDelegation delegation = new RouteListFragmentDelegation();
+        delegation.setOperation("multipleRemove");
         delegation.setPosition(position);
 
         view.delegatePosition(delegation);

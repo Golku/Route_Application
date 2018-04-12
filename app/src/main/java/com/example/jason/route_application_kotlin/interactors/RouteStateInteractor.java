@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.example.jason.route_application_kotlin.data.api.ApiCallback;
 import com.example.jason.route_application_kotlin.data.api.ApiService;
-import com.example.jason.route_application_kotlin.data.pojos.api.OutGoingRoute;
+import com.example.jason.route_application_kotlin.data.pojos.api.RouteRequest;
 import com.example.jason.route_application_kotlin.data.pojos.api.RouteResponse;
 import com.example.jason.route_application_kotlin.features.routeState.MvpRouteState;
 
@@ -28,9 +28,9 @@ public class RouteStateInteractor implements MvpRouteState.Interactor{
     }
 
     @Override
-    public void sendRoute(final ApiCallback.RouteResponseCallback callback, OutGoingRoute outGoingRoute) {
+    public void sendRoute(final ApiCallback.RouteResponseCallback callback, RouteRequest routeRequest) {
 
-        Call<RouteResponse> call = apiService.submitRoute(outGoingRoute);
+        Call<RouteResponse> call = apiService.submitRoute(routeRequest);
 
         call.enqueue(new Callback<RouteResponse>() {
             @Override

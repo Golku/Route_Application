@@ -8,10 +8,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.jason.route_application_kotlin.R;
-import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
-import com.example.jason.route_application_kotlin.data.pojos.api.OrganizedRoute;
-import com.example.jason.route_application_kotlin.data.pojos.api.OutGoingRoute;
-import com.example.jason.route_application_kotlin.data.pojos.api.SingleDrive;
+import com.example.jason.route_application_kotlin.data.pojos.api.Route;
+import com.example.jason.route_application_kotlin.data.pojos.api.RouteRequest;
 import com.example.jason.route_application_kotlin.features.correctInvalidAddresses.CorrectInvalidAddressesActivity;
 import com.example.jason.route_application_kotlin.features.route.RouteActivity;
 
@@ -22,7 +20,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.support.DaggerAppCompatActivity;
-import java.util.List;
 
 public class RouteStateActivity extends DaggerAppCompatActivity implements MvpRouteState.View {
 
@@ -81,13 +78,13 @@ public class RouteStateActivity extends DaggerAppCompatActivity implements MvpRo
             String origin = getIntent().getStringExtra("origin");
             ArrayList<String> inputtedAddressesList =  getIntent().getStringArrayListExtra("addressesList");
 
-            OutGoingRoute outGoingRoute = new OutGoingRoute(
+            RouteRequest routeRequest = new RouteRequest(
                     routeCode,
                     origin,
                     inputtedAddressesList
             );
 
-            presenter.submitRoute(outGoingRoute);
+            presenter.submitRoute(routeRequest);
 
         }else if(action.equals("getRoute")){
             presenter.getRouteState();
@@ -108,21 +105,9 @@ public class RouteStateActivity extends DaggerAppCompatActivity implements MvpRo
     }
 
     @Override
-    public void startRouteUnorganized(String routeCode, ArrayList<FormattedAddress> addressList) {
+    public void startRoute(Route route) {
         Intent intent = new Intent(this, RouteActivity.class);
-        intent.putExtra("routeCode", routeCode);
-        intent.putExtra("organized", false);
-        intent.putParcelableArrayListExtra("addressList", addressList);
-        startActivity(intent);
-        closeActivity();
-    }
-
-    @Override
-    public void startRouteOrganized(String routeCode, ArrayList<SingleDrive> routeList) {
-        Intent intent = new Intent(this, RouteActivity.class);
-        intent.putExtra("routeCode", routeCode);
-        intent.putExtra("organized", true);
-        intent.putParcelableArrayListExtra("routeList", routeList);
+        intent.putExtra("route", route);
         startActivity(intent);
         closeActivity();
     }

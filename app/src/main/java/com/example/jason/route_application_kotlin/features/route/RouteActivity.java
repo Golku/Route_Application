@@ -3,18 +3,15 @@ package com.example.jason.route_application_kotlin.features.route;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.jason.route_application_kotlin.R;
-import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
 import com.example.jason.route_application_kotlin.data.pojos.RouteInfoHolder;
 import com.example.jason.route_application_kotlin.data.pojos.RouteListFragmentDelegation;
-import com.example.jason.route_application_kotlin.data.pojos.api.SingleDrive;
+import com.example.jason.route_application_kotlin.data.pojos.api.Route;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveRequest;
 import com.example.jason.route_application_kotlin.features.addressDetails.AddressDetailsActivity;
 import com.example.jason.route_application_kotlin.features.route.listFragment.RouteListFragment;
@@ -27,8 +24,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.support.DaggerAppCompatActivity;
-import java.util.ArrayList;
-import java.util.List;
 
 public class RouteActivity extends DaggerAppCompatActivity implements
         MvpRoute.View,
@@ -63,17 +58,14 @@ public class RouteActivity extends DaggerAppCompatActivity implements
     }
 
     private void init(){
-        String routeCode = getIntent().getStringExtra("routeCode");
-        boolean organized = getIntent().getBooleanExtra("organized", false);
 
-        presenter.setRouteCode(routeCode);
+        Route route = getIntent().getParcelableExtra("route");
 
-        if(organized){
-            List<SingleDrive> routeList = getIntent().getParcelableArrayListExtra("routeList");
-            presenter.organizedRoute(routeList);
+        if(route != null) {
+            presenter.initializeRoute(route);
         }else{
-            List<FormattedAddress> addressList = getIntent().getParcelableArrayListExtra("addressList");
-            presenter.unorganizedRoute(addressList);
+            showToast("Something went wrong. Unable to get route.");
+            closeActivity();
         }
     }
 
@@ -103,8 +95,13 @@ public class RouteActivity extends DaggerAppCompatActivity implements
     }
 
     @Override
-    public void onMarkerRemoved(String destination) {
-        presenter.onMarkerRemoved(destination);
+    public void onDeselectMarker(String destination) {
+        presenter.markerDeselected(destination);
+    }
+
+    @Override
+    public void onDeselectMultipleMarkers(String destination) {
+        presenter.multipleMarkersDeselected(destination);
     }
 
     @Override

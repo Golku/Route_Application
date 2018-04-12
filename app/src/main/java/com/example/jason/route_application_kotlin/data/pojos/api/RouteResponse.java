@@ -1,8 +1,5 @@
 package com.example.jason.route_application_kotlin.data.pojos.api;
 
-import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,8 +9,7 @@ import java.util.List;
 public class RouteResponse {
 
     private int routeState;
-    private ArrayList<FormattedAddress> addressList;
-    private ArrayList<SingleDrive> routeList;
+    private Route route;
     private List<String> invalidAddresses;
 
     public int getRouteState() {
@@ -24,20 +20,12 @@ public class RouteResponse {
         this.routeState = routeState;
     }
 
-    public ArrayList<FormattedAddress> getAddressList() {
-        return addressList;
+    public Route getRoute() {
+        return route;
     }
 
-    public void setAddressList(ArrayList<FormattedAddress> addressList) {
-        this.addressList = addressList;
-    }
-
-    public ArrayList<SingleDrive> getRouteList() {
-        return routeList;
-    }
-
-    public void setRouteList(ArrayList<SingleDrive> routeList) {
-        this.routeList = routeList;
+    public void setRoute(Route route) {
+        this.route = route;
     }
 
     public List<String> getInvalidAddresses() {

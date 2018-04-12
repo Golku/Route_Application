@@ -21,11 +21,11 @@ public class RouteMapPresenter implements MvpRouteMap.Presenter {
 
     private MvpRouteMap.View view;
 
+    private List<FormattedAddress> addressList;
+
     private List<Marker> routeOrder;
 
     private Marker previousSelectedMarker;
-
-    private List<FormattedAddress> addressList;
 
     RouteMapPresenter(MvpRouteMap.View view) {
         this.view = view;
@@ -41,6 +41,13 @@ public class RouteMapPresenter implements MvpRouteMap.Presenter {
     @Override
     public void setMarkers() {
         view.addMarkersToMap(addressList);
+    }
+
+    @Override
+    public void multipleMarkersDeselected(Marker marker) {
+        int markerIndex = routeOrder.indexOf(marker);
+        routeOrder.subList(markerIndex, routeOrder.size()).clear();
+        view.deselectMultipleMarker(marker.getTitle());
     }
 
     @Override
@@ -75,7 +82,7 @@ public class RouteMapPresenter implements MvpRouteMap.Presenter {
                 }
 
                 view.removePolyLine();
-                view.removeAddress(clickedMarker.getTitle());
+                view.deselectMarker(clickedMarker.getTitle());
 
             } else {
                 boolean newMarker = (boolean) clickedMarker.getTag();
@@ -90,8 +97,7 @@ public class RouteMapPresenter implements MvpRouteMap.Presenter {
                     clickedMarker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
                     previousSelectedMarker = clickedMarker;
                 }else{
-//                    ask the user if he wants to remove all after this one.
-//                    view.showSnackBar(clickedMarker.getTitle());
+                    view.showSnackBar(clickedMarker);
                 }
             }
         } else {

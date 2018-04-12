@@ -72,7 +72,6 @@ public class RouteListFragment extends Fragment implements RouteAdapter.RouteLis
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         RouteInfoHolder routeInfoHolder = getArguments().getParcelable("routeInfoHolder");
         presenter.initializeAdapter(routeInfoHolder.getRouteList());
     }
@@ -110,8 +109,13 @@ public class RouteListFragment extends Fragment implements RouteAdapter.RouteLis
 
     @Override
     public void removeDriveFromList(int position) {
-        adapter.notifyItemRemoved(position);
+        adapter.notifyDataSetChanged();
         recyclerView.smoothScrollToPosition(position-1);
+    }
+
+    @Override
+    public void removeMultipleDriveFromList(int position) {
+
     }
 
     @Override

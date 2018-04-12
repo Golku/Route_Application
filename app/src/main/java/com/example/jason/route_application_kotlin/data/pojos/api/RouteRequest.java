@@ -7,13 +7,13 @@ import java.util.List;
  * Created by Jason on 14-Feb-18.
  */
 
-public class OutGoingRoute {
+public class RouteRequest {
 
     private String routeCode;
     private String origin;
     private List<String> addressList;
 
-    public OutGoingRoute(String routeCode, String origin, ArrayList<String> addressList) {
+    public RouteRequest(String routeCode, String origin, ArrayList<String> addressList) {
         this.routeCode = routeCode;
         this.origin = origin;
         this.addressList = addressList;

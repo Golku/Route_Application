@@ -33,6 +33,8 @@ public class RouteListPresenter implements MvpRouteList.Presenter{
                 break;
             case "remove" : removeDrive(position);
                 break;
+            case "multipleRemove" : removeMultipleDrive(position);
+                break;
         }
     }
 
@@ -42,5 +44,9 @@ public class RouteListPresenter implements MvpRouteList.Presenter{
 
     private void removeDrive(int position){
         view.removeDriveFromList(position);
+    }
+
+    private void removeMultipleDrive(int position){
+        view.removeMultipleDriveFromList(position);
     }
 }
