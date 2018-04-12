@@ -156,7 +156,7 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements M
     public void updateBusinessImageView(String business) {
         addressTypeImageView.setVisibility(View.VISIBLE);
         if (business.equals("yes")) {
-            addressTypeImageView.setImageResource(R.drawable.ic_business_address);
+            addressTypeImageView.setImageResource(R.drawable.ic_marker_business);
         }
     }
 

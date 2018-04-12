@@ -1,7 +1,10 @@
 package com.example.jason.route_application_kotlin.features.route.mapFragment;
 
+import android.util.Log;
+
 import com.example.jason.route_application_kotlin.R;
 import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
+import com.example.jason.route_application_kotlin.data.pojos.MarkerInfo;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveRequest;
 
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -27,15 +30,11 @@ public class RouteMapPresenter implements MvpRouteMap.Presenter {
 
     private Marker previousSelectedMarker;
 
-    RouteMapPresenter(MvpRouteMap.View view) {
+    RouteMapPresenter(MvpRouteMap.View view, List<FormattedAddress> addressList) {
         this.view = view;
+        this.addressList = addressList;
         this.routeOrder = new ArrayList<>();
         this.previousSelectedMarker = null;
-    }
-
-    @Override
-    public void setAddressList(List<FormattedAddress> addressList) {
-        this.addressList = addressList;
     }
 
     @Override
@@ -44,20 +43,44 @@ public class RouteMapPresenter implements MvpRouteMap.Presenter {
     }
 
     @Override
-    public void multipleMarkersDeselected(Marker marker) {
-        int markerIndex = routeOrder.indexOf(marker);
-        routeOrder.subList(markerIndex, routeOrder.size()).clear();
-        view.deselectMultipleMarker(marker.getTitle());
+    public void multipleMarkersDeselected(int markerPosition) {
+
+        for(int i=markerPosition; i<routeOrder.size(); i++){
+            Marker marker = routeOrder.get(i);
+            MarkerInfo markerInfo = (MarkerInfo) marker.getTag();
+
+            markerInfo.setSelected(false);
+
+            if(markerInfo.isBusiness()){
+                markerInfo.setIconType("business");
+            }else{
+                markerInfo.setIconType("private");
+            }
+
+            view.changeMarkerIcon(marker);
+        }
+
+        routeOrder.subList(markerPosition, routeOrder.size()).clear();
+
+        if (routeOrder.size() > 0) {
+            previousSelectedMarker = routeOrder.get(routeOrder.size() -1);
+        } else {
+            previousSelectedMarker = null;
+        }
+        view.deselectMultipleMarker(routeOrder.get(markerPosition).getTitle());
     }
 
     @Override
     public void processMarker(Marker clickedMarker) {
+
         if(clickedMarker.getTag() != null) {
             if (clickedMarker.getTag().equals("origin")) {
-                view.showToast("origin");
+                view.showToast("My location");
                 return;
             }
         }
+
+        MarkerInfo markerInfo = (MarkerInfo) clickedMarker.getTag();
 
         SingleDriveRequest request = new SingleDriveRequest();
         String origin = null;
@@ -67,10 +90,17 @@ public class RouteMapPresenter implements MvpRouteMap.Presenter {
         LatLng end = null;
 
         if (previousSelectedMarker != null) {
+
             if (clickedMarker.equals(previousSelectedMarker)) {
-                clickedMarker.setTag(true);
                 routeOrder.remove(clickedMarker);
-                clickedMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_private_address2));
+
+                markerInfo.setSelected(false);
+
+                if(markerInfo.isBusiness()){
+                    markerInfo.setIconType("business");
+                }else{
+                    markerInfo.setIconType("private");
+                }
 
                 int routeSize = routeOrder.size();
 
@@ -82,34 +112,42 @@ public class RouteMapPresenter implements MvpRouteMap.Presenter {
                 }
 
                 view.removePolyLine();
+                view.changeMarkerIcon(clickedMarker);
                 view.deselectMarker(clickedMarker.getTitle());
 
             } else {
-                boolean newMarker = (boolean) clickedMarker.getTag();
 
-                if (newMarker) {
+                if (markerInfo.isSelected()) {
+                    view.showSnackBar(routeOrder.indexOf(clickedMarker));
+                }else{
+
                     origin = previousSelectedMarker.getTitle();
                     destination = clickedMarker.getTitle();
                     start = previousSelectedMarker.getPosition();
                     end = clickedMarker.getPosition();
-                    clickedMarker.setTag(false);
+
+                    markerInfo.setSelected(true);
+                    markerInfo.setIconType("selected");
+
                     routeOrder.add(clickedMarker);
-                    clickedMarker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
                     previousSelectedMarker = clickedMarker;
-                }else{
-                    view.showSnackBar(clickedMarker);
+                    view.changeMarkerIcon(clickedMarker);
                 }
             }
         } else {
+
             //use phone location for origin.
             origin = "Vrij-Harnasch 21, Den Hoorn";
             destination = clickedMarker.getTitle();
             start = new LatLng(52.008234, 4.312999);
             end = clickedMarker.getPosition();
-            clickedMarker.setTag(false);
+
+            markerInfo.setSelected(true);
+            markerInfo.setIconType("selected");
+
             routeOrder.add(clickedMarker);
-            clickedMarker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
             previousSelectedMarker = clickedMarker;
+            view.changeMarkerIcon(clickedMarker);
         }
 
         if(origin != null && destination != null) {

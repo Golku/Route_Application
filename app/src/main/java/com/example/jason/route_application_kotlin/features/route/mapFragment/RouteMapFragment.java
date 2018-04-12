@@ -7,6 +7,7 @@ import com.directions.route.Routing;
 import com.directions.route.RoutingListener;
 import com.example.jason.route_application_kotlin.R;
 import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
+import com.example.jason.route_application_kotlin.data.pojos.MarkerInfo;
 import com.example.jason.route_application_kotlin.data.pojos.RouteInfoHolder;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveRequest;
 import com.example.jason.route_application_kotlin.features.route.RouteActivity;
@@ -29,7 +30,6 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -89,11 +89,9 @@ public class RouteMapFragment extends Fragment implements
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        presenter = new RouteMapPresenter(this);
-        polylines = new ArrayList<>();
-
         RouteInfoHolder routeInfoHolder = getArguments().getParcelable("routeInfoHolder");
-        presenter.setAddressList(routeInfoHolder.getAddressList());
+        presenter = new RouteMapPresenter(this, routeInfoHolder.getAddressList());
+        polylines = new ArrayList<>();
     }
 
     @Nullable
@@ -130,40 +128,36 @@ public class RouteMapFragment extends Fragment implements
 
     @Override
     public void addMarkersToMap(List<FormattedAddress> addressList) {
-        Resources res = this.getResources();
-        String iconName;
-
         //get phone location
         Marker originMarker = googleMap.addMarker(
                 new MarkerOptions()
                         .position(new LatLng(52.008234, 4.312999))
                         .title("My Location")
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker2)));
-
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_origin)));
         originMarker.setTag("origin");
 
         if (addressList != null) {
             for (FormattedAddress address : addressList) {
-                String formattedAddress = address.getFormattedAddress();
-                double lat = address.getLat();
-                double lng = address.getLng();
+
+                MarkerInfo markerInfo = new MarkerInfo();
+
+                markerInfo.setSelected(false);
 
                 if (address.getIsBusiness()) {
-                    iconName = "ic_business_address";
+                    markerInfo.setBusiness(true);
+                    markerInfo.setIconType("business");
                 } else {
-                    iconName = "ic_private_address2";
+                    markerInfo.setBusiness(false);
+                    markerInfo.setIconType("private");
                 }
-
-//                iconName = "ic_"+String.valueOf(i+1);
-
-                int resID = res.getIdentifier(iconName, "drawable", getContext().getPackageName());
 
                 Marker marker = googleMap.addMarker(
                         new MarkerOptions()
-                                .position(new LatLng(lat, lng))
-                                .title(formattedAddress)
-                                .icon(BitmapDescriptorFactory.fromResource(resID)));
-                marker.setTag(true);
+                                .position(new LatLng(address.getLat(), address.getLng()))
+                                .title(address.getFormattedAddress()));
+                marker.setTag(markerInfo);
+
+                changeMarkerIcon(marker);
             }
         }
 
@@ -179,6 +173,32 @@ public class RouteMapFragment extends Fragment implements
     }
 
     @Override
+    public void changeMarkerIcon(Marker marker) {
+        MarkerInfo markerInfo = (MarkerInfo) marker.getTag();
+
+        Resources res = this.getResources();
+        String iconName = null;
+
+        switch (markerInfo.getIconType()) {
+            case "private":
+                iconName = "ic_marker_private";
+                break;
+            case "business":
+                iconName = "ic_marker_business";
+                break;
+            case "selected":
+                iconName = "ic_marker_selected";
+                break;
+        }
+
+//        iconName = "ic_" + String.valueOf(i + 1);
+
+        int resID = res.getIdentifier(iconName, "drawable", getContext().getPackageName());
+
+        marker.setIcon(BitmapDescriptorFactory.fromResource(resID));
+    }
+
+    @Override
     public void getDriveInformation(SingleDriveRequest request) {
         routeActivityCallback.getDriveInformation(request);
     }
@@ -189,17 +209,17 @@ public class RouteMapFragment extends Fragment implements
     }
 
     @Override
-    public void deselectMultipleMarker(final String destination) {
+    public void deselectMultipleMarker(String destination) {
         routeActivityCallback.onDeselectMultipleMarkers(destination);
     }
 
     @Override
-    public void showSnackBar(final Marker marker) {
+    public void showSnackBar(final int markerPosition) {
         Snackbar snackbar = Snackbar.make(rootLayout, "Deselect until here?", Snackbar.LENGTH_LONG);
         snackbar.setAction("yes", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                presenter.multipleMarkersDeselected(marker);
+                presenter.multipleMarkersDeselected(markerPosition);
             }
         });
         snackbar.show();

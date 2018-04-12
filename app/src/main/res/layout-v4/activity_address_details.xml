@@ -82,7 +82,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_private_address2"
+            app:srcCompat="@drawable/ic_marker_private"
             android:layout_marginLeft="8dp" />
 
     </android.support.constraint.ConstraintLayout>
@@ -134,7 +134,7 @@
         app:backgroundTint="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/ic_plus2"
+        app:srcCompat="@drawable/ic_1"
         android:layout_marginRight="32dp" />
 
 

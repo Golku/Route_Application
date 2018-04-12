@@ -107,7 +107,6 @@ public class RoutePresenter implements
     public void multipleMarkersDeselected(String destination) {
 
         int position = -1;
-        int size = routeList.size();
 
         for(SingleDrive singleDrive : routeList){
 
@@ -115,21 +114,18 @@ public class RoutePresenter implements
 
             if(destination.equals(driveDestination)){
                 position = routeList.indexOf(singleDrive);
-                deliveryTimeSum = singleDrive.getDeliveryTimeInMillis();
+                deliveryTimeSum = routeList.get(position-1).getDeliveryTimeInMillis();
                 break;
             }
         }
 
-        for(int i = position; i<size; i++){
-            routeList.remove(i);
-        }
-
+        routeList.subList(position, routeList.size()).clear();
 
         RouteListFragmentDelegation delegation = new RouteListFragmentDelegation();
         delegation.setOperation("multipleRemove");
         delegation.setPosition(position);
 
-        view.delegatePosition(delegation);
+//        view.delegatePosition(delegation);
     }
 
     private void removeDeliveryTime(SingleDrive singleDrive){

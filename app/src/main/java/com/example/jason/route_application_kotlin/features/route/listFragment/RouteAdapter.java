@@ -60,9 +60,9 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.CustomViewHo
         holder.estimatedArrivalTime.setText(arrivalTime);
 
         if(currentItem.getDestinationIsABusiness()){
-            holder.addressType.setImageResource(R.drawable.ic_business_address);
+            holder.addressType.setImageResource(R.drawable.ic_marker_business);
         }else{
-            holder.addressType.setImageResource(R.drawable.ic_private_address2);
+            holder.addressType.setImageResource(R.drawable.ic_marker_private);
         }
 
     }

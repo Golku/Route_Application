@@ -27,23 +27,6 @@ public class RouteInteractor implements MvpRoute.Interactor{
     }
 
     @Override
-    public void getRoute(final ApiCallback.RouteResponseCallback callback, String routeCode) {
-        Call<RouteResponse> call = apiService.getRoute(routeCode);
-
-        call.enqueue(new Callback<RouteResponse>() {
-            @Override
-            public void onResponse(Call<RouteResponse> call, Response<RouteResponse> response) {
-                callback.onRouteResponse(response.body());
-            }
-
-            @Override
-            public void onFailure(Call<RouteResponse> call, Throwable t) {
-                callback.onRouteResponseFailure();
-            }
-        });
-    }
-
-    @Override
     public void getDriveInformation(final ApiCallback.SingleDriveResponseCallback callback, SingleDriveRequest request) {
         Call<SingleDriveResponse> call = apiService.getDriveInformation(request);
 

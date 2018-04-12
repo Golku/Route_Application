@@ -27,7 +27,9 @@ public interface MvpRouteMap {
 
         void deselectMultipleMarker(String destination);
 
-        void showSnackBar(Marker marker);
+        void changeMarkerIcon(Marker marker);
+
+        void showSnackBar(int markerPosition);
 
         void removePolyLine();
 
@@ -37,11 +39,9 @@ public interface MvpRouteMap {
 
     interface Presenter{
 
-        void setAddressList(List<FormattedAddress> addressList);
-
         void setMarkers();
 
-        void multipleMarkersDeselected(Marker marker);
+        void multipleMarkersDeselected(int markerPosition);
 
         void processMarker(Marker marker);
     }
