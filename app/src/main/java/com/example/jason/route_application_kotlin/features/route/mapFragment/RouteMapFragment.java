@@ -69,7 +69,7 @@ public class RouteMapFragment extends Fragment implements
 
         void getDriveInformation(SingleDriveRequest request);
 
-        void onDeselectMarker(String destination);
+        void onDeselectMarker();
 
         void onDeselectMultipleMarkers(String destination);
 
@@ -204,8 +204,8 @@ public class RouteMapFragment extends Fragment implements
     }
 
     @Override
-    public void deselectMarker(String destination) {
-        routeActivityCallback.onDeselectMarker(destination);
+    public void deselectMarker() {
+        routeActivityCallback.onDeselectMarker();
     }
 
     @Override

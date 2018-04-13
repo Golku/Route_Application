@@ -23,7 +23,7 @@ public interface MvpRouteMap {
 
         void getPolylineToMarker(LatLng start, LatLng end);
 
-        void deselectMarker(String destination);
+        void deselectMarker();
 
         void deselectMultipleMarker(String destination);
 

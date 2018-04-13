@@ -95,8 +95,8 @@ public class RouteActivity extends DaggerAppCompatActivity implements
     }
 
     @Override
-    public void onDeselectMarker(String destination) {
-        presenter.markerDeselected(destination);
+    public void onDeselectMarker() {
+        presenter.markerDeselected();
     }
 
     @Override

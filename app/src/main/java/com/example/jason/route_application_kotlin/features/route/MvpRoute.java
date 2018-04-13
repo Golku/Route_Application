@@ -35,7 +35,7 @@ public interface MvpRoute {
 
         void getDriveInformation(SingleDriveRequest request);
 
-        void markerDeselected(String destination);
+        void markerDeselected();
 
         void multipleMarkersDeselected(String destination);
 

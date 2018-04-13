@@ -1,5 +1,7 @@
 package com.example.jason.route_application_kotlin.features.route;
 
+import android.util.Log;
+
 import com.example.jason.route_application_kotlin.data.api.ApiCallback;
 import com.example.jason.route_application_kotlin.data.pojos.RouteInfoHolder;
 import com.example.jason.route_application_kotlin.data.pojos.RouteListFragmentDelegation;
@@ -22,7 +24,7 @@ public class RoutePresenter implements
         MvpRoute.Presenter,
         ApiCallback.SingleDriveResponseCallback {
 
-    private final String log_tag = "routeLogTag";
+    private final String log_tag = "debugTag";
 
     private MvpRoute.View view;
     private MvpRoute.Interactor interactor;
@@ -31,14 +33,12 @@ public class RoutePresenter implements
     private List<SingleDrive> routeList;
 
     private SimpleDateFormat sdf;
-    private long deliveryTimeSum;
 
     @Inject
     public RoutePresenter(MvpRoute.View view, MvpRoute.Interactor interactor) {
         this.view = view;
         this.interactor = interactor;
         sdf = new SimpleDateFormat("kk:mm");
-        deliveryTimeSum = 0;
     }
 
     @Override
@@ -49,10 +49,10 @@ public class RoutePresenter implements
 
         routeInfoHolder.setAddressList(route.getAddressList());
 
-        if(route.getRouteList() != null && !route.getRouteList().isEmpty()){
+        if (route.getRouteList() != null && !route.getRouteList().isEmpty()) {
             routeList = route.getRouteList();
             routeInfoHolder.setOrganized(true);
-        }else{
+        } else {
             routeList = new ArrayList<>();
             routeInfoHolder.setOrganized(false);
         }
@@ -67,45 +67,45 @@ public class RoutePresenter implements
         interactor.getDriveInformation(this, request);
     }
 
-    private void addDeliveryTime(SingleDrive singleDrive){
+    private void addDeliveryTime(SingleDrive singleDrive) {
 
-        long date = System.currentTimeMillis();
-        long driveTime = singleDrive.getDriveDurationInSeconds()*1000;
-        long packageDeliveryTime = 120000;
+        long deliveryTime;
+        long driveTime = singleDrive.getDriveDurationInSeconds() * 1000;
+        long PACKAGE_DELIVERY_TIME = 120000;
 
-        deliveryTimeSum = deliveryTimeSum + (driveTime + packageDeliveryTime);
+        if (routeList.size() > 1) {
+            SingleDrive previousDrive = routeList.get(routeList.indexOf(singleDrive) - 1);
+            deliveryTime = previousDrive.getDeliveryTimeInMillis() + driveTime + PACKAGE_DELIVERY_TIME;
+        } else {
+            long date = System.currentTimeMillis();
+            deliveryTime = date + driveTime + PACKAGE_DELIVERY_TIME;
+        }
 
-        long deliveryTime = date + deliveryTimeSum;
         String deliveryTimeString = sdf.format(deliveryTime);
 
         singleDrive.setDeliveryTimeInMillis(deliveryTime);
         singleDrive.setDeliveryTimeHumanReadable(deliveryTimeString);
+
         getRouteEndTime();
+
+        RouteListFragmentDelegation delegation = new RouteListFragmentDelegation();
+        delegation.setOperation("add");
+        delegation.setPosition(routeList.indexOf(singleDrive));
+
+        view.delegateRouteChange(delegation);
     }
 
     @Override
-    public void markerDeselected(String destination) {
+    public void markerDeselected() {
 
-        int position = -1;
-
-        for(SingleDrive singleDrive : routeList){
-
-            String driveDestination = singleDrive.getDestinationFormattedAddress().getFormattedAddress();
-
-            if(destination.equals(driveDestination)){
-                position = routeList.indexOf(singleDrive);
-                routeList.remove(singleDrive);
-                deliveryTimeSum = deliveryTimeSum - singleDrive.getDeliveryTimeInMillis();
-                break;
-            }
-        }
+        int position = routeList.size() - 1;
+        routeList.remove(position);
 
         getRouteEndTime();
 
         RouteListFragmentDelegation delegation = new RouteListFragmentDelegation();
         delegation.setOperation("remove");
         delegation.setPosition(position);
-
         view.delegateRouteChange(delegation);
     }
 
@@ -114,11 +114,11 @@ public class RoutePresenter implements
 
         int position = -1;
 
-        for(SingleDrive singleDrive : routeList){
+        for (SingleDrive singleDrive : routeList) {
 
             String driveDestination = singleDrive.getDestinationFormattedAddress().getFormattedAddress();
 
-            if(destination.equals(driveDestination)){
+            if (destination.equals(driveDestination)) {
                 position = routeList.indexOf(singleDrive);
                 break;
             }
@@ -126,28 +126,17 @@ public class RoutePresenter implements
 
         routeList.subList(position, routeList.size()).clear();
 
-        if(routeList.size() > 0){
-            deliveryTimeSum = routeList.get(routeList.size()-1).getDeliveryTimeInMillis();
-            String deliveryTimeString = sdf.format(deliveryTimeSum);
-            routeList.get(routeList.size()-1).setDeliveryTimeHumanReadable(deliveryTimeString);
-        }else{
-            deliveryTimeSum = 0;
-        }
-
         getRouteEndTime();
 
         RouteListFragmentDelegation delegation = new RouteListFragmentDelegation();
         delegation.setOperation("multipleRemove");
         delegation.setPosition(position);
-
         view.delegateRouteChange(delegation);
     }
 
-    private void getRouteEndTime(){
-        int routeSize = routeList.size();
-        if (routeSize > 0) {
-            int finalDriveIndex = routeSize - 1;
-            SingleDrive finalDrive = routeList.get(finalDriveIndex);
+    private void getRouteEndTime() {
+        if (routeList.size() > 0) {
+            SingleDrive finalDrive = routeList.get(routeList.size() - 1);
             view.updateRouteEndTime(finalDrive.getDeliveryTimeHumanReadable());
         } else {
             view.updateRouteEndTime("end time");
@@ -168,16 +157,9 @@ public class RoutePresenter implements
 //        the response processing will fail! FIX THIS!!!
     @Override
     public void onSingleDriveResponse(SingleDriveResponse response) {
-        if(response.getSingleDrive() != null){
-
+        if (response.getSingleDrive() != null) {
             routeList.add(response.getSingleDrive());
             addDeliveryTime(response.getSingleDrive());
-
-            RouteListFragmentDelegation delegation = new RouteListFragmentDelegation();
-            delegation.setOperation("add");
-            delegation.setPosition(routeList.size() - 1);
-
-            view.delegateRouteChange(delegation);
         }
     }
 

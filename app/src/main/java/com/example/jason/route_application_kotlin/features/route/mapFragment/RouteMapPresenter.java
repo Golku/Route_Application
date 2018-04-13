@@ -116,7 +116,7 @@ public class RouteMapPresenter implements MvpRouteMap.Presenter {
 
                 view.removePolyLine();
                 view.changeMarkerIcon(clickedMarker);
-                view.deselectMarker(clickedMarker.getTitle());
+                view.deselectMarker();
 
             } else {
 
