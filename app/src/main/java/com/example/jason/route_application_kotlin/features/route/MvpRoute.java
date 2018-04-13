@@ -1,5 +1,7 @@
 package com.example.jason.route_application_kotlin.features.route;
 
+import android.location.Location;
+
 import com.example.jason.route_application_kotlin.data.api.ApiCallback;
 import com.example.jason.route_application_kotlin.data.pojos.RouteInfoHolder;
 import com.example.jason.route_application_kotlin.data.pojos.RouteListFragmentDelegation;
@@ -16,6 +18,8 @@ public interface MvpRoute {
 
         void setupFragments(RouteInfoHolder routeInfoHolder);
 
+        void updateDeliveryCompletion(int[] deliveryCompletion);
+
         void updateRouteEndTime(String endTime);
 
         void delegateRouteChange(RouteListFragmentDelegation delegation);
@@ -31,7 +35,7 @@ public interface MvpRoute {
 
     interface Presenter{
 
-        void initializeRoute(Route route);
+        void initializeRoute(Route route, Location location);
 
         void getDriveInformation(SingleDriveRequest request);
 

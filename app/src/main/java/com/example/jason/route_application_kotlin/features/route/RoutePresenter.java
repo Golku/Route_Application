@@ -1,6 +1,6 @@
 package com.example.jason.route_application_kotlin.features.route;
 
-import android.util.Log;
+import android.location.Location;
 
 import com.example.jason.route_application_kotlin.data.api.ApiCallback;
 import com.example.jason.route_application_kotlin.data.pojos.RouteInfoHolder;
@@ -9,9 +9,9 @@ import com.example.jason.route_application_kotlin.data.pojos.api.Route;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDrive;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveRequest;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveResponse;
+import com.google.android.gms.maps.model.LatLng;
 
 import javax.inject.Inject;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,17 +32,24 @@ public class RoutePresenter implements
     private Route route;
     private List<SingleDrive> routeList;
 
+    private int[] deliveryCompletion;
+    private int deliveredPrivate;
+    private int deliveredBusiness;
+
     private SimpleDateFormat sdf;
 
     @Inject
     public RoutePresenter(MvpRoute.View view, MvpRoute.Interactor interactor) {
         this.view = view;
         this.interactor = interactor;
+        deliveryCompletion = new int[4];
+        deliveredPrivate = 0;
+        deliveredBusiness = 0;
         sdf = new SimpleDateFormat("kk:mm");
     }
 
     @Override
-    public void initializeRoute(Route route) {
+    public void initializeRoute(Route route, Location location) {
         this.route = route;
 
         RouteInfoHolder routeInfoHolder = new RouteInfoHolder();
@@ -57,8 +64,15 @@ public class RoutePresenter implements
             routeInfoHolder.setOrganized(false);
         }
 
+        routeInfoHolder.setUserLocation(new LatLng(location.getLatitude(), location.getLongitude()));
         routeInfoHolder.setRouteList(routeList);
 
+        deliveryCompletion[0] = deliveredPrivate;
+        deliveryCompletion[1] = this.route.getPrivateAddressCount();
+        deliveryCompletion[2] = deliveredBusiness;
+        deliveryCompletion[3] = this.route.getBusinessAddressCount();
+
+        view.updateDeliveryCompletion(deliveryCompletion);
         view.setupFragments(routeInfoHolder);
     }
 
@@ -68,7 +82,6 @@ public class RoutePresenter implements
     }
 
     private void addDeliveryTime(SingleDrive singleDrive) {
-
         long deliveryTime;
         long driveTime = singleDrive.getDriveDurationInSeconds() * 1000;
         long PACKAGE_DELIVERY_TIME = 120000;
@@ -91,13 +104,11 @@ public class RoutePresenter implements
         RouteListFragmentDelegation delegation = new RouteListFragmentDelegation();
         delegation.setOperation("add");
         delegation.setPosition(routeList.indexOf(singleDrive));
-
         view.delegateRouteChange(delegation);
     }
 
     @Override
     public void markerDeselected() {
-
         int position = routeList.size() - 1;
         routeList.remove(position);
 
@@ -139,7 +150,7 @@ public class RoutePresenter implements
             SingleDrive finalDrive = routeList.get(routeList.size() - 1);
             view.updateRouteEndTime(finalDrive.getDeliveryTimeHumanReadable());
         } else {
-            view.updateRouteEndTime("end time");
+            view.updateRouteEndTime("");
         }
     }
 

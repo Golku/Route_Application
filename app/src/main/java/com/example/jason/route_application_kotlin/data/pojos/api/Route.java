@@ -11,15 +11,15 @@ public class Route implements Parcelable{
 
     private String routeCode;
     private List<FormattedAddress> addressList;
-    private List<FormattedAddress> privateAddressList;
-    private List<FormattedAddress> businessAddressList;
+    private int privateAddressCount;
+    private int businessAddressCount;
     private List<SingleDrive> routeList;
 
     protected Route(Parcel in) {
         routeCode = in.readString();
         addressList = in.createTypedArrayList(FormattedAddress.CREATOR);
-        privateAddressList = in.createTypedArrayList(FormattedAddress.CREATOR);
-        businessAddressList = in.createTypedArrayList(FormattedAddress.CREATOR);
+        privateAddressCount = in.readInt();
+        businessAddressCount = in.readInt();
         routeList = in.createTypedArrayList(SingleDrive.CREATOR);
     }
 
@@ -27,8 +27,8 @@ public class Route implements Parcelable{
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(routeCode);
         dest.writeTypedList(addressList);
-        dest.writeTypedList(privateAddressList);
-        dest.writeTypedList(businessAddressList);
+        dest.writeInt(privateAddressCount);
+        dest.writeInt(businessAddressCount);
         dest.writeTypedList(routeList);
     }
 
@@ -65,20 +65,20 @@ public class Route implements Parcelable{
         this.addressList = addressList;
     }
 
-    public List<FormattedAddress> getPrivateAddressList() {
-        return privateAddressList;
+    public int getPrivateAddressCount() {
+        return privateAddressCount;
     }
 
-    public void setPrivateAddressList(List<FormattedAddress> privateAddressList) {
-        this.privateAddressList = privateAddressList;
+    public void setPrivateAddressCount(int privateAddressCount) {
+        this.privateAddressCount = privateAddressCount;
     }
 
-    public List<FormattedAddress> getBusinessAddressList() {
-        return businessAddressList;
+    public int getBusinessAddressCount() {
+        return businessAddressCount;
     }
 
-    public void setBusinessAddressList(List<FormattedAddress> businessAddressList) {
-        this.businessAddressList = businessAddressList;
+    public void setBusinessAddressCount(int businessAddressCount) {
+        this.businessAddressCount = businessAddressCount;
     }
 
     public List<SingleDrive> getRouteList() {

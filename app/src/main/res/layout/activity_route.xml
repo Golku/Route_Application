@@ -32,7 +32,7 @@
         app:layout_constraintTop_toBottomOf="@+id/appbar">
 
         <TextView
-            android:id="@+id/textView1"
+            android:id="@+id/private_tv"
             android:layout_width="wrap_content"
             android:layout_height="19dp"
             android:layout_marginLeft="16dp"
@@ -44,7 +44,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/business_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
@@ -55,67 +55,50 @@
             android:textColor="@color/colorPrimaryDark"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView1" />
+            app:layout_constraintTop_toBottomOf="@+id/private_tv" />
 
         <TextView
-            android:id="@+id/privateCurrentSizeTv"
+            android:id="@+id/end_time_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:text="current size"
-            android:textColor="@color/colorPrimaryDark"
-            app:layout_constraintStart_toEndOf="@+id/textView1"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginLeft="8dp"/>
-
-        <TextView
-            android:id="@+id/businessCurrentSizeTv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="current size"
-            android:textColor="@color/colorPrimaryDark"
-            app:layout_constraintStart_toEndOf="@+id/textView2"
-            app:layout_constraintTop_toBottomOf="@+id/privateCurrentSizeTv"
-            android:layout_marginLeft="8dp"/>
-
-        <TextView
-            android:id="@+id/routeEndTimeTv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
             android:layout_marginEnd="16dp"
-            android:text="end time"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
+            android:text="Route end time"
             android:textColor="@color/colorPrimaryDark"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginRight="16dp" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/privateMaxSizeTv"
+            android:id="@+id/private_completion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:textColor="@color/colorPrimaryDark"
-            android:text="/ max size"
-            app:layout_constraintStart_toEndOf="@+id/privateCurrentSizeTv"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginLeft="8dp"/>
+            app:layout_constraintStart_toEndOf="@+id/private_tv"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/businessMaxSizeTv"
+            android:id="@+id/business_completion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="/ max size"
             android:textColor="@color/colorPrimaryDark"
-            app:layout_constraintStart_toEndOf="@+id/businessCurrentSizeTv"
-            app:layout_constraintTop_toBottomOf="@+id/privateMaxSizeTv"
-            android:layout_marginLeft="8dp"/>
+            app:layout_constraintStart_toEndOf="@+id/business_tv"
+            app:layout_constraintTop_toBottomOf="@+id/private_completion" />
+
+        <TextView
+            android:id="@+id/route_end_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/colorPrimaryDark"
+            app:layout_constraintStart_toStartOf="@+id/end_time_tv"
+            app:layout_constraintTop_toBottomOf="@+id/end_time_tv" />
 
     </android.support.constraint.ConstraintLayout>
 

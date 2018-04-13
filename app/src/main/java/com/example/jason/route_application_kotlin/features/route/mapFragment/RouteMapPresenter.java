@@ -24,14 +24,17 @@ public class RouteMapPresenter implements MvpRouteMap.Presenter {
 
     private MvpRouteMap.View view;
 
+    private LatLng userLocation;
+
     private List<FormattedAddress> addressList;
 
     private List<Marker> routeOrder;
 
     private Marker previousSelectedMarker;
 
-    RouteMapPresenter(MvpRouteMap.View view, List<FormattedAddress> addressList) {
+    RouteMapPresenter(MvpRouteMap.View view, LatLng userLocation, List<FormattedAddress> addressList) {
         this.view = view;
+        this.userLocation = userLocation;
         this.addressList = addressList;
         this.routeOrder = new ArrayList<>();
         this.previousSelectedMarker = null;
@@ -86,6 +89,7 @@ public class RouteMapPresenter implements MvpRouteMap.Presenter {
         MarkerInfo markerInfo = (MarkerInfo) clickedMarker.getTag();
 
         SingleDriveRequest request = new SingleDriveRequest();
+
         String origin = null;
         String destination = null;
 
@@ -93,7 +97,6 @@ public class RouteMapPresenter implements MvpRouteMap.Presenter {
         LatLng end = null;
 
         if (previousSelectedMarker != null) {
-
             if (clickedMarker.equals(previousSelectedMarker)) {
                 routeOrder.remove(clickedMarker);
 
@@ -119,11 +122,9 @@ public class RouteMapPresenter implements MvpRouteMap.Presenter {
                 view.deselectMarker();
 
             } else {
-
                 if (markerInfo.isSelected()) {
                     view.showSnackBar(routeOrder.indexOf(clickedMarker));
                 }else{
-
                     origin = previousSelectedMarker.getTitle();
                     destination = clickedMarker.getTitle();
                     start = previousSelectedMarker.getPosition();
@@ -138,11 +139,10 @@ public class RouteMapPresenter implements MvpRouteMap.Presenter {
                 }
             }
         } else {
-
             //use phone location for origin.
             origin = "Vrij-Harnasch 21, Den Hoorn";
             destination = clickedMarker.getTitle();
-            start = new LatLng(52.008234, 4.312999);
+            start = userLocation;
             end = clickedMarker.getPosition();
 
             markerInfo.setSelected(true);

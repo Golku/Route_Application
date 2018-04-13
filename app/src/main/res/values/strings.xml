@@ -51,11 +51,10 @@
     <string name="this_addresses_are_invalid_here_you_can_remove_then_from_the_route_or_correct_them.activity_correct_invalid_addresses">This addresses are invalid. Here you can remove then from the route or correct them.</string>
     <string name="employee_name.activity_comment_input">employee name</string>
     <string name="date.activity_comment_input">date</string>
-    <string name="title_activity_route2">RouteActivity2</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
-    <string name="tab_text_3">Tab 3</string>
-    <string name="action_settings">Settings</string>
-    <string name="section_format">Hello World from section: %1$d</string>
+
+    <string name="devider">/</string>
+    <string name="completionEnd">delivered</string>
+
+
 
 </resources>

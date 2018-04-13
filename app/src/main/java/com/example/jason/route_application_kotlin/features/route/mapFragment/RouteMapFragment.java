@@ -90,7 +90,7 @@ public class RouteMapFragment extends Fragment implements
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         RouteInfoHolder routeInfoHolder = getArguments().getParcelable("routeInfoHolder");
-        presenter = new RouteMapPresenter(this, routeInfoHolder.getAddressList());
+        presenter = new RouteMapPresenter(this, routeInfoHolder.getUserLocation(),routeInfoHolder.getAddressList());
         polylines = new ArrayList<>();
     }
 

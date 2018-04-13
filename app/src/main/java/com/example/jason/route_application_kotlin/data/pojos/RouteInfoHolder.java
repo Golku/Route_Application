@@ -1,6 +1,7 @@
 package com.example.jason.route_application_kotlin.data.pojos;
 
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDrive;
+import com.google.android.gms.maps.model.LatLng;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -10,6 +11,7 @@ import java.util.List;
 public class RouteInfoHolder implements Parcelable{
 
     private boolean organized;
+    private LatLng userLocation;
     private List<FormattedAddress> addressList;
     private List<SingleDrive> routeList;
 
@@ -18,6 +20,7 @@ public class RouteInfoHolder implements Parcelable{
 
     private RouteInfoHolder(Parcel in) {
         organized = in.readByte() != 0;
+        userLocation = in.readParcelable(LatLng.class.getClassLoader());
         addressList = in.createTypedArrayList(FormattedAddress.CREATOR);
         routeList = in.createTypedArrayList(SingleDrive.CREATOR);
     }
@@ -25,6 +28,7 @@ public class RouteInfoHolder implements Parcelable{
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeByte((byte) (organized ? 1 : 0));
+        dest.writeParcelable(userLocation, flags);
         dest.writeTypedList(addressList);
         dest.writeTypedList(routeList);
     }
@@ -52,6 +56,14 @@ public class RouteInfoHolder implements Parcelable{
 
     public void setOrganized(boolean organized) {
         this.organized = organized;
+    }
+
+    public LatLng getUserLocation() {
+        return userLocation;
+    }
+
+    public void setUserLocation(LatLng userLocation) {
+        this.userLocation = userLocation;
     }
 
     public List<FormattedAddress> getAddressList() {
