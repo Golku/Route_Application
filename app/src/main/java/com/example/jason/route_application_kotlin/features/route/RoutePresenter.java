@@ -68,12 +68,16 @@ public class RoutePresenter implements
     }
 
     private void addDeliveryTime(SingleDrive singleDrive){
+
         long date = System.currentTimeMillis();
         long driveTime = singleDrive.getDriveDurationInSeconds()*1000;
         long packageDeliveryTime = 120000;
+
         deliveryTimeSum = deliveryTimeSum + (driveTime + packageDeliveryTime);
+
         long deliveryTime = date + deliveryTimeSum;
         String deliveryTimeString = sdf.format(deliveryTime);
+
         singleDrive.setDeliveryTimeInMillis(deliveryTime);
         singleDrive.setDeliveryTimeHumanReadable(deliveryTimeString);
         getRouteEndTime();
@@ -91,16 +95,18 @@ public class RoutePresenter implements
             if(destination.equals(driveDestination)){
                 position = routeList.indexOf(singleDrive);
                 routeList.remove(singleDrive);
-                removeDeliveryTime(singleDrive);
+                deliveryTimeSum = deliveryTimeSum - singleDrive.getDeliveryTimeInMillis();
                 break;
             }
         }
+
+        getRouteEndTime();
 
         RouteListFragmentDelegation delegation = new RouteListFragmentDelegation();
         delegation.setOperation("remove");
         delegation.setPosition(position);
 
-        view.delegatePosition(delegation);
+        view.delegateRouteChange(delegation);
     }
 
     @Override
@@ -114,25 +120,27 @@ public class RoutePresenter implements
 
             if(destination.equals(driveDestination)){
                 position = routeList.indexOf(singleDrive);
-                deliveryTimeSum = routeList.get(position-1).getDeliveryTimeInMillis();
                 break;
             }
         }
 
         routeList.subList(position, routeList.size()).clear();
 
+        if(routeList.size() > 0){
+            deliveryTimeSum = routeList.get(routeList.size()-1).getDeliveryTimeInMillis();
+            String deliveryTimeString = sdf.format(deliveryTimeSum);
+            routeList.get(routeList.size()-1).setDeliveryTimeHumanReadable(deliveryTimeString);
+        }else{
+            deliveryTimeSum = 0;
+        }
+
+        getRouteEndTime();
+
         RouteListFragmentDelegation delegation = new RouteListFragmentDelegation();
         delegation.setOperation("multipleRemove");
         delegation.setPosition(position);
 
-//        view.delegatePosition(delegation);
-    }
-
-    private void removeDeliveryTime(SingleDrive singleDrive){
-        long driveTime = singleDrive.getDriveDurationInSeconds()*1000;
-        long packageDeliveryTime = 120000;
-        deliveryTimeSum = deliveryTimeSum - (driveTime + packageDeliveryTime);
-        getRouteEndTime();
+        view.delegateRouteChange(delegation);
     }
 
     private void getRouteEndTime(){
@@ -161,6 +169,7 @@ public class RoutePresenter implements
     @Override
     public void onSingleDriveResponse(SingleDriveResponse response) {
         if(response.getSingleDrive() != null){
+
             routeList.add(response.getSingleDrive());
             addDeliveryTime(response.getSingleDrive());
 
@@ -168,7 +177,7 @@ public class RoutePresenter implements
             delegation.setOperation("add");
             delegation.setPosition(routeList.size() - 1);
 
-            view.delegatePosition(delegation);
+            view.delegateRouteChange(delegation);
         }
     }
 

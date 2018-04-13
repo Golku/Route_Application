@@ -110,7 +110,7 @@ public class RouteActivity extends DaggerAppCompatActivity implements
     }
 
     @Override
-    public void delegatePosition(RouteListFragmentDelegation delegation) {
+    public void delegateRouteChange(RouteListFragmentDelegation delegation) {
         EventBus.getDefault().post(delegation);
     }
 

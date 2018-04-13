@@ -109,13 +109,16 @@ public class RouteListFragment extends Fragment implements RouteAdapter.RouteLis
 
     @Override
     public void removeDriveFromList(int position) {
-        adapter.notifyDataSetChanged();
+        adapter.notifyItemRemoved(position);
         recyclerView.smoothScrollToPosition(position-1);
     }
 
     @Override
     public void removeMultipleDriveFromList(int position) {
-
+        adapter.notifyDataSetChanged();
+        if(position>0){
+            recyclerView.smoothScrollToPosition(position-1);
+        }
     }
 
     @Override

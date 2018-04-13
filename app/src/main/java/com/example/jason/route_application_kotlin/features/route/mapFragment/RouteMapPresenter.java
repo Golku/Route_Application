@@ -45,6 +45,8 @@ public class RouteMapPresenter implements MvpRouteMap.Presenter {
     @Override
     public void multipleMarkersDeselected(int markerPosition) {
 
+        String markerDestination = routeOrder.get(markerPosition).getTitle();
+
         for(int i=markerPosition; i<routeOrder.size(); i++){
             Marker marker = routeOrder.get(i);
             MarkerInfo markerInfo = (MarkerInfo) marker.getTag();
@@ -67,7 +69,8 @@ public class RouteMapPresenter implements MvpRouteMap.Presenter {
         } else {
             previousSelectedMarker = null;
         }
-        view.deselectMultipleMarker(routeOrder.get(markerPosition).getTitle());
+        view.removePolyLine();
+        view.deselectMultipleMarker(markerDestination);
     }
 
     @Override

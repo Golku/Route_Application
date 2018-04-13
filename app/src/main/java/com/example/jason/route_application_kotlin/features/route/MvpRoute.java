@@ -18,7 +18,7 @@ public interface MvpRoute {
 
         void updateRouteEndTime(String endTime);
 
-        void delegatePosition(RouteListFragmentDelegation delegation);
+        void delegateRouteChange(RouteListFragmentDelegation delegation);
 
         void showAddressDetails(String address);
 
