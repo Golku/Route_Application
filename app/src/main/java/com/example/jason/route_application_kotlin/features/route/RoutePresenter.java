@@ -122,11 +122,9 @@ public class RoutePresenter implements
 
     @Override
     public void multipleMarkersDeselected(String destination) {
-
         int position = -1;
 
         for (SingleDrive singleDrive : routeList) {
-
             String driveDestination = singleDrive.getDestinationFormattedAddress().getFormattedAddress();
 
             if (destination.equals(driveDestination)) {
