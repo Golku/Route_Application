@@ -24,7 +24,7 @@ public class RoutePresenter implements
         MvpRoute.Presenter,
         ApiCallback.SingleDriveResponseCallback {
 
-    private final String log_tag = "debugTag";
+    private final String logTag = "debugTag";
 
     private MvpRoute.View view;
     private MvpRoute.Interactor interactor;
@@ -68,9 +68,9 @@ public class RoutePresenter implements
         routeInfoHolder.setRouteList(routeList);
 
         deliveryCompletion[0] = deliveredPrivate;
-        deliveryCompletion[1] = this.route.getPrivateAddressCount();
+        deliveryCompletion[1] = route.getPrivateAddressCount();
         deliveryCompletion[2] = deliveredBusiness;
-        deliveryCompletion[3] = this.route.getBusinessAddressCount();
+        deliveryCompletion[3] = route.getBusinessAddressCount();
 
         view.updateDeliveryCompletion(deliveryCompletion);
         view.setupFragments(routeInfoHolder);

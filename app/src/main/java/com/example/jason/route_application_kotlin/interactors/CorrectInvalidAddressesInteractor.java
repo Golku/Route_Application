@@ -18,7 +18,6 @@ import retrofit2.Response;
 public class CorrectInvalidAddressesInteractor implements MvpCorrectInvalidAddresses.Interactor{
 
     private ApiService apiService;
-    private final String log_tag = "logTagDebug";
 
     @Inject
     public CorrectInvalidAddressesInteractor(ApiService apiService) {

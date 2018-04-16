@@ -6,6 +6,8 @@ import com.example.jason.route_application_kotlin.features.addressDetails.Addres
 import com.example.jason.route_application_kotlin.features.addressDetails.AddressDetailsModule;
 import com.example.jason.route_application_kotlin.features.correctInvalidAddresses.CorrectInvalidAddressesActivity;
 import com.example.jason.route_application_kotlin.features.correctInvalidAddresses.CorrectInvalidAddressesModule;
+import com.example.jason.route_application_kotlin.features.login.LoginActivity;
+import com.example.jason.route_application_kotlin.features.login.LoginModule;
 import com.example.jason.route_application_kotlin.features.route.RouteActivity;
 import com.example.jason.route_application_kotlin.features.route.RouteModule;
 import com.example.jason.route_application_kotlin.features.routeInput.RouteInputActivity;
@@ -22,6 +24,9 @@ import dagger.android.ContributesAndroidInjector;
 
 @Module
 abstract class ActivityBuilder {
+
+    @ContributesAndroidInjector(modules = LoginModule.class)
+    abstract LoginActivity bindLogin();
 
     @ContributesAndroidInjector(modules = RouteInputModule.class)
     abstract RouteInputActivity bindRouteInput();

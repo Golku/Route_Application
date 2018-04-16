@@ -30,8 +30,8 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
-        <activity android:name=".features.route.RouteActivity"
+        <activity
+            android:name=".features.route.RouteActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity android:name=".features.addressDetails.AddressDetailsActivity"/>
         <activity
@@ -42,6 +42,8 @@
             android:name=".features.correctInvalidAddresses.CorrectInvalidAddressesActivity"
             android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".features.routeState.RouteStateActivity"/>
+        <activity android:name=".features.login.LoginActivity">
+        </activity>
     </application>
 
 </manifest>
