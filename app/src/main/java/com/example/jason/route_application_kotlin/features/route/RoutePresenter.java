@@ -99,7 +99,7 @@ public class RoutePresenter implements
         singleDrive.setDeliveryTimeInMillis(deliveryTime);
         singleDrive.setDeliveryTimeHumanReadable(deliveryTimeString);
 
-        getRouteEndTime();
+        onUpdateRouteEndTime();
 
         RouteListFragmentDelegation delegation = new RouteListFragmentDelegation();
         delegation.setOperation("add");
@@ -112,7 +112,7 @@ public class RoutePresenter implements
         int position = routeList.size() - 1;
         routeList.remove(position);
 
-        getRouteEndTime();
+        onUpdateRouteEndTime();
 
         RouteListFragmentDelegation delegation = new RouteListFragmentDelegation();
         delegation.setOperation("remove");
@@ -135,7 +135,7 @@ public class RoutePresenter implements
 
         routeList.subList(position, routeList.size()).clear();
 
-        getRouteEndTime();
+        onUpdateRouteEndTime();
 
         RouteListFragmentDelegation delegation = new RouteListFragmentDelegation();
         delegation.setOperation("multipleRemove");
@@ -143,13 +143,18 @@ public class RoutePresenter implements
         view.delegateRouteChange(delegation);
     }
 
-    private void getRouteEndTime() {
+    private void onUpdateRouteEndTime() {
         if (routeList.size() > 0) {
             SingleDrive finalDrive = routeList.get(routeList.size() - 1);
             view.updateRouteEndTime(finalDrive.getDeliveryTimeHumanReadable());
         } else {
             view.updateRouteEndTime("");
         }
+    }
+
+    @Override
+    public void onUpdateDeliveryCompletion(int[] deliveryCompletion) {
+
     }
 
     @Override

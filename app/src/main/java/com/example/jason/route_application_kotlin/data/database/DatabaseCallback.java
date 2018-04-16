@@ -9,5 +9,17 @@ import com.example.jason.route_application_kotlin.data.pojos.database.DatabaseRe
 public interface DatabaseCallback {
     void onDatabaseResponse(DatabaseResponse databaseResponse);
     void onApiResponseFailure();
+
+    interface LoginCallBack{
+
+    }
+
+    interface AddressInformationCallBack{
+
+    }
+
+    interface CommentInputCallBack{
+
+    }
 }
 

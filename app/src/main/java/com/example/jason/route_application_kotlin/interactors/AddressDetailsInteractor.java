@@ -20,8 +20,6 @@ import retrofit2.Response;
 
 public class AddressDetailsInteractor implements MvpAddressDetails.Interactor {
 
-    private final String log_tag = "addressDetailsLogTag";
-
     private DatabaseService databaseService;
 
     @Inject
@@ -31,7 +29,6 @@ public class AddressDetailsInteractor implements MvpAddressDetails.Interactor {
 
     @Override
     public void getAddressInformation(final DatabaseCallback databaseCallback, FormattedAddress formattedAddress) {
-
 
         Call<DatabaseResponse> call = databaseService.getAddressInformation(
                 formattedAddress.getStreet(),

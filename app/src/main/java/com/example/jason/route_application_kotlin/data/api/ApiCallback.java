@@ -18,5 +18,4 @@ public interface ApiCallback {
         void onSingleDriveResponse(SingleDriveResponse response);
         void onSingleDriveResponseFailure();
     }
-
 }

@@ -43,6 +43,8 @@ public interface MvpRoute {
 
         void multipleMarkersDeselected(String destination);
 
+        void onUpdateDeliveryCompletion(int[] deliveryCompletion);
+
         void onListItemClick(String address);
 
         void onGoButtonClick(String address);
