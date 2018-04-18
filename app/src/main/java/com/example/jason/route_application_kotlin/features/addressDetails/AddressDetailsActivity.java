@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import com.example.jason.route_application_kotlin.R;
 import com.example.jason.route_application_kotlin.data.pojos.database.AddressInformation;
-import com.example.jason.route_application_kotlin.data.pojos.database.CommentInformation;
+import com.example.jason.route_application_kotlin.data.pojos.CommentInformation;
 import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
 import com.example.jason.route_application_kotlin.features.commentDisplay.CommentDisplayActivity;
 import com.example.jason.route_application_kotlin.features.commentInput.CommentInputActivity;
@@ -48,7 +48,6 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements M
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
 
-    private final String log_tag = "AddressDetails_logTag";
     private boolean returning;
     private boolean active;
 
@@ -97,8 +96,6 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements M
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        //Ask Wesley why this doesn't work
-        //after back button is press you still get the toast "connection fail" if connection fails
         finish();
     }
 

@@ -1,6 +1,6 @@
 package com.example.jason.route_application_kotlin.data.api;
 
-import com.example.jason.route_application_kotlin.data.pojos.api.CorrectedAddresses;
+import com.example.jason.route_application_kotlin.data.pojos.api.CorrectedAddressesRequest;
 import com.example.jason.route_application_kotlin.data.pojos.api.RouteRequest;
 import com.example.jason.route_application_kotlin.data.pojos.api.RouteResponse;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveRequest;
@@ -25,7 +25,7 @@ public interface ApiService {
     Call<RouteResponse> submitRoute(@Body RouteRequest routeRequest);
 
     @POST("correctedaddressessubmition")
-    Call<RouteResponse> submitCorrectedAddresses(@Body CorrectedAddresses correctedAddresses);
+    Call<RouteResponse> submitCorrectedAddresses(@Body CorrectedAddressesRequest correctedAddressesRequest);
 
     @POST("getdriveinformation")
     Call<SingleDriveResponse> getDriveInformation(@Body SingleDriveRequest request);

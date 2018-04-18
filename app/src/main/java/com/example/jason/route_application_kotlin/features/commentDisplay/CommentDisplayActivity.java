@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.example.jason.route_application_kotlin.R;
-import com.example.jason.route_application_kotlin.data.pojos.database.CommentInformation;
+import com.example.jason.route_application_kotlin.data.pojos.CommentInformation;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

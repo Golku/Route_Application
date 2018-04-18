@@ -3,7 +3,7 @@ package com.example.jason.route_application_kotlin.interactors;
 import android.support.annotation.NonNull;
 import com.example.jason.route_application_kotlin.data.api.ApiCallback;
 import com.example.jason.route_application_kotlin.data.api.ApiService;
-import com.example.jason.route_application_kotlin.data.pojos.api.CorrectedAddresses;
+import com.example.jason.route_application_kotlin.data.pojos.api.CorrectedAddressesRequest;
 import com.example.jason.route_application_kotlin.data.pojos.api.RouteResponse;
 import com.example.jason.route_application_kotlin.features.correctInvalidAddresses.MvpCorrectInvalidAddresses;
 import javax.inject.Inject;
@@ -42,8 +42,8 @@ public class CorrectInvalidAddressesInteractor implements MvpCorrectInvalidAddre
     }
 
     @Override
-    public void submitCorrectedAddresses(final ApiCallback.RouteResponseCallback callback, CorrectedAddresses correctedAddresses) {
-        Call<RouteResponse> call = apiService.submitCorrectedAddresses(correctedAddresses);
+    public void submitCorrectedAddresses(final ApiCallback.RouteResponseCallback callback, CorrectedAddressesRequest correctedAddressesRequest) {
+        Call<RouteResponse> call = apiService.submitCorrectedAddresses(correctedAddressesRequest);
 
         call.enqueue(new Callback<RouteResponse>() {
             @Override

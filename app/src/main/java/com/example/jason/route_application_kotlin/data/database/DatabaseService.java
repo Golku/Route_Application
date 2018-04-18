@@ -1,6 +1,9 @@
 package com.example.jason.route_application_kotlin.data.database;
 
-import com.example.jason.route_application_kotlin.data.pojos.database.DatabaseResponse;
+import com.example.jason.route_application_kotlin.data.pojos.database.AddressInformationResponse;
+import com.example.jason.route_application_kotlin.data.pojos.database.CommentInputResponse;
+import com.example.jason.route_application_kotlin.data.pojos.database.LoginResponse;
+
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -13,8 +16,15 @@ import retrofit2.http.POST;
 public interface DatabaseService {
 
     @FormUrlEncoded
+    @POST("login.php")
+    Call<LoginResponse> login(
+            @Field("username") String username,
+            @Field("password") String password
+    );
+
+    @FormUrlEncoded
     @POST("getAddressInfo.php")
-    Call<DatabaseResponse> getAddressInformation(
+    Call<AddressInformationResponse> getAddressInformation(
             @Field("street_name") String street,
             @Field("post_code") String postCode,
             @Field("city") String city
@@ -22,7 +32,7 @@ public interface DatabaseService {
 
     @FormUrlEncoded
     @POST("addAddressComment.php")
-    Call<DatabaseResponse> addCommentToAddress(
+    Call<CommentInputResponse> addCommentToAddress(
             @Field("street_name") String street,
             @Field("post_code") String postCode,
             @Field("city") String city,

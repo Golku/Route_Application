@@ -2,7 +2,7 @@ package com.example.jason.route_application_kotlin.interactors;
 
 import com.example.jason.route_application_kotlin.data.database.DatabaseCallback;
 import com.example.jason.route_application_kotlin.data.database.DatabaseService;
-import com.example.jason.route_application_kotlin.data.pojos.database.DatabaseResponse;
+import com.example.jason.route_application_kotlin.data.pojos.database.CommentInputResponse;
 import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
 import com.example.jason.route_application_kotlin.features.commentInput.MvpCommentInput;
 import javax.inject.Inject;
@@ -24,9 +24,9 @@ public class CommentInputInteractor implements MvpCommentInput.Interactor{
     }
 
     @Override
-    public void addCommentToAddress(final DatabaseCallback databaseCallback, FormattedAddress formattedAddress, String employeeId, String comment, String date) {
+    public void addCommentToAddress(final DatabaseCallback.CommentInputCallBack callback, FormattedAddress formattedAddress, String employeeId, String comment, String date) {
 
-        Call<DatabaseResponse> call = databaseService.addCommentToAddress(
+        Call<CommentInputResponse> call = databaseService.addCommentToAddress(
                 formattedAddress.getStreet(),
                 formattedAddress.getPostCode(),
                 formattedAddress.getCity(),
@@ -35,15 +35,15 @@ public class CommentInputInteractor implements MvpCommentInput.Interactor{
                 date
         );
 
-        call.enqueue(new Callback<DatabaseResponse>() {
+        call.enqueue(new Callback<CommentInputResponse>() {
             @Override
-            public void onResponse(Call<DatabaseResponse> call, Response<DatabaseResponse> response) {
-                databaseCallback.onDatabaseResponse(response.body());
+            public void onResponse(Call<CommentInputResponse> call, Response<CommentInputResponse> response) {
+                callback.onCommentInputResponse(response.body());
             }
 
             @Override
-            public void onFailure(Call<DatabaseResponse> call, Throwable t) {
-                databaseCallback.onApiResponseFailure();
+            public void onFailure(Call<CommentInputResponse> call, Throwable t) {
+                callback.onCommentInputResponseFailure();
             }
         });
 

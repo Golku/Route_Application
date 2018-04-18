@@ -6,7 +6,7 @@ import java.util.List;
  * Created by Jason on 3/3/2018.
  */
 
-public class CorrectedAddresses {
+public class CorrectedAddressesRequest {
 
     private String routeCode;
     private List<String> correctedAddressesList;

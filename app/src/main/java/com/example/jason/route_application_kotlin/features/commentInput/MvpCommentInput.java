@@ -34,7 +34,7 @@ public interface MvpCommentInput {
     }
 
     interface Interactor{
-        void addCommentToAddress(DatabaseCallback databaseCallback,
+        void addCommentToAddress(DatabaseCallback.CommentInputCallBack callback,
                                  FormattedAddress formattedAddress,
                                  String employeeId,
                                  String comment,

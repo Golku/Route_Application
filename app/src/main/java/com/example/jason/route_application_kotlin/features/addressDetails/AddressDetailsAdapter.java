@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import com.example.jason.route_application_kotlin.R;
 import com.example.jason.route_application_kotlin.data.pojos.database.AddressInformation;
-import com.example.jason.route_application_kotlin.data.pojos.database.CommentInformation;
+import com.example.jason.route_application_kotlin.data.pojos.CommentInformation;
 
 /**
  * Created by Jason on 07-Feb-18.
@@ -19,7 +19,7 @@ public class AddressDetailsAdapter extends RecyclerView.Adapter <AddressDetailsA
     private CommentListFunctions commentListFunctions;
     private CommentInformation commentInformation;
 
-    public AddressDetailsAdapter(AddressInformation addressInformation, CommentListFunctions commentListFunctions) {
+    AddressDetailsAdapter(AddressInformation addressInformation, CommentListFunctions commentListFunctions) {
         this.addressInformation = addressInformation;
         this.commentListFunctions = commentListFunctions;
         this.commentInformation = new CommentInformation();
@@ -54,7 +54,7 @@ public class AddressDetailsAdapter extends RecyclerView.Adapter <AddressDetailsA
         private TextView comment;
         private ViewGroup container;
 
-        public CustomViewHolder(View itemView) {
+        CustomViewHolder(View itemView) {
             super(itemView);
             this.employedName = itemView.findViewById(R.id.employeeNameTextView);
             this.date = itemView.findViewById(R.id.dateTextView);

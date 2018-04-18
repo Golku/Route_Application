@@ -1,4 +1,4 @@
-package com.example.jason.route_application_kotlin.data.pojos.database;
+package com.example.jason.route_application_kotlin.data.pojos;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -17,7 +17,7 @@ public class CommentInformation implements Parcelable{
 
     }
 
-    protected CommentInformation(Parcel in) {
+    private CommentInformation(Parcel in) {
         employeeId = in.readString();
         date = in.readString();
         comment = in.readString();

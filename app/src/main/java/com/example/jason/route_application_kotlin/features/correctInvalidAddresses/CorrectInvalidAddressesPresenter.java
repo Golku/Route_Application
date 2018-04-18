@@ -3,7 +3,7 @@ package com.example.jason.route_application_kotlin.features.correctInvalidAddres
 import android.os.Handler;
 
 import com.example.jason.route_application_kotlin.data.api.ApiCallback;
-import com.example.jason.route_application_kotlin.data.pojos.api.CorrectedAddresses;
+import com.example.jason.route_application_kotlin.data.pojos.api.CorrectedAddressesRequest;
 import com.example.jason.route_application_kotlin.data.pojos.api.RouteResponse;
 
 import java.util.List;
@@ -19,7 +19,7 @@ public class CorrectInvalidAddressesPresenter implements MvpCorrectInvalidAddres
     private final String log_tag = "logTagDebug";
 
     private List<String> invalidAddressesList;
-    private CorrectedAddresses correctedAddresses;
+    private CorrectedAddressesRequest correctedAddressesRequest;
 
     private MvpCorrectInvalidAddresses.View view;
     private MvpCorrectInvalidAddresses.Interactor interactor;
@@ -68,9 +68,9 @@ public class CorrectInvalidAddressesPresenter implements MvpCorrectInvalidAddres
     public void submitCorrectedAddresses() {
         view.hideScreenElements();
         view.onStartNetworkOperation();
-        correctedAddresses.setRouteCode(routeCode);
-        correctedAddresses.setCorrectedAddressesList(invalidAddressesList);
-        interactor.submitCorrectedAddresses(this, correctedAddresses);
+        correctedAddressesRequest.setRouteCode(routeCode);
+        correctedAddressesRequest.setCorrectedAddressesList(invalidAddressesList);
+        interactor.submitCorrectedAddresses(this, correctedAddressesRequest);
     }
 
     private void onValidatingAddresses(){
@@ -92,7 +92,7 @@ public class CorrectInvalidAddressesPresenter implements MvpCorrectInvalidAddres
         if(invalidAddressesList != null){
             this.invalidAddressesList = invalidAddressesList;
             networkFetchAttempts = 0;
-            this.correctedAddresses = new CorrectedAddresses();
+            this.correctedAddressesRequest = new CorrectedAddressesRequest();
             view.setupAlertDialog();
             view.showScreenElements();
             view.setupAdapter(this.invalidAddressesList);

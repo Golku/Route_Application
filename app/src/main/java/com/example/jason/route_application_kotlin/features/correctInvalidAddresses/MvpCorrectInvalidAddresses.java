@@ -1,7 +1,7 @@
 package com.example.jason.route_application_kotlin.features.correctInvalidAddresses;
 
 import com.example.jason.route_application_kotlin.data.api.ApiCallback;
-import com.example.jason.route_application_kotlin.data.pojos.api.CorrectedAddresses;
+import com.example.jason.route_application_kotlin.data.pojos.api.CorrectedAddressesRequest;
 import java.util.List;
 
 /**
@@ -56,7 +56,7 @@ public interface MvpCorrectInvalidAddresses {
 
         void getInvalidAddresses(ApiCallback.RouteResponseCallback callback, String routeCode);
 
-        void submitCorrectedAddresses(ApiCallback.RouteResponseCallback callback, CorrectedAddresses correctedAddresses);
+        void submitCorrectedAddresses(ApiCallback.RouteResponseCallback callback, CorrectedAddressesRequest correctedAddressesRequest);
 
     }
 

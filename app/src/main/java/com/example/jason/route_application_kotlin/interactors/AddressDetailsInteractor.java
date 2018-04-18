@@ -1,15 +1,11 @@
 package com.example.jason.route_application_kotlin.interactors;
 
-import android.util.Log;
-
 import com.example.jason.route_application_kotlin.data.database.DatabaseCallback;
 import com.example.jason.route_application_kotlin.data.database.DatabaseService;
-import com.example.jason.route_application_kotlin.data.pojos.database.DatabaseResponse;
+import com.example.jason.route_application_kotlin.data.pojos.database.AddressInformationResponse;
 import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
 import com.example.jason.route_application_kotlin.features.addressDetails.MvpAddressDetails;
-
 import javax.inject.Inject;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -28,27 +24,23 @@ public class AddressDetailsInteractor implements MvpAddressDetails.Interactor {
     }
 
     @Override
-    public void getAddressInformation(final DatabaseCallback databaseCallback, FormattedAddress formattedAddress) {
+    public void getAddressInformation(final DatabaseCallback.AddressInformationCallBack callBack, FormattedAddress formattedAddress) {
 
-        Call<DatabaseResponse> call = databaseService.getAddressInformation(
+        Call<AddressInformationResponse> call = databaseService.getAddressInformation(
                 formattedAddress.getStreet(),
                 formattedAddress.getPostCode(),
                 formattedAddress.getCity()
         );
 
-        call.enqueue(new Callback<DatabaseResponse>() {
+        call.enqueue(new Callback<AddressInformationResponse>() {
             @Override
-            public void onResponse(Call<DatabaseResponse> call, Response<DatabaseResponse> response) {
-                Log.d("detailsLogTag", "Responded");
-                databaseCallback.onDatabaseResponse(response.body());
+            public void onResponse(Call<AddressInformationResponse> call, Response<AddressInformationResponse> response) {
+                callBack.onAddressInformationResponse(response.body());
             }
 
             @Override
-            public void onFailure(Call<DatabaseResponse> call, Throwable t) {
-                Log.d("detailsLogTag", "Failure");
-                Log.d("detailsLogTag", "Throwable: " + t.toString());
-                Log.d("detailsLogTag", "call: " + call.toString());
-                databaseCallback.onApiResponseFailure();
+            public void onFailure(Call<AddressInformationResponse> call, Throwable t) {
+                callBack.onAddressInformationResponseFailure();
             }
         });
     }

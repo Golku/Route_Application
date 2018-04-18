@@ -1,7 +1,7 @@
 package com.example.jason.route_application_kotlin.features.commentInput;
 
 import com.example.jason.route_application_kotlin.data.database.DatabaseCallback;
-import com.example.jason.route_application_kotlin.data.pojos.database.DatabaseResponse;
+import com.example.jason.route_application_kotlin.data.pojos.database.CommentInputResponse;
 import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
 
 import java.text.SimpleDateFormat;
@@ -12,7 +12,7 @@ import javax.inject.Inject;
  * Created by Jason on 19-Feb-18.
  */
 
-public class CommentInputPresenter implements MvpCommentInput.Presenter, DatabaseCallback {
+public class CommentInputPresenter implements MvpCommentInput.Presenter, DatabaseCallback.CommentInputCallBack {
 
     private final MvpCommentInput.View view;
     private MvpCommentInput.Interactor interactor;
@@ -43,20 +43,19 @@ public class CommentInputPresenter implements MvpCommentInput.Presenter, Databas
     }
 
     @Override
-    public void onDatabaseResponse(DatabaseResponse databaseResponse) {
+    public void onCommentInputResponse(CommentInputResponse response) {
         view.onFinishNetworkOperation();
 
-        if(databaseResponse.isError()){
-            view.showToast("Fail to add comment");
-        }else{
+        if(response.isSucces()){
             view.showToast("Comment was added");
             view.closeActivity();
+        }else{
+            view.showToast("Fail to add comment");
         }
-
     }
 
     @Override
-    public void onApiResponseFailure() {
+    public void onCommentInputResponseFailure() {
         view.showToast("Unable to connect to the database");
         view.closeActivity();
     }
