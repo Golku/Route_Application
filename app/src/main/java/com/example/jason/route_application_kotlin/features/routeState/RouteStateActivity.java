@@ -11,7 +11,7 @@ import com.example.jason.route_application_kotlin.R;
 import com.example.jason.route_application_kotlin.data.pojos.api.Route;
 import com.example.jason.route_application_kotlin.data.pojos.api.RouteRequest;
 import com.example.jason.route_application_kotlin.features.correctInvalidAddresses.CorrectInvalidAddressesActivity;
-import com.example.jason.route_application_kotlin.features.route.RouteActivity;
+import com.example.jason.route_application_kotlin.features.container.ContainerActivity;
 
 import java.util.ArrayList;
 
@@ -106,7 +106,7 @@ public class RouteStateActivity extends DaggerAppCompatActivity implements MvpRo
 
     @Override
     public void startRoute(Route route) {
-        Intent intent = new Intent(this, RouteActivity.class);
+        Intent intent = new Intent(this, ContainerActivity.class);
         intent.putExtra("route", route);
         startActivity(intent);
         closeActivity();

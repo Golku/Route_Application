@@ -8,8 +8,8 @@ import com.example.jason.route_application_kotlin.features.correctInvalidAddress
 import com.example.jason.route_application_kotlin.features.correctInvalidAddresses.CorrectInvalidAddressesModule;
 import com.example.jason.route_application_kotlin.features.login.LoginActivity;
 import com.example.jason.route_application_kotlin.features.login.LoginModule;
-import com.example.jason.route_application_kotlin.features.route.RouteActivity;
-import com.example.jason.route_application_kotlin.features.route.RouteModule;
+import com.example.jason.route_application_kotlin.features.container.ContainerActivity;
+import com.example.jason.route_application_kotlin.features.container.ContainerModule;
 import com.example.jason.route_application_kotlin.features.routeInput.RouteInputActivity;
 import com.example.jason.route_application_kotlin.features.routeInput.RouteInputModule;
 import com.example.jason.route_application_kotlin.features.routeState.RouteStateActivity;
@@ -34,8 +34,8 @@ abstract class ActivityBuilder {
     @ContributesAndroidInjector(modules = RouteStateModule.class)
     abstract RouteStateActivity bindRouteState();
 
-    @ContributesAndroidInjector(modules = RouteModule.class)
-    abstract RouteActivity bindRoute();
+    @ContributesAndroidInjector(modules = ContainerModule.class)
+    abstract ContainerActivity bindContainer();
 
     @ContributesAndroidInjector(modules = AddressDetailsModule.class)
     abstract AddressDetailsActivity bindAddressDetails();

@@ -1,4 +1,4 @@
-package com.example.jason.route_application_kotlin.features.route.mapFragment;
+package com.example.jason.route_application_kotlin.features.container.mapFragment;
 
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveRequest;
 
@@ -13,7 +13,7 @@ import java.util.List;
  * Created by Jason on 3/28/2018.
  */
 
-public interface MvpRouteMap {
+public interface MvpContainerMap {
 
     interface View{
 

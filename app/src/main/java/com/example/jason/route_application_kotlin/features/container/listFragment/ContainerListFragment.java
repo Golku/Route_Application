@@ -1,10 +1,10 @@
-package com.example.jason.route_application_kotlin.features.route.listFragment;
+package com.example.jason.route_application_kotlin.features.container.listFragment;
 
 import com.example.jason.route_application_kotlin.R;
 import com.example.jason.route_application_kotlin.data.pojos.RouteInfoHolder;
 import com.example.jason.route_application_kotlin.data.pojos.RouteListFragmentDelegation;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDrive;
-import com.example.jason.route_application_kotlin.features.route.RouteActivity;
+import com.example.jason.route_application_kotlin.features.container.ContainerActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -27,17 +27,17 @@ import java.util.List;
  * Created by Jason on 3/22/2018.,
  */
 
-public class RouteListFragment extends Fragment implements RouteAdapter.RouteListFunctions, MvpRouteList.View{
+public class ContainerListFragment extends Fragment implements ContainerAdapter.RouteListFunctions, MvpContainerList.View{
 
     private final String debugTag = "debugTag";
 
-    private MvpRouteList.Presenter presenter;
+    private MvpContainerList.Presenter presenter;
 
-    private RouteActivity routeActivityCallback;
+    private ContainerActivity containerActivityCallback;
 
     private RecyclerView recyclerView;
 
-    private RouteAdapter adapter;
+    private ContainerAdapter adapter;
 
     public interface RouteListListener{
         void onListItemClick(String address);
@@ -48,23 +48,23 @@ public class RouteListFragment extends Fragment implements RouteAdapter.RouteLis
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            routeActivityCallback = (RouteActivity) context;
+            containerActivityCallback = (ContainerActivity) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
-                    + " routeActivityCallback error");
+                    + " containerActivityCallback error");
         }
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        presenter = new RouteListPresenter(this);
+        presenter = new ContainerListPresenter(this);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_route_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_container_list, container, false);
         this.recyclerView = view.findViewById(R.id.routeRecView);
         return view;
     }
@@ -92,7 +92,7 @@ public class RouteListFragment extends Fragment implements RouteAdapter.RouteLis
     public void setupAdapter(List<SingleDrive> routeList) {
         recyclerView.setVisibility(View.VISIBLE);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new RouteAdapter(routeList, this);
+        adapter = new ContainerAdapter(routeList, this);
         recyclerView.setAdapter(adapter);
     }
 
@@ -123,12 +123,12 @@ public class RouteListFragment extends Fragment implements RouteAdapter.RouteLis
 
     @Override
     public void onAdapterListItemClick(String address) {
-        routeActivityCallback.onListItemClick(address);
+        containerActivityCallback.onListItemClick(address);
     }
 
     @Override
     public void onAdapterGoButtonClick(String address) {
-        routeActivityCallback.onGoButtonClick(address);
+        containerActivityCallback.onGoButtonClick(address);
     }
 
     @Override

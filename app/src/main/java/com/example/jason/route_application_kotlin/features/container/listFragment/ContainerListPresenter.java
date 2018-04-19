@@ -1,20 +1,19 @@
-package com.example.jason.route_application_kotlin.features.route.listFragment;
+package com.example.jason.route_application_kotlin.features.container.listFragment;
 
 import com.example.jason.route_application_kotlin.data.pojos.RouteListFragmentDelegation;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDrive;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Jason on 03-Apr-18.
  */
 
-public class RouteListPresenter implements MvpRouteList.Presenter{
+public class ContainerListPresenter implements MvpContainerList.Presenter{
 
-    private MvpRouteList.View view;
+    private MvpContainerList.View view;
 
-    RouteListPresenter(MvpRouteList.View view) {
+    ContainerListPresenter(MvpContainerList.View view) {
         this.view = view;
     }
 

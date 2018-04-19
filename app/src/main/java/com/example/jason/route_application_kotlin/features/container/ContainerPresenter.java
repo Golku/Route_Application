@@ -1,4 +1,4 @@
-package com.example.jason.route_application_kotlin.features.route;
+package com.example.jason.route_application_kotlin.features.container;
 
 import android.location.Location;
 
@@ -9,8 +9,6 @@ import com.example.jason.route_application_kotlin.data.pojos.api.Route;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDrive;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveRequest;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveResponse;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 
 import javax.inject.Inject;
 import java.text.SimpleDateFormat;
@@ -21,14 +19,14 @@ import java.util.List;
  * Created by Jason on 07-Feb-18.
  */
 
-public class RoutePresenter implements
-        MvpRoute.Presenter,
+public class ContainerPresenter implements
+        MvpContainer.Presenter,
         ApiCallback.SingleDriveResponseCallback {
 
     private final String logTag = "debugTag";
 
-    private MvpRoute.View view;
-    private MvpRoute.Interactor interactor;
+    private MvpContainer.View view;
+    private MvpContainer.Interactor interactor;
 
     private Route route;
     private List<SingleDrive> routeList;
@@ -40,7 +38,7 @@ public class RoutePresenter implements
     private SimpleDateFormat sdf;
 
     @Inject
-    public RoutePresenter(MvpRoute.View view, MvpRoute.Interactor interactor) {
+    public ContainerPresenter(MvpContainer.View view, MvpContainer.Interactor interactor) {
         this.view = view;
         this.interactor = interactor;
         deliveryCompletion = new int[4];

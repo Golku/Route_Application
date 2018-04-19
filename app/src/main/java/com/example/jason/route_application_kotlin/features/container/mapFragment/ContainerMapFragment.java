@@ -1,4 +1,4 @@
-package com.example.jason.route_application_kotlin.features.route.mapFragment;
+package com.example.jason.route_application_kotlin.features.container.mapFragment;
 
 import com.directions.route.AbstractRouting;
 import com.directions.route.Route;
@@ -10,7 +10,7 @@ import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
 import com.example.jason.route_application_kotlin.data.pojos.MarkerInfo;
 import com.example.jason.route_application_kotlin.data.pojos.RouteInfoHolder;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveRequest;
-import com.example.jason.route_application_kotlin.features.route.RouteActivity;
+import com.example.jason.route_application_kotlin.features.container.ContainerActivity;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -45,19 +45,19 @@ import java.util.List;
  * Created by Jason on 3/22/2018.
  */
 
-public class RouteMapFragment extends Fragment implements
-        MvpRouteMap.View,
+public class ContainerMapFragment extends Fragment implements
+        MvpContainerMap.View,
         OnMapReadyCallback,
         GoogleMap.OnMarkerClickListener,
         RoutingListener {
 
     private final String debugTag = "debugTag";
 
-    private MvpRouteMap.Presenter presenter;
+    private MvpContainerMap.Presenter presenter;
 
     private GoogleMap googleMap;
 
-    private RouteActivity routeActivityCallback;
+    private ContainerActivity containerActivityCallback;
 
     private List<Polyline> polylines;
 
@@ -79,10 +79,10 @@ public class RouteMapFragment extends Fragment implements
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            this.routeActivityCallback = (RouteActivity) context;
+            this.containerActivityCallback = (ContainerActivity) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
-                    + " routeActivityCallback error");
+                    + " containerActivityCallback error");
         }
     }
 
@@ -91,7 +91,7 @@ public class RouteMapFragment extends Fragment implements
         super.onCreate(savedInstanceState);
         RouteInfoHolder routeInfoHolder = getArguments().getParcelable("routeInfoHolder");
 
-        presenter = new RouteMapPresenter(this,
+        presenter = new ContainerMapPresenter(this,
                 routeInfoHolder.getUserLocation(),
                 routeInfoHolder.getAddressList(),
                 routeInfoHolder.getRouteOrder());
@@ -102,7 +102,7 @@ public class RouteMapFragment extends Fragment implements
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_route_map, container, false);
+        View view = inflater.inflate(R.layout.fragment_container_map, container, false);
         this.rootLayout = view.findViewById(R.id.root_layout);
         return view;
     }
@@ -205,17 +205,17 @@ public class RouteMapFragment extends Fragment implements
 
     @Override
     public void getDriveInformation(SingleDriveRequest request) {
-        routeActivityCallback.getDriveInformation(request);
+        containerActivityCallback.getDriveInformation(request);
     }
 
     @Override
     public void deselectMarker() {
-        routeActivityCallback.onDeselectMarker();
+        containerActivityCallback.onDeselectMarker();
     }
 
     @Override
     public void deselectMultipleMarker(String destination) {
-        routeActivityCallback.onDeselectMultipleMarkers(destination);
+        containerActivityCallback.onDeselectMultipleMarkers(destination);
     }
 
     @Override

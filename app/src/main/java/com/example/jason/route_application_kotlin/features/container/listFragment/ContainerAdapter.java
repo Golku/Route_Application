@@ -1,4 +1,4 @@
-package com.example.jason.route_application_kotlin.features.route.listFragment;
+package com.example.jason.route_application_kotlin.features.container.listFragment;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,12 +15,12 @@ import java.util.List;
  * Created by Jason on 07-Feb-18.
  */
 
-public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.CustomViewHolder>{
+public class ContainerAdapter extends RecyclerView.Adapter<ContainerAdapter.CustomViewHolder>{
 
     private List<SingleDrive> routeList;
     private RouteListFunctions routeListFunctions;
 
-    RouteAdapter(List<SingleDrive> routeList, RouteListFunctions routeListFunctions) {
+    ContainerAdapter(List<SingleDrive> routeList, RouteListFunctions routeListFunctions) {
         this.routeList = routeList;
         this.routeListFunctions = routeListFunctions;
     }
@@ -36,13 +36,13 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.CustomViewHo
     }
 
     @Override
-    public RouteAdapter.CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ContainerAdapter.CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_travel_information, parent, false);
         return new CustomViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(RouteAdapter.CustomViewHolder holder, int position) {
+    public void onBindViewHolder(ContainerAdapter.CustomViewHolder holder, int position) {
 
         SingleDrive currentItem = routeList.get(position);
 

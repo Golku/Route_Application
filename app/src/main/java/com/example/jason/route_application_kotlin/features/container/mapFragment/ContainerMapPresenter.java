@@ -1,13 +1,9 @@
-package com.example.jason.route_application_kotlin.features.route.mapFragment;
+package com.example.jason.route_application_kotlin.features.container.mapFragment;
 
-import android.util.Log;
-
-import com.example.jason.route_application_kotlin.R;
 import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
 import com.example.jason.route_application_kotlin.data.pojos.MarkerInfo;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveRequest;
 
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
@@ -18,11 +14,11 @@ import java.util.List;
  * Created by Jason on 3/28/2018.
  */
 
-public class RouteMapPresenter implements MvpRouteMap.Presenter {
+public class ContainerMapPresenter implements MvpContainerMap.Presenter {
 
     private final String logTag = "logTagDebug";
 
-    private MvpRouteMap.View view;
+    private MvpContainerMap.View view;
 
     private LatLng userLocation;
 
@@ -32,7 +28,7 @@ public class RouteMapPresenter implements MvpRouteMap.Presenter {
 
     private Marker previousSelectedMarker;
 
-    RouteMapPresenter(MvpRouteMap.View view, LatLng userLocation, List<FormattedAddress> addressList, List<String> routeOrder) {
+    ContainerMapPresenter(MvpContainerMap.View view, LatLng userLocation, List<FormattedAddress> addressList, List<String> routeOrder) {
         this.view = view;
         this.userLocation = userLocation;
         this.addressList = addressList;

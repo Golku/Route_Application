@@ -1,4 +1,4 @@
-package com.example.jason.route_application_kotlin.features.route;
+package com.example.jason.route_application_kotlin.features.container;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -17,8 +17,8 @@ import com.example.jason.route_application_kotlin.data.pojos.RouteListFragmentDe
 import com.example.jason.route_application_kotlin.data.pojos.api.Route;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveRequest;
 import com.example.jason.route_application_kotlin.features.addressDetails.AddressDetailsActivity;
-import com.example.jason.route_application_kotlin.features.route.listFragment.RouteListFragment;
-import com.example.jason.route_application_kotlin.features.route.mapFragment.RouteMapFragment;
+import com.example.jason.route_application_kotlin.features.container.listFragment.ContainerListFragment;
+import com.example.jason.route_application_kotlin.features.container.mapFragment.ContainerMapFragment;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -28,15 +28,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.support.DaggerAppCompatActivity;
 
-public class RouteActivity extends DaggerAppCompatActivity implements
-        MvpRoute.View,
-        RouteListFragment.RouteListListener,
-        RouteMapFragment.RouteMapListener {
+public class ContainerActivity extends DaggerAppCompatActivity implements
+        MvpContainer.View,
+        ContainerListFragment.RouteListListener,
+        ContainerMapFragment.RouteMapListener {
 
     private final String debugTag = "debugTag";
 
     @Inject
-    MvpRoute.Presenter presenter;
+    MvpContainer.Presenter presenter;
 
     @BindView(R.id.container)
     ViewPager viewPager;
@@ -54,7 +54,7 @@ public class RouteActivity extends DaggerAppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_route);
+        setContentView(R.layout.activity_container);
         ButterKnife.bind(this);
         init();
     }
@@ -82,19 +82,19 @@ public class RouteActivity extends DaggerAppCompatActivity implements
     @Override
     public void setupFragments(RouteInfoHolder routeInfoHolder) {
         Bundle bundle = new Bundle();
-        Fragment routeListFragment = new RouteListFragment();
-        Fragment routeMapFragment = new RouteMapFragment();
+        Fragment routeListFragment = new ContainerListFragment();
+        Fragment routeMapFragment = new ContainerMapFragment();
 
         bundle.putParcelable("routeInfoHolder", routeInfoHolder);
 
         routeMapFragment.setArguments(bundle);
         routeListFragment.setArguments(bundle);
 
-        RouteSectionPagerAdapter routeSectionPagerAdapter = new RouteSectionPagerAdapter(getSupportFragmentManager());
-        routeSectionPagerAdapter.addFragment("Route", routeListFragment);
-        routeSectionPagerAdapter.addFragment("Map", routeMapFragment);
+        ContainerSectionPagerAdapter containerSectionPagerAdapter = new ContainerSectionPagerAdapter(getSupportFragmentManager());
+        containerSectionPagerAdapter.addFragment("Route", routeListFragment);
+        containerSectionPagerAdapter.addFragment("Map", routeMapFragment);
 
-        viewPager.setAdapter(routeSectionPagerAdapter);
+        viewPager.setAdapter(containerSectionPagerAdapter);
 
         tabLayout.setupWithViewPager(viewPager);
     }

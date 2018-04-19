@@ -1,15 +1,10 @@
 package com.example.jason.route_application_kotlin.features.login;
 
 import com.example.jason.route_application_kotlin.R;
-import com.example.jason.route_application_kotlin.features.addressDetails.AddressDetailsActivity;
-import com.example.jason.route_application_kotlin.features.route.MvpRoute;
 import com.example.jason.route_application_kotlin.features.routeInput.RouteInputActivity;
 
 import android.content.Intent;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 

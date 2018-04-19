@@ -1,4 +1,4 @@
-package com.example.jason.route_application_kotlin.features.route;
+package com.example.jason.route_application_kotlin.features.container;
 
 import android.location.Location;
 
@@ -12,7 +12,7 @@ import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveRequ
  * Created by Jason on 07-Feb-18.
  */
 
-public interface MvpRoute {
+public interface MvpContainer {
 
     interface View{
 

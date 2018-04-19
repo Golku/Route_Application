@@ -1,4 +1,4 @@
-package com.example.jason.route_application_kotlin.features.route;
+package com.example.jason.route_application_kotlin.features.container;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,12 +11,12 @@ import java.util.List;
  * Created by Jason on 3/22/2018.
  */
 
-public class RouteSectionPagerAdapter extends FragmentPagerAdapter{
+public class ContainerSectionPagerAdapter extends FragmentPagerAdapter{
 
     private List<String>fragmentTitle = new ArrayList<>();
     private List<Fragment>fragmentList = new ArrayList<>();
 
-    RouteSectionPagerAdapter(FragmentManager fm) {
+    ContainerSectionPagerAdapter(FragmentManager fm) {
         super(fm);
     }
 
