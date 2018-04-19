@@ -10,6 +10,7 @@ import com.example.jason.route_application_kotlin.data.pojos.api.SingleDrive;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveRequest;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveResponse;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 
 import javax.inject.Inject;
 import java.text.SimpleDateFormat;
@@ -58,13 +59,14 @@ public class RoutePresenter implements
 
         if (route.getRouteList() != null && !route.getRouteList().isEmpty()) {
             routeList = route.getRouteList();
+            routeInfoHolder.setRouteOrder(orderRoute(routeList));
             routeInfoHolder.setOrganized(true);
         } else {
             routeList = new ArrayList<>();
             routeInfoHolder.setOrganized(false);
         }
 
-        routeInfoHolder.setUserLocation(new LatLng(location.getLatitude(), location.getLongitude()));
+//        routeInfoHolder.setUserLocation(new LatLng(location.getLatitude(), location.getLongitude()));
         routeInfoHolder.setRouteList(routeList);
 
         deliveryCompletion[0] = deliveredPrivate;
@@ -74,6 +76,14 @@ public class RoutePresenter implements
 
         view.updateDeliveryCompletion(deliveryCompletion);
         view.setupFragments(routeInfoHolder);
+    }
+
+    private List<String> orderRoute(List<SingleDrive> routeList){
+        List<String> routeOrder = new ArrayList<>();
+        for(SingleDrive drive : routeList){
+            routeOrder.add(drive.getDestinationFormattedAddress().getFormattedAddress());
+        }
+        return routeOrder;
     }
 
     @Override

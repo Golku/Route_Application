@@ -26,6 +26,8 @@ public interface MvpRouteInput {
 
         void updateListSizeTextView(int listSize);
 
+        void showToast(String message);
+
     }
 
     interface Presenter{

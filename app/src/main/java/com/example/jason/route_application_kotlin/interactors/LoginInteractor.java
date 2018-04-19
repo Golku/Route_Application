@@ -21,8 +21,11 @@ public class LoginInteractor implements MvpLogin.Interactor{
     }
 
     @Override
-    public void login(final DatabaseCallback.LoginCallBack callBack) {
-        Call<LoginResponse> call = databaseService.login("", "");
+    public void loginRequest(final String username,
+            final String password,
+            final DatabaseCallback.LoginCallBack callBack) {
+
+        Call<LoginResponse> call = databaseService.login(username, password);
 
         call.enqueue(new Callback<LoginResponse>() {
             @Override

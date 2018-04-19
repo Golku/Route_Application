@@ -14,6 +14,7 @@ public class RouteInfoHolder implements Parcelable{
     private LatLng userLocation;
     private List<FormattedAddress> addressList;
     private List<SingleDrive> routeList;
+    private List<String> routeOrder;
 
     public RouteInfoHolder() {
     }
@@ -23,6 +24,7 @@ public class RouteInfoHolder implements Parcelable{
         userLocation = in.readParcelable(LatLng.class.getClassLoader());
         addressList = in.createTypedArrayList(FormattedAddress.CREATOR);
         routeList = in.createTypedArrayList(SingleDrive.CREATOR);
+        routeOrder = in.createStringArrayList();
     }
 
     @Override
@@ -31,6 +33,7 @@ public class RouteInfoHolder implements Parcelable{
         dest.writeParcelable(userLocation, flags);
         dest.writeTypedList(addressList);
         dest.writeTypedList(routeList);
+        dest.writeStringList(routeOrder);
     }
 
     @Override
@@ -80,5 +83,13 @@ public class RouteInfoHolder implements Parcelable{
 
     public void setRouteList(List<SingleDrive> routeList) {
         this.routeList = routeList;
+    }
+
+    public List<String> getRouteOrder() {
+        return routeOrder;
+    }
+
+    public void setRouteOrder(List<String> routeOrder) {
+        this.routeOrder = routeOrder;
     }
 }

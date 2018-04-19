@@ -54,5 +54,8 @@
 
     <string name="devider">/</string>
     <string name="completionEnd">delivered</string>
+    <string name="username">username</string>
+    <string name="password">password</string>
+    <string name="login">Login</string>
 
 </resources>

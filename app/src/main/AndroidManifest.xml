@@ -24,11 +24,6 @@
         <activity
             android:name=".features.routeInput.RouteInputActivity"
             android:windowSoftInputMode="adjustPan">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
         <activity
             android:name=".features.route.RouteActivity"
@@ -43,6 +38,11 @@
             android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".features.routeState.RouteStateActivity"/>
         <activity android:name=".features.login.LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
     </application>
 

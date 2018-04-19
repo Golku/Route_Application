@@ -3,7 +3,9 @@ package com.example.jason.route_application_kotlin.features.routeInput;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -42,8 +44,6 @@ public class RouteInputActivity extends DaggerAppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
         GoogleApiClient.ConnectionCallbacks{
 
-    private final String log_tag = "RouteActivity_log";
-
     @Inject
     MvpRouteInput.Presenter presenter;
 
@@ -60,6 +60,8 @@ public class RouteInputActivity extends DaggerAppCompatActivity implements
     @BindView(R.id.recView)
     RecyclerView recyclerView;
 
+    private final String log_tag = "RouteActivity_log";
+    private boolean backPress = false;
     private RouteInputAdapter adapter;
 
     private final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(new LatLng(37.398160, 4.477733), new LatLng(52.070498, 4.300700));
@@ -67,6 +69,26 @@ public class RouteInputActivity extends DaggerAppCompatActivity implements
     private RouteInputPlaceArrayAdapter mPlaceArrayAdapter;
     private InputMethodManager imm;
 
+    @Override
+    public void onBackPressed() {
+        if(backPress){
+            closeActivity();
+        }else{
+            backPress = true;
+            onBackPressSnackbar();
+        }
+    }
+
+    private void onBackPressSnackbar(){
+        Snackbar snackbar = Snackbar.make(recyclerView, "press again to exit", Snackbar.LENGTH_SHORT);
+        snackbar.addCallback(new Snackbar.Callback(){
+            @Override
+            public void onDismissed(Snackbar transientBottomBar, int event) {
+                backPress = false;
+            }
+        });
+        snackbar.show();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -248,7 +270,12 @@ public class RouteInputActivity extends DaggerAppCompatActivity implements
         startActivity(intent);
     }
 
-    private void showToast(String message) {
+    @Override
+    public void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    private void closeActivity(){
+        finish();
     }
 }

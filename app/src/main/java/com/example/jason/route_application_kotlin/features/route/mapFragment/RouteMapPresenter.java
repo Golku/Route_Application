@@ -32,7 +32,7 @@ public class RouteMapPresenter implements MvpRouteMap.Presenter {
 
     private Marker previousSelectedMarker;
 
-    RouteMapPresenter(MvpRouteMap.View view, LatLng userLocation, List<FormattedAddress> addressList) {
+    RouteMapPresenter(MvpRouteMap.View view, LatLng userLocation, List<FormattedAddress> addressList, List<String> routeOrder) {
         this.view = view;
         this.userLocation = userLocation;
         this.addressList = addressList;
@@ -142,7 +142,7 @@ public class RouteMapPresenter implements MvpRouteMap.Presenter {
             //use phone location for origin.
             origin = "Vrij-Harnasch 21, Den Hoorn";
             destination = clickedMarker.getTitle();
-            start = userLocation;
+            start = new LatLng(52.008234,4.312999);
             end = clickedMarker.getPosition();
 
             markerInfo.setSelected(true);

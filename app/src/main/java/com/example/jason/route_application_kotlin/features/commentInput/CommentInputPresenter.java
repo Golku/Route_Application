@@ -46,7 +46,7 @@ public class CommentInputPresenter implements MvpCommentInput.Presenter, Databas
     public void onCommentInputResponse(CommentInputResponse response) {
         view.onFinishNetworkOperation();
 
-        if(response.isSucces()){
+        if(response.isSuccess()){
             view.showToast("Comment was added");
             view.closeActivity();
         }else{

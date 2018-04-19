@@ -2,13 +2,13 @@ package com.example.jason.route_application_kotlin.data.pojos.database;
 
 public class CommentInputResponse {
 
-    private boolean succes;
+    private boolean success;
 
-    public boolean isSucces() {
-        return succes;
+    public boolean isSuccess() {
+        return success;
     }
 
-    public void setSucces(boolean succes) {
-        this.succes = succes;
+    public void setSuccess(boolean success) {
+        this.success = success;
     }
 }

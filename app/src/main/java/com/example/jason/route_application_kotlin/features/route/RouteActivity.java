@@ -65,19 +65,19 @@ public class RouteActivity extends DaggerAppCompatActivity implements
     }
 
     private void init() {
-        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-        }else {
-            showToast("unable to get location");
-        }
-
-        Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+//        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//
+//        }else {
+//            showToast("unable to get location");
+//        }
+//
+//        Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
         Route route = getIntent().getParcelableExtra("route");
 
         if(route != null) {
-            presenter.initializeRoute(route, location);
+            presenter.initializeRoute(route, null);
         }else{
             showToast("Something went wrong. Unable to get route.");
             closeActivity();
@@ -87,8 +87,8 @@ public class RouteActivity extends DaggerAppCompatActivity implements
     @Override
     public void setupFragments(RouteInfoHolder routeInfoHolder) {
         Bundle bundle = new Bundle();
-        Fragment routeMapFragment = new RouteMapFragment();
         Fragment routeListFragment = new RouteListFragment();
+        Fragment routeMapFragment = new RouteMapFragment();
 
         bundle.putParcelable("routeInfoHolder", routeInfoHolder);
 
@@ -96,8 +96,8 @@ public class RouteActivity extends DaggerAppCompatActivity implements
         routeListFragment.setArguments(bundle);
 
         RouteSectionPagerAdapter routeSectionPagerAdapter = new RouteSectionPagerAdapter(getSupportFragmentManager());
-        routeSectionPagerAdapter.addFragment("Map", routeMapFragment);
         routeSectionPagerAdapter.addFragment("Route", routeListFragment);
+        routeSectionPagerAdapter.addFragment("Map", routeMapFragment);
 
         viewPager.setAdapter(routeSectionPagerAdapter);
 

@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/list_row_background">
+    android:background="@color/white"
+    android:layout_marginTop="12dp">
 
     <TextView
         android:id="@+id/streetTextView"
@@ -36,7 +38,7 @@
         android:textColor="@color/colorPrimaryDark"
         app:layout_constraintEnd_toStartOf="@+id/goBtn"
         app:layout_constraintStart_toEndOf="@+id/addressTypeImageView"
-        app:layout_constraintTop_toBottomOf="@+id/streetTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/streetTextView"/>
 
     <TextView
         android:id="@+id/distanceTextView"
@@ -45,12 +47,12 @@
         android:layout_marginBottom="16dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
         android:text="@string/distance.list_travel_information"
         android:textColor="@color/colorPrimaryDark"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/addressTypeImageView"
-        app:layout_constraintTop_toBottomOf="@+id/cityTextView"
-        android:layout_marginLeft="8dp" />
+        app:layout_constraintTop_toBottomOf="@+id/cityTextView"/>
 
     <TextView
         android:id="@+id/positionTextView"
@@ -65,7 +67,7 @@
         android:visibility="visible"
         app:layout_constraintEnd_toStartOf="@+id/streetTextView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <ImageView
         android:id="@+id/goBtn"
@@ -73,11 +75,11 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
         android:contentDescription="@string/goBtn.list_travel_information"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_go_button4"
-        android:layout_marginRight="16dp" />
+        app:srcCompat="@drawable/ic_go_button4"/>
 
     <TextView
         android:id="@+id/durationTextView"
@@ -86,12 +88,12 @@
         android:layout_marginBottom="16dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
         android:text="@string/duration.list_travel_information"
         android:textColor="@color/colorPrimaryDark"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/distanceTextView"
-        app:layout_constraintTop_toBottomOf="@+id/cityTextView"
-        android:layout_marginLeft="8dp" />
+        app:layout_constraintTop_toBottomOf="@+id/cityTextView"/>
 
     <TextView
         android:id="@+id/estimatedArrivalTimeTextView"
@@ -104,7 +106,7 @@
         android:textColor="@color/colorPrimaryDark"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <ImageView
         android:id="@+id/addressTypeImageView"
@@ -112,10 +114,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
         android:contentDescription="@string/addressType.list_travel_information"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/positionTextView"
-        app:srcCompat="@drawable/ic_marker_private"
-        android:layout_marginLeft="8dp" />
+        app:srcCompat="@drawable/ic_marker_private"/>
 
 </android.support.constraint.ConstraintLayout>

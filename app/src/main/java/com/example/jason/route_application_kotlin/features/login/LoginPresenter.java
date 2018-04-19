@@ -19,12 +19,37 @@ public class LoginPresenter implements MvpLogin.Presenter, DatabaseCallback.Logi
     }
 
     @Override
-    public void onLoginResponse(LoginResponse response) {
+    public void loginBtnClick(String username, String password) {
 
+        //incription
+        String encryptedUsername = encryptInput(username);
+        String encryptedPassword = encryptInput(password);
+
+        interactor.loginRequest(encryptedUsername, encryptedPassword, this);
+
+    }
+
+    private String encryptInput (String input){
+        return input;
+    }
+
+    @Override
+    public void onLoginResponse(LoginResponse response) {
+        if (response == null) {return;}
+
+        if(response.isMatch()){
+//            begin session
+//            and start containerActivity
+
+            view.showContainer();
+            view.closeActivity();
+        }else{
+            view.showToast("No match");
+        }
     }
 
     @Override
     public void onLoginResponseFailure() {
-
+        view.showToast("Failed");
     }
 }

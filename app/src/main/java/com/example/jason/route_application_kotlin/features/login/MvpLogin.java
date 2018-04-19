@@ -6,14 +6,25 @@ public interface MvpLogin {
 
     interface View{
 
+        void onLoginBtnClick();
+
+        void showContainer();
+
+        void showToast(String message);
+
+        void closeActivity();
     }
 
     interface Presenter{
 
+        void loginBtnClick(String username, String password);
+
     }
 
     interface Interactor{
-        void login(DatabaseCallback.LoginCallBack callBack);
+
+        void loginRequest(String username, String password, DatabaseCallback.LoginCallBack callBack);
+
     }
 
 }
