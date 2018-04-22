@@ -7,47 +7,15 @@ import android.os.Parcelable;
 
 import java.util.List;
 
-public class Route implements Parcelable{
+public class Route{
 
     private String routeCode;
+    private int routeState;
     private List<FormattedAddress> addressList;
     private int privateAddressCount;
     private int businessAddressCount;
     private List<SingleDrive> routeList;
-
-    protected Route(Parcel in) {
-        routeCode = in.readString();
-        addressList = in.createTypedArrayList(FormattedAddress.CREATOR);
-        privateAddressCount = in.readInt();
-        businessAddressCount = in.readInt();
-        routeList = in.createTypedArrayList(SingleDrive.CREATOR);
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(routeCode);
-        dest.writeTypedList(addressList);
-        dest.writeInt(privateAddressCount);
-        dest.writeInt(businessAddressCount);
-        dest.writeTypedList(routeList);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    public static final Creator<Route> CREATOR = new Creator<Route>() {
-        @Override
-        public Route createFromParcel(Parcel in) {
-            return new Route(in);
-        }
-
-        @Override
-        public Route[] newArray(int size) {
-            return new Route[size];
-        }
-    };
+    private List<String> invalidAddresses;
 
     public String getRouteCode() {
         return routeCode;
@@ -55,6 +23,14 @@ public class Route implements Parcelable{
 
     public void setRouteCode(String routeCode) {
         this.routeCode = routeCode;
+    }
+
+    public int getRouteState() {
+        return routeState;
+    }
+
+    public void setRouteState(int routeState) {
+        this.routeState = routeState;
     }
 
     public List<FormattedAddress> getAddressList() {
@@ -87,5 +63,13 @@ public class Route implements Parcelable{
 
     public void setRouteList(List<SingleDrive> routeList) {
         this.routeList = routeList;
+    }
+
+    public List<String> getInvalidAddresses() {
+        return invalidAddresses;
+    }
+
+    public void setInvalidAddresses(List<String> invalidAddresses) {
+        this.invalidAddresses = invalidAddresses;
     }
 }

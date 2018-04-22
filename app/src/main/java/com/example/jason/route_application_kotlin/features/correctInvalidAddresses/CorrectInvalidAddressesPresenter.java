@@ -4,7 +4,6 @@ import android.os.Handler;
 
 import com.example.jason.route_application_kotlin.data.api.ApiCallback;
 import com.example.jason.route_application_kotlin.data.pojos.api.CorrectedAddressesRequest;
-import com.example.jason.route_application_kotlin.data.pojos.api.RouteResponse;
 
 import java.util.List;
 
@@ -102,7 +101,7 @@ public class CorrectInvalidAddressesPresenter implements MvpCorrectInvalidAddres
     }
 
     @Override
-    public void onRouteResponse(RouteResponse response) {
+    public void onRouteResponse(ContainerResponse response) {
         int routeState = response.getRouteState();
 
         switch (routeState) {

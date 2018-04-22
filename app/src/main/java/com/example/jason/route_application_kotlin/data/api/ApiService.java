@@ -2,9 +2,7 @@ package com.example.jason.route_application_kotlin.data.api;
 
 import com.example.jason.route_application_kotlin.data.pojos.api.CorrectedAddressesRequest;
 import com.example.jason.route_application_kotlin.data.pojos.api.RouteRequest;
-import com.example.jason.route_application_kotlin.data.pojos.api.RouteResponse;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveRequest;
-import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -18,14 +16,14 @@ import retrofit2.http.Path;
 
 public interface ApiService {
 
-    @GET("getroute/{routeCode}")
-    Call<RouteResponse> getRoute(@Path("routeCode")String routeCode);
+    @GET("getcontainer/{username}")
+    Call<ContainerResponse> getContainer(@Path("username")String username);
 
     @POST("submitroute")
-    Call<RouteResponse> submitRoute(@Body RouteRequest routeRequest);
+    Call<ContainerResponse> submitRoute(@Body RouteRequest routeRequest);
 
     @POST("correctedaddressessubmition")
-    Call<RouteResponse> submitCorrectedAddresses(@Body CorrectedAddressesRequest correctedAddressesRequest);
+    Call<ContainerResponse> submitCorrectedAddresses(@Body CorrectedAddressesRequest correctedAddressesRequest);
 
     @POST("getdriveinformation")
     Call<SingleDriveResponse> getDriveInformation(@Body SingleDriveRequest request);

@@ -14,6 +14,8 @@ import com.example.jason.route_application_kotlin.features.routeInput.RouteInput
 import com.example.jason.route_application_kotlin.features.routeInput.RouteInputModule;
 import com.example.jason.route_application_kotlin.features.routeState.RouteStateActivity;
 import com.example.jason.route_application_kotlin.features.routeState.RouteStateModule;
+import com.example.jason.route_application_kotlin.features.splash.SplashActivity;
+import com.example.jason.route_application_kotlin.features.splash.SplashModule;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
@@ -24,6 +26,9 @@ import dagger.android.ContributesAndroidInjector;
 
 @Module
 abstract class ActivityBuilder {
+
+    @ContributesAndroidInjector(modules = SplashModule.class)
+    abstract SplashActivity bindSplash();
 
     @ContributesAndroidInjector(modules = LoginModule.class)
     abstract LoginActivity bindLogin();

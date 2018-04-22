@@ -2,15 +2,18 @@ package com.example.jason.route_application_kotlin.features.login;
 
 import com.example.jason.route_application_kotlin.data.database.DatabaseCallback;
 import com.example.jason.route_application_kotlin.data.pojos.database.LoginResponse;
+import com.example.jason.route_application_kotlin.features.shared.BasePresenter;
 
 import javax.inject.Inject;
 
-public class LoginPresenter implements MvpLogin.Presenter, DatabaseCallback.LoginCallBack{
+public class LoginPresenter extends BasePresenter implements MvpLogin.Presenter, DatabaseCallback.LoginCallBack{
 
     private final String debugTag = "debugTag";
 
     private MvpLogin.View view;
     private MvpLogin.Interactor interactor;
+
+    private String username;
 
     @Inject
     LoginPresenter(MvpLogin.View view, MvpLogin.Interactor interactor) {
@@ -20,6 +23,8 @@ public class LoginPresenter implements MvpLogin.Presenter, DatabaseCallback.Logi
 
     @Override
     public void loginBtnClick(String username, String password) {
+
+        this.username = username;
 
         //incription
         String encryptedUsername = encryptInput(username);
@@ -38,18 +43,18 @@ public class LoginPresenter implements MvpLogin.Presenter, DatabaseCallback.Logi
         if (response == null) {return;}
 
         if(response.isMatch()){
-//            begin session
-//            and start containerActivity
-
+            setSession(username, view.getSession());
             view.showContainer();
             view.closeActivity();
         }else{
+            view.finishNetworkOperation();
             view.showToast("No match");
         }
     }
 
     @Override
     public void onLoginResponseFailure() {
+        view.finishNetworkOperation();
         view.showToast("Failed");
     }
 }

@@ -9,7 +9,7 @@ import dagger.Module;
  */
 
 @Module
-public abstract class RouteStateModule {
+public abstract class  RouteStateModule {
 
     @Binds
     public abstract MvpRouteState.View provideView(RouteStateActivity view);

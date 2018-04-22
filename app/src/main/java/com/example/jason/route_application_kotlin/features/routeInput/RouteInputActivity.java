@@ -58,7 +58,7 @@ public class RouteInputActivity extends DaggerAppCompatActivity implements
     @BindView(R.id.recView)
     RecyclerView recyclerView;
 
-    private final String log_tag = "RouteActivity_log";
+    private final String debugTag = "debugTag";
     private boolean backPress = false;
     private RouteInputAdapter adapter;
 
@@ -153,7 +153,7 @@ public class RouteInputActivity extends DaggerAppCompatActivity implements
 
             if (!places.getStatus().isSuccess()) {
 
-                Log.e(log_tag, "Place query did not complete. Error: " + places.getStatus().toString());
+                Log.e(debugTag, "Place query did not complete. Error: " + places.getStatus().toString());
 
                 return;
             }
@@ -172,13 +172,13 @@ public class RouteInputActivity extends DaggerAppCompatActivity implements
     @Override
     public void onConnected(Bundle bundle) {
         mPlaceArrayAdapter.setGoogleApiClient(mGoogleApiClient);
-        Log.i(log_tag, "Google Places API connected.");
+        Log.i(debugTag, "Google Places API connected.");
 
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.e(log_tag, "Google Places API connection failed with error code: "
+        Log.e(debugTag, "Google Places API connection failed with error code: "
                 + connectionResult.getErrorCode());
 
         Toast.makeText(this,
@@ -190,7 +190,7 @@ public class RouteInputActivity extends DaggerAppCompatActivity implements
     @Override
     public void onConnectionSuspended(int i) {
         mPlaceArrayAdapter.setGoogleApiClient(null);
-        Log.e(log_tag, "Google Places API connection suspended.");
+        Log.e(debugTag, "Google Places API connection suspended.");
     }
 
     @Override

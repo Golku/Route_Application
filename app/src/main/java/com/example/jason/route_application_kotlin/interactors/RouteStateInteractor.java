@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import com.example.jason.route_application_kotlin.data.api.ApiCallback;
 import com.example.jason.route_application_kotlin.data.api.ApiService;
 import com.example.jason.route_application_kotlin.data.pojos.api.RouteRequest;
-import com.example.jason.route_application_kotlin.data.pojos.api.RouteResponse;
 import com.example.jason.route_application_kotlin.features.routeState.MvpRouteState;
 
 import javax.inject.Inject;
@@ -30,16 +29,16 @@ public class RouteStateInteractor implements MvpRouteState.Interactor{
     @Override
     public void sendRoute(final ApiCallback.RouteResponseCallback callback, RouteRequest routeRequest) {
 
-        Call<RouteResponse> call = apiService.submitRoute(routeRequest);
+        Call<ContainerResponse> call = apiService.submitRoute(routeRequest);
 
-        call.enqueue(new Callback<RouteResponse>() {
+        call.enqueue(new Callback<ContainerResponse>() {
             @Override
-            public void onResponse(@NonNull Call<RouteResponse> call, @NonNull Response<RouteResponse> response) {
+            public void onResponse(@NonNull Call<ContainerResponse> call, @NonNull Response<ContainerResponse> response) {
                 callback.onRouteResponse(response.body());
             }
 
             @Override
-            public void onFailure(@NonNull Call<RouteResponse> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<ContainerResponse> call, @NonNull Throwable t) {
                 callback.onRouteResponseFailure();
             }
         });
@@ -49,16 +48,16 @@ public class RouteStateInteractor implements MvpRouteState.Interactor{
     @Override
     public void getRouteState(final ApiCallback.RouteResponseCallback callback, String routeCode) {
 
-        Call<RouteResponse> call = apiService.getRoute(routeCode);
+        Call<ContainerResponse> call = apiService.getRoute(routeCode);
 
-        call.enqueue(new Callback<RouteResponse>() {
+        call.enqueue(new Callback<ContainerResponse>() {
             @Override
-            public void onResponse(@NonNull Call<RouteResponse> call, @NonNull Response<RouteResponse> response) {
+            public void onResponse(@NonNull Call<ContainerResponse> call, @NonNull Response<ContainerResponse> response) {
                 callback.onRouteResponse(response.body());
             }
 
             @Override
-            public void onFailure(@NonNull Call<RouteResponse> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<ContainerResponse> call, @NonNull Throwable t) {
                 callback.onRouteResponseFailure();
             }
         });

@@ -5,7 +5,6 @@ import android.os.Handler;
 import com.example.jason.route_application_kotlin.data.api.ApiCallback;
 import com.example.jason.route_application_kotlin.data.pojos.api.Route;
 import com.example.jason.route_application_kotlin.data.pojos.api.RouteRequest;
-import com.example.jason.route_application_kotlin.data.pojos.api.RouteResponse;
 
 import javax.inject.Inject;
 
@@ -104,7 +103,7 @@ public class RouteStatePresenter implements MvpRouteState.Presenter, ApiCallback
 
 //    if the server has an error and returns a html page the application crashes. FIX THIS!!
     @Override
-    public void onRouteResponse(RouteResponse response) {
+    public void onRouteResponse(ContainerResponse response) {
         int routeState = response.getRouteState();
 
         switch (routeState) {

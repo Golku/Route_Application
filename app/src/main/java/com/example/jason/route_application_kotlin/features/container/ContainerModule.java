@@ -1,6 +1,6 @@
 package com.example.jason.route_application_kotlin.features.container;
 
-import com.example.jason.route_application_kotlin.interactors.RouteInteractor;
+import com.example.jason.route_application_kotlin.interactors.ContainerInteractor;
 
 import dagger.Binds;
 import dagger.Module;
@@ -19,6 +19,6 @@ public abstract class ContainerModule {
     public abstract MvpContainer.Presenter providePresenter(ContainerPresenter presenter);
 
     @Binds
-    public abstract MvpContainer.Interactor provideInteractor(RouteInteractor interactor);
+    public abstract MvpContainer.Interactor provideInteractor(ContainerInteractor interactor);
 
 }

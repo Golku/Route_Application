@@ -6,9 +6,10 @@ import com.example.jason.route_application_kotlin.data.api.ApiCallback;
 import com.example.jason.route_application_kotlin.data.pojos.RouteInfoHolder;
 import com.example.jason.route_application_kotlin.data.pojos.RouteListFragmentDelegation;
 import com.example.jason.route_application_kotlin.data.pojos.api.Route;
+import com.example.jason.route_application_kotlin.data.pojos.Session;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDrive;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveRequest;
-import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveResponse;
+import com.example.jason.route_application_kotlin.features.shared.BasePresenter;
 
 import javax.inject.Inject;
 import java.text.SimpleDateFormat;
@@ -19,14 +20,17 @@ import java.util.List;
  * Created by Jason on 07-Feb-18.
  */
 
-public class ContainerPresenter implements
+public class ContainerPresenter extends BasePresenter implements
         MvpContainer.Presenter,
+        ApiCallback.ContainerResponseCallback,
         ApiCallback.SingleDriveResponseCallback {
 
     private final String logTag = "debugTag";
 
     private MvpContainer.View view;
     private MvpContainer.Interactor interactor;
+
+    private Session session;
 
     private Route route;
     private List<SingleDrive> routeList;
@@ -45,6 +49,16 @@ public class ContainerPresenter implements
         deliveredPrivate = 0;
         deliveredBusiness = 0;
         sdf = new SimpleDateFormat("kk:mm");
+    }
+
+    @Override
+    public void setSession() {
+        session = view.getSession();
+    }
+
+    @Override
+    public void getContainer() {
+        interactor.getContainer(this, session.getUsername());
     }
 
     @Override
@@ -175,7 +189,17 @@ public class ContainerPresenter implements
         view.navigateToDestination(address);
     }
 
-//        If the server has an error and sends back a routeResponse with a html page
+    @Override
+    public void onContainerResponse(ContainerResponse response) {
+
+    }
+
+    @Override
+    public void onContainerResponseFailure() {
+        view.showToast("Unable to fetch container from api");
+    }
+
+    //        If the server has an error and sends back a routeResponse with a html page
 //        the response processing will fail! FIX THIS!!!
     @Override
     public void onSingleDriveResponse(SingleDriveResponse response) {

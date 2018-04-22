@@ -15,6 +15,7 @@ import com.example.jason.route_application_kotlin.R;
 import com.example.jason.route_application_kotlin.data.pojos.RouteInfoHolder;
 import com.example.jason.route_application_kotlin.data.pojos.RouteListFragmentDelegation;
 import com.example.jason.route_application_kotlin.data.pojos.api.Route;
+import com.example.jason.route_application_kotlin.data.pojos.Session;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveRequest;
 import com.example.jason.route_application_kotlin.features.addressDetails.AddressDetailsActivity;
 import com.example.jason.route_application_kotlin.features.container.listFragment.ContainerListFragment;
@@ -60,6 +61,8 @@ public class ContainerActivity extends DaggerAppCompatActivity implements
     }
 
     private void init() {
+        presenter.setSession();
+        presenter.getContainer();
 //        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 //        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 //
@@ -77,6 +80,11 @@ public class ContainerActivity extends DaggerAppCompatActivity implements
             showToast("Something went wrong. Unable to get route.");
             closeActivity();
         }
+    }
+
+    @Override
+    public Session getSession() {
+        return new Session(this);
     }
 
     @Override
