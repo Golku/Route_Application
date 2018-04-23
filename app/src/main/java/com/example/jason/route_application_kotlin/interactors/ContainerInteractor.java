@@ -2,6 +2,8 @@ package com.example.jason.route_application_kotlin.interactors;
 
 import com.example.jason.route_application_kotlin.data.api.ApiCallback;
 import com.example.jason.route_application_kotlin.data.api.ApiService;
+import com.example.jason.route_application_kotlin.data.pojos.api.Container;
+import com.example.jason.route_application_kotlin.data.pojos.api.SingleDrive;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveRequest;
 import com.example.jason.route_application_kotlin.features.container.MvpContainer;
 
@@ -24,34 +26,34 @@ public class ContainerInteractor implements MvpContainer.Interactor{
     }
 
     @Override
-    public void getContainer(final ApiCallback.ContainerResponseCallback callback, String username) {
-        Call<ContainerResponse> call = apiService.getContainer(username);
+    public void getContainer(String username, final ApiCallback.ContainerResponseCallback callback) {
+        Call<Container> call = apiService.getContainer(username);
 
-        call.enqueue(new Callback<ContainerResponse>() {
+        call.enqueue(new Callback<Container>() {
             @Override
-            public void onResponse(Call<ContainerResponse> call, Response<ContainerResponse> response) {
+            public void onResponse(Call<Container> call, Response<Container> response) {
                 callback.onContainerResponse(response.body());
             }
 
             @Override
-            public void onFailure(Call<ContainerResponse> call, Throwable t) {
+            public void onFailure(Call<Container> call, Throwable t) {
                 callback.onContainerResponseFailure();
             }
         });
     }
 
     @Override
-    public void getDriveInformation(final ApiCallback.SingleDriveResponseCallback callback, SingleDriveRequest request) {
-        Call<SingleDriveResponse> call = apiService.getDriveInformation(request);
+    public void getDriveInformation(SingleDriveRequest request, final ApiCallback.SingleDriveResponseCallback callback) {
+        Call<SingleDrive> call = apiService.getDriveInformation(request);
 
-        call.enqueue(new Callback<SingleDriveResponse>() {
+        call.enqueue(new Callback<SingleDrive>() {
             @Override
-            public void onResponse(Call<SingleDriveResponse> call, Response<SingleDriveResponse> response) {
+            public void onResponse(Call<SingleDrive> call, Response<SingleDrive> response) {
                 callback.onSingleDriveResponse(response.body());
             }
 
             @Override
-            public void onFailure(Call<SingleDriveResponse> call, Throwable t) {
+            public void onFailure(Call<SingleDrive> call, Throwable t) {
                 callback.onSingleDriveResponseFailure();
             }
         });

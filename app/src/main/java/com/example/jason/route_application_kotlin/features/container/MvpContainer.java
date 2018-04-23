@@ -42,8 +42,6 @@ public interface MvpContainer {
 
         void getContainer();
 
-        void initializeRoute(Route route, Location location);
-
         void getDriveInformation(SingleDriveRequest request);
 
         void markerDeselected();
@@ -59,9 +57,9 @@ public interface MvpContainer {
 
     interface Interactor{
 
-        void getContainer(ApiCallback.ContainerResponseCallback callback, String username);
+        void getContainer(String username, ApiCallback.ContainerResponseCallback callback);
 
-        void getDriveInformation(ApiCallback.SingleDriveResponseCallback callback, SingleDriveRequest request);
+        void getDriveInformation(SingleDriveRequest request, ApiCallback.SingleDriveResponseCallback callback);
 
     }
 

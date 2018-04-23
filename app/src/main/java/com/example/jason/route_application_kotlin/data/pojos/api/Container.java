@@ -4,8 +4,17 @@ import java.util.List;
 
 public class Container {
 
+    private String username;
     private Route route;
     private List<String> userAddresses;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public Route getRoute() {
         return route;

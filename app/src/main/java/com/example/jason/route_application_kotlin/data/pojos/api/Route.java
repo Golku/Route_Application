@@ -9,6 +9,7 @@ import java.util.List;
 
 public class Route{
 
+    private String username;
     private String routeCode;
     private int routeState;
     private List<FormattedAddress> addressList;
@@ -16,6 +17,14 @@ public class Route{
     private int businessAddressCount;
     private List<SingleDrive> routeList;
     private List<String> invalidAddresses;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public String getRouteCode() {
         return routeCode;

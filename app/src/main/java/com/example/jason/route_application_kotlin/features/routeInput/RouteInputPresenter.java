@@ -1,5 +1,8 @@
 package com.example.jason.route_application_kotlin.features.routeInput;
 
+import com.example.jason.route_application_kotlin.data.api.ApiCallback;
+import com.example.jason.route_application_kotlin.data.pojos.api.RouteRequest;
+
 import java.util.ArrayList;
 import javax.inject.Inject;
 
@@ -7,14 +10,16 @@ import javax.inject.Inject;
  * Created by Jason on 07-Feb-18.
  */
 
-public class RouteInputPresenter implements MvpRouteInput.Presenter{
+public class RouteInputPresenter implements MvpRouteInput.Presenter, ApiCallback.RouteSubmitCallback{
 
     private MvpRouteInput.View view;
+    private MvpRouteInput.Interactor interactor;
     private ArrayList<String> listOfAddresses;
 
     @Inject
-    public RouteInputPresenter(MvpRouteInput.View view) {
+    public RouteInputPresenter(MvpRouteInput.View view, MvpRouteInput.Interactor interactor) {
         this.view =  view;
+        this.interactor = interactor;
         listOfAddresses = new ArrayList<>();
     }
 
@@ -44,7 +49,18 @@ public class RouteInputPresenter implements MvpRouteInput.Presenter{
     }
 
     @Override
-    public void submitRouteRoute() {
-        view.startRoute(listOfAddresses);
+    public void submitRoute() {
+        RouteRequest request = new RouteRequest("username", listOfAddresses);
+        interactor.routeRequest(request, this);
+    }
+
+    @Override
+    public void onRouteSubmitResponse(boolean submitted) {
+
+    }
+
+    @Override
+    public void onRouteSubmitResponseFailure() {
+
     }
 }

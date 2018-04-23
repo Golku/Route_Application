@@ -5,8 +5,9 @@ import android.location.Location;
 import com.example.jason.route_application_kotlin.data.api.ApiCallback;
 import com.example.jason.route_application_kotlin.data.pojos.RouteInfoHolder;
 import com.example.jason.route_application_kotlin.data.pojos.RouteListFragmentDelegation;
-import com.example.jason.route_application_kotlin.data.pojos.api.Route;
+import com.example.jason.route_application_kotlin.data.pojos.api.Container;
 import com.example.jason.route_application_kotlin.data.pojos.Session;
+import com.example.jason.route_application_kotlin.data.pojos.api.Route;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDrive;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveRequest;
 import com.example.jason.route_application_kotlin.features.shared.BasePresenter;
@@ -25,14 +26,13 @@ public class ContainerPresenter extends BasePresenter implements
         ApiCallback.ContainerResponseCallback,
         ApiCallback.SingleDriveResponseCallback {
 
-    private final String logTag = "debugTag";
+    private final String debugTag = "debugTag";
 
     private MvpContainer.View view;
     private MvpContainer.Interactor interactor;
 
     private Session session;
-
-    private Route route;
+    private Container container;
     private List<SingleDrive> routeList;
 
     private int[] deliveryCompletion;
@@ -58,12 +58,13 @@ public class ContainerPresenter extends BasePresenter implements
 
     @Override
     public void getContainer() {
-        interactor.getContainer(this, session.getUsername());
+        interactor.getContainer(session.getUsername(), this);
     }
 
-    @Override
-    public void initializeRoute(Route route, Location location) {
-        this.route = route;
+    private void initializeContainer(Container container) {
+        this.container = container;
+
+        Route route = container.getRoute();
 
         RouteInfoHolder routeInfoHolder = new RouteInfoHolder();
 
@@ -100,7 +101,7 @@ public class ContainerPresenter extends BasePresenter implements
 
     @Override
     public void getDriveInformation(SingleDriveRequest request) {
-        interactor.getDriveInformation(this, request);
+        interactor.getDriveInformation(request,this);
     }
 
     private void addDeliveryTime(SingleDrive singleDrive) {
@@ -190,8 +191,11 @@ public class ContainerPresenter extends BasePresenter implements
     }
 
     @Override
-    public void onContainerResponse(ContainerResponse response) {
-
+    public void onContainerResponse(Container response) {
+        if (response != null){
+            container = response;
+            initializeContainer(container);
+        }
     }
 
     @Override
@@ -199,13 +203,13 @@ public class ContainerPresenter extends BasePresenter implements
         view.showToast("Unable to fetch container from api");
     }
 
-    //        If the server has an error and sends back a routeResponse with a html page
+//        If the server has an error and sends back a routeResponse with a html page
 //        the response processing will fail! FIX THIS!!!
     @Override
-    public void onSingleDriveResponse(SingleDriveResponse response) {
-        if (response.getSingleDrive() != null) {
-            routeList.add(response.getSingleDrive());
-            addDeliveryTime(response.getSingleDrive());
+    public void onSingleDriveResponse(SingleDrive response) {
+        if (response != null) {
+            routeList.add(response);
+            addDeliveryTime(response);
         }
     }
 

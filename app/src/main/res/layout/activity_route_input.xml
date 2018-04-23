@@ -24,13 +24,14 @@
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
             android:hint="@string/enter_place_here.Activity_route_input"
             android:textColor="@color/colorPrimaryDark"
             android:textColorHint="@color/colorPrimary"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/routeCodeInputEditText"/>
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
             android:id="@+id/headerTextView"
@@ -99,17 +100,18 @@
 
         <Button
             android:id="@+id/submitRouteBtn"
-            android:layout_width="wrap_content"
+            android:layout_width="124dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
             android:background="@drawable/buttons_style"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:text="@string/submit_route.Activity_route_input"
             android:textColor="@color/white"
-            app:layout_constraintEnd_toStartOf="@+id/getRouteBtn"
-            app:layout_constraintStart_toEndOf="@+id/addAddressToListBtn"
-            app:layout_constraintTop_toBottomOf="@+id/phoneTextView" />
+            app:layout_constraintTop_toBottomOf="@+id/phoneTextView"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
 
         <TextView
@@ -138,34 +140,6 @@
             android:textStyle="bold"
             app:layout_constraintLeft_toRightOf="@+id/listSizeHeaderTextView"
             app:layout_constraintTop_toBottomOf="@+id/addAddressToListBtn" />
-
-        <EditText
-            android:id="@+id/routeCodeInputEditText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:ems="10"
-            android:hint="@string/enter_route_code_here.Activity_route_input"
-            android:inputType="textPersonName"
-            android:textColor="@color/colorPrimaryDark"
-            android:textColorHint="@color/colorPrimary"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginLeft="16dp"/>
-
-        <Button
-            android:id="@+id/getRouteBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/buttons_style"
-            android:text="@string/get_route.Activity_route_input"
-            android:textColor="@color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/phoneTextView" />
 
     </android.support.constraint.ConstraintLayout>
 

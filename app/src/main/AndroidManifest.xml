@@ -54,8 +54,6 @@
             android:name=".features.correctInvalidAddresses.CorrectInvalidAddressesActivity"
             android:windowSoftInputMode="adjustPan"/>
 
-        <activity android:name=".features.routeState.RouteStateActivity"/>
-
     </application>
 
 </manifest>

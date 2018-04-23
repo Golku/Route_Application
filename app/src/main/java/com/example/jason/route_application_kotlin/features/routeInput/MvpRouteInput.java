@@ -1,5 +1,7 @@
 package com.example.jason.route_application_kotlin.features.routeInput;
 
+import com.example.jason.route_application_kotlin.data.api.ApiCallback;
+import com.example.jason.route_application_kotlin.data.pojos.api.RouteRequest;
 import java.util.ArrayList;
 
 /**
@@ -22,11 +24,11 @@ public interface MvpRouteInput {
 
         void showAddressDetails(String address);
 
-        void startRoute(ArrayList<String> listOfAddresses);
-
         void updateListSizeTextView(int listSize);
 
         void showToast(String message);
+
+        void closeActivity();
 
     }
 
@@ -34,13 +36,19 @@ public interface MvpRouteInput {
 
         void setUpView();
 
-        void submitRouteRoute();
+        void submitRoute();
 
         void addAddressToList(String address);
 
         void onListItemClick(String address);
 
         void onListItemSwiped(int position);
+
+    }
+
+    interface Interactor{
+
+        void routeRequest(RouteRequest request, ApiCallback.RouteSubmitCallback callback);
 
     }
 

@@ -50,8 +50,6 @@ public class ContainerActivity extends DaggerAppCompatActivity implements
     @BindView(R.id.route_end_time)
     TextView routeEndTime;
 
-    LocationManager locationManager;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,23 +61,6 @@ public class ContainerActivity extends DaggerAppCompatActivity implements
     private void init() {
         presenter.setSession();
         presenter.getContainer();
-//        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//
-//        }else {
-//            showToast("unable to get location");
-//        }
-//
-//        Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-
-        Route route = getIntent().getParcelableExtra("route");
-
-        if(route != null) {
-            presenter.initializeRoute(route, null);
-        }else{
-            showToast("Something went wrong. Unable to get route.");
-            closeActivity();
-        }
     }
 
     @Override
