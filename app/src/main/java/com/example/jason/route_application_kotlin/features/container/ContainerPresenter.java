@@ -68,8 +68,8 @@ public class ContainerPresenter extends BasePresenter implements
             System.out.println("route is not null");
         }
 
-        if(route.getFormattedAddressList() != null){
-            addressList = route.getFormattedAddressList();
+        if(route.getAddressList() != null){
+            addressList = route.getAddressList();
         }else{
             addressList = new ArrayList<>();
         }

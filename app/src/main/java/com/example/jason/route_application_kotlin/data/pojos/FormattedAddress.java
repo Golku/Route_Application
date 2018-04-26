@@ -20,6 +20,10 @@ public class FormattedAddress implements Parcelable {
     private boolean isBusiness;
     private boolean isInvalid;
 
+    public FormattedAddress(){
+
+    }
+
     protected FormattedAddress(Parcel in) {
         rawAddress = in.readString();
         formattedAddress = in.readString();
