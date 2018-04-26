@@ -7,47 +7,24 @@ import android.os.Parcelable;
 
 import java.util.List;
 
-public class Route implements Parcelable{
+public class Route{
 
+    private String username;
     private String routeCode;
+    private int routeState;
     private List<FormattedAddress> addressList;
     private int privateAddressCount;
     private int businessAddressCount;
+    private int invalidAddressCount;
     private List<SingleDrive> routeList;
 
-    protected Route(Parcel in) {
-        routeCode = in.readString();
-        addressList = in.createTypedArrayList(FormattedAddress.CREATOR);
-        privateAddressCount = in.readInt();
-        businessAddressCount = in.readInt();
-        routeList = in.createTypedArrayList(SingleDrive.CREATOR);
+    public String getUsername() {
+        return username;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(routeCode);
-        dest.writeTypedList(addressList);
-        dest.writeInt(privateAddressCount);
-        dest.writeInt(businessAddressCount);
-        dest.writeTypedList(routeList);
+    public void setUsername(String username) {
+        this.username = username;
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    public static final Creator<Route> CREATOR = new Creator<Route>() {
-        @Override
-        public Route createFromParcel(Parcel in) {
-            return new Route(in);
-        }
-
-        @Override
-        public Route[] newArray(int size) {
-            return new Route[size];
-        }
-    };
 
     public String getRouteCode() {
         return routeCode;
@@ -55,6 +32,14 @@ public class Route implements Parcelable{
 
     public void setRouteCode(String routeCode) {
         this.routeCode = routeCode;
+    }
+
+    public int getRouteState() {
+        return routeState;
+    }
+
+    public void setRouteState(int routeState) {
+        this.routeState = routeState;
     }
 
     public List<FormattedAddress> getAddressList() {
@@ -79,6 +64,14 @@ public class Route implements Parcelable{
 
     public void setBusinessAddressCount(int businessAddressCount) {
         this.businessAddressCount = businessAddressCount;
+    }
+
+    public int getInvalidAddressCount() {
+        return invalidAddressCount;
+    }
+
+    public void setInvalidAddressCount(int invalidAddressCount) {
+        this.invalidAddressCount = invalidAddressCount;
     }
 
     public List<SingleDrive> getRouteList() {

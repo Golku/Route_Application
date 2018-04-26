@@ -1,15 +1,15 @@
 package com.example.jason.route_application_kotlin.features.container;
 
-import android.location.Location;
-
 import com.example.jason.route_application_kotlin.data.api.ApiCallback;
+import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
 import com.example.jason.route_application_kotlin.data.pojos.RouteInfoHolder;
 import com.example.jason.route_application_kotlin.data.pojos.RouteListFragmentDelegation;
+import com.example.jason.route_application_kotlin.data.pojos.api.Container;
+import com.example.jason.route_application_kotlin.data.pojos.Session;
 import com.example.jason.route_application_kotlin.data.pojos.api.Route;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDrive;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveRequest;
-import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveResponse;
-
+import com.example.jason.route_application_kotlin.features.shared.BasePresenter;
 import javax.inject.Inject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -19,16 +19,20 @@ import java.util.List;
  * Created by Jason on 07-Feb-18.
  */
 
-public class ContainerPresenter implements
+public class ContainerPresenter extends BasePresenter implements
         MvpContainer.Presenter,
+        ApiCallback.ContainerResponseCallback,
         ApiCallback.SingleDriveResponseCallback {
 
-    private final String logTag = "debugTag";
+    private final String debugTag = "debugTag";
 
     private MvpContainer.View view;
     private MvpContainer.Interactor interactor;
 
+    private Session session;
+    private Container container;
     private Route route;
+    private List<FormattedAddress> addressList;
     private List<SingleDrive> routeList;
 
     private int[] deliveryCompletion;
@@ -48,31 +52,53 @@ public class ContainerPresenter implements
     }
 
     @Override
-    public void initializeRoute(Route route, Location location) {
-        this.route = route;
+    public void getContainer(Session session) {
+        this.session = session;
+        interactor.getContainer(session.getUsername(), this);
+    }
 
-        RouteInfoHolder routeInfoHolder = new RouteInfoHolder();
+    private void setRouteInfo(){
 
-        routeInfoHolder.setAddressList(route.getAddressList());
+        if(container.getRoute() == null){
+            addressList = new ArrayList<>();
+            routeList = new ArrayList<>();
+            return;
+        }else{
+            route = container.getRoute();
+            System.out.println("route is not null");
+        }
+
+        if(route.getAddressList() != null){
+            addressList = route.getAddressList();
+        }else{
+            addressList = new ArrayList<>();
+        }
 
         if (route.getRouteList() != null && !route.getRouteList().isEmpty()) {
             routeList = route.getRouteList();
-            routeInfoHolder.setRouteOrder(orderRoute(routeList));
-            routeInfoHolder.setOrganized(true);
         } else {
             routeList = new ArrayList<>();
-            routeInfoHolder.setOrganized(false);
         }
 
-//        routeInfoHolder.setUserLocation(new LatLng(location.getLatitude(), location.getLongitude()));
-        routeInfoHolder.setRouteList(routeList);
+        deliveryCompletion[1] = route.getPrivateAddressCount();
+        deliveryCompletion[3] = route.getBusinessAddressCount();
+    }
+
+    private void initializeContainer(Container container) {
+        this.container = container;
 
         deliveryCompletion[0] = deliveredPrivate;
-        deliveryCompletion[1] = route.getPrivateAddressCount();
         deliveryCompletion[2] = deliveredBusiness;
-        deliveryCompletion[3] = route.getBusinessAddressCount();
+
+        setRouteInfo();
 
         view.updateDeliveryCompletion(deliveryCompletion);
+
+        RouteInfoHolder routeInfoHolder = new RouteInfoHolder();
+
+        routeInfoHolder.setAddressList(addressList);
+        routeInfoHolder.setRouteList(routeList);
+
         view.setupFragments(routeInfoHolder);
     }
 
@@ -86,7 +112,7 @@ public class ContainerPresenter implements
 
     @Override
     public void getDriveInformation(SingleDriveRequest request) {
-        interactor.getDriveInformation(this, request);
+        interactor.getDriveInformation(request,this);
     }
 
     private void addDeliveryTime(SingleDrive singleDrive) {
@@ -175,13 +201,25 @@ public class ContainerPresenter implements
         view.navigateToDestination(address);
     }
 
+    @Override
+    public void onContainerResponse(Container response) {
+        if (response != null){
+            initializeContainer(response);
+        }
+    }
+
+    @Override
+    public void onContainerResponseFailure() {
+        view.showToast("Unable to fetch container from api");
+    }
+
 //        If the server has an error and sends back a routeResponse with a html page
 //        the response processing will fail! FIX THIS!!!
     @Override
-    public void onSingleDriveResponse(SingleDriveResponse response) {
-        if (response.getSingleDrive() != null) {
-            routeList.add(response.getSingleDrive());
-            addDeliveryTime(response.getSingleDrive());
+    public void onSingleDriveResponse(SingleDrive response) {
+        if (response != null) {
+            routeList.add(response);
+            addDeliveryTime(response);
         }
     }
 

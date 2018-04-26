@@ -16,8 +16,7 @@ public class AddressFormatterModule {
     @Provides
     @AppScope
     public AddressFormatter provideAddressFormatter(){
-        AddressFormatter addressFormatter = new AddressFormatter();
-        return addressFormatter;
+        return new AddressFormatter();
     }
 
 }

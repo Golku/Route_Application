@@ -1,11 +1,9 @@
 package com.example.jason.route_application_kotlin.features.container;
 
-import android.location.Location;
-
 import com.example.jason.route_application_kotlin.data.api.ApiCallback;
 import com.example.jason.route_application_kotlin.data.pojos.RouteInfoHolder;
 import com.example.jason.route_application_kotlin.data.pojos.RouteListFragmentDelegation;
-import com.example.jason.route_application_kotlin.data.pojos.api.Route;
+import com.example.jason.route_application_kotlin.data.pojos.Session;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveRequest;
 
 /**
@@ -35,7 +33,7 @@ public interface MvpContainer {
 
     interface Presenter{
 
-        void initializeRoute(Route route, Location location);
+        void getContainer(Session session);
 
         void getDriveInformation(SingleDriveRequest request);
 
@@ -52,8 +50,9 @@ public interface MvpContainer {
 
     interface Interactor{
 
-        void getDriveInformation(ApiCallback.SingleDriveResponseCallback callback, SingleDriveRequest request);
+        void getContainer(String username, ApiCallback.ContainerResponseCallback callback);
 
+        void getDriveInformation(SingleDriveRequest request, ApiCallback.SingleDriveResponseCallback callback);
     }
 
 }

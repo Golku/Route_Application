@@ -54,9 +54,9 @@ public interface MvpCorrectInvalidAddresses {
 
     interface Interactor{
 
-        void getInvalidAddresses(ApiCallback.RouteResponseCallback callback, String routeCode);
-
-        void submitCorrectedAddresses(ApiCallback.RouteResponseCallback callback, CorrectedAddressesRequest correctedAddressesRequest);
+//        void getInvalidAddresses(ApiCallback.RouteResponseCallback callback, String routeCode);
+//
+//        void submitCorrectedAddresses(ApiCallback.RouteResponseCallback callback, CorrectedAddressesRequest correctedAddressesRequest);
 
     }
 

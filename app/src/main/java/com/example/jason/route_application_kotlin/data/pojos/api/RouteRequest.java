@@ -1,6 +1,5 @@
 package com.example.jason.route_application_kotlin.data.pojos.api;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,30 +8,20 @@ import java.util.List;
 
 public class RouteRequest {
 
-    private String routeCode;
-    private String origin;
+    private String username;
     private List<String> addressList;
 
-    public RouteRequest(String routeCode, String origin, ArrayList<String> addressList) {
-        this.routeCode = routeCode;
-        this.origin = origin;
+    public RouteRequest(String username, List<String> addressList) {
+        this.username = username;
         this.addressList = addressList;
     }
 
-    public String getRouteCode() {
-        return routeCode;
+    public String getUsername() {
+        return username;
     }
 
-    public void setRouteCode(String routeCode) {
-        this.routeCode = routeCode;
-    }
-
-    public String getOrigin() {
-        return origin;
-    }
-
-    public void setOrigin(String origin) {
-        this.origin = origin;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public List<String> getAddressList() {

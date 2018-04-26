@@ -11,7 +11,6 @@ import com.example.jason.route_application_kotlin.data.pojos.MarkerInfo;
 import com.example.jason.route_application_kotlin.data.pojos.RouteInfoHolder;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveRequest;
 import com.example.jason.route_application_kotlin.features.container.ContainerActivity;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -92,7 +91,6 @@ public class ContainerMapFragment extends Fragment implements
         RouteInfoHolder routeInfoHolder = getArguments().getParcelable("routeInfoHolder");
 
         presenter = new ContainerMapPresenter(this,
-                routeInfoHolder.getUserLocation(),
                 routeInfoHolder.getAddressList(),
                 routeInfoHolder.getRouteOrder());
 
@@ -144,11 +142,15 @@ public class ContainerMapFragment extends Fragment implements
         if (addressList != null) {
             for (FormattedAddress address : addressList) {
 
+                if(address.isInvalid()){
+                    return;
+                }
+
                 MarkerInfo markerInfo = new MarkerInfo();
 
                 markerInfo.setSelected(false);
 
-                if (address.getIsBusiness()) {
+                if (address.isBusiness()) {
                     markerInfo.setBusiness(true);
                     markerInfo.setIconType("business");
                 } else {

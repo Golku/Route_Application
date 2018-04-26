@@ -24,7 +24,9 @@ public class ContainerListPresenter implements MvpContainerList.Presenter{
 
     @Override
     public void onDelegation(RouteListFragmentDelegation delegation) {
+
         String operation = delegation.getOperation();
+
         int position = delegation.getPosition();
 
         switch (operation) {

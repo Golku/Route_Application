@@ -1,16 +1,21 @@
 package com.example.jason.route_application_kotlin.features.login;
 
 import com.example.jason.route_application_kotlin.data.database.DatabaseCallback;
+import com.example.jason.route_application_kotlin.data.pojos.Session;
 
 public interface MvpLogin {
 
     interface View{
+
+        Session getSession();
 
         void onLoginBtnClick();
 
         void showContainer();
 
         void showToast(String message);
+
+        void finishNetworkOperation();
 
         void closeActivity();
     }

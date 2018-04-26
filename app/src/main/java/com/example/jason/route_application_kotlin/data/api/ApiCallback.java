@@ -1,7 +1,7 @@
 package com.example.jason.route_application_kotlin.data.api;
 
-import com.example.jason.route_application_kotlin.data.pojos.api.RouteResponse;
-import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveResponse;
+import com.example.jason.route_application_kotlin.data.pojos.api.Container;
+import com.example.jason.route_application_kotlin.data.pojos.api.SingleDrive;
 
 /**
  * Created by Jason on 14-Feb-18.
@@ -9,13 +9,20 @@ import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveResp
 
 public interface ApiCallback {
 
-    interface RouteResponseCallback {
-        void onRouteResponse(RouteResponse response);
-        void onRouteResponseFailure();
+    interface ContainerResponseCallback {
+        void onContainerResponse(Container response);
+        void onContainerResponseFailure();
+    }
+
+    interface RouteSubmitCallback{
+        void onRouteSubmitResponse(boolean submitted);
+        void onRouteSubmitResponseFailure();
     }
 
     interface SingleDriveResponseCallback {
-        void onSingleDriveResponse(SingleDriveResponse response);
+        void onSingleDriveResponse(SingleDrive response);
         void onSingleDriveResponseFailure();
     }
+
+
 }

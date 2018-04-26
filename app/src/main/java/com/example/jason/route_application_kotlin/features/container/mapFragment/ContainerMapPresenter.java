@@ -28,9 +28,8 @@ public class ContainerMapPresenter implements MvpContainerMap.Presenter {
 
     private Marker previousSelectedMarker;
 
-    ContainerMapPresenter(MvpContainerMap.View view, LatLng userLocation, List<FormattedAddress> addressList, List<String> routeOrder) {
+    ContainerMapPresenter(MvpContainerMap.View view, List<FormattedAddress> addressList, List<String> routeOrder) {
         this.view = view;
-        this.userLocation = userLocation;
         this.addressList = addressList;
         this.routeOrder = new ArrayList<>();
         this.previousSelectedMarker = null;
@@ -46,7 +45,7 @@ public class ContainerMapPresenter implements MvpContainerMap.Presenter {
 
         String markerDestination = routeOrder.get(markerPosition).getTitle();
 
-        for(int i=markerPosition; i<routeOrder.size(); i++){
+        for(int i = markerPosition; i<routeOrder.size(); i++){
             Marker marker = routeOrder.get(i);
             MarkerInfo markerInfo = (MarkerInfo) marker.getTag();
 

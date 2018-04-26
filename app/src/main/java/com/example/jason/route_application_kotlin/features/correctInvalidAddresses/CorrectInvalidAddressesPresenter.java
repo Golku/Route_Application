@@ -4,7 +4,6 @@ import android.os.Handler;
 
 import com.example.jason.route_application_kotlin.data.api.ApiCallback;
 import com.example.jason.route_application_kotlin.data.pojos.api.CorrectedAddressesRequest;
-import com.example.jason.route_application_kotlin.data.pojos.api.RouteResponse;
 
 import java.util.List;
 
@@ -14,7 +13,7 @@ import javax.inject.Inject;
  * Created by Jason on 23-Feb-18.
  */
 
-public class CorrectInvalidAddressesPresenter implements MvpCorrectInvalidAddresses.Presenter, ApiCallback.RouteResponseCallback {
+public class CorrectInvalidAddressesPresenter implements MvpCorrectInvalidAddresses.Presenter{
 
     private final String log_tag = "logTagDebug";
 
@@ -44,7 +43,7 @@ public class CorrectInvalidAddressesPresenter implements MvpCorrectInvalidAddres
     public void checkForInvalidAddresses() {
         view.onStartNetworkOperation();
         networkFetchAttempts++;
-        interactor.getInvalidAddresses(this, routeCode);
+//        interactor.getInvalidAddresses(this, routeCode);
     }
 
     @Override
@@ -70,7 +69,7 @@ public class CorrectInvalidAddressesPresenter implements MvpCorrectInvalidAddres
         view.onStartNetworkOperation();
         correctedAddressesRequest.setRouteCode(routeCode);
         correctedAddressesRequest.setCorrectedAddressesList(invalidAddressesList);
-        interactor.submitCorrectedAddresses(this, correctedAddressesRequest);
+//        interactor.submitCorrectedAddresses(this, correctedAddressesRequest);
     }
 
     private void onValidatingAddresses(){
@@ -101,23 +100,23 @@ public class CorrectInvalidAddressesPresenter implements MvpCorrectInvalidAddres
         }
     }
 
-    @Override
-    public void onRouteResponse(RouteResponse response) {
-        int routeState = response.getRouteState();
-
-        switch (routeState) {
-            case 1 : onValidatingAddresses();
-                break;
-            case 4 : onHasInvalidAddresses(response.getInvalidAddresses());
-                break;
-            default: view.closeActivity();
-        }
-    }
-
-    @Override
-    public void onRouteResponseFailure() {
-        view.showToast("Unable to connect to the api");
-        view.closeActivity();
-    }
+//    @Override
+//    public void onRouteResponse(ContainerResponse response) {
+//        int routeState = response.getRouteState();
+//
+//        switch (routeState) {
+//            case 1 : onValidatingAddresses();
+//                break;
+//            case 4 : onHasInvalidAddresses(response.getInvalidAddresses());
+//                break;
+//            default: view.closeActivity();
+//        }
+//    }
+//
+//    @Override
+//    public void onRouteResponseFailure() {
+//        view.showToast("Unable to connect to the api");
+//        view.closeActivity();
+//    }
 
 }

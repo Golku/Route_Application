@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -15,6 +16,7 @@ import com.example.jason.route_application_kotlin.R;
 import com.example.jason.route_application_kotlin.data.pojos.RouteInfoHolder;
 import com.example.jason.route_application_kotlin.data.pojos.RouteListFragmentDelegation;
 import com.example.jason.route_application_kotlin.data.pojos.api.Route;
+import com.example.jason.route_application_kotlin.data.pojos.Session;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveRequest;
 import com.example.jason.route_application_kotlin.features.addressDetails.AddressDetailsActivity;
 import com.example.jason.route_application_kotlin.features.container.listFragment.ContainerListFragment;
@@ -33,8 +35,6 @@ public class ContainerActivity extends DaggerAppCompatActivity implements
         ContainerListFragment.RouteListListener,
         ContainerMapFragment.RouteMapListener {
 
-    private final String debugTag = "debugTag";
-
     @Inject
     MvpContainer.Presenter presenter;
 
@@ -49,7 +49,30 @@ public class ContainerActivity extends DaggerAppCompatActivity implements
     @BindView(R.id.route_end_time)
     TextView routeEndTime;
 
-    LocationManager locationManager;
+    private final String debugTag = "debugTag";
+
+    private boolean backPress = false;
+
+    @Override
+    public void onBackPressed() {
+        if(backPress){
+            closeActivity();
+        }else{
+            backPress = true;
+            onBackPressSnackbar();
+        }
+    }
+
+    private void onBackPressSnackbar(){
+        Snackbar snackbar = Snackbar.make(viewPager, "press again to exit", Snackbar.LENGTH_SHORT);
+        snackbar.addCallback(new Snackbar.Callback(){
+            @Override
+            public void onDismissed(Snackbar transientBottomBar, int event) {
+                backPress = false;
+            }
+        });
+        snackbar.show();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,30 +83,14 @@ public class ContainerActivity extends DaggerAppCompatActivity implements
     }
 
     private void init() {
-//        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//
-//        }else {
-//            showToast("unable to get location");
-//        }
-//
-//        Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-
-        Route route = getIntent().getParcelableExtra("route");
-
-        if(route != null) {
-            presenter.initializeRoute(route, null);
-        }else{
-            showToast("Something went wrong. Unable to get route.");
-            closeActivity();
-        }
+        presenter.getContainer(new Session(this));
     }
 
     @Override
     public void setupFragments(RouteInfoHolder routeInfoHolder) {
         Bundle bundle = new Bundle();
-        Fragment routeListFragment = new ContainerListFragment();
         Fragment routeMapFragment = new ContainerMapFragment();
+        Fragment routeListFragment = new ContainerListFragment();
 
         bundle.putParcelable("routeInfoHolder", routeInfoHolder);
 
@@ -91,8 +98,8 @@ public class ContainerActivity extends DaggerAppCompatActivity implements
         routeListFragment.setArguments(bundle);
 
         ContainerSectionPagerAdapter containerSectionPagerAdapter = new ContainerSectionPagerAdapter(getSupportFragmentManager());
-        containerSectionPagerAdapter.addFragment("Route", routeListFragment);
         containerSectionPagerAdapter.addFragment("Map", routeMapFragment);
+        containerSectionPagerAdapter.addFragment("Route", routeListFragment);
 
         viewPager.setAdapter(containerSectionPagerAdapter);
 

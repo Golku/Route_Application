@@ -18,8 +18,10 @@ public class FormattedAddress implements Parcelable {
     private double lat;
     private double lng;
     private boolean isBusiness;
+    private boolean isInvalid;
 
-    public FormattedAddress() {
+    public FormattedAddress(){
+
     }
 
     protected FormattedAddress(Parcel in) {
@@ -32,6 +34,7 @@ public class FormattedAddress implements Parcelable {
         lat = in.readDouble();
         lng = in.readDouble();
         isBusiness = in.readByte() != 0;
+        isInvalid = in.readByte() != 0;
     }
 
     @Override
@@ -45,6 +48,7 @@ public class FormattedAddress implements Parcelable {
         dest.writeDouble(lat);
         dest.writeDouble(lng);
         dest.writeByte((byte) (isBusiness ? 1 : 0));
+        dest.writeByte((byte) (isInvalid ? 1 : 0));
     }
 
     @Override
@@ -128,11 +132,19 @@ public class FormattedAddress implements Parcelable {
         this.lng = lng;
     }
 
-    public boolean getIsBusiness() {
+    public boolean isBusiness() {
         return isBusiness;
     }
 
-    public void setIsBusiness(boolean business) {
+    public void setBusiness(boolean business) {
         isBusiness = business;
+    }
+
+    public boolean isInvalid() {
+        return isInvalid;
+    }
+
+    public void setInvalid(boolean invalid) {
+        isInvalid = invalid;
     }
 }

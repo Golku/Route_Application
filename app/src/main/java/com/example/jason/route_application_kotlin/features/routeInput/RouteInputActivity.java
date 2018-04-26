@@ -17,7 +17,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.example.jason.route_application_kotlin.R;
 import com.example.jason.route_application_kotlin.features.addressDetails.AddressDetailsActivity;
-import com.example.jason.route_application_kotlin.features.routeState.RouteStateActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -45,8 +44,6 @@ public class RouteInputActivity extends DaggerAppCompatActivity implements
     @Inject
     MvpRouteInput.Presenter presenter;
 
-    @BindView(R.id.routeCodeInputEditText)
-    EditText routeCodeInputEditText;
     @BindView(R.id.autoCompleteTextView)
     AutoCompleteTextView autoCompleteTextView;
     @BindView(R.id.addressTextView)
@@ -58,35 +55,13 @@ public class RouteInputActivity extends DaggerAppCompatActivity implements
     @BindView(R.id.recView)
     RecyclerView recyclerView;
 
-    private final String log_tag = "RouteActivity_log";
-    private boolean backPress = false;
+    private final String debugTag = "debugTag";
     private RouteInputAdapter adapter;
 
     private final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(new LatLng(37.398160, 4.477733), new LatLng(52.070498, 4.300700));
     private GoogleApiClient mGoogleApiClient;
     private RouteInputPlaceArrayAdapter mPlaceArrayAdapter;
     private InputMethodManager imm;
-
-    @Override
-    public void onBackPressed() {
-        if(backPress){
-            closeActivity();
-        }else{
-            backPress = true;
-            onBackPressSnackbar();
-        }
-    }
-
-    private void onBackPressSnackbar(){
-        Snackbar snackbar = Snackbar.make(recyclerView, "press again to exit", Snackbar.LENGTH_SHORT);
-        snackbar.addCallback(new Snackbar.Callback(){
-            @Override
-            public void onDismissed(Snackbar transientBottomBar, int event) {
-                backPress = false;
-            }
-        });
-        snackbar.show();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,7 +128,7 @@ public class RouteInputActivity extends DaggerAppCompatActivity implements
 
             if (!places.getStatus().isSuccess()) {
 
-                Log.e(log_tag, "Place query did not complete. Error: " + places.getStatus().toString());
+                Log.e(debugTag, "Place query did not complete. Error: " + places.getStatus().toString());
 
                 return;
             }
@@ -172,13 +147,13 @@ public class RouteInputActivity extends DaggerAppCompatActivity implements
     @Override
     public void onConnected(Bundle bundle) {
         mPlaceArrayAdapter.setGoogleApiClient(mGoogleApiClient);
-        Log.i(log_tag, "Google Places API connected.");
+        Log.i(debugTag, "Google Places API connected.");
 
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.e(log_tag, "Google Places API connection failed with error code: "
+        Log.e(debugTag, "Google Places API connection failed with error code: "
                 + connectionResult.getErrorCode());
 
         Toast.makeText(this,
@@ -190,7 +165,7 @@ public class RouteInputActivity extends DaggerAppCompatActivity implements
     @Override
     public void onConnectionSuspended(int i) {
         mPlaceArrayAdapter.setGoogleApiClient(null);
-        Log.e(log_tag, "Google Places API connection suspended.");
+        Log.e(debugTag, "Google Places API connection suspended.");
     }
 
     @Override
@@ -246,26 +221,7 @@ public class RouteInputActivity extends DaggerAppCompatActivity implements
     @OnClick(R.id.submitRouteBtn)
     @Override
     public void onSubmitRouteButtonClick() {
-//        startOrganizedRoute();
-        presenter.submitRouteRoute();
-    }
-
-    @Override
-    public void startRoute(ArrayList<String> listOfAddresses) {
-        Intent intent = new Intent(this, RouteStateActivity.class);
-        intent.putExtra("action", "submitRoute");
-        intent.putExtra("routeCode", routeCodeInputEditText.getText().toString());
-        intent.putExtra("origin", "vrij-harnasch 21, den hoorn");
-        intent.putStringArrayListExtra("addressesList", listOfAddresses);
-        startActivity(intent);
-    }
-
-    @OnClick(R.id.getRouteBtn)
-    public void startRoute() {
-        Intent intent = new Intent(this, RouteStateActivity.class);
-        intent.putExtra("action", "getRoute");
-        intent.putExtra("routeCode", routeCodeInputEditText.getText().toString());
-        startActivity(intent);
+        presenter.submitRoute();
     }
 
     @Override
@@ -273,7 +229,8 @@ public class RouteInputActivity extends DaggerAppCompatActivity implements
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-    private void closeActivity(){
+    @Override
+    public void closeActivity(){
         finish();
     }
 }
