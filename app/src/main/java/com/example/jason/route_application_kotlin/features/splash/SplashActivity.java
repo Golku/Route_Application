@@ -30,14 +30,9 @@ public class SplashActivity extends DaggerAppCompatActivity implements MvpSplash
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                presenter.redirectUser();
+                presenter.redirectUser(new Session(SplashActivity.this));
             }
         }, 2000);
-    }
-
-    @Override
-    public Session getSession() {
-        return new Session(this);
     }
 
     @Override

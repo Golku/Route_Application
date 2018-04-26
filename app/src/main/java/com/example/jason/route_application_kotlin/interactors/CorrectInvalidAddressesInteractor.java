@@ -23,37 +23,37 @@ public class CorrectInvalidAddressesInteractor implements MvpCorrectInvalidAddre
         this.apiService = apiService;
     }
 
-    @Override
-    public void getInvalidAddresses(final ApiCallback.RouteResponseCallback callback, String routeCode) {
-        Call<ContainerResponse> call = apiService.getRoute(routeCode);
-
-        call.enqueue(new Callback<ContainerResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<ContainerResponse> call, @NonNull Response<ContainerResponse> response) {
-                callback.onRouteResponse(response.body());
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<ContainerResponse> call, @NonNull Throwable t) {
-                callback.onRouteResponseFailure();
-            }
-        });
-    }
-
-    @Override
-    public void submitCorrectedAddresses(final ApiCallback.RouteResponseCallback callback, CorrectedAddressesRequest correctedAddressesRequest) {
-        Call<ContainerResponse> call = apiService.submitCorrectedAddresses(correctedAddressesRequest);
-
-        call.enqueue(new Callback<ContainerResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<ContainerResponse> call, @NonNull Response<ContainerResponse> response) {
-                callback.onRouteResponse(response.body());
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<ContainerResponse> call, @NonNull Throwable t) {
-                callback.onRouteResponseFailure();
-            }
-        });
-    }
+//    @Override
+//    public void getInvalidAddresses(final ApiCallback.RouteResponseCallback callback, String routeCode) {
+//        Call<ContainerResponse> call = apiService.getRoute(routeCode);
+//
+//        call.enqueue(new Callback<ContainerResponse>() {
+//            @Override
+//            public void onResponse(@NonNull Call<ContainerResponse> call, @NonNull Response<ContainerResponse> response) {
+//                callback.onRouteResponse(response.body());
+//            }
+//
+//            @Override
+//            public void onFailure(@NonNull Call<ContainerResponse> call, @NonNull Throwable t) {
+//                callback.onRouteResponseFailure();
+//            }
+//        });
+//    }
+//
+//    @Override
+//    public void submitCorrectedAddresses(final ApiCallback.RouteResponseCallback callback, CorrectedAddressesRequest correctedAddressesRequest) {
+//        Call<ContainerResponse> call = apiService.submitCorrectedAddresses(correctedAddressesRequest);
+//
+//        call.enqueue(new Callback<ContainerResponse>() {
+//            @Override
+//            public void onResponse(@NonNull Call<ContainerResponse> call, @NonNull Response<ContainerResponse> response) {
+//                callback.onRouteResponse(response.body());
+//            }
+//
+//            @Override
+//            public void onFailure(@NonNull Call<ContainerResponse> call, @NonNull Throwable t) {
+//                callback.onRouteResponseFailure();
+//            }
+//        });
+//    }
 }

@@ -34,7 +34,6 @@ public interface MvpContainerMap {
         void removePolyLine();
 
         void showToast(String message);
-
     }
 
     interface Presenter{

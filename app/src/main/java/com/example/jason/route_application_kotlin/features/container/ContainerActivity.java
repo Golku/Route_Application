@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -34,8 +35,6 @@ public class ContainerActivity extends DaggerAppCompatActivity implements
         ContainerListFragment.RouteListListener,
         ContainerMapFragment.RouteMapListener {
 
-    private final String debugTag = "debugTag";
-
     @Inject
     MvpContainer.Presenter presenter;
 
@@ -50,6 +49,31 @@ public class ContainerActivity extends DaggerAppCompatActivity implements
     @BindView(R.id.route_end_time)
     TextView routeEndTime;
 
+    private final String debugTag = "debugTag";
+
+    private boolean backPress = false;
+
+    @Override
+    public void onBackPressed() {
+        if(backPress){
+            closeActivity();
+        }else{
+            backPress = true;
+            onBackPressSnackbar();
+        }
+    }
+
+    private void onBackPressSnackbar(){
+        Snackbar snackbar = Snackbar.make(viewPager, "press again to exit", Snackbar.LENGTH_SHORT);
+        snackbar.addCallback(new Snackbar.Callback(){
+            @Override
+            public void onDismissed(Snackbar transientBottomBar, int event) {
+                backPress = false;
+            }
+        });
+        snackbar.show();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,20 +83,14 @@ public class ContainerActivity extends DaggerAppCompatActivity implements
     }
 
     private void init() {
-        presenter.setSession();
-        presenter.getContainer();
-    }
-
-    @Override
-    public Session getSession() {
-        return new Session(this);
+        presenter.getContainer(new Session(this));
     }
 
     @Override
     public void setupFragments(RouteInfoHolder routeInfoHolder) {
         Bundle bundle = new Bundle();
-        Fragment routeListFragment = new ContainerListFragment();
         Fragment routeMapFragment = new ContainerMapFragment();
+        Fragment routeListFragment = new ContainerListFragment();
 
         bundle.putParcelable("routeInfoHolder", routeInfoHolder);
 
@@ -80,8 +98,8 @@ public class ContainerActivity extends DaggerAppCompatActivity implements
         routeListFragment.setArguments(bundle);
 
         ContainerSectionPagerAdapter containerSectionPagerAdapter = new ContainerSectionPagerAdapter(getSupportFragmentManager());
-        containerSectionPagerAdapter.addFragment("Route", routeListFragment);
         containerSectionPagerAdapter.addFragment("Map", routeMapFragment);
+        containerSectionPagerAdapter.addFragment("Route", routeListFragment);
 
         viewPager.setAdapter(containerSectionPagerAdapter);
 

@@ -2,17 +2,26 @@ package com.example.jason.route_application_kotlin.data.pojos;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 public class Session {
 
+    private final String debugTag = "debugTag";
+
     private final String ACTIVE = "active";
     private final String USERNAME = "username";
-    private final String TIME_STAMP = "timeStamp";
+    private final String Login_Time = "loginTime";
 
     private SharedPreferences prefs;
 
     public Session(Context cntx) {
         prefs = cntx.getSharedPreferences("session", Context.MODE_PRIVATE);
+    }
+
+    public void printInfo(){
+        Log.d(debugTag, "username: " + getUsername());
+        Log.d(debugTag, "Active: " + getActive());
+        Log.d(debugTag, "LoginTime: " + getLoginTime().toString());
     }
 
     public void setActive(boolean active){
@@ -27,7 +36,7 @@ public class Session {
 
     public void setLoginTime(Long currentTime){
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putLong(TIME_STAMP, currentTime).apply();
+        editor.putLong(Login_Time, currentTime).apply();
     }
 
     public boolean getActive(){
@@ -39,7 +48,7 @@ public class Session {
     }
 
     public Long getLoginTime(){
-        return prefs.getLong(TIME_STAMP, 0);
+        return prefs.getLong(Login_Time, 0);
     }
 
 }

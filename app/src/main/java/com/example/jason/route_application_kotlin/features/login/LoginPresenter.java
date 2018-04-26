@@ -1,6 +1,7 @@
 package com.example.jason.route_application_kotlin.features.login;
 
 import com.example.jason.route_application_kotlin.data.database.DatabaseCallback;
+import com.example.jason.route_application_kotlin.data.pojos.Session;
 import com.example.jason.route_application_kotlin.data.pojos.database.LoginResponse;
 import com.example.jason.route_application_kotlin.features.shared.BasePresenter;
 
@@ -31,7 +32,6 @@ public class LoginPresenter extends BasePresenter implements MvpLogin.Presenter,
         String encryptedPassword = encryptInput(password);
 
         interactor.loginRequest(encryptedUsername, encryptedPassword, this);
-
     }
 
     private String encryptInput (String input){

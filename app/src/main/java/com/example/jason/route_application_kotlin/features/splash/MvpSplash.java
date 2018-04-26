@@ -6,20 +6,16 @@ public interface MvpSplash {
 
     interface View{
 
-        Session getSession();
-
         void showContainer();
 
         void showLogin();
 
         void closeActivity();
-
     }
 
     interface Presenter{
 
-        void redirectUser();
-
+        void redirectUser(Session session);
     }
 
 }

@@ -1,8 +1,7 @@
 package com.example.jason.route_application_kotlin.features.container;
 
-import android.location.Location;
-
 import com.example.jason.route_application_kotlin.data.api.ApiCallback;
+import com.example.jason.route_application_kotlin.data.pojos.FormattedAddress;
 import com.example.jason.route_application_kotlin.data.pojos.RouteInfoHolder;
 import com.example.jason.route_application_kotlin.data.pojos.RouteListFragmentDelegation;
 import com.example.jason.route_application_kotlin.data.pojos.api.Container;
@@ -11,7 +10,6 @@ import com.example.jason.route_application_kotlin.data.pojos.api.Route;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDrive;
 import com.example.jason.route_application_kotlin.data.pojos.api.SingleDriveRequest;
 import com.example.jason.route_application_kotlin.features.shared.BasePresenter;
-
 import javax.inject.Inject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,6 +31,8 @@ public class ContainerPresenter extends BasePresenter implements
 
     private Session session;
     private Container container;
+    private Route route;
+    private List<FormattedAddress> addressList;
     private List<SingleDrive> routeList;
 
     private int[] deliveryCompletion;
@@ -52,42 +52,53 @@ public class ContainerPresenter extends BasePresenter implements
     }
 
     @Override
-    public void setSession() {
-        session = view.getSession();
+    public void getContainer(Session session) {
+        this.session = session;
+        interactor.getContainer(session.getUsername(), this);
     }
 
-    @Override
-    public void getContainer() {
-        interactor.getContainer(session.getUsername(), this);
+    private void setRouteInfo(){
+
+        if(container.getRoute() == null){
+            addressList = new ArrayList<>();
+            routeList = new ArrayList<>();
+            return;
+        }else{
+            route = container.getRoute();
+            System.out.println("route is not null");
+        }
+
+        if(route.getFormattedAddressList() != null){
+            addressList = route.getFormattedAddressList();
+        }else{
+            addressList = new ArrayList<>();
+        }
+
+        if (route.getRouteList() != null && !route.getRouteList().isEmpty()) {
+            routeList = route.getRouteList();
+        } else {
+            routeList = new ArrayList<>();
+        }
+
+        deliveryCompletion[1] = route.getPrivateAddressCount();
+        deliveryCompletion[3] = route.getBusinessAddressCount();
     }
 
     private void initializeContainer(Container container) {
         this.container = container;
 
-        Route route = container.getRoute();
+        deliveryCompletion[0] = deliveredPrivate;
+        deliveryCompletion[2] = deliveredBusiness;
+
+        setRouteInfo();
+
+        view.updateDeliveryCompletion(deliveryCompletion);
 
         RouteInfoHolder routeInfoHolder = new RouteInfoHolder();
 
-        routeInfoHolder.setAddressList(route.getAddressList());
-
-        if (route.getRouteList() != null && !route.getRouteList().isEmpty()) {
-            routeList = route.getRouteList();
-            routeInfoHolder.setRouteOrder(orderRoute(routeList));
-            routeInfoHolder.setOrganized(true);
-        } else {
-            routeList = new ArrayList<>();
-            routeInfoHolder.setOrganized(false);
-        }
-
-//        routeInfoHolder.setUserLocation(new LatLng(location.getLatitude(), location.getLongitude()));
+        routeInfoHolder.setAddressList(addressList);
         routeInfoHolder.setRouteList(routeList);
 
-        deliveryCompletion[0] = deliveredPrivate;
-        deliveryCompletion[1] = route.getPrivateAddressCount();
-        deliveryCompletion[2] = deliveredBusiness;
-        deliveryCompletion[3] = route.getBusinessAddressCount();
-
-        view.updateDeliveryCompletion(deliveryCompletion);
         view.setupFragments(routeInfoHolder);
     }
 
@@ -193,8 +204,7 @@ public class ContainerPresenter extends BasePresenter implements
     @Override
     public void onContainerResponse(Container response) {
         if (response != null){
-            container = response;
-            initializeContainer(container);
+            initializeContainer(response);
         }
     }
 

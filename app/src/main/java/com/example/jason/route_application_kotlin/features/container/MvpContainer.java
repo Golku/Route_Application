@@ -17,8 +17,6 @@ public interface MvpContainer {
 
     interface View{
 
-        Session getSession();
-
         void setupFragments(RouteInfoHolder routeInfoHolder);
 
         void updateDeliveryCompletion(int[] deliveryCompletion);
@@ -38,9 +36,7 @@ public interface MvpContainer {
 
     interface Presenter{
 
-        void setSession();
-
-        void getContainer();
+        void getContainer(Session session);
 
         void getDriveInformation(SingleDriveRequest request);
 
@@ -60,7 +56,6 @@ public interface MvpContainer {
         void getContainer(String username, ApiCallback.ContainerResponseCallback callback);
 
         void getDriveInformation(SingleDriveRequest request, ApiCallback.SingleDriveResponseCallback callback);
-
     }
 
 }

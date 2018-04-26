@@ -12,8 +12,6 @@ import com.example.jason.route_application_kotlin.features.container.ContainerAc
 import com.example.jason.route_application_kotlin.features.container.ContainerModule;
 import com.example.jason.route_application_kotlin.features.routeInput.RouteInputActivity;
 import com.example.jason.route_application_kotlin.features.routeInput.RouteInputModule;
-import com.example.jason.route_application_kotlin.features.routeState.RouteStateActivity;
-import com.example.jason.route_application_kotlin.features.routeState.RouteStateModule;
 import com.example.jason.route_application_kotlin.features.splash.SplashActivity;
 import com.example.jason.route_application_kotlin.features.splash.SplashModule;
 
@@ -36,9 +34,6 @@ abstract class ActivityBuilder {
     @ContributesAndroidInjector(modules = RouteInputModule.class)
     abstract RouteInputActivity bindRouteInput();
 
-    @ContributesAndroidInjector(modules = RouteStateModule.class)
-    abstract RouteStateActivity bindRouteState();
-
     @ContributesAndroidInjector(modules = ContainerModule.class)
     abstract ContainerActivity bindContainer();
 
@@ -50,5 +45,4 @@ abstract class ActivityBuilder {
 
     @ContributesAndroidInjector(modules = CorrectInvalidAddressesModule.class)
     abstract CorrectInvalidAddressesActivity bindCorrectInvalidAddresses();
-
 }

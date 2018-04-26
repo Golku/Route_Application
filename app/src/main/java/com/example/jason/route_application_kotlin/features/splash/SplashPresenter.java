@@ -15,18 +15,15 @@ public class SplashPresenter extends BasePresenter implements MvpSplash.Presente
     }
 
     @Override
-    public void redirectUser() {
-        Session session = view.getSession();
+    public void redirectUser(Session session) {
 
-        boolean active = verifySession(session);
-        boolean timeOut = verifySessionTimeOut(session);
-
-        if(active && !timeOut){
+        if(verifySession(session) && verifySessionTimeOut(session)){
             view.showContainer();
         }else{
             session.setActive(false);
             view.showLogin();
         }
+
         view.closeActivity();
     }
 }

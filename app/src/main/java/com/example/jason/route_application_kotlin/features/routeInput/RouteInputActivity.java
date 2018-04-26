@@ -44,8 +44,6 @@ public class RouteInputActivity extends DaggerAppCompatActivity implements
     @Inject
     MvpRouteInput.Presenter presenter;
 
-    @BindView(R.id.routeCodeInputEditText)
-    EditText routeCodeInputEditText;
     @BindView(R.id.autoCompleteTextView)
     AutoCompleteTextView autoCompleteTextView;
     @BindView(R.id.addressTextView)
@@ -58,34 +56,12 @@ public class RouteInputActivity extends DaggerAppCompatActivity implements
     RecyclerView recyclerView;
 
     private final String debugTag = "debugTag";
-    private boolean backPress = false;
     private RouteInputAdapter adapter;
 
     private final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(new LatLng(37.398160, 4.477733), new LatLng(52.070498, 4.300700));
     private GoogleApiClient mGoogleApiClient;
     private RouteInputPlaceArrayAdapter mPlaceArrayAdapter;
     private InputMethodManager imm;
-
-    @Override
-    public void onBackPressed() {
-        if(backPress){
-            closeActivity();
-        }else{
-            backPress = true;
-            onBackPressSnackbar();
-        }
-    }
-
-    private void onBackPressSnackbar(){
-        Snackbar snackbar = Snackbar.make(recyclerView, "press again to exit", Snackbar.LENGTH_SHORT);
-        snackbar.addCallback(new Snackbar.Callback(){
-            @Override
-            public void onDismissed(Snackbar transientBottomBar, int event) {
-                backPress = false;
-            }
-        });
-        snackbar.show();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

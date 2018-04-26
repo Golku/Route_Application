@@ -2,12 +2,15 @@ package com.example.jason.route_application_kotlin.features.shared;
 
 import com.example.jason.route_application_kotlin.data.pojos.Session;
 
+import android.util.Log;
+
 public abstract class BasePresenter {
 
     private final String debugTag = "debugTag";
 
-    private final long TIME_OUT = 600000; //10 min
-//    private final long TIME_OUT = 30000; //30 sec
+    private final long TIME_OUT = 3600000; //60 min
+//    private final long TIME_OUT = 120000; //120 sec
+//    private final long TIME_OUT = 60000; //60 sec
     private Long currentTime;
 
     protected BasePresenter() {
@@ -25,13 +28,7 @@ public abstract class BasePresenter {
     }
 
     protected boolean verifySessionTimeOut(Session session){
-        boolean timeOut;
-
-        Long timeOutTime = session.getLoginTime() + TIME_OUT;
-
-        timeOut = currentTime > timeOutTime;
-
-        return timeOut;
+        Log.d(debugTag, "Remaining seconds: "+ String.valueOf(((session.getLoginTime() + TIME_OUT) - currentTime)/1000));
+        return currentTime < (session.getLoginTime() + TIME_OUT);
     }
-
 }
