@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/overcast"
-    tools:context="com.example.jason.route_application_kotlin.features.container.ContainerActivity">
+    tools:context="com.example.jason.route_application.features.container.ContainerActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"

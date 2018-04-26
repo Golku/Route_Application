@@ -1,0 +1,174 @@
+package com.example.jason.route_application.features.correctInvalidAddresses;
+
+import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.jason.route_application.R;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import dagger.android.support.DaggerAppCompatActivity;
+
+public class CorrectInvalidAddressesActivity extends DaggerAppCompatActivity implements MvpCorrectInvalidAddresses.View, CorrectInvalidAddressesAdapter.AddressListFunctions{
+
+    private final String log_tag = "logTagDebug";
+
+    @Inject MvpCorrectInvalidAddresses.Presenter presenter;
+
+    @BindView(R.id.recView)
+    RecyclerView recyclerView;
+    @BindView(R.id.instructionTextView)
+    TextView instructionTextView;
+    @BindView(R.id.messageToUserTextView)
+    TextView messageToUserTextView;
+    @BindView(R.id.progressBar)
+    ProgressBar progressBar;
+    @BindView(R.id.submitAddressesBtn)
+    Button submitAddressesBtn;
+
+    private CorrectInvalidAddressesAdapter adapter;
+
+    private AlertDialog alertDialog;
+
+    private EditText correctedAddressEditText;
+    private Button cancelDialogBtn;
+    private Button changeAddressBtn;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_correct_invalid_addresses);
+        ButterKnife.bind(this);
+        init();
+    }
+
+    private void init(){
+        String routeCode = getIntent().getStringExtra("routeCode");
+        presenter.setRouteCode(routeCode);
+        presenter.checkForInvalidAddresses();
+    }
+
+    @Override
+    public void setupAdapter(List<String> invalidAddressesList) {
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new CorrectInvalidAddressesAdapter(invalidAddressesList, this);
+        recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void setupAlertDialog() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(CorrectInvalidAddressesActivity.this);
+        View view = getLayoutInflater().inflate(R.layout.reform_address_dialog, null);
+
+        correctedAddressEditText = view.findViewById(R.id.correctedAddressEditText);
+        cancelDialogBtn = view.findViewById(R.id.cancelDialogBtn);
+        changeAddressBtn = view.findViewById(R.id.changeAddressBtn);
+
+        alertDialogBuilder.setView(view);
+        alertDialog = alertDialogBuilder.create();
+    }
+
+    @Override
+    public void showAlertDialog(final int position, String address) {
+        correctedAddressEditText.setText(address);
+
+        changeAddressBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!correctedAddressEditText.getText().toString().isEmpty()) {
+                    String correctedAddress = correctedAddressEditText.getText().toString();
+                    alertDialog.dismiss();
+                    presenter.correctAddress(position, correctedAddress);
+                }else{
+                    showToast("Fill in a address");
+                }
+            }
+        });
+
+        cancelDialogBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+            }
+        });
+
+        alertDialog.show();
+    }
+
+    @Override
+    public void updateList(int position) {
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void removeAddressFromList(int position) {
+        adapter.notifyItemRemoved(position);
+    }
+
+    @OnClick(R.id.submitAddressesBtn)
+    public void onSubmitAddressesBtnClick(){
+        presenter.submitCorrectedAddresses();
+    }
+
+    @Override
+    public void onRemoveAddressButtonClick(int position) {
+        presenter.onRemoveAddressButtonClick(position);
+    }
+
+    @Override
+    public void onListItemClick(int position) {
+        presenter.onItemClick(position);
+    }
+
+    @Override
+    public void onStartNetworkOperation() {
+        messageToUserTextView.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onFinishNetworkOperation() {
+        messageToUserTextView.setVisibility(View.GONE);
+        progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showScreenElements() {
+        instructionTextView.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.VISIBLE);
+        submitAddressesBtn.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideScreenElements() {
+        instructionTextView.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.GONE);
+        submitAddressesBtn.setVisibility(View.GONE);
+    }
+
+
+    @Override
+    public void closeActivity() {
+        finish();
+    }
+
+    @Override
+    public void showToast(String message) {
+        Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
+        toast.show();
+    }
+}
