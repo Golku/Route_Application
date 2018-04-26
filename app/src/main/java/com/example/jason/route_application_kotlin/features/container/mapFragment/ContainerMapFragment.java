@@ -142,11 +142,15 @@ public class ContainerMapFragment extends Fragment implements
         if (addressList != null) {
             for (FormattedAddress address : addressList) {
 
+                if(address.isInvalid()){
+                    return;
+                }
+
                 MarkerInfo markerInfo = new MarkerInfo();
 
                 markerInfo.setSelected(false);
 
-                if (address.getIsBusiness()) {
+                if (address.isBusiness()) {
                     markerInfo.setBusiness(true);
                     markerInfo.setIconType("business");
                 } else {
