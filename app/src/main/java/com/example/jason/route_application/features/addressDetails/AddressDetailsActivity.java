@@ -13,9 +13,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.jason.route_application.R;
+import com.example.jason.route_application.data.pojos.Address;
 import com.example.jason.route_application.data.pojos.database.AddressInformation;
 import com.example.jason.route_application.data.pojos.CommentInformation;
-import com.example.jason.route_application.data.pojos.FormattedAddress;
 import com.example.jason.route_application.features.commentDisplay.CommentDisplayActivity;
 import com.example.jason.route_application.features.commentInput.CommentInputActivity;
 
@@ -100,10 +100,10 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements M
     }
 
     @Override
-    public void setUpAddressInformation(FormattedAddress formattedAddress) {
-        streetTextView.setText(formattedAddress.getStreet());
-        postcodeTextView.setText(formattedAddress.getPostCode());
-        cityTextView.setText(formattedAddress.getCity());
+    public void setUpAddressInformation(Address address) {
+        streetTextView.setText(address.getStreet());
+        postcodeTextView.setText(address.getPostCode());
+        cityTextView.setText(address.getCity());
     }
 
     @Override
@@ -132,8 +132,8 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements M
     }
 
     @Override
-    public void showAddressInGoogle(FormattedAddress formattedAddress) {
-        String url = "http://www.google.com/search?q=" + formattedAddress.getStreet() + " " + formattedAddress.getCity();
+    public void showAddressInGoogle(Address address) {
+        String url = "http://www.google.com/search?q=" + address.getStreet() + " " + address.getCity();
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(url));
         startActivity(intent);
@@ -176,10 +176,10 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements M
     }
 
     @Override
-    public void showCommentInput(FormattedAddress formattedAddress) {
+    public void showCommentInput(Address address) {
         returning = true;
         Intent i = new Intent(this, CommentInputActivity.class);
-        i.putExtra("formattedAddress", formattedAddress);
+        i.putExtra("address", address);
         startActivity(i);
     }
 

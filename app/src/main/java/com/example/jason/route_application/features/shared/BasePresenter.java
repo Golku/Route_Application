@@ -28,7 +28,7 @@ public abstract class BasePresenter {
     }
 
     protected boolean verifySessionTimeOut(Session session){
-        Log.d(debugTag, "Remaining seconds: "+ String.valueOf(((session.getLoginTime() + TIME_OUT) - currentTime)/1000));
+//        Log.d(debugTag, "Remaining seconds: "+ String.valueOf(((session.getLoginTime() + TIME_OUT) - currentTime)/1000));
         return currentTime < (session.getLoginTime() + TIME_OUT);
     }
 }

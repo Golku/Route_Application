@@ -2,7 +2,6 @@ package com.example.jason.route_application.features.container;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -15,12 +14,12 @@ import android.widget.Toast;
 import com.example.jason.route_application.R;
 import com.example.jason.route_application.data.pojos.RouteInfoHolder;
 import com.example.jason.route_application.data.pojos.RouteListFragmentDelegation;
-import com.example.jason.route_application.data.pojos.api.Route;
 import com.example.jason.route_application.data.pojos.Session;
-import com.example.jason.route_application.data.pojos.api.SingleDriveRequest;
+import com.example.jason.route_application.data.pojos.api.DriveRequest;
 import com.example.jason.route_application.features.addressDetails.AddressDetailsActivity;
 import com.example.jason.route_application.features.container.listFragment.ContainerListFragment;
 import com.example.jason.route_application.features.container.mapFragment.ContainerMapFragment;
+import com.example.jason.route_application.features.routeInput.RouteInputActivity;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -114,6 +113,12 @@ public class ContainerActivity extends DaggerAppCompatActivity implements
     }
 
     @Override
+    public void showRouteInput() {
+        Intent i = new Intent (this, RouteInputActivity.class);
+        startActivity(i);
+    }
+
+    @Override
     public void updateRouteEndTime(String endTime) {
         routeEndTime.setText(endTime);
     }
@@ -124,7 +129,7 @@ public class ContainerActivity extends DaggerAppCompatActivity implements
     }
 
     @Override
-    public void getDriveInformation(SingleDriveRequest request) {
+    public void getDriveInformation(DriveRequest request) {
         presenter.getDriveInformation(request);
     }
 

@@ -1,6 +1,7 @@
 package com.example.jason.route_application.features.routeInput;
 
 import com.example.jason.route_application.data.api.ApiCallback;
+import com.example.jason.route_application.data.pojos.Session;
 import com.example.jason.route_application.data.pojos.api.RouteRequest;
 import java.util.ArrayList;
 
@@ -34,7 +35,7 @@ public interface MvpRouteInput {
 
     interface Presenter{
 
-        void setUpView();
+        void setUpView(Session session);
 
         void submitRoute();
 

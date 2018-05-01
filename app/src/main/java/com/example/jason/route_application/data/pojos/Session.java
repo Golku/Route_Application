@@ -10,7 +10,7 @@ public class Session {
 
     private final String ACTIVE = "active";
     private final String USERNAME = "username";
-    private final String Login_Time = "loginTime";
+    private final String LOGIN_TIME = "loginTime";
 
     private SharedPreferences prefs;
 
@@ -36,7 +36,7 @@ public class Session {
 
     public void setLoginTime(Long currentTime){
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putLong(Login_Time, currentTime).apply();
+        editor.putLong(LOGIN_TIME, currentTime).apply();
     }
 
     public boolean getActive(){
@@ -48,7 +48,7 @@ public class Session {
     }
 
     public Long getLoginTime(){
-        return prefs.getLong(Login_Time, 0);
+        return prefs.getLong(LOGIN_TIME, 0);
     }
 
 }

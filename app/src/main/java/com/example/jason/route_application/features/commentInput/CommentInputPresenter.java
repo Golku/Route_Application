@@ -2,7 +2,7 @@ package com.example.jason.route_application.features.commentInput;
 
 import com.example.jason.route_application.data.database.DatabaseCallback;
 import com.example.jason.route_application.data.pojos.database.CommentInputResponse;
-import com.example.jason.route_application.data.pojos.FormattedAddress;
+import com.example.jason.route_application.data.pojos.Address;
 
 import java.text.SimpleDateFormat;
 
@@ -17,7 +17,7 @@ public class CommentInputPresenter implements MvpCommentInput.Presenter, Databas
     private final MvpCommentInput.View view;
     private MvpCommentInput.Interactor interactor;
 
-    private FormattedAddress formattedAddress;
+    private Address address;
     private String employeeId;
     private String date;
 
@@ -28,9 +28,9 @@ public class CommentInputPresenter implements MvpCommentInput.Presenter, Databas
     }
 
     @Override
-    public void setUpInfo(String employeeId, FormattedAddress formattedAddress){
+    public void setUpInfo(String employeeId, Address address){
         this.employeeId = employeeId;
-        this.formattedAddress = formattedAddress;
+        this.address = address;
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
         this.date = sdf.format(System.currentTimeMillis());
         view.updateTextViews(employeeId, date);
@@ -39,7 +39,7 @@ public class CommentInputPresenter implements MvpCommentInput.Presenter, Databas
     @Override
     public void onAddCommentBtnClick(String comment) {
         view.onStartNetworkOperation();
-        interactor.addCommentToAddress(this, formattedAddress, employeeId, comment, date);
+        interactor.addCommentToAddress(this, address, employeeId, comment, date);
     }
 
     @Override

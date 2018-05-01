@@ -8,6 +8,18 @@
     android:layout_height="match_parent"
     tools:context=".features.container.ContainerActivity">
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/addAddressBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        app:srcCompat="@drawable/buttons_style"
+        app:layout_constraintEnd_toEndOf="@+id/routeRecView"
+        app:layout_constraintBottom_toBottomOf="@+id/routeRecView"/>
+
     <Button
         android:id="@+id/button5"
         android:layout_width="wrap_content"
@@ -27,7 +39,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="8dp"
-        android:text="User List"
+        android:text="User list"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 

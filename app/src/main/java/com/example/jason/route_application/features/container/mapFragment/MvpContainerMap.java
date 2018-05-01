@@ -1,11 +1,10 @@
 package com.example.jason.route_application.features.container.mapFragment;
 
-import com.example.jason.route_application.data.pojos.api.SingleDriveRequest;
+import com.example.jason.route_application.data.pojos.Address;
+import com.example.jason.route_application.data.pojos.api.DriveRequest;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-
-import com.example.jason.route_application.data.pojos.FormattedAddress;
 
 import java.util.List;
 
@@ -17,9 +16,9 @@ public interface MvpContainerMap {
 
     interface View{
 
-        void addMarkersToMap(List<FormattedAddress> addresses);
+        void addMarkersToMap(List<Address> addresses);
 
-        void getDriveInformation(SingleDriveRequest request);
+        void getDriveInformation(DriveRequest request);
 
         void getPolylineToMarker(LatLng start, LatLng end);
 

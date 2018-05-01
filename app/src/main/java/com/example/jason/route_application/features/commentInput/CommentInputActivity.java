@@ -9,7 +9,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.jason.route_application.R;
-import com.example.jason.route_application.data.pojos.FormattedAddress;
+import com.example.jason.route_application.data.pojos.Address;
+import com.example.jason.route_application.data.pojos.Session;
 
 import javax.inject.Inject;
 
@@ -45,9 +46,9 @@ public class CommentInputActivity extends DaggerAppCompatActivity implements Mvp
     }
 
     private void init(){
-        FormattedAddress formattedAddress = getIntent().getParcelableExtra("formattedAddress");
-        String employeeId = "1";
-        presenter.setUpInfo(employeeId, formattedAddress);
+        Address address = getIntent().getParcelableExtra("address");
+        Session session = new Session(this);
+        presenter.setUpInfo(session.getUsername(), address);
     }
 
     @Override

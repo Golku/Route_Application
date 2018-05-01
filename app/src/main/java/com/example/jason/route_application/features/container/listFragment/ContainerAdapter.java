@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.example.jason.route_application.R;
-import com.example.jason.route_application.data.pojos.api.SingleDrive;
+import com.example.jason.route_application.data.pojos.api.Drive;
 
 import java.util.List;
 
@@ -17,10 +17,10 @@ import java.util.List;
 
 public class ContainerAdapter extends RecyclerView.Adapter<ContainerAdapter.CustomViewHolder>{
 
-    private List<SingleDrive> routeList;
+    private List<Drive> routeList;
     private RouteListFunctions routeListFunctions;
 
-    ContainerAdapter(List<SingleDrive> routeList, RouteListFunctions routeListFunctions) {
+    ContainerAdapter(List<Drive> routeList, RouteListFunctions routeListFunctions) {
         this.routeList = routeList;
         this.routeListFunctions = routeListFunctions;
     }
@@ -31,7 +31,7 @@ public class ContainerAdapter extends RecyclerView.Adapter<ContainerAdapter.Cust
 //        void onListItemSwipe(int position);
     }
 
-    List<SingleDrive> getList(){
+    List<Drive> getList(){
         return this.routeList;
     }
 
@@ -44,16 +44,16 @@ public class ContainerAdapter extends RecyclerView.Adapter<ContainerAdapter.Cust
     @Override
     public void onBindViewHolder(ContainerAdapter.CustomViewHolder holder, int position) {
 
-        SingleDrive currentItem = routeList.get(position);
+        Drive currentItem = routeList.get(position);
 
         String positionTracker = Integer.toString(position + 1);
-        String city = currentItem.getDestinationFormattedAddress().getPostCode() + " " + currentItem.getDestinationFormattedAddress().getCity();
+        String city = currentItem.getDestinationAddress().getPostCode() + " " + currentItem.getDestinationAddress().getCity();
         String distance = "Distance: "+currentItem.getDriveDistanceHumanReadable();
         String duration = "Duration: "+currentItem.getDriveDurationHumanReadable();
         String arrivalTime = currentItem.getDeliveryTimeHumanReadable();
 
         holder.positionTextView.setText(positionTracker);
-        holder.streetTextView.setText(currentItem.getDestinationFormattedAddress().getStreet());
+        holder.streetTextView.setText(currentItem.getDestinationAddress().getStreet());
         holder.cityTextView.setText(city);
         holder.distanceTextView.setText(distance);
         holder.durationTextView.setText(duration);
@@ -102,10 +102,10 @@ public class ContainerAdapter extends RecyclerView.Adapter<ContainerAdapter.Cust
         public void onClick(View v) {
 
             if(v == this.container){
-                routeListFunctions.onAdapterListItemClick(routeList.get(this.getAdapterPosition()).getDestinationFormattedAddress().getFormattedAddress());
+                routeListFunctions.onAdapterListItemClick(routeList.get(this.getAdapterPosition()).getDestinationAddress().getFormattedAddress());
             }
             else if(v == this.goButton){
-                routeListFunctions.onAdapterGoButtonClick(routeList.get(this.getAdapterPosition()).getDestinationFormattedAddress().getFormattedAddress());
+                routeListFunctions.onAdapterGoButtonClick(routeList.get(this.getAdapterPosition()).getDestinationAddress().getFormattedAddress());
             }
         }
 

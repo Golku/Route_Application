@@ -1,8 +1,8 @@
 package com.example.jason.route_application.features.container.mapFragment;
 
-import com.example.jason.route_application.data.pojos.FormattedAddress;
+import com.example.jason.route_application.data.pojos.Address;
 import com.example.jason.route_application.data.pojos.MarkerInfo;
-import com.example.jason.route_application.data.pojos.api.SingleDriveRequest;
+import com.example.jason.route_application.data.pojos.api.DriveRequest;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -22,13 +22,13 @@ public class ContainerMapPresenter implements MvpContainerMap.Presenter {
 
     private LatLng userLocation;
 
-    private List<FormattedAddress> addressList;
+    private List<Address> addressList;
 
     private List<Marker> routeOrder;
 
     private Marker previousSelectedMarker;
 
-    ContainerMapPresenter(MvpContainerMap.View view, List<FormattedAddress> addressList, List<String> routeOrder) {
+    ContainerMapPresenter(MvpContainerMap.View view, List<Address> addressList, List<String> routeOrder) {
         this.view = view;
         this.addressList = addressList;
         this.routeOrder = new ArrayList<>();
@@ -83,7 +83,7 @@ public class ContainerMapPresenter implements MvpContainerMap.Presenter {
 
         MarkerInfo markerInfo = (MarkerInfo) clickedMarker.getTag();
 
-        SingleDriveRequest request = new SingleDriveRequest();
+        DriveRequest request = new DriveRequest();
 
         String origin = null;
         String destination = null;

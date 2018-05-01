@@ -1,9 +1,9 @@
 package com.example.jason.route_application.features.addressDetails;
 
 import com.example.jason.route_application.data.database.DatabaseCallback;
+import com.example.jason.route_application.data.pojos.Address;
 import com.example.jason.route_application.data.pojos.database.AddressInformation;
 import com.example.jason.route_application.data.pojos.CommentInformation;
-import com.example.jason.route_application.data.pojos.FormattedAddress;
 
 /**
  * Created by Jason on 07-Feb-18.
@@ -12,13 +12,13 @@ import com.example.jason.route_application.data.pojos.FormattedAddress;
 public interface MvpAddressDetails {
 
     interface View{
-        void setUpAddressInformation(FormattedAddress formattedAddress);
+        void setUpAddressInformation(Address address);
         void setUpAdapter(AddressInformation addressInformation);
         void onGoogleLinkClick();
         void onAddCommentButtonClick();
-        void showAddressInGoogle(FormattedAddress formattedAddress);
+        void showAddressInGoogle(Address address);
         void showCommentDisplay(CommentInformation commentInformation);
-        void showCommentInput(FormattedAddress formattedAddress);
+        void showCommentInput(Address address);
         void updateMessageToUserTextView(boolean visible, String message);
         void updateBusinessImageView(String business);
         void onStartNetworkOperation();
@@ -38,7 +38,7 @@ public interface MvpAddressDetails {
     }
 
     interface Interactor{
-        void getAddressInformation(DatabaseCallback.AddressInformationCallBack callBack, FormattedAddress formattedAddress);
+        void getAddressInformation(DatabaseCallback.AddressInformationCallBack callBack, Address address);
     }
 
 }

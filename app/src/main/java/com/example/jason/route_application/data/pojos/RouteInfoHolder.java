@@ -1,6 +1,6 @@
 package com.example.jason.route_application.data.pojos;
 
-import com.example.jason.route_application.data.pojos.api.SingleDrive;
+import com.example.jason.route_application.data.pojos.api.Drive;
 import com.google.android.gms.maps.model.LatLng;
 
 import android.os.Parcel;
@@ -12,8 +12,8 @@ public class RouteInfoHolder implements Parcelable{
 
     private boolean organized;
     private LatLng userLocation;
-    private List<FormattedAddress> addressList;
-    private List<SingleDrive> routeList;
+    private List<Address> addressList;
+    private List<Drive> routeList;
     private List<String> routeOrder;
 
     public RouteInfoHolder() {
@@ -22,8 +22,8 @@ public class RouteInfoHolder implements Parcelable{
     private RouteInfoHolder(Parcel in) {
         organized = in.readByte() != 0;
         userLocation = in.readParcelable(LatLng.class.getClassLoader());
-        addressList = in.createTypedArrayList(FormattedAddress.CREATOR);
-        routeList = in.createTypedArrayList(SingleDrive.CREATOR);
+        addressList = in.createTypedArrayList(Address.CREATOR);
+        routeList = in.createTypedArrayList(Drive.CREATOR);
         routeOrder = in.createStringArrayList();
     }
 
@@ -69,19 +69,19 @@ public class RouteInfoHolder implements Parcelable{
         this.userLocation = userLocation;
     }
 
-    public List<FormattedAddress> getAddressList() {
+    public List<Address> getAddressList() {
         return addressList;
     }
 
-    public void setAddressList(List<FormattedAddress> addressList) {
+    public void setAddressList(List<Address> addressList) {
         this.addressList = addressList;
     }
 
-    public List<SingleDrive> getRouteList() {
+    public List<Drive> getRouteList() {
         return routeList;
     }
 
-    public void setRouteList(List<SingleDrive> routeList) {
+    public void setRouteList(List<Drive> routeList) {
         this.routeList = routeList;
     }
 

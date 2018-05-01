@@ -3,17 +3,14 @@ package com.example.jason.route_application.features.container.listFragment;
 import com.example.jason.route_application.R;
 import com.example.jason.route_application.data.pojos.RouteInfoHolder;
 import com.example.jason.route_application.data.pojos.RouteListFragmentDelegation;
-import com.example.jason.route_application.data.pojos.api.SingleDrive;
-import com.example.jason.route_application.features.addressDetails.AddressDetailsActivity;
+import com.example.jason.route_application.data.pojos.api.Drive;
 import com.example.jason.route_application.features.container.ContainerActivity;
-import com.example.jason.route_application.features.routeInput.RouteInputActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -46,6 +43,7 @@ public class ContainerListFragment extends Fragment implements ContainerAdapter.
     public interface RouteListListener{
         void onListItemClick(String address);
         void onGoButtonClick(String address);
+        void showRouteInput();
     }
 
     @Override
@@ -70,6 +68,15 @@ public class ContainerListFragment extends Fragment implements ContainerAdapter.
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_container_list, container, false);
         this.recyclerView = view.findViewById(R.id.routeRecView);
+
+        Button routeInputBtn = view.findViewById(R.id.route_input_btn);
+        routeInputBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showRouteInput();
+            }
+        });
+
         return view;
     }
 
@@ -93,7 +100,7 @@ public class ContainerListFragment extends Fragment implements ContainerAdapter.
     }
 
     @Override
-    public void setupAdapter(List<SingleDrive> routeList) {
+    public void setupAdapter(List<Drive> routeList) {
         recyclerView.setVisibility(View.VISIBLE);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new ContainerAdapter(routeList, this);
@@ -123,6 +130,10 @@ public class ContainerListFragment extends Fragment implements ContainerAdapter.
         if(position>0){
             recyclerView.smoothScrollToPosition(position-1);
         }
+    }
+
+    private void showRouteInput(){
+        containerActivityCallback.showRouteInput();
     }
 
     @Override

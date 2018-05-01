@@ -4,7 +4,7 @@ import com.example.jason.route_application.data.api.ApiCallback;
 import com.example.jason.route_application.data.pojos.RouteInfoHolder;
 import com.example.jason.route_application.data.pojos.RouteListFragmentDelegation;
 import com.example.jason.route_application.data.pojos.Session;
-import com.example.jason.route_application.data.pojos.api.SingleDriveRequest;
+import com.example.jason.route_application.data.pojos.api.DriveRequest;
 
 /**
  * Created by Jason on 07-Feb-18.
@@ -35,7 +35,7 @@ public interface MvpContainer {
 
         void getContainer(Session session);
 
-        void getDriveInformation(SingleDriveRequest request);
+        void getDriveInformation(DriveRequest request);
 
         void markerDeselected();
 
@@ -52,7 +52,9 @@ public interface MvpContainer {
 
         void getContainer(String username, ApiCallback.ContainerResponseCallback callback);
 
-        void getDriveInformation(SingleDriveRequest request, ApiCallback.SingleDriveResponseCallback callback);
+        void getRoute(String username, ApiCallback.RouteResponseCallback callback);
+
+        void getDriveInformation(DriveRequest request, ApiCallback.DriveResponseCallback callback);
     }
 
 }

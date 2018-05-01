@@ -1,7 +1,7 @@
 package com.example.jason.route_application.features.container.listFragment;
 
 import com.example.jason.route_application.data.pojos.RouteListFragmentDelegation;
-import com.example.jason.route_application.data.pojos.api.SingleDrive;
+import com.example.jason.route_application.data.pojos.api.Drive;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ public class ContainerListPresenter implements MvpContainerList.Presenter{
     }
 
     @Override
-    public void initializeAdapter(List<SingleDrive> routeList) {
+    public void initializeAdapter(List<Drive> routeList) {
         view.setupAdapter(routeList);
     }
 

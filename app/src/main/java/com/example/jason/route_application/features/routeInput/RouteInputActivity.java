@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.jason.route_application.R;
+import com.example.jason.route_application.data.pojos.Session;
 import com.example.jason.route_application.features.addressDetails.AddressDetailsActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -72,7 +73,7 @@ public class RouteInputActivity extends DaggerAppCompatActivity implements
     }
 
     public void init() {
-        presenter.setUpView();
+        presenter.setUpView(new Session(this));
 
         autoCompleteTextView.setThreshold(3);
         autoCompleteTextView.setOnItemClickListener(mAutocompleteClickListener);

@@ -3,7 +3,7 @@ package com.example.jason.route_application.interactors;
 import com.example.jason.route_application.data.database.DatabaseCallback;
 import com.example.jason.route_application.data.database.DatabaseService;
 import com.example.jason.route_application.data.pojos.database.AddressInformationResponse;
-import com.example.jason.route_application.data.pojos.FormattedAddress;
+import com.example.jason.route_application.data.pojos.Address;
 import com.example.jason.route_application.features.addressDetails.MvpAddressDetails;
 import javax.inject.Inject;
 import retrofit2.Call;
@@ -24,12 +24,12 @@ public class AddressDetailsInteractor implements MvpAddressDetails.Interactor {
     }
 
     @Override
-    public void getAddressInformation(final DatabaseCallback.AddressInformationCallBack callBack, FormattedAddress formattedAddress) {
+    public void getAddressInformation(final DatabaseCallback.AddressInformationCallBack callBack, Address address) {
 
         Call<AddressInformationResponse> call = databaseService.getAddressInformation(
-                formattedAddress.getStreet(),
-                formattedAddress.getPostCode(),
-                formattedAddress.getCity()
+                address.getStreet(),
+                address.getPostCode(),
+                address.getCity()
         );
 
         call.enqueue(new Callback<AddressInformationResponse>() {

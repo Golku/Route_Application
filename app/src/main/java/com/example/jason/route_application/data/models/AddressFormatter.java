@@ -1,7 +1,7 @@
 package com.example.jason.route_application.data.models;
 
 
-import com.example.jason.route_application.data.pojos.FormattedAddress;
+import com.example.jason.route_application.data.pojos.Address;
 
 /**
  * Created by Jason on 08-Feb-18.
@@ -12,15 +12,15 @@ public class AddressFormatter {
     /**
      * Formats the given address to a standard format of  "street, postCode city, country"
      */
-    public FormattedAddress formatAddress(String address){
+    public Address formatAddress(String address){
 
-        FormattedAddress formattedAddress;
+        Address formattedAddress;
 
         if(address == null){
             formattedAddress = null;
         }else{
 
-            formattedAddress = new FormattedAddress();
+            formattedAddress = new Address();
 
 //            System.out.println("complete address: "+address);
 //            System.out.println("");

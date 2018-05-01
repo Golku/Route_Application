@@ -2,8 +2,8 @@ package com.example.jason.route_application.interactors;
 
 import com.example.jason.route_application.data.database.DatabaseCallback;
 import com.example.jason.route_application.data.database.DatabaseService;
+import com.example.jason.route_application.data.pojos.Address;
 import com.example.jason.route_application.data.pojos.database.CommentInputResponse;
-import com.example.jason.route_application.data.pojos.FormattedAddress;
 import com.example.jason.route_application.features.commentInput.MvpCommentInput;
 import javax.inject.Inject;
 import retrofit2.Call;
@@ -24,12 +24,12 @@ public class CommentInputInteractor implements MvpCommentInput.Interactor{
     }
 
     @Override
-    public void addCommentToAddress(final DatabaseCallback.CommentInputCallBack callback, FormattedAddress formattedAddress, String employeeId, String comment, String date) {
+    public void addCommentToAddress(final DatabaseCallback.CommentInputCallBack callback, Address address, String employeeId, String comment, String date) {
 
         Call<CommentInputResponse> call = databaseService.addCommentToAddress(
-                formattedAddress.getStreet(),
-                formattedAddress.getPostCode(),
-                formattedAddress.getCity(),
+                address.getStreet(),
+                address.getPostCode(),
+                address.getCity(),
                 employeeId,
                 comment,
                 date

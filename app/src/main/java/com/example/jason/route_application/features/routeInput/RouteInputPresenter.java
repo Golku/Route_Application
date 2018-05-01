@@ -1,7 +1,10 @@
 package com.example.jason.route_application.features.routeInput;
 
 import com.example.jason.route_application.data.api.ApiCallback;
+import com.example.jason.route_application.data.pojos.Session;
 import com.example.jason.route_application.data.pojos.api.RouteRequest;
+
+import android.util.Log;
 
 import java.util.ArrayList;
 import javax.inject.Inject;
@@ -16,6 +19,8 @@ public class RouteInputPresenter implements MvpRouteInput.Presenter, ApiCallback
     private MvpRouteInput.Interactor interactor;
     private ArrayList<String> listOfAddresses;
 
+    Session session;
+
     @Inject
     public RouteInputPresenter(MvpRouteInput.View view, MvpRouteInput.Interactor interactor) {
         this.view =  view;
@@ -24,7 +29,8 @@ public class RouteInputPresenter implements MvpRouteInput.Presenter, ApiCallback
     }
 
     @Override
-    public void setUpView() {
+    public void setUpView(Session session) {
+        this.session = session;
         view.setUpAdapter(listOfAddresses);
         view.updateListSizeTextView(listOfAddresses.size());
     }
@@ -50,8 +56,9 @@ public class RouteInputPresenter implements MvpRouteInput.Presenter, ApiCallback
 
     @Override
     public void submitRoute() {
-        RouteRequest request = new RouteRequest("username", listOfAddresses);
+        RouteRequest request = new RouteRequest(session.getUsername(), listOfAddresses);
         interactor.routeRequest(request, this);
+        view.closeActivity();
     }
 
     @Override

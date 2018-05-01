@@ -2,9 +2,10 @@ package com.example.jason.route_application.data.api;
 
 import com.example.jason.route_application.data.pojos.api.Container;
 import com.example.jason.route_application.data.pojos.api.CorrectedAddressesRequest;
+import com.example.jason.route_application.data.pojos.api.Route;
 import com.example.jason.route_application.data.pojos.api.RouteRequest;
-import com.example.jason.route_application.data.pojos.api.SingleDrive;
-import com.example.jason.route_application.data.pojos.api.SingleDriveRequest;
+import com.example.jason.route_application.data.pojos.api.Drive;
+import com.example.jason.route_application.data.pojos.api.DriveRequest;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -21,11 +22,14 @@ public interface ApiService {
     @GET("getcontainer/{username}")
     Call<Container> getContainer(@Path("username")String username);
 
+    @GET("getroute/{username}")
+    Call<Route> getRoute(@Path("username")String username);
+
     @POST("submitroute")
     Call<Void> submitRoute(@Body RouteRequest routeRequest);
 
     @POST("getdriveinformation")
-    Call<SingleDrive> getDriveInformation(@Body SingleDriveRequest request);
+    Call<Drive> getDriveInformation(@Body DriveRequest request);
 
     @POST("correctedaddressessubmition")
     Call submitCorrectedAddresses(@Body CorrectedAddressesRequest correctedAddressesRequest);

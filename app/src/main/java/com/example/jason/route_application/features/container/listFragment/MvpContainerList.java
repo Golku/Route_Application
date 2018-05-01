@@ -1,7 +1,7 @@
 package com.example.jason.route_application.features.container.listFragment;
 
 import com.example.jason.route_application.data.pojos.RouteListFragmentDelegation;
-import com.example.jason.route_application.data.pojos.api.SingleDrive;
+import com.example.jason.route_application.data.pojos.api.Drive;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ public interface MvpContainerList {
 
     interface View{
 
-        void setupAdapter(List<SingleDrive> routeList);
+        void setupAdapter(List<Drive> routeList);
 
         void addDriveToList(int position);
 
@@ -27,7 +27,7 @@ public interface MvpContainerList {
 
     interface Presenter{
 
-        void initializeAdapter(List<SingleDrive> routeList);
+        void initializeAdapter(List<Drive> routeList);
 
         void onDelegation(RouteListFragmentDelegation delegation);
 

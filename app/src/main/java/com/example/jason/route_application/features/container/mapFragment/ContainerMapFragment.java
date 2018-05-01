@@ -6,10 +6,10 @@ import com.directions.route.RouteException;
 import com.directions.route.Routing;
 import com.directions.route.RoutingListener;
 import com.example.jason.route_application.R;
-import com.example.jason.route_application.data.pojos.FormattedAddress;
+import com.example.jason.route_application.data.pojos.Address;
 import com.example.jason.route_application.data.pojos.MarkerInfo;
 import com.example.jason.route_application.data.pojos.RouteInfoHolder;
-import com.example.jason.route_application.data.pojos.api.SingleDriveRequest;
+import com.example.jason.route_application.data.pojos.api.DriveRequest;
 import com.example.jason.route_application.features.container.ContainerActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -66,7 +66,7 @@ public class ContainerMapFragment extends Fragment implements
 
     public interface RouteMapListener {
 
-        void getDriveInformation(SingleDriveRequest request);
+        void getDriveInformation(DriveRequest request);
 
         void onDeselectMarker();
 
@@ -130,7 +130,7 @@ public class ContainerMapFragment extends Fragment implements
     }
 
     @Override
-    public void addMarkersToMap(List<FormattedAddress> addressList) {
+    public void addMarkersToMap(List<Address> addressList) {
         //get phone location
         Marker originMarker = googleMap.addMarker(
                 new MarkerOptions()
@@ -140,9 +140,9 @@ public class ContainerMapFragment extends Fragment implements
         originMarker.setTag("origin");
 
         if (addressList != null) {
-            for (FormattedAddress address : addressList) {
+            for (Address address : addressList) {
 
-                if(address.isInvalid()){
+                if(address.getInvalid()){
                     return;
                 }
 
@@ -150,7 +150,9 @@ public class ContainerMapFragment extends Fragment implements
 
                 markerInfo.setSelected(false);
 
-                if (address.isBusiness()) {
+
+
+                if (address.getBusiness()) {
                     markerInfo.setBusiness(true);
                     markerInfo.setIconType("business");
                 } else {
@@ -206,7 +208,7 @@ public class ContainerMapFragment extends Fragment implements
     }
 
     @Override
-    public void getDriveInformation(SingleDriveRequest request) {
+    public void getDriveInformation(DriveRequest request) {
         containerActivityCallback.getDriveInformation(request);
     }
 

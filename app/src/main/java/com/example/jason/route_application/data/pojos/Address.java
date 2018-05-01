@@ -7,7 +7,7 @@ import android.os.Parcelable;
  * Created by Jason on 07-Feb-18.
  */
 
-public class FormattedAddress implements Parcelable {
+public class Address implements Parcelable {
 
     private String rawAddress;
     private String formattedAddress;
@@ -17,14 +17,14 @@ public class FormattedAddress implements Parcelable {
     private String country;
     private double lat;
     private double lng;
-    private boolean isBusiness;
-    private boolean isInvalid;
+    private boolean business;
+    private boolean invalid;
 
-    public FormattedAddress(){
+    public Address(){
 
     }
 
-    protected FormattedAddress(Parcel in) {
+    protected Address(Parcel in) {
         rawAddress = in.readString();
         formattedAddress = in.readString();
         street = in.readString();
@@ -33,8 +33,8 @@ public class FormattedAddress implements Parcelable {
         country = in.readString();
         lat = in.readDouble();
         lng = in.readDouble();
-        isBusiness = in.readByte() != 0;
-        isInvalid = in.readByte() != 0;
+        business = in.readByte() != 0;
+        invalid = in.readByte() != 0;
     }
 
     @Override
@@ -47,8 +47,8 @@ public class FormattedAddress implements Parcelable {
         dest.writeString(country);
         dest.writeDouble(lat);
         dest.writeDouble(lng);
-        dest.writeByte((byte) (isBusiness ? 1 : 0));
-        dest.writeByte((byte) (isInvalid ? 1 : 0));
+        dest.writeByte((byte) (business ? 1 : 0));
+        dest.writeByte((byte) (invalid ? 1 : 0));
     }
 
     @Override
@@ -56,15 +56,15 @@ public class FormattedAddress implements Parcelable {
         return 0;
     }
 
-    public static final Creator<FormattedAddress> CREATOR = new Creator<FormattedAddress>() {
+    public static final Creator<Address> CREATOR = new Creator<Address>() {
         @Override
-        public FormattedAddress createFromParcel(Parcel in) {
-            return new FormattedAddress(in);
+        public Address createFromParcel(Parcel in) {
+            return new Address(in);
         }
 
         @Override
-        public FormattedAddress[] newArray(int size) {
-            return new FormattedAddress[size];
+        public Address[] newArray(int size) {
+            return new Address[size];
         }
     };
 
@@ -132,19 +132,19 @@ public class FormattedAddress implements Parcelable {
         this.lng = lng;
     }
 
-    public boolean isBusiness() {
-        return isBusiness;
+    public boolean getBusiness() {
+        return business;
     }
 
     public void setBusiness(boolean business) {
-        isBusiness = business;
+        this.business = business;
     }
 
-    public boolean isInvalid() {
-        return isInvalid;
+    public boolean getInvalid() {
+        return invalid;
     }
 
     public void setInvalid(boolean invalid) {
-        isInvalid = invalid;
+        this.invalid = invalid;
     }
 }

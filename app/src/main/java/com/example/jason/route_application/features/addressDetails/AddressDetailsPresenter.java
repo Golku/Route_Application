@@ -2,9 +2,9 @@ package com.example.jason.route_application.features.addressDetails;
 
 import com.example.jason.route_application.data.database.DatabaseCallback;
 import com.example.jason.route_application.data.models.AddressFormatter;
+import com.example.jason.route_application.data.pojos.Address;
 import com.example.jason.route_application.data.pojos.CommentInformation;
 import com.example.jason.route_application.data.pojos.database.AddressInformationResponse;
-import com.example.jason.route_application.data.pojos.FormattedAddress;
 
 import javax.inject.Inject;
 
@@ -20,7 +20,7 @@ public class AddressDetailsPresenter implements MvpAddressDetails.Presenter, Dat
     private final MvpAddressDetails.View view;
     private MvpAddressDetails.Interactor interactor;
 
-    private FormattedAddress formattedAddress;
+    private Address address;
 
     @Inject
     AddressDetailsPresenter(MvpAddressDetails.View view, MvpAddressDetails.Interactor interactor) {
@@ -30,18 +30,18 @@ public class AddressDetailsPresenter implements MvpAddressDetails.Presenter, Dat
 
     @Override
     public void formatAddress(String address) {
-        formattedAddress = addressFormatter.formatAddress(address);
+        this.address = addressFormatter.formatAddress(address);
     }
 
     @Override
     public void updateTextViews() {
-        view.setUpAddressInformation(formattedAddress);
+        view.setUpAddressInformation(address);
     }
 
     @Override
     public void getAddressInformation() {
         view.onStartNetworkOperation();
-        interactor.getAddressInformation(this, formattedAddress);
+        interactor.getAddressInformation(this, address);
     }
 
     @Override
@@ -87,7 +87,7 @@ public class AddressDetailsPresenter implements MvpAddressDetails.Presenter, Dat
 
     @Override
     public void onGoogleLinkClick() {
-        view.showAddressInGoogle(formattedAddress);
+        view.showAddressInGoogle(address);
     }
 
     @Override
@@ -97,7 +97,7 @@ public class AddressDetailsPresenter implements MvpAddressDetails.Presenter, Dat
 
     @Override
     public void onAddCommentButtonClick() {
-        view.showCommentInput(formattedAddress);
+        view.showCommentInput(address);
     }
 
 

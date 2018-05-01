@@ -1,7 +1,7 @@
 package com.example.jason.route_application.features.commentInput;
 
 import com.example.jason.route_application.data.database.DatabaseCallback;
-import com.example.jason.route_application.data.pojos.FormattedAddress;
+import com.example.jason.route_application.data.pojos.Address;
 
 /**
  * Created by Jason on 2/10/2018.
@@ -27,7 +27,7 @@ public interface MvpCommentInput {
 
     interface Presenter{
 
-        void setUpInfo(String employeeId, FormattedAddress formattedAddress);
+        void setUpInfo(String employeeId, Address address);
 
         void onAddCommentBtnClick(String comment);
 
@@ -35,7 +35,7 @@ public interface MvpCommentInput {
 
     interface Interactor{
         void addCommentToAddress(DatabaseCallback.CommentInputCallBack callback,
-                                 FormattedAddress formattedAddress,
+                                 Address address,
                                  String employeeId,
                                  String comment,
                                  String date

@@ -1,15 +1,18 @@
 package com.example.jason.route_application.features.container;
 
 import com.example.jason.route_application.data.api.ApiCallback;
-import com.example.jason.route_application.data.pojos.FormattedAddress;
+import com.example.jason.route_application.data.pojos.Address;
 import com.example.jason.route_application.data.pojos.RouteInfoHolder;
 import com.example.jason.route_application.data.pojos.RouteListFragmentDelegation;
 import com.example.jason.route_application.data.pojos.api.Container;
 import com.example.jason.route_application.data.pojos.Session;
 import com.example.jason.route_application.data.pojos.api.Route;
-import com.example.jason.route_application.data.pojos.api.SingleDrive;
-import com.example.jason.route_application.data.pojos.api.SingleDriveRequest;
+import com.example.jason.route_application.data.pojos.api.Drive;
+import com.example.jason.route_application.data.pojos.api.DriveRequest;
 import com.example.jason.route_application.features.shared.BasePresenter;
+
+import android.util.Log;
+
 import javax.inject.Inject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -22,7 +25,8 @@ import java.util.List;
 public class ContainerPresenter extends BasePresenter implements
         MvpContainer.Presenter,
         ApiCallback.ContainerResponseCallback,
-        ApiCallback.SingleDriveResponseCallback {
+        ApiCallback.RouteResponseCallback,
+        ApiCallback.DriveResponseCallback {
 
     private final String debugTag = "debugTag";
 
@@ -32,8 +36,8 @@ public class ContainerPresenter extends BasePresenter implements
     private Session session;
     private Container container;
     private Route route;
-    private List<FormattedAddress> addressList;
-    private List<SingleDrive> routeList;
+    private List<Address> addressList;
+    private List<Drive> routeList;
 
     private int[] deliveryCompletion;
     private int deliveredPrivate;
@@ -62,15 +66,21 @@ public class ContainerPresenter extends BasePresenter implements
         if(container.getRoute() == null){
             addressList = new ArrayList<>();
             routeList = new ArrayList<>();
+
             return;
         }else{
             route = container.getRoute();
-            System.out.println("route is not null");
+            Log.d(debugTag, "route is not null");
         }
 
         if(route.getAddressList() != null){
             addressList = route.getAddressList();
+            for(Address address: addressList){
+                Log.d(debugTag, "address: " + address.getFormattedAddress());
+                Log.d(debugTag, "business: " + address.getBusiness());
+            }
         }else{
+            Log.d(debugTag, "address is not null");
             addressList = new ArrayList<>();
         }
 
@@ -102,26 +112,26 @@ public class ContainerPresenter extends BasePresenter implements
         view.setupFragments(routeInfoHolder);
     }
 
-    private List<String> orderRoute(List<SingleDrive> routeList){
+    private List<String> orderRoute(List<Drive> routeList){
         List<String> routeOrder = new ArrayList<>();
-        for(SingleDrive drive : routeList){
-            routeOrder.add(drive.getDestinationFormattedAddress().getFormattedAddress());
+        for(Drive drive : routeList){
+            routeOrder.add(drive.getDestinationAddress().getFormattedAddress());
         }
         return routeOrder;
     }
 
     @Override
-    public void getDriveInformation(SingleDriveRequest request) {
+    public void getDriveInformation(DriveRequest request) {
         interactor.getDriveInformation(request,this);
     }
 
-    private void addDeliveryTime(SingleDrive singleDrive) {
+    private void addDeliveryTime(Drive drive) {
         long deliveryTime;
-        long driveTime = singleDrive.getDriveDurationInSeconds() * 1000;
+        long driveTime = drive.getDriveDurationInSeconds() * 1000;
         long PACKAGE_DELIVERY_TIME = 120000;
 
         if (routeList.size() > 1) {
-            SingleDrive previousDrive = routeList.get(routeList.indexOf(singleDrive) - 1);
+            Drive previousDrive = routeList.get(routeList.indexOf(drive) - 1);
             deliveryTime = previousDrive.getDeliveryTimeInMillis() + driveTime + PACKAGE_DELIVERY_TIME;
         } else {
             long date = System.currentTimeMillis();
@@ -130,14 +140,14 @@ public class ContainerPresenter extends BasePresenter implements
 
         String deliveryTimeString = sdf.format(deliveryTime);
 
-        singleDrive.setDeliveryTimeInMillis(deliveryTime);
-        singleDrive.setDeliveryTimeHumanReadable(deliveryTimeString);
+        drive.setDeliveryTimeInMillis(deliveryTime);
+        drive.setDeliveryTimeHumanReadable(deliveryTimeString);
 
         onUpdateRouteEndTime();
 
         RouteListFragmentDelegation delegation = new RouteListFragmentDelegation();
         delegation.setOperation("add");
-        delegation.setPosition(routeList.indexOf(singleDrive));
+        delegation.setPosition(routeList.indexOf(drive));
         view.delegateRouteChange(delegation);
     }
 
@@ -158,11 +168,11 @@ public class ContainerPresenter extends BasePresenter implements
     public void multipleMarkersDeselected(String destination) {
         int position = -1;
 
-        for (SingleDrive singleDrive : routeList) {
-            String driveDestination = singleDrive.getDestinationFormattedAddress().getFormattedAddress();
+        for (Drive drive : routeList) {
+            String driveDestination = drive.getDestinationAddress().getFormattedAddress();
 
             if (destination.equals(driveDestination)) {
-                position = routeList.indexOf(singleDrive);
+                position = routeList.indexOf(drive);
                 break;
             }
         }
@@ -179,7 +189,7 @@ public class ContainerPresenter extends BasePresenter implements
 
     private void onUpdateRouteEndTime() {
         if (routeList.size() > 0) {
-            SingleDrive finalDrive = routeList.get(routeList.size() - 1);
+            Drive finalDrive = routeList.get(routeList.size() - 1);
             view.updateRouteEndTime(finalDrive.getDeliveryTimeHumanReadable());
         } else {
             view.updateRouteEndTime("");
@@ -201,6 +211,9 @@ public class ContainerPresenter extends BasePresenter implements
         view.navigateToDestination(address);
     }
 
+//        If the server has an error and sends back a routeResponse with a html page
+//        the response processing will fail! FIX THIS!!!
+
     @Override
     public void onContainerResponse(Container response) {
         if (response != null){
@@ -213,10 +226,20 @@ public class ContainerPresenter extends BasePresenter implements
         view.showToast("Unable to fetch container from api");
     }
 
-//        If the server has an error and sends back a routeResponse with a html page
-//        the response processing will fail! FIX THIS!!!
     @Override
-    public void onSingleDriveResponse(SingleDrive response) {
+    public void onRouteResponse(Route response) {
+        if(response != null){
+            setRouteInfo();
+        }
+    }
+
+    @Override
+    public void onRouteResponseFailure() {
+        view.showToast("Unable to fetch route from api");
+    }
+
+    @Override
+    public void onSingleDriveResponse(Drive response) {
         if (response != null) {
             routeList.add(response);
             addDeliveryTime(response);
