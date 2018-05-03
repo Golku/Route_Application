@@ -9,46 +9,46 @@ import android.os.Parcelable;
 
 public class Address implements Parcelable {
 
-    private String rawAddress;
-    private String formattedAddress;
+    private String address;
     private String street;
     private String postCode;
     private String city;
     private String country;
     private double lat;
     private double lng;
+    private int openingHours;
     private boolean business;
-    private boolean invalid;
+    private boolean valid;
 
     public Address(){
 
     }
 
     protected Address(Parcel in) {
-        rawAddress = in.readString();
-        formattedAddress = in.readString();
+        address = in.readString();
         street = in.readString();
         postCode = in.readString();
         city = in.readString();
         country = in.readString();
         lat = in.readDouble();
         lng = in.readDouble();
+        openingHours = in.readInt();
         business = in.readByte() != 0;
-        invalid = in.readByte() != 0;
+        valid = in.readByte() != 0;
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(rawAddress);
-        dest.writeString(formattedAddress);
+        dest.writeString(address);
         dest.writeString(street);
         dest.writeString(postCode);
         dest.writeString(city);
         dest.writeString(country);
         dest.writeDouble(lat);
         dest.writeDouble(lng);
+        dest.writeInt(openingHours);
         dest.writeByte((byte) (business ? 1 : 0));
-        dest.writeByte((byte) (invalid ? 1 : 0));
+        dest.writeByte((byte) (valid ? 1 : 0));
     }
 
     @Override
@@ -68,20 +68,12 @@ public class Address implements Parcelable {
         }
     };
 
-    public String getRawAddress() {
-        return rawAddress;
+    public String getAddress() {
+        return address;
     }
 
-    public void setRawAddress(String rawAddress) {
-        this.rawAddress = rawAddress;
-    }
-
-    public String getFormattedAddress() {
-        return formattedAddress;
-    }
-
-    public void setFormattedAddress(String formattedAddress) {
-        this.formattedAddress = formattedAddress;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getStreet() {
@@ -132,7 +124,15 @@ public class Address implements Parcelable {
         this.lng = lng;
     }
 
-    public boolean getBusiness() {
+    public int getOpeningHours() {
+        return openingHours;
+    }
+
+    public void setOpeningHours(int openingHours) {
+        this.openingHours = openingHours;
+    }
+
+    public boolean isBusiness() {
         return business;
     }
 
@@ -140,11 +140,11 @@ public class Address implements Parcelable {
         this.business = business;
     }
 
-    public boolean getInvalid() {
-        return invalid;
+    public boolean isValid() {
+        return valid;
     }
 
-    public void setInvalid(boolean invalid) {
-        this.invalid = invalid;
+    public void setValid(boolean valid) {
+        this.valid = valid;
     }
 }

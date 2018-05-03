@@ -11,19 +11,29 @@ import android.os.Parcelable;
 
 public class Drive{
 
+    private boolean valid;
+
     private Address originAddress;
     private Address destinationAddress;
 
     private boolean destinationIsABusiness;
 
-    private long driveDistanceInMeters;
-    private String driveDistanceHumanReadable;
-
     private long driveDurationInSeconds;
     private String driveDurationHumanReadable;
 
+    private long driveDistanceInMeters;
+    private String driveDistanceHumanReadable;
+
     private long deliveryTimeInMillis;
     private String deliveryTimeHumanReadable;
+
+    public boolean isValid() {
+        return valid;
+    }
+
+    public void setValid(boolean valid) {
+        this.valid = valid;
+    }
 
     public Address getOriginAddress() {
         return originAddress;
@@ -49,22 +59,6 @@ public class Drive{
         this.destinationIsABusiness = destinationIsABusiness;
     }
 
-    public long getDriveDistanceInMeters() {
-        return driveDistanceInMeters;
-    }
-
-    public void setDriveDistanceInMeters(long driveDistanceInMeters) {
-        this.driveDistanceInMeters = driveDistanceInMeters;
-    }
-
-    public String getDriveDistanceHumanReadable() {
-        return driveDistanceHumanReadable;
-    }
-
-    public void setDriveDistanceHumanReadable(String driveDistanceHumanReadable) {
-        this.driveDistanceHumanReadable = driveDistanceHumanReadable;
-    }
-
     public long getDriveDurationInSeconds() {
         return driveDurationInSeconds;
     }
@@ -79,6 +73,22 @@ public class Drive{
 
     public void setDriveDurationHumanReadable(String driveDurationHumanReadable) {
         this.driveDurationHumanReadable = driveDurationHumanReadable;
+    }
+
+    public long getDriveDistanceInMeters() {
+        return driveDistanceInMeters;
+    }
+
+    public void setDriveDistanceInMeters(long driveDistanceInMeters) {
+        this.driveDistanceInMeters = driveDistanceInMeters;
+    }
+
+    public String getDriveDistanceHumanReadable() {
+        return driveDistanceHumanReadable;
+    }
+
+    public void setDriveDistanceHumanReadable(String driveDistanceHumanReadable) {
+        this.driveDistanceHumanReadable = driveDistanceHumanReadable;
     }
 
     public long getDeliveryTimeInMillis() {

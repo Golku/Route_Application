@@ -23,7 +23,6 @@ public class RouteInfoHolder implements Parcelable{
         organized = in.readByte() != 0;
         userLocation = in.readParcelable(LatLng.class.getClassLoader());
         addressList = in.createTypedArrayList(Address.CREATOR);
-        routeList = in.createTypedArrayList(Drive.CREATOR);
         routeOrder = in.createStringArrayList();
     }
 
@@ -32,7 +31,6 @@ public class RouteInfoHolder implements Parcelable{
         dest.writeByte((byte) (organized ? 1 : 0));
         dest.writeParcelable(userLocation, flags);
         dest.writeTypedList(addressList);
-        dest.writeTypedList(routeList);
         dest.writeStringList(routeOrder);
     }
 

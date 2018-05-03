@@ -27,6 +27,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import dagger.android.support.DaggerAppCompatActivity;
 
 public class ContainerActivity extends DaggerAppCompatActivity implements
@@ -87,18 +88,19 @@ public class ContainerActivity extends DaggerAppCompatActivity implements
 
     @Override
     public void setupFragments(RouteInfoHolder routeInfoHolder) {
+
         Bundle bundle = new Bundle();
-        Fragment routeMapFragment = new ContainerMapFragment();
         Fragment routeListFragment = new ContainerListFragment();
+        Fragment routeMapFragment = new ContainerMapFragment();
 
         bundle.putParcelable("routeInfoHolder", routeInfoHolder);
 
-        routeMapFragment.setArguments(bundle);
         routeListFragment.setArguments(bundle);
+        routeMapFragment.setArguments(bundle);
 
         ContainerSectionPagerAdapter containerSectionPagerAdapter = new ContainerSectionPagerAdapter(getSupportFragmentManager());
-        containerSectionPagerAdapter.addFragment("Map", routeMapFragment);
         containerSectionPagerAdapter.addFragment("Route", routeListFragment);
+        containerSectionPagerAdapter.addFragment("Map", routeMapFragment);
 
         viewPager.setAdapter(containerSectionPagerAdapter);
 
@@ -129,7 +131,7 @@ public class ContainerActivity extends DaggerAppCompatActivity implements
     }
 
     @Override
-    public void getDriveInformation(DriveRequest request) {
+    public void onMarkerSelected(DriveRequest request) {
         presenter.getDriveInformation(request);
     }
 
@@ -164,6 +166,11 @@ public class ContainerActivity extends DaggerAppCompatActivity implements
     public void navigateToDestination(String address) {
         Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse("http://maps.google.com/maps?daddr="+address));
         startActivity(intent);
+    }
+
+    @OnClick(R.id.get_route_btn)
+    public void onGetRouteBtnClick(){
+        presenter.getRoute();
     }
 
     @Override

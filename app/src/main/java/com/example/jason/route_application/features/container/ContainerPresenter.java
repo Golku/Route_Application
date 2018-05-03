@@ -14,6 +14,7 @@ import com.example.jason.route_application.features.shared.BasePresenter;
 import android.util.Log;
 
 import javax.inject.Inject;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,16 +32,23 @@ public class ContainerPresenter extends BasePresenter implements
     private final String debugTag = "debugTag";
 
     private MvpContainer.View view;
+
     private MvpContainer.Interactor interactor;
 
     private Session session;
+
     private Container container;
+
     private Route route;
+
     private List<Address> addressList;
+
     private List<Drive> routeList;
 
     private int[] deliveryCompletion;
+
     private int deliveredPrivate;
+
     private int deliveredBusiness;
 
     private SimpleDateFormat sdf;
@@ -61,48 +69,48 @@ public class ContainerPresenter extends BasePresenter implements
         interactor.getContainer(session.getUsername(), this);
     }
 
-    private void setRouteInfo(){
-
-        if(container.getRoute() == null){
-            addressList = new ArrayList<>();
-            routeList = new ArrayList<>();
-
-            return;
-        }else{
-            route = container.getRoute();
-            Log.d(debugTag, "route is not null");
-        }
-
-        if(route.getAddressList() != null){
-            addressList = route.getAddressList();
-            for(Address address: addressList){
-                Log.d(debugTag, "address: " + address.getFormattedAddress());
-                Log.d(debugTag, "business: " + address.getBusiness());
-            }
-        }else{
-            Log.d(debugTag, "address is not null");
-            addressList = new ArrayList<>();
-        }
-
-        if (route.getRouteList() != null && !route.getRouteList().isEmpty()) {
-            routeList = route.getRouteList();
-        } else {
-            routeList = new ArrayList<>();
-        }
-
-        deliveryCompletion[1] = route.getPrivateAddressCount();
-        deliveryCompletion[3] = route.getBusinessAddressCount();
+    @Override
+    public void getRoute() {
+        interactor.getRoute(session.getUsername(), this);
     }
 
     private void initializeContainer(Container container) {
         this.container = container;
 
-        deliveryCompletion[0] = deliveredPrivate;
-        deliveryCompletion[2] = deliveredBusiness;
+//        In this method prepare the container by loading the values that are displayed in the top information bar
 
-        setRouteInfo();
+//        deliveryCompletion[0] = deliveredPrivate;
+//        deliveryCompletion[2] = deliveredBusiness;
+//        deliveryCompletion[1] = route.getPrivateAddressCount();
+//        deliveryCompletion[3] = route.getBusinessAddressCount();
+//        view.updateDeliveryCompletion(deliveryCompletion);
 
-        view.updateDeliveryCompletion(deliveryCompletion);
+        addressList = new ArrayList<>();
+        routeList = new ArrayList<>();
+
+        setupRouteInfo(container.getRoute());
+    }
+
+    private void setupRouteInfo(Route route) {
+
+        if (route == null) {
+            Log.d(debugTag, "route is null");
+            return;
+        }
+
+        container.setRoute(route);
+
+        if (route.getAddressList() != null) {
+            addressList = route.getAddressList();
+            for (Address address : addressList) {
+                Log.d(debugTag, "address: " + address.getAddress());
+                Log.d(debugTag, "business: " + address.isBusiness());
+            }
+        }
+
+        if (route.getRouteList() != null) {
+            routeList = route.getRouteList();
+        }
 
         RouteInfoHolder routeInfoHolder = new RouteInfoHolder();
 
@@ -112,17 +120,17 @@ public class ContainerPresenter extends BasePresenter implements
         view.setupFragments(routeInfoHolder);
     }
 
-    private List<String> orderRoute(List<Drive> routeList){
+    private List<String> orderRoute(List<Drive> routeList) {
         List<String> routeOrder = new ArrayList<>();
-        for(Drive drive : routeList){
-            routeOrder.add(drive.getDestinationAddress().getFormattedAddress());
+        for (Drive drive : routeList) {
+            routeOrder.add(drive.getDestinationAddress().getAddress());
         }
         return routeOrder;
     }
 
     @Override
     public void getDriveInformation(DriveRequest request) {
-        interactor.getDriveInformation(request,this);
+        interactor.getDriveInformation(request, this);
     }
 
     private void addDeliveryTime(Drive drive) {
@@ -148,6 +156,7 @@ public class ContainerPresenter extends BasePresenter implements
         RouteListFragmentDelegation delegation = new RouteListFragmentDelegation();
         delegation.setOperation("add");
         delegation.setPosition(routeList.indexOf(drive));
+        delegation.setListIdentifier("routeList");
         view.delegateRouteChange(delegation);
     }
 
@@ -161,6 +170,7 @@ public class ContainerPresenter extends BasePresenter implements
         RouteListFragmentDelegation delegation = new RouteListFragmentDelegation();
         delegation.setOperation("remove");
         delegation.setPosition(position);
+        delegation.setListIdentifier("routeList");
         view.delegateRouteChange(delegation);
     }
 
@@ -169,7 +179,7 @@ public class ContainerPresenter extends BasePresenter implements
         int position = -1;
 
         for (Drive drive : routeList) {
-            String driveDestination = drive.getDestinationAddress().getFormattedAddress();
+            String driveDestination = drive.getDestinationAddress().getAddress();
 
             if (destination.equals(driveDestination)) {
                 position = routeList.indexOf(drive);
@@ -216,7 +226,7 @@ public class ContainerPresenter extends BasePresenter implements
 
     @Override
     public void onContainerResponse(Container response) {
-        if (response != null){
+        if (response != null) {
             initializeContainer(response);
         }
     }
@@ -228,9 +238,7 @@ public class ContainerPresenter extends BasePresenter implements
 
     @Override
     public void onRouteResponse(Route response) {
-        if(response != null){
-            setRouteInfo();
-        }
+        setupRouteInfo(response);
     }
 
     @Override

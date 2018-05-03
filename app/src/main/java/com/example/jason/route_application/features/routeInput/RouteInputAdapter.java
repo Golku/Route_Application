@@ -54,13 +54,13 @@ public class RouteInputAdapter extends RecyclerView.Adapter<RouteInputAdapter.Cu
     class CustomViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView address;
-        private ViewGroup container;
+        private ViewGroup addressWrapper;
 
         CustomViewHolder(View itemView) {
             super(itemView);
-            this.address = itemView.findViewById(R.id.address);
-            this.container = itemView.findViewById(R.id.root_layout);
-            this.container.setOnClickListener(this);
+            this.address = itemView.findViewById(R.id.address_text_view);
+            this.addressWrapper = itemView.findViewById(R.id.address_wrapper);
+            this.addressWrapper.setOnClickListener(this);
         }
 
         public void onClick(View v) {

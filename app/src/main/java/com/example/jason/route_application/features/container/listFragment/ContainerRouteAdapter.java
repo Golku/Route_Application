@@ -15,19 +15,19 @@ import java.util.List;
  * Created by Jason on 07-Feb-18.
  */
 
-public class ContainerAdapter extends RecyclerView.Adapter<ContainerAdapter.CustomViewHolder>{
+public class ContainerRouteAdapter extends RecyclerView.Adapter<ContainerRouteAdapter.CustomViewHolder>{
 
     private List<Drive> routeList;
-    private RouteListFunctions routeListFunctions;
+    private RouteAdapterFunctions routeAdapterFunctions;
 
-    ContainerAdapter(List<Drive> routeList, RouteListFunctions routeListFunctions) {
+    ContainerRouteAdapter(RouteAdapterFunctions routeAdapterFunctions, List<Drive> routeList) {
         this.routeList = routeList;
-        this.routeListFunctions = routeListFunctions;
+        this.routeAdapterFunctions = routeAdapterFunctions;
     }
 
-    public interface RouteListFunctions{
-        void onAdapterListItemClick(String address);
-        void onAdapterGoButtonClick(String address);
+    public interface RouteAdapterFunctions {
+        void routeAdapterItemClick(String address);
+        void routeAdapterGoButtonClick(String address);
 //        void onListItemSwipe(int position);
     }
 
@@ -36,30 +36,30 @@ public class ContainerAdapter extends RecyclerView.Adapter<ContainerAdapter.Cust
     }
 
     @Override
-    public ContainerAdapter.CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_travel_information, parent, false);
         return new CustomViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(ContainerAdapter.CustomViewHolder holder, int position) {
+    public void onBindViewHolder(CustomViewHolder holder, int position) {
 
-        Drive currentItem = routeList.get(position);
+        Drive drive = routeList.get(position);
 
         String positionTracker = Integer.toString(position + 1);
-        String city = currentItem.getDestinationAddress().getPostCode() + " " + currentItem.getDestinationAddress().getCity();
-        String distance = "Distance: "+currentItem.getDriveDistanceHumanReadable();
-        String duration = "Duration: "+currentItem.getDriveDurationHumanReadable();
-        String arrivalTime = currentItem.getDeliveryTimeHumanReadable();
+        String city = drive.getDestinationAddress().getPostCode() + " " + drive.getDestinationAddress().getCity();
+        String distance = "Distance: "+drive.getDriveDistanceHumanReadable();
+        String duration = "Duration: "+drive.getDriveDurationHumanReadable();
+        String arrivalTime = drive.getDeliveryTimeHumanReadable();
 
         holder.positionTextView.setText(positionTracker);
-        holder.streetTextView.setText(currentItem.getDestinationAddress().getStreet());
+        holder.streetTextView.setText(drive.getDestinationAddress().getStreet());
         holder.cityTextView.setText(city);
         holder.distanceTextView.setText(distance);
         holder.durationTextView.setText(duration);
         holder.estimatedArrivalTime.setText(arrivalTime);
 
-        if(currentItem.getDestinationIsABusiness()){
+        if(drive.isDestinationIsABusiness()){
             holder.addressType.setImageResource(R.drawable.ic_marker_business);
         }else{
             holder.addressType.setImageResource(R.drawable.ic_marker_private);
@@ -102,10 +102,10 @@ public class ContainerAdapter extends RecyclerView.Adapter<ContainerAdapter.Cust
         public void onClick(View v) {
 
             if(v == this.container){
-                routeListFunctions.onAdapterListItemClick(routeList.get(this.getAdapterPosition()).getDestinationAddress().getFormattedAddress());
+                routeAdapterFunctions.routeAdapterItemClick(routeList.get(this.getAdapterPosition()).getDestinationAddress().getAddress());
             }
             else if(v == this.goButton){
-                routeListFunctions.onAdapterGoButtonClick(routeList.get(this.getAdapterPosition()).getDestinationAddress().getFormattedAddress());
+                routeAdapterFunctions.routeAdapterGoButtonClick(routeList.get(this.getAdapterPosition()).getDestinationAddress().getAddress());
             }
         }
 
