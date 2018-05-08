@@ -17,13 +17,12 @@ import com.example.jason.route_application.features.container.ContainerActivity;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class AddressListFragment extends Fragment implements MvpAddressList.View{
 
-    @BindView(R.id.address_input_btn)
+    @BindView(R.id.add_address_btn)
     FloatingActionButton addressInputBtn;
     @BindView(R.id.address_list)
     RecyclerView recyclerView;
@@ -102,5 +101,4 @@ public class AddressListFragment extends Fragment implements MvpAddressList.View
     public void listItemClick(String address) {
         containerActivityCallback.onListItemClick(address);
     }
-
 }

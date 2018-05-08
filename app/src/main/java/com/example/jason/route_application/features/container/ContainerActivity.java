@@ -115,17 +115,17 @@ public class ContainerActivity extends DaggerAppCompatActivity implements
         viewPager.setAdapter(containerSectionPagerAdapter);
     }
 
-    @OnClick(R.id.fa_btn)
+    @OnClick(R.id.address_list_iv)
     public void showAddressList(){
         viewPager.setCurrentItem(0);
     }
 
-    @OnClick(R.id.fb_btn)
+    @OnClick(R.id.map_iv)
     public void showMap(){
         viewPager.setCurrentItem(1);
     }
 
-    @OnClick(R.id.fa_btn)
+    @OnClick(R.id.route_list_iv)
     public void showRouteList(){
         viewPager.setCurrentItem(2);
     }

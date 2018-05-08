@@ -32,7 +32,10 @@
 
         <activity android:name=".features.login.LoginActivity"/>
 
-        <activity android:name=".features.container.ContainerActivity"/>
+        <activity
+            android:name=".features.container.ContainerActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            />
 
         <activity android:name=".features.addressDetails.AddressDetailsActivity"/>
 

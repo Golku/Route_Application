@@ -162,7 +162,6 @@ public class ContainerPresenter extends BasePresenter implements
         FragmentDelegation delegation = new FragmentDelegation();
         delegation.setOperation("add");
         delegation.setPosition(routeList.indexOf(drive));
-        delegation.setListIdentifier("routeList");
         view.delegateRouteChange(delegation);
     }
 
@@ -176,7 +175,6 @@ public class ContainerPresenter extends BasePresenter implements
         FragmentDelegation delegation = new FragmentDelegation();
         delegation.setOperation("remove");
         delegation.setPosition(position);
-        delegation.setListIdentifier("routeList");
         view.delegateRouteChange(delegation);
     }
 
