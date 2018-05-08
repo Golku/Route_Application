@@ -4,7 +4,6 @@ import com.example.jason.route_application.R;
 import com.example.jason.route_application.data.pojos.Session;
 import com.example.jason.route_application.features.container.ContainerActivity;
 import com.example.jason.route_application.features.login.LoginActivity;
-import com.example.jason.route_application.features.routeInput.RouteInputActivity;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Bundle;

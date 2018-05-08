@@ -12,7 +12,7 @@ import java.util.List;
  * Created by Jason on 3/28/2018.
  */
 
-public interface MvpContainerMap {
+public interface MvpMap {
 
     interface View{
 

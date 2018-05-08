@@ -4,14 +4,10 @@ import com.example.jason.route_application.features.commentInput.CommentInputAct
 import com.example.jason.route_application.features.commentInput.CommentInputModule;
 import com.example.jason.route_application.features.addressDetails.AddressDetailsActivity;
 import com.example.jason.route_application.features.addressDetails.AddressDetailsModule;
-import com.example.jason.route_application.features.correctInvalidAddresses.CorrectInvalidAddressesActivity;
-import com.example.jason.route_application.features.correctInvalidAddresses.CorrectInvalidAddressesModule;
 import com.example.jason.route_application.features.login.LoginActivity;
 import com.example.jason.route_application.features.login.LoginModule;
 import com.example.jason.route_application.features.container.ContainerActivity;
 import com.example.jason.route_application.features.container.ContainerModule;
-import com.example.jason.route_application.features.routeInput.RouteInputActivity;
-import com.example.jason.route_application.features.routeInput.RouteInputModule;
 import com.example.jason.route_application.features.splash.SplashActivity;
 import com.example.jason.route_application.features.splash.SplashModule;
 
@@ -31,9 +27,6 @@ abstract class ActivityBuilder {
     @ContributesAndroidInjector(modules = LoginModule.class)
     abstract LoginActivity bindLogin();
 
-    @ContributesAndroidInjector(modules = RouteInputModule.class)
-    abstract RouteInputActivity bindRouteInput();
-
     @ContributesAndroidInjector(modules = ContainerModule.class)
     abstract ContainerActivity bindContainer();
 
@@ -42,7 +35,4 @@ abstract class ActivityBuilder {
 
     @ContributesAndroidInjector(modules = CommentInputModule.class)
     abstract CommentInputActivity bindCommentInput();
-
-    @ContributesAndroidInjector(modules = CorrectInvalidAddressesModule.class)
-    abstract CorrectInvalidAddressesActivity bindCorrectInvalidAddresses();
 }

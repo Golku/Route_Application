@@ -74,7 +74,7 @@ public class CommentInputActivity extends DaggerAppCompatActivity implements Mvp
         addCommentBtn.setEnabled(false);
         progressBar.setVisibility(View.VISIBLE);
         messageToUserTextView.setVisibility(View.VISIBLE);
-        messageToUserTextView.setText("Adding comment...");
+        messageToUserTextView.setText("Adding list_item_comment...");
     }
 
     @Override

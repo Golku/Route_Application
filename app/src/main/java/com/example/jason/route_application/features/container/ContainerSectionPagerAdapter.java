@@ -13,21 +13,14 @@ import java.util.List;
 
 public class ContainerSectionPagerAdapter extends FragmentPagerAdapter{
 
-    private List<String>fragmentTitle = new ArrayList<>();
     private List<Fragment>fragmentList = new ArrayList<>();
 
     ContainerSectionPagerAdapter(FragmentManager fm) {
         super(fm);
     }
 
-    void addFragment(String title, Fragment fragment){
-        fragmentTitle.add(title);
+    void addFragment(Fragment fragment){
         fragmentList.add(fragment);
-    }
-
-    @Override
-    public CharSequence getPageTitle(int position) {
-        return fragmentTitle.get(position);
     }
 
     @Override

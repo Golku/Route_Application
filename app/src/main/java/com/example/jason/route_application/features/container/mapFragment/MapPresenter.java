@@ -14,11 +14,11 @@ import java.util.List;
  * Created by Jason on 3/28/2018.
  */
 
-public class ContainerMapPresenter implements MvpContainerMap.Presenter {
+public class MapPresenter implements MvpMap.Presenter {
 
     private final String logTag = "logTagDebug";
 
-    private MvpContainerMap.View view;
+    private MvpMap.View view;
 
     private LatLng userLocation;
 
@@ -28,7 +28,7 @@ public class ContainerMapPresenter implements MvpContainerMap.Presenter {
 
     private Marker previousSelectedMarker;
 
-    ContainerMapPresenter(MvpContainerMap.View view, List<Address> addressList, List<String> routeOrder) {
+    MapPresenter(MvpMap.View view, List<Address> addressList, List<String> routeOrder) {
         this.view = view;
         this.addressList = addressList;
         this.routeOrder = new ArrayList<>();

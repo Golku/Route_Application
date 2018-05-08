@@ -31,7 +31,7 @@ public class AddressDetailsAdapter extends RecyclerView.Adapter <AddressDetailsA
 
     @Override
     public AddressDetailsAdapter.CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.comment, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_comment, parent, false);
         return new CustomViewHolder(v);
     }
 

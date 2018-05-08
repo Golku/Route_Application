@@ -1,5 +1,6 @@
 package com.example.jason.route_application.data.api;
 
+import com.example.jason.route_application.data.pojos.Address;
 import com.example.jason.route_application.data.pojos.api.Container;
 import com.example.jason.route_application.data.pojos.api.Route;
 import com.example.jason.route_application.data.pojos.api.Drive;
@@ -20,15 +21,14 @@ public interface ApiCallback {
         void onRouteResponseFailure();
     }
 
-    interface RouteSubmitCallback{
-        void onRouteSubmitResponse(boolean submitted);
-        void onRouteSubmitResponseFailure();
-    }
-
     interface DriveResponseCallback {
         void onSingleDriveResponse(Drive response);
         void onSingleDriveResponseFailure();
     }
 
+    interface AddAddressCallback {
+        void onAddAddressResponse(Address response);
+        void onAddAddressResponseFailure();
+    }
 
 }

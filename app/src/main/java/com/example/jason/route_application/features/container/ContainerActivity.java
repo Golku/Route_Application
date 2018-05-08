@@ -5,26 +5,26 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.jason.route_application.R;
+import com.example.jason.route_application.data.pojos.Address;
 import com.example.jason.route_application.data.pojos.RouteInfoHolder;
-import com.example.jason.route_application.data.pojos.RouteListFragmentDelegation;
+import com.example.jason.route_application.data.pojos.FragmentDelegation;
 import com.example.jason.route_application.data.pojos.Session;
 import com.example.jason.route_application.data.pojos.api.DriveRequest;
 import com.example.jason.route_application.features.addressDetails.AddressDetailsActivity;
-import com.example.jason.route_application.features.container.listFragment.ContainerListFragment;
-import com.example.jason.route_application.features.container.mapFragment.ContainerMapFragment;
-import com.example.jason.route_application.features.routeInput.RouteInputActivity;
-
+import com.example.jason.route_application.features.container.addressListFragment.AddressListFragment;
+import com.example.jason.route_application.features.container.routeListFragment.RouteListFragment;
+import com.example.jason.route_application.features.container.mapFragment.MapFragment;
 import org.greenrobot.eventbus.EventBus;
-
 import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -32,16 +32,14 @@ import dagger.android.support.DaggerAppCompatActivity;
 
 public class ContainerActivity extends DaggerAppCompatActivity implements
         MvpContainer.View,
-        ContainerListFragment.RouteListListener,
-        ContainerMapFragment.RouteMapListener {
+        RouteListFragment.RouteListListener,
+        MapFragment.RouteMapListener {
 
     @Inject
     MvpContainer.Presenter presenter;
 
     @BindView(R.id.container)
     ViewPager viewPager;
-    @BindView(R.id.tabs)
-    TabLayout tabLayout;
     @BindView(R.id.private_completion)
     TextView privateCompletion;
     @BindView(R.id.business_completion)
@@ -50,6 +48,14 @@ public class ContainerActivity extends DaggerAppCompatActivity implements
     TextView routeEndTime;
 
     private final String debugTag = "debugTag";
+
+    private AlertDialog alertDialog;
+    private EditText streetInput;
+    private EditText postcodeLettersInput;
+    private EditText postcodeNumbersInput;
+    private EditText cityInput;
+    private Button cancelDialogBtn;
+    private Button addAddressBtn;
 
     private boolean backPress = false;
 
@@ -64,7 +70,7 @@ public class ContainerActivity extends DaggerAppCompatActivity implements
     }
 
     private void onBackPressSnackbar(){
-        Snackbar snackbar = Snackbar.make(viewPager, "press again to exit", Snackbar.LENGTH_SHORT);
+        Snackbar snackbar = Snackbar.make(viewPager, "Press again to exit", Snackbar.LENGTH_SHORT);
         snackbar.addCallback(new Snackbar.Callback(){
             @Override
             public void onDismissed(Snackbar transientBottomBar, int event) {
@@ -83,6 +89,7 @@ public class ContainerActivity extends DaggerAppCompatActivity implements
     }
 
     private void init() {
+        setupAddressInputDialog();
         presenter.getContainer(new Session(this));
     }
 
@@ -90,21 +97,52 @@ public class ContainerActivity extends DaggerAppCompatActivity implements
     public void setupFragments(RouteInfoHolder routeInfoHolder) {
 
         Bundle bundle = new Bundle();
-        Fragment routeListFragment = new ContainerListFragment();
-        Fragment routeMapFragment = new ContainerMapFragment();
-
         bundle.putParcelable("routeInfoHolder", routeInfoHolder);
 
+        Fragment addressListFragment = new AddressListFragment();
+        Fragment MapFragment = new MapFragment();
+        Fragment routeListFragment = new RouteListFragment();
+
+        addressListFragment.setArguments(bundle);
+        MapFragment.setArguments(bundle);
         routeListFragment.setArguments(bundle);
-        routeMapFragment.setArguments(bundle);
 
         ContainerSectionPagerAdapter containerSectionPagerAdapter = new ContainerSectionPagerAdapter(getSupportFragmentManager());
-        containerSectionPagerAdapter.addFragment("Route", routeListFragment);
-        containerSectionPagerAdapter.addFragment("Map", routeMapFragment);
+        containerSectionPagerAdapter.addFragment(addressListFragment);
+        containerSectionPagerAdapter.addFragment(MapFragment);
+        containerSectionPagerAdapter.addFragment(routeListFragment);
 
         viewPager.setAdapter(containerSectionPagerAdapter);
+    }
 
-        tabLayout.setupWithViewPager(viewPager);
+    @OnClick(R.id.fa_btn)
+    public void showAddressList(){
+        viewPager.setCurrentItem(0);
+    }
+
+    @OnClick(R.id.fb_btn)
+    public void showMap(){
+        viewPager.setCurrentItem(1);
+    }
+
+    @OnClick(R.id.fa_btn)
+    public void showRouteList(){
+        viewPager.setCurrentItem(2);
+    }
+
+    private void setupAddressInputDialog(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ContainerActivity.this);
+        View view = getLayoutInflater().inflate(R.layout.dialog_address_input, null);
+
+        streetInput = view.findViewById(R.id.street_input);
+        postcodeNumbersInput = view.findViewById(R.id.postcode_numbers_input);
+        postcodeLettersInput = view.findViewById(R.id.postcode_letters_input);
+        cityInput = view.findViewById(R.id.city_input);
+        addAddressBtn = view.findViewById(R.id.add_address_btn);
+        cancelDialogBtn = view.findViewById(R.id.cancel_dialog_btn);
+
+        alertDialogBuilder.setView(view);
+        alertDialog = alertDialogBuilder.create();
     }
 
     @SuppressLint("SetTextI18n")
@@ -115,9 +153,31 @@ public class ContainerActivity extends DaggerAppCompatActivity implements
     }
 
     @Override
-    public void showRouteInput() {
-        Intent i = new Intent (this, RouteInputActivity.class);
-        startActivity(i);
+    public void showAddressInputDialog() {
+        addAddressBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!streetInput.getText().toString().isEmpty()) {
+                    Address address = new Address();
+                    address.setStreet(streetInput.getText().toString());
+                    address.setPostCode(postcodeNumbersInput.getText().toString()+" "+postcodeNumbersInput.getText().toString());
+                    address.setCity(cityInput.getText().toString());
+                    address.setCountry("Netherlands");
+                    alertDialog.dismiss();
+                    presenter.addAddress(address);
+                }else{
+                    showToast("Fill in a address");
+                }
+            }
+        });
+        cancelDialogBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+            }
+        });
+
+        alertDialog.show();
     }
 
     @Override
@@ -126,7 +186,7 @@ public class ContainerActivity extends DaggerAppCompatActivity implements
     }
 
     @Override
-    public void delegateRouteChange(RouteListFragmentDelegation delegation) {
+    public void delegateRouteChange(FragmentDelegation delegation) {
         EventBus.getDefault().post(delegation);
     }
 
@@ -166,11 +226,6 @@ public class ContainerActivity extends DaggerAppCompatActivity implements
     public void navigateToDestination(String address) {
         Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse("http://maps.google.com/maps?daddr="+address));
         startActivity(intent);
-    }
-
-    @OnClick(R.id.get_route_btn)
-    public void onGetRouteBtnClick(){
-        presenter.getRoute();
     }
 
     @Override

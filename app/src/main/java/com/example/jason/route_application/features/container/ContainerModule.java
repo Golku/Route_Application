@@ -20,5 +20,4 @@ public abstract class ContainerModule {
 
     @Binds
     public abstract MvpContainer.Interactor provideInteractor(ContainerInteractor interactor);
-
 }

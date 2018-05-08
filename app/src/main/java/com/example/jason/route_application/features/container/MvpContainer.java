@@ -1,8 +1,9 @@
 package com.example.jason.route_application.features.container;
 
 import com.example.jason.route_application.data.api.ApiCallback;
+import com.example.jason.route_application.data.pojos.Address;
 import com.example.jason.route_application.data.pojos.RouteInfoHolder;
-import com.example.jason.route_application.data.pojos.RouteListFragmentDelegation;
+import com.example.jason.route_application.data.pojos.FragmentDelegation;
 import com.example.jason.route_application.data.pojos.Session;
 import com.example.jason.route_application.data.pojos.api.DriveRequest;
 
@@ -20,11 +21,13 @@ public interface MvpContainer {
 
         void updateRouteEndTime(String endTime);
 
-        void delegateRouteChange(RouteListFragmentDelegation delegation);
+        void delegateRouteChange(FragmentDelegation delegation);
 
         void showAddressDetails(String address);
 
         void navigateToDestination(String address);
+
+        void showAddressInputDialog();
 
         void showToast(String message);
 
@@ -38,6 +41,8 @@ public interface MvpContainer {
         void getRoute();
 
         void getDriveInformation(DriveRequest request);
+
+        void addAddress(Address address);
 
         void markerDeselected();
 
@@ -57,6 +62,8 @@ public interface MvpContainer {
         void getRoute(String username, ApiCallback.RouteResponseCallback callback);
 
         void getDriveInformation(DriveRequest request, ApiCallback.DriveResponseCallback callback);
+
+        void addAddress(Address address, ApiCallback.AddAddressCallback callback);
     }
 
 }

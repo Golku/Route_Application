@@ -30,30 +30,16 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".features.login.LoginActivity">
-        </activity>
+        <activity android:name=".features.login.LoginActivity"/>
 
-        <activity
-            android:name=".features.routeInput.RouteInputActivity"
-            android:windowSoftInputMode="adjustPan">
-        </activity>
-
-        <activity
-            android:name=".features.container.ContainerActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <activity android:name=".features.container.ContainerActivity"/>
 
         <activity android:name=".features.addressDetails.AddressDetailsActivity"/>
-
-        <activity
-            android:name=".features.commentInput.CommentInputActivity"
-            android:windowSoftInputMode="adjustPan"/>
 
         <activity android:name=".features.commentDisplay.CommentDisplayActivity"/>
 
         <activity
-            android:name=".features.correctInvalidAddresses.CorrectInvalidAddressesActivity"
+            android:name=".features.commentInput.CommentInputActivity"
             android:windowSoftInputMode="adjustPan"/>
-
     </application>
-
 </manifest>

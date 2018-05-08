@@ -12,7 +12,7 @@
     <string name="enter_route_code_here.Activity_route_input">Enter route code here</string>
     <string name="get_route.Activity_route_input">Get Route</string>
 
-    <!--list_travel_information-->
+    <!--list_item_drive-->
     <string name="street.list_travel_information">Street</string>
     <string name="city.list_travel_information">city</string>
     <string name="distance.list_travel_information">distance</string>

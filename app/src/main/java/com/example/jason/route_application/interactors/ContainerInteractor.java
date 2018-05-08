@@ -2,6 +2,7 @@ package com.example.jason.route_application.interactors;
 
 import com.example.jason.route_application.data.api.ApiCallback;
 import com.example.jason.route_application.data.api.ApiService;
+import com.example.jason.route_application.data.pojos.Address;
 import com.example.jason.route_application.data.pojos.api.Container;
 import com.example.jason.route_application.data.pojos.api.Route;
 import com.example.jason.route_application.data.pojos.api.Drive;
@@ -73,6 +74,23 @@ public class ContainerInteractor implements MvpContainer.Interactor{
             @Override
             public void onFailure(Call<Drive> call, Throwable t) {
                 callback.onSingleDriveResponseFailure();
+            }
+        });
+    }
+
+    @Override
+    public void addAddress(Address address, final ApiCallback.AddAddressCallback callback) {
+        Call<Address> call = apiService.addAddress(address);
+
+        call.enqueue(new Callback<Address>() {
+            @Override
+            public void onResponse(Call<Address> call, Response<Address> response) {
+                callback.onAddAddressResponse(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<Address> call, Throwable t) {
+                callback.onAddAddressResponseFailure();
             }
         });
     }

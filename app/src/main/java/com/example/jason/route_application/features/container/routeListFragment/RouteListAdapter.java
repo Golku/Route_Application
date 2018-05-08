@@ -1,4 +1,4 @@
-package com.example.jason.route_application.features.container.listFragment;
+package com.example.jason.route_application.features.container.routeListFragment;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,20 +15,19 @@ import java.util.List;
  * Created by Jason on 07-Feb-18.
  */
 
-public class ContainerRouteAdapter extends RecyclerView.Adapter<ContainerRouteAdapter.CustomViewHolder>{
+public class RouteListAdapter extends RecyclerView.Adapter<RouteListAdapter.CustomViewHolder>{
 
     private List<Drive> routeList;
-    private RouteAdapterFunctions routeAdapterFunctions;
+    private AdapterCallback callback;
 
-    ContainerRouteAdapter(RouteAdapterFunctions routeAdapterFunctions, List<Drive> routeList) {
+    RouteListAdapter(AdapterCallback callback, List<Drive> routeList) {
         this.routeList = routeList;
-        this.routeAdapterFunctions = routeAdapterFunctions;
+        this.callback = callback;
     }
 
-    public interface RouteAdapterFunctions {
-        void routeAdapterItemClick(String address);
-        void routeAdapterGoButtonClick(String address);
-//        void onListItemSwipe(int position);
+    interface AdapterCallback{
+        void onItemClick(String address);
+        void onGoButtonClick(String address);
     }
 
     List<Drive> getList(){
@@ -37,7 +36,7 @@ public class ContainerRouteAdapter extends RecyclerView.Adapter<ContainerRouteAd
 
     @Override
     public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_travel_information, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_drive, parent, false);
         return new CustomViewHolder(v);
     }
 
@@ -64,7 +63,6 @@ public class ContainerRouteAdapter extends RecyclerView.Adapter<ContainerRouteAd
         }else{
             holder.addressType.setImageResource(R.drawable.ic_marker_private);
         }
-
     }
 
     @Override
@@ -102,12 +100,11 @@ public class ContainerRouteAdapter extends RecyclerView.Adapter<ContainerRouteAd
         public void onClick(View v) {
 
             if(v == this.container){
-                routeAdapterFunctions.routeAdapterItemClick(routeList.get(this.getAdapterPosition()).getDestinationAddress().getAddress());
+                callback.onItemClick(routeList.get(this.getAdapterPosition()).getDestinationAddress().getAddress());
             }
             else if(v == this.goButton){
-                routeAdapterFunctions.routeAdapterGoButtonClick(routeList.get(this.getAdapterPosition()).getDestinationAddress().getAddress());
+                callback.onGoButtonClick(routeList.get(this.getAdapterPosition()).getDestinationAddress().getAddress());
             }
         }
-
     }
 }

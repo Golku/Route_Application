@@ -3,7 +3,7 @@ package com.example.jason.route_application.features.container;
 import com.example.jason.route_application.data.api.ApiCallback;
 import com.example.jason.route_application.data.pojos.Address;
 import com.example.jason.route_application.data.pojos.RouteInfoHolder;
-import com.example.jason.route_application.data.pojos.RouteListFragmentDelegation;
+import com.example.jason.route_application.data.pojos.FragmentDelegation;
 import com.example.jason.route_application.data.pojos.api.Container;
 import com.example.jason.route_application.data.pojos.Session;
 import com.example.jason.route_application.data.pojos.api.Route;
@@ -27,7 +27,8 @@ public class ContainerPresenter extends BasePresenter implements
         MvpContainer.Presenter,
         ApiCallback.ContainerResponseCallback,
         ApiCallback.RouteResponseCallback,
-        ApiCallback.DriveResponseCallback {
+        ApiCallback.DriveResponseCallback,
+        ApiCallback.AddAddressCallback{
 
     private final String debugTag = "debugTag";
 
@@ -133,6 +134,11 @@ public class ContainerPresenter extends BasePresenter implements
         interactor.getDriveInformation(request, this);
     }
 
+    @Override
+    public void addAddress(Address address) {
+        interactor.addAddress(address, this);
+    }
+
     private void addDeliveryTime(Drive drive) {
         long deliveryTime;
         long driveTime = drive.getDriveDurationInSeconds() * 1000;
@@ -153,7 +159,7 @@ public class ContainerPresenter extends BasePresenter implements
 
         onUpdateRouteEndTime();
 
-        RouteListFragmentDelegation delegation = new RouteListFragmentDelegation();
+        FragmentDelegation delegation = new FragmentDelegation();
         delegation.setOperation("add");
         delegation.setPosition(routeList.indexOf(drive));
         delegation.setListIdentifier("routeList");
@@ -167,7 +173,7 @@ public class ContainerPresenter extends BasePresenter implements
 
         onUpdateRouteEndTime();
 
-        RouteListFragmentDelegation delegation = new RouteListFragmentDelegation();
+        FragmentDelegation delegation = new FragmentDelegation();
         delegation.setOperation("remove");
         delegation.setPosition(position);
         delegation.setListIdentifier("routeList");
@@ -191,7 +197,7 @@ public class ContainerPresenter extends BasePresenter implements
 
         onUpdateRouteEndTime();
 
-        RouteListFragmentDelegation delegation = new RouteListFragmentDelegation();
+        FragmentDelegation delegation = new FragmentDelegation();
         delegation.setOperation("multipleRemove");
         delegation.setPosition(position);
         view.delegateRouteChange(delegation);
@@ -257,5 +263,15 @@ public class ContainerPresenter extends BasePresenter implements
     @Override
     public void onSingleDriveResponseFailure() {
         view.showToast("Unable to fetch drive information from api");
+    }
+
+    @Override
+    public void onAddAddressResponse(Address response) {
+
+    }
+
+    @Override
+    public void onAddAddressResponseFailure() {
+
     }
 }

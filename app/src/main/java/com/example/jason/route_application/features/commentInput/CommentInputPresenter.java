@@ -50,7 +50,7 @@ public class CommentInputPresenter implements MvpCommentInput.Presenter, Databas
             view.showToast("Comment was added");
             view.closeActivity();
         }else{
-            view.showToast("Fail to add comment");
+            view.showToast("Fail to add list_item_comment");
         }
     }
 

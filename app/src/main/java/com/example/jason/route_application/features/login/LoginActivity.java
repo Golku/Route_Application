@@ -3,16 +3,12 @@ package com.example.jason.route_application.features.login;
 import com.example.jason.route_application.R;
 import com.example.jason.route_application.data.pojos.Session;
 import com.example.jason.route_application.features.container.ContainerActivity;
-import com.example.jason.route_application.features.routeInput.RouteInputActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;

@@ -31,7 +31,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,15 +44,15 @@ import java.util.List;
  * Created by Jason on 3/22/2018.
  */
 
-public class ContainerMapFragment extends Fragment implements
-        MvpContainerMap.View,
+public class MapFragment extends Fragment implements
+        MvpMap.View,
         OnMapReadyCallback,
         GoogleMap.OnMarkerClickListener,
         RoutingListener {
 
     private final String debugTag = "debugTag";
 
-    private MvpContainerMap.Presenter presenter;
+    private MvpMap.Presenter presenter;
 
     private GoogleMap googleMap;
 
@@ -90,7 +89,7 @@ public class ContainerMapFragment extends Fragment implements
         super.onCreate(savedInstanceState);
         RouteInfoHolder routeInfoHolder = getArguments().getParcelable("routeInfoHolder");
 
-        presenter = new ContainerMapPresenter(this,
+        presenter = new MapPresenter(this,
                 routeInfoHolder.getAddressList(),
                 routeInfoHolder.getRouteOrder());
 
@@ -100,7 +99,7 @@ public class ContainerMapFragment extends Fragment implements
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_container_map, container, false);
+        View view = inflater.inflate(R.layout.fragment_map, container, false);
         this.rootLayout = view.findViewById(R.id.root_layout);
         return view;
     }
