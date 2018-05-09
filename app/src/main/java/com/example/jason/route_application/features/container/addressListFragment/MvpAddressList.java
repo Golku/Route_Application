@@ -4,6 +4,7 @@ import com.example.jason.route_application.data.pojos.FragmentDelegation;
 
 public interface MvpAddressList {
 
+
     interface View{
 
         void setupAdapter(AddressListAdapter adapter);
