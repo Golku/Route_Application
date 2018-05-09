@@ -48,7 +48,7 @@ public class LoginActivity extends DaggerAppCompatActivity implements MvpLogin.V
     @Override
     public void onLoginBtnClick() {
         loginBtn.setEnabled(false);
-        String username = usernameInput.getText().toString();
+        String username = usernameInput.getText().toString().toLowerCase();
         String password = passwordInput.getText().toString();
         presenter.loginBtnClick(username, password);
     }

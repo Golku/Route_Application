@@ -1,6 +1,7 @@
 package com.example.jason.route_application.data.api;
 
 import com.example.jason.route_application.data.pojos.Address;
+import com.example.jason.route_application.data.pojos.api.AddressRequest;
 import com.example.jason.route_application.data.pojos.api.Container;
 import com.example.jason.route_application.data.pojos.api.Route;
 import com.example.jason.route_application.data.pojos.api.Drive;
@@ -18,15 +19,15 @@ import retrofit2.http.Path;
 
 public interface ApiService {
 
-    @GET("getcontainer/{username}")
-    Call<Container> getContainer(@Path("username")String username);
+    @GET("containerrequest/{username}")
+    Call<Container> containerRequest(@Path("username")String username);
 
-    @GET("getroute/{username}")
-    Call<Route> getRoute(@Path("username")String username);
+    @GET("routerequest/{username}")
+    Call<Route> routeRequest(@Path("username")String username);
 
-    @POST("getdriveinformation")
-    Call<Drive> getDriveInformation(@Body DriveRequest request);
+    @POST("addressrequest")
+    Call<Address> addressRequest(@Body AddressRequest address);
 
-    @POST("addaddress")
-    Call<Address> addAddress(@Body Address address);
+    @POST("driverequest")
+    Call<Drive> driveRequest(@Body DriveRequest request);
 }

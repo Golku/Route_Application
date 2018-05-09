@@ -39,12 +39,13 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull CustomViewHolder holder, int position) {
-        holder.streetTv.setText(addressList.get(position).getStreet());
-        holder.cityTv.setText(addressList.get(position).getPostCode() +" "+ addressList.get(position).getCity());
-
-        if(addressList.get(position).isValid()){
+        Address address = addressList.get(position);
+        if(address.isValid()){
+            holder.streetTv.setText(address.getStreet());
+            holder.cityTv.setText(address.getPostCode() +" "+ address.getCity());
             holder.addressStatusIv.setImageResource(R.drawable.valid_ic);
         }else{
+            holder.streetTv.setText(address.getAddress());
             holder.addressStatusIv.setImageResource(R.drawable.invalid_ic);
         }
     }

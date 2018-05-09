@@ -3,6 +3,7 @@ package com.example.jason.route_application.interactors;
 import com.example.jason.route_application.data.api.ApiCallback;
 import com.example.jason.route_application.data.api.ApiService;
 import com.example.jason.route_application.data.pojos.Address;
+import com.example.jason.route_application.data.pojos.api.AddressRequest;
 import com.example.jason.route_application.data.pojos.api.Container;
 import com.example.jason.route_application.data.pojos.api.Route;
 import com.example.jason.route_application.data.pojos.api.Drive;
@@ -28,69 +29,69 @@ public class ContainerInteractor implements MvpContainer.Interactor{
     }
 
     @Override
-    public void getContainer(String username, final ApiCallback.ContainerResponseCallback callback) {
-        Call<Container> call = apiService.getContainer(username);
+    public void containerRequest(String username, final ApiCallback.ContainerResponseCallback callback) {
+        Call<Container> call = apiService.containerRequest(username);
 
         call.enqueue(new Callback<Container>() {
             @Override
             public void onResponse(Call<Container> call, Response<Container> response) {
-                callback.onContainerResponse(response.body());
+                callback.containerResponse(response.body());
             }
 
             @Override
             public void onFailure(Call<Container> call, Throwable t) {
-                callback.onContainerResponseFailure();
+                callback.containerResponseFailure();
             }
         });
     }
 
     @Override
-    public void getRoute(String username, final ApiCallback.RouteResponseCallback callback) {
-        Call<Route> call = apiService.getRoute(username);
+    public void routeRequest(String username, final ApiCallback.RouteResponseCallback callback) {
+        Call<Route> call = apiService.routeRequest(username);
 
         call.enqueue(new Callback<Route>() {
             @Override
             public void onResponse(Call<Route> call, Response<Route> response) {
-                callback.onRouteResponse(response.body());
+                callback.routeResponse(response.body());
             }
 
             @Override
             public void onFailure(Call<Route> call, Throwable t) {
-                callback.onRouteResponseFailure();
+                callback.routeResponseFailure();
             }
         });
     }
 
     @Override
-    public void getDriveInformation(DriveRequest request, final ApiCallback.DriveResponseCallback callback) {
-        Call<Drive> call = apiService.getDriveInformation(request);
-
-        call.enqueue(new Callback<Drive>() {
-            @Override
-            public void onResponse(Call<Drive> call, Response<Drive> response) {
-                callback.onSingleDriveResponse(response.body());
-            }
-
-            @Override
-            public void onFailure(Call<Drive> call, Throwable t) {
-                callback.onSingleDriveResponseFailure();
-            }
-        });
-    }
-
-    @Override
-    public void addAddress(Address address, final ApiCallback.AddAddressCallback callback) {
-        Call<Address> call = apiService.addAddress(address);
+    public void addressRequest(AddressRequest request, final ApiCallback.AddAddressCallback callback) {
+        Call<Address> call = apiService.addressRequest(request);
 
         call.enqueue(new Callback<Address>() {
             @Override
             public void onResponse(Call<Address> call, Response<Address> response) {
-                callback.onAddAddressResponse(response.body());
+                callback.addressResponse(response.body());
             }
 
             @Override
             public void onFailure(Call<Address> call, Throwable t) {
-                callback.onAddAddressResponseFailure();
+                callback.addressResponseFailure();
+            }
+        });
+    }
+
+    @Override
+    public void driveRequest(DriveRequest request, final ApiCallback.DriveResponseCallback callback) {
+        Call<Drive> call = apiService.driveRequest(request);
+
+        call.enqueue(new Callback<Drive>() {
+            @Override
+            public void onResponse(Call<Drive> call, Response<Drive> response) {
+                callback.driveResponse(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<Drive> call, Throwable t) {
+                callback.driveResponseFailure();
             }
         });
     }

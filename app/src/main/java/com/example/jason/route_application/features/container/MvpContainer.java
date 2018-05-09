@@ -5,6 +5,7 @@ import com.example.jason.route_application.data.pojos.Address;
 import com.example.jason.route_application.data.pojos.RouteInfoHolder;
 import com.example.jason.route_application.data.pojos.FragmentDelegation;
 import com.example.jason.route_application.data.pojos.Session;
+import com.example.jason.route_application.data.pojos.api.AddressRequest;
 import com.example.jason.route_application.data.pojos.api.DriveRequest;
 
 /**
@@ -19,15 +20,13 @@ public interface MvpContainer {
 
         void updateDeliveryCompletion(int[] deliveryCompletion);
 
-        void updateRouteEndTime(String endTime);
+        void updateRouteEndTimeTv(String endTime);
 
         void delegateRouteChange(FragmentDelegation delegation);
 
         void showAddressDetails(String address);
 
         void navigateToDestination(String address);
-
-        void showAddressInputDialog();
 
         void showToast(String message);
 
@@ -40,15 +39,15 @@ public interface MvpContainer {
 
         void getRoute();
 
-        void getDriveInformation(DriveRequest request);
+        void getAddress(String address);
 
-        void addAddress(Address address);
+        void getDrive(DriveRequest request);
 
-        void markerDeselected();
+        void removeAddress(Address address);
 
-        void multipleMarkersDeselected(String destination);
+        void removeDrive();
 
-        void onUpdateDeliveryCompletion(int[] deliveryCompletion);
+        void removeMultipleDrive(String destination);
 
         void onListItemClick(String address);
 
@@ -57,13 +56,13 @@ public interface MvpContainer {
 
     interface Interactor{
 
-        void getContainer(String username, ApiCallback.ContainerResponseCallback callback);
+        void containerRequest(String username, ApiCallback.ContainerResponseCallback callback);
 
-        void getRoute(String username, ApiCallback.RouteResponseCallback callback);
+        void routeRequest(String username, ApiCallback.RouteResponseCallback callback);
 
-        void getDriveInformation(DriveRequest request, ApiCallback.DriveResponseCallback callback);
+        void addressRequest(AddressRequest request, ApiCallback.AddAddressCallback callback);
 
-        void addAddress(Address address, ApiCallback.AddAddressCallback callback);
+        void driveRequest(DriveRequest request, ApiCallback.DriveResponseCallback callback);
     }
 
 }

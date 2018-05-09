@@ -64,7 +64,7 @@ public class MapFragment extends Fragment implements
 
     private static final int[] COLORS = new int[]{R.color.colorAccent};
 
-    public interface RouteMapListener {
+    public interface MapListener {
 
         void onMarkerSelected(DriveRequest request);
 

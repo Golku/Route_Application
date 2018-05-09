@@ -7,14 +7,9 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.jason.route_application.R;
-import com.example.jason.route_application.data.pojos.Address;
 import com.example.jason.route_application.data.pojos.RouteInfoHolder;
 import com.example.jason.route_application.data.pojos.FragmentDelegation;
 import com.example.jason.route_application.data.pojos.Session;
@@ -32,8 +27,9 @@ import dagger.android.support.DaggerAppCompatActivity;
 
 public class ContainerActivity extends DaggerAppCompatActivity implements
         MvpContainer.View,
-        RouteListFragment.RouteListListener,
-        MapFragment.RouteMapListener {
+        AddressListFragment.AddressListListener,
+        MapFragment.MapListener,
+        RouteListFragment.RouteListListener{
 
     @Inject
     MvpContainer.Presenter presenter;
@@ -48,14 +44,6 @@ public class ContainerActivity extends DaggerAppCompatActivity implements
     TextView routeEndTime;
 
     private final String debugTag = "debugTag";
-
-    private AlertDialog alertDialog;
-    private EditText streetInput;
-    private EditText postcodeLettersInput;
-    private EditText postcodeNumbersInput;
-    private EditText cityInput;
-    private Button cancelDialogBtn;
-    private Button addAddressBtn;
 
     private boolean backPress = false;
 
@@ -89,7 +77,6 @@ public class ContainerActivity extends DaggerAppCompatActivity implements
     }
 
     private void init() {
-        setupAddressInputDialog();
         presenter.getContainer(new Session(this));
     }
 
@@ -130,21 +117,6 @@ public class ContainerActivity extends DaggerAppCompatActivity implements
         viewPager.setCurrentItem(2);
     }
 
-    private void setupAddressInputDialog(){
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ContainerActivity.this);
-        View view = getLayoutInflater().inflate(R.layout.dialog_address_input, null);
-
-        streetInput = view.findViewById(R.id.street_input);
-        postcodeNumbersInput = view.findViewById(R.id.postcode_numbers_input);
-        postcodeLettersInput = view.findViewById(R.id.postcode_letters_input);
-        cityInput = view.findViewById(R.id.city_input);
-        addAddressBtn = view.findViewById(R.id.add_address_btn);
-        cancelDialogBtn = view.findViewById(R.id.cancel_dialog_btn);
-
-        alertDialogBuilder.setView(view);
-        alertDialog = alertDialogBuilder.create();
-    }
-
     @SuppressLint("SetTextI18n")
     @Override
     public void updateDeliveryCompletion(int[] deliveryCompletion) {
@@ -153,35 +125,7 @@ public class ContainerActivity extends DaggerAppCompatActivity implements
     }
 
     @Override
-    public void showAddressInputDialog() {
-        addAddressBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(!streetInput.getText().toString().isEmpty()) {
-                    Address address = new Address();
-                    address.setStreet(streetInput.getText().toString());
-                    address.setPostCode(postcodeNumbersInput.getText().toString()+" "+postcodeNumbersInput.getText().toString());
-                    address.setCity(cityInput.getText().toString());
-                    address.setCountry("Netherlands");
-                    alertDialog.dismiss();
-                    presenter.addAddress(address);
-                }else{
-                    showToast("Fill in a address");
-                }
-            }
-        });
-        cancelDialogBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                alertDialog.dismiss();
-            }
-        });
-
-        alertDialog.show();
-    }
-
-    @Override
-    public void updateRouteEndTime(String endTime) {
+    public void updateRouteEndTimeTv(String endTime) {
         routeEndTime.setText(endTime);
     }
 
@@ -191,23 +135,28 @@ public class ContainerActivity extends DaggerAppCompatActivity implements
     }
 
     @Override
+    public void onListItemClick(String address) {
+        presenter.onListItemClick(address);
+    }
+
+    @Override
+    public void onAddAddress(String address) {
+        presenter.getAddress(address);
+    }
+
+    @Override
     public void onMarkerSelected(DriveRequest request) {
-        presenter.getDriveInformation(request);
+        presenter.getDrive(request);
     }
 
     @Override
     public void onDeselectMarker() {
-        presenter.markerDeselected();
+        presenter.removeDrive();
     }
 
     @Override
     public void onDeselectMultipleMarkers(String destination) {
-        presenter.multipleMarkersDeselected(destination);
-    }
-
-    @Override
-    public void onListItemClick(String address) {
-        presenter.onListItemClick(address);
+        presenter.removeMultipleDrive(destination);
     }
 
     @Override

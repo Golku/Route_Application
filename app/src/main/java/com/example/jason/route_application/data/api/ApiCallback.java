@@ -12,23 +12,23 @@ import com.example.jason.route_application.data.pojos.api.Drive;
 public interface ApiCallback {
 
     interface ContainerResponseCallback {
-        void onContainerResponse(Container response);
-        void onContainerResponseFailure();
+        void containerResponse(Container response);
+        void containerResponseFailure();
     }
 
     interface RouteResponseCallback{
-        void onRouteResponse(Route response);
-        void onRouteResponseFailure();
+        void routeResponse(Route response);
+        void routeResponseFailure();
     }
 
     interface DriveResponseCallback {
-        void onSingleDriveResponse(Drive response);
-        void onSingleDriveResponseFailure();
+        void driveResponse(Drive response);
+        void driveResponseFailure();
     }
 
     interface AddAddressCallback {
-        void onAddAddressResponse(Address response);
-        void onAddAddressResponseFailure();
+        void addressResponse(Address response);
+        void addressResponseFailure();
     }
 
 }

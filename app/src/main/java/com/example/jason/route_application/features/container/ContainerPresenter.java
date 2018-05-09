@@ -4,6 +4,7 @@ import com.example.jason.route_application.data.api.ApiCallback;
 import com.example.jason.route_application.data.pojos.Address;
 import com.example.jason.route_application.data.pojos.RouteInfoHolder;
 import com.example.jason.route_application.data.pojos.FragmentDelegation;
+import com.example.jason.route_application.data.pojos.api.AddressRequest;
 import com.example.jason.route_application.data.pojos.api.Container;
 import com.example.jason.route_application.data.pojos.Session;
 import com.example.jason.route_application.data.pojos.api.Route;
@@ -67,12 +68,23 @@ public class ContainerPresenter extends BasePresenter implements
     @Override
     public void getContainer(Session session) {
         this.session = session;
-        interactor.getContainer(session.getUsername(), this);
+        interactor.containerRequest(session.getUsername(), this);
     }
 
     @Override
     public void getRoute() {
-        interactor.getRoute(session.getUsername(), this);
+        interactor.routeRequest(session.getUsername(), this);
+    }
+
+    @Override
+    public void getDrive(DriveRequest request) {
+        interactor.driveRequest(request, this);
+    }
+
+    @Override
+    public void getAddress(String address) {
+        AddressRequest request = new AddressRequest(session.getUsername(), address);
+        interactor.addressRequest(request, this);
     }
 
     private void initializeContainer(Container container) {
@@ -129,17 +141,24 @@ public class ContainerPresenter extends BasePresenter implements
         return routeOrder;
     }
 
-    @Override
-    public void getDriveInformation(DriveRequest request) {
-        interactor.getDriveInformation(request, this);
+    private void addAddress(Address address) {
+        addressList.add(address);
+
+        FragmentDelegation delegation = new FragmentDelegation();
+        delegation.setList("address");
+        delegation.setOperation("add");
+        delegation.setPosition(addressList.indexOf(address));
+        view.delegateRouteChange(delegation);
     }
 
     @Override
-    public void addAddress(Address address) {
-        interactor.addAddress(address, this);
+    public void removeAddress(Address address) {
+
     }
 
-    private void addDeliveryTime(Drive drive) {
+    private void addDrive(Drive drive) {
+        routeList.add(drive);
+
         long deliveryTime;
         long driveTime = drive.getDriveDurationInSeconds() * 1000;
         long PACKAGE_DELIVERY_TIME = 120000;
@@ -157,29 +176,31 @@ public class ContainerPresenter extends BasePresenter implements
         drive.setDeliveryTimeInMillis(deliveryTime);
         drive.setDeliveryTimeHumanReadable(deliveryTimeString);
 
-        onUpdateRouteEndTime();
+        updateRouteEndTime();
 
         FragmentDelegation delegation = new FragmentDelegation();
+        delegation.setList("route");
         delegation.setOperation("add");
         delegation.setPosition(routeList.indexOf(drive));
         view.delegateRouteChange(delegation);
     }
 
     @Override
-    public void markerDeselected() {
+    public void removeDrive() {
         int position = routeList.size() - 1;
         routeList.remove(position);
 
-        onUpdateRouteEndTime();
+        updateRouteEndTime();
 
         FragmentDelegation delegation = new FragmentDelegation();
+        delegation.setList("route");
         delegation.setOperation("remove");
         delegation.setPosition(position);
         view.delegateRouteChange(delegation);
     }
 
     @Override
-    public void multipleMarkersDeselected(String destination) {
+    public void removeMultipleDrive(String destination) {
         int position = -1;
 
         for (Drive drive : routeList) {
@@ -193,26 +214,22 @@ public class ContainerPresenter extends BasePresenter implements
 
         routeList.subList(position, routeList.size()).clear();
 
-        onUpdateRouteEndTime();
+        updateRouteEndTime();
 
         FragmentDelegation delegation = new FragmentDelegation();
+        delegation.setList("route");
         delegation.setOperation("multipleRemove");
         delegation.setPosition(position);
         view.delegateRouteChange(delegation);
     }
 
-    private void onUpdateRouteEndTime() {
+    private void updateRouteEndTime() {
         if (routeList.size() > 0) {
             Drive finalDrive = routeList.get(routeList.size() - 1);
-            view.updateRouteEndTime(finalDrive.getDeliveryTimeHumanReadable());
+            view.updateRouteEndTimeTv(finalDrive.getDeliveryTimeHumanReadable());
         } else {
-            view.updateRouteEndTime("");
+            view.updateRouteEndTimeTv("");
         }
-    }
-
-    @Override
-    public void onUpdateDeliveryCompletion(int[] deliveryCompletion) {
-
     }
 
     @Override
@@ -224,52 +241,53 @@ public class ContainerPresenter extends BasePresenter implements
     public void onGoButtonClick(String address) {
         view.navigateToDestination(address);
     }
-
 //        If the server has an error and sends back a routeResponse with a html page
+
 //        the response processing will fail! FIX THIS!!!
 
     @Override
-    public void onContainerResponse(Container response) {
+    public void containerResponse(Container response) {
         if (response != null) {
             initializeContainer(response);
         }
     }
 
     @Override
-    public void onContainerResponseFailure() {
+    public void containerResponseFailure() {
         view.showToast("Unable to fetch container from api");
     }
 
     @Override
-    public void onRouteResponse(Route response) {
+    public void routeResponse(Route response) {
         setupRouteInfo(response);
     }
 
     @Override
-    public void onRouteResponseFailure() {
+    public void routeResponseFailure() {
         view.showToast("Unable to fetch route from api");
     }
 
     @Override
-    public void onSingleDriveResponse(Drive response) {
-        if (response != null) {
-            routeList.add(response);
-            addDeliveryTime(response);
+    public void addressResponse(Address response) {
+        if(response != null){
+            addAddress(response);
         }
     }
 
     @Override
-    public void onSingleDriveResponseFailure() {
+    public void addressResponseFailure() {
+        view.showToast("Unable to fetch address from api");
+    }
+
+    @Override
+    public void driveResponse(Drive response) {
+        if (response != null) {
+            addDrive(response);
+        }
+    }
+
+    @Override
+    public void driveResponseFailure() {
         view.showToast("Unable to fetch drive information from api");
-    }
-
-    @Override
-    public void onAddAddressResponse(Address response) {
-
-    }
-
-    @Override
-    public void onAddAddressResponseFailure() {
-
     }
 }

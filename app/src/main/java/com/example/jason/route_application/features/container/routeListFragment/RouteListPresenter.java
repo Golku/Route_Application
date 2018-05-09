@@ -29,6 +29,10 @@ public class RouteListPresenter implements MvpRouteList.Presenter, RouteListAdap
     @Override
     public void onDelegation(FragmentDelegation delegation) {
 
+        if(!delegation.getList().equals("route")){
+            return;
+        }
+
         String operation = delegation.getOperation();
 
         int position = delegation.getPosition();

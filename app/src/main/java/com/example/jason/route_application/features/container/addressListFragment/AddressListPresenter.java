@@ -25,6 +25,10 @@ public class AddressListPresenter implements MvpAddressList.Presenter, AddressLi
     @Override
     public void onDelegation(FragmentDelegation delegation) {
 
+        if(!delegation.getList().equals("address")){
+            return;
+        }
+
         String operation = delegation.getOperation();
 
         int position = delegation.getPosition();
@@ -42,7 +46,7 @@ public class AddressListPresenter implements MvpAddressList.Presenter, AddressLi
         if (address.isValid()) {
             view.listItemClick(address.getAddress());
         }else{
-
+            view.showAddressInputDialog(address.getAddress());
         }
     }
 
