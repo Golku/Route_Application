@@ -12,8 +12,6 @@ import com.example.jason.route_application.data.pojos.api.DriveRequest;
 import com.example.jason.route_application.data.pojos.FragmentEvent;
 import com.example.jason.route_application.features.shared.BasePresenter;
 
-import android.util.Log;
-
 import javax.inject.Inject;
 
 import java.text.SimpleDateFormat;
@@ -115,12 +113,8 @@ public class ContainerPresenter extends BasePresenter implements
     private void setupAddressList() {
         addressList = new ArrayList<>();
 
-        if (container.getUserAddressList() != null) {
-            addressList.addAll(container.getUserAddressList());
-        }
-
-        if (container.getRouteAddressList() != null) {
-            addressList.addAll(container.getRouteAddressList());
+        if (container.getAddressList() != null) {
+            addressList.addAll(container.getAddressList());
         }
     }
 
@@ -183,8 +177,17 @@ public class ContainerPresenter extends BasePresenter implements
     }
 
     private void addAddress(Address address) {
-        addressList.add(address);
-        createActivityEvent("addressAdded", address, addressList.indexOf(address), this);
+        boolean notFound = true;
+        for(Address it : addressList){
+            if(it.getAddress().equals(address.getAddress())){
+                it.setPackageCount(it.getPackageCount()+1);
+                notFound = false;
+            }
+        }
+        if(notFound){
+            addressList.add(address);
+            createActivityEvent("addressAdded", address, addressList.indexOf(address), this);
+        }
     }
 
     private void removeAddress(Address address) {

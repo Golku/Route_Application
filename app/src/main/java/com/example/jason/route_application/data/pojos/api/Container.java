@@ -9,8 +9,7 @@ public class Container {
     private String username;
     private String routeCode;
     private int routeState;
-    private List<Address> userAddressList;
-    private List<Address> routeAddressList;
+    private List<Address> addressList;
     private List<Drive> driveList;
     private int privateAddressCount;
     private int businessAddressCount;
@@ -40,20 +39,12 @@ public class Container {
         this.routeState = routeState;
     }
 
-    public List<Address> getUserAddressList() {
-        return userAddressList;
+    public List<Address> getAddressList() {
+        return addressList;
     }
 
-    public void setUserAddressList(List<Address> userAddressList) {
-        this.userAddressList = userAddressList;
-    }
-
-    public List<Address> getRouteAddressList() {
-        return routeAddressList;
-    }
-
-    public void setRouteAddressList(List<Address> routeAddressList) {
-        this.routeAddressList = routeAddressList;
+    public void setAddressList(List<Address> addressList) {
+        this.addressList = addressList;
     }
 
     public List<Drive> getDriveList() {
