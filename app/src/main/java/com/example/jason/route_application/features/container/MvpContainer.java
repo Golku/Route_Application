@@ -1,12 +1,12 @@
 package com.example.jason.route_application.features.container;
 
 import com.example.jason.route_application.data.api.ApiCallback;
-import com.example.jason.route_application.data.pojos.Address;
 import com.example.jason.route_application.data.pojos.RouteInfoHolder;
-import com.example.jason.route_application.data.pojos.FragmentDelegation;
+import com.example.jason.route_application.data.pojos.ActivityEvent;
 import com.example.jason.route_application.data.pojos.Session;
 import com.example.jason.route_application.data.pojos.api.AddressRequest;
 import com.example.jason.route_application.data.pojos.api.DriveRequest;
+import com.example.jason.route_application.data.pojos.FragmentEvent;
 
 /**
  * Created by Jason on 07-Feb-18.
@@ -22,7 +22,7 @@ public interface MvpContainer {
 
         void updateRouteEndTimeTv(String endTime);
 
-        void delegateRouteChange(FragmentDelegation delegation);
+        void sendActivityEvent(ActivityEvent activityEvent);
 
         void showAddressDetails(String address);
 
@@ -35,34 +35,21 @@ public interface MvpContainer {
 
     interface Presenter{
 
-        void getContainer(Session session);
+        void setSession(Session session);
 
-        void getRoute();
+        void getContainer();
 
-        void getAddress(String address);
+        void fragmentEvent(FragmentEvent fragmentEvent);
 
-        void getDrive(DriveRequest request);
-
-        void removeAddress(Address address);
-
-        void removeDrive();
-
-        void removeMultipleDrive(String destination);
-
-        void onListItemClick(String address);
-
-        void onGoButtonClick(String address);
+        void delegateActivityEvent(ActivityEvent activityEvent);
     }
 
     interface Interactor{
 
         void containerRequest(String username, ApiCallback.ContainerResponseCallback callback);
 
-        void routeRequest(String username, ApiCallback.RouteResponseCallback callback);
-
         void addressRequest(AddressRequest request, ApiCallback.AddAddressCallback callback);
 
         void driveRequest(DriveRequest request, ApiCallback.DriveResponseCallback callback);
     }
-
 }

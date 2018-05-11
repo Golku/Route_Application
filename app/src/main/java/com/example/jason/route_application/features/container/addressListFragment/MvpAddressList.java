@@ -1,6 +1,7 @@
 package com.example.jason.route_application.features.container.addressListFragment;
 
-import com.example.jason.route_application.data.pojos.FragmentDelegation;
+import com.example.jason.route_application.data.pojos.ActivityEvent;
+import com.example.jason.route_application.data.pojos.FragmentEvent;
 
 public interface MvpAddressList {
 
@@ -8,11 +9,11 @@ public interface MvpAddressList {
 
         void setupAdapter(AddressListAdapter adapter);
 
-        void showAddressInputDialog();
+        void showAddressInputDialog(String title);
 
-        void scrollToLastItem(int position);
+        void sendFragmentEvent(FragmentEvent fragmentEvent);
 
-        void listItemClick(String address);
+        void scrollToItem(int position);
 
         void showToast(String message);
     }
@@ -21,6 +22,10 @@ public interface MvpAddressList {
 
         void showAddressList();
 
-        void onDelegation(FragmentDelegation delegation);
+        void showDialog(String title);
+
+        void addAddress(String addressString);
+
+        void activityEvent(ActivityEvent activityEvent);
     }
 }

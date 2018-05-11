@@ -1,8 +1,10 @@
 package com.example.jason.route_application.features.container.mapFragment;
 
+import com.example.jason.route_application.data.pojos.ActivityEvent;
 import com.example.jason.route_application.data.pojos.Address;
 import com.example.jason.route_application.data.pojos.MarkerInfo;
 import com.example.jason.route_application.data.pojos.api.DriveRequest;
+import com.example.jason.route_application.data.pojos.FragmentEvent;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -23,67 +25,48 @@ public class MapPresenter implements MvpMap.Presenter {
     private LatLng userLocation;
 
     private List<Address> addressList;
-
-    private List<Marker> routeOrder;
+    private List<Marker> markersList;
 
     private Marker previousSelectedMarker;
 
     MapPresenter(MvpMap.View view, List<Address> addressList, List<String> routeOrder) {
         this.view = view;
         this.addressList = addressList;
-        this.routeOrder = new ArrayList<>();
+        this.markersList = new ArrayList<>();
         this.previousSelectedMarker = null;
     }
 
     @Override
     public void setMarkers() {
-        view.addMarkersToMap(addressList);
+
+        //get phone location
+        Address origin = new Address();
+
+        origin.setAddress("My location");
+        origin.setUserLocation(true);
+        origin.setLat(52.008234);
+        origin.setLng(4.312999);
+
+        view.markAddressOnMap(origin);
+
+        for(Address address : addressList){
+            if(address.isValid()){
+                view.markAddressOnMap(address);
+            }
+        }
+
+        view.moveMapCamera(52.008234, 4.312999);
     }
 
     @Override
-    public void multipleMarkersDeselected(int markerPosition) {
+    public void markerClick(Marker clickedMarker) {
 
-        String markerDestination = routeOrder.get(markerPosition).getTitle();
-
-        for(int i = markerPosition; i<routeOrder.size(); i++){
-            Marker marker = routeOrder.get(i);
-            MarkerInfo markerInfo = (MarkerInfo) marker.getTag();
-
-            markerInfo.setSelected(false);
-
-            if(markerInfo.isBusiness()){
-                markerInfo.setIconType("business");
-            }else{
-                markerInfo.setIconType("private");
-            }
-
-            view.changeMarkerIcon(marker);
-        }
-
-        routeOrder.subList(markerPosition, routeOrder.size()).clear();
-
-        if (routeOrder.size() > 0) {
-            previousSelectedMarker = routeOrder.get(routeOrder.size() -1);
-        } else {
-            previousSelectedMarker = null;
-        }
-        view.removePolyLine();
-        view.deselectMultipleMarker(markerDestination);
-    }
-
-    @Override
-    public void processMarker(Marker clickedMarker) {
-
-        if(clickedMarker.getTag() != null) {
-            if (clickedMarker.getTag().equals("origin")) {
-                view.showToast("My location");
-                return;
-            }
+        if(clickedMarker.getTitle().equals("My location")) {
+            view.showToast("origin");
+            return;
         }
 
         MarkerInfo markerInfo = (MarkerInfo) clickedMarker.getTag();
-
-        DriveRequest request = new DriveRequest();
 
         String origin = null;
         String destination = null;
@@ -92,8 +75,10 @@ public class MapPresenter implements MvpMap.Presenter {
         LatLng end = null;
 
         if (previousSelectedMarker != null) {
+
             if (clickedMarker.equals(previousSelectedMarker)) {
-                routeOrder.remove(clickedMarker);
+
+                markersList.remove(clickedMarker);
 
                 markerInfo.setSelected(false);
 
@@ -103,23 +88,26 @@ public class MapPresenter implements MvpMap.Presenter {
                     markerInfo.setIconType("private");
                 }
 
-                int routeSize = routeOrder.size();
+                int routeSize = markersList.size();
 
                 if (routeSize > 0) {
                     int lastMarkerIndex = routeSize - 1;
-                    previousSelectedMarker = routeOrder.get(lastMarkerIndex);
+                    previousSelectedMarker = markersList.get(lastMarkerIndex);
                 } else {
                     previousSelectedMarker = null;
                 }
 
                 view.removePolyLine();
                 view.changeMarkerIcon(clickedMarker);
-                view.deselectMarker();
+                deselectMarker();
 
             } else {
+
                 if (markerInfo.isSelected()) {
-                    view.showSnackBar(routeOrder.indexOf(clickedMarker));
+
+                    view.showSnackBar(markersList.indexOf(clickedMarker));
                 }else{
+
                     origin = previousSelectedMarker.getTitle();
                     destination = clickedMarker.getTitle();
                     start = previousSelectedMarker.getPosition();
@@ -128,7 +116,7 @@ public class MapPresenter implements MvpMap.Presenter {
                     markerInfo.setSelected(true);
                     markerInfo.setIconType("selected");
 
-                    routeOrder.add(clickedMarker);
+                    markersList.add(clickedMarker);
                     previousSelectedMarker = clickedMarker;
                     view.changeMarkerIcon(clickedMarker);
                 }
@@ -143,16 +131,113 @@ public class MapPresenter implements MvpMap.Presenter {
             markerInfo.setSelected(true);
             markerInfo.setIconType("selected");
 
-            routeOrder.add(clickedMarker);
+            markersList.add(clickedMarker);
             previousSelectedMarker = clickedMarker;
             view.changeMarkerIcon(clickedMarker);
         }
 
         if(origin != null && destination != null) {
+            DriveRequest request = new DriveRequest();
             request.setOrigin(origin);
             request.setDestination(destination);
             view.getPolylineToMarker(start, end);
-            view.getDriveInformation(request);
+            markerSelected(request);
+        }
+    }
+
+    private void markerSelected(DriveRequest request){
+        FragmentEvent fragmentEvent = new FragmentEvent();
+        fragmentEvent.setEvent("getDrive");
+        fragmentEvent.setDriveRequest(request);
+        view.sendFragmentEvent(fragmentEvent);
+    }
+
+    private void deselectMarker(){
+        FragmentEvent fragmentEvent = new FragmentEvent();
+        fragmentEvent.setEvent("removeDrive");
+        view.sendFragmentEvent(fragmentEvent);
+    }
+
+    @Override
+    public void infoWindowClick(Marker marker) {
+        FragmentEvent fragmentEvent = new FragmentEvent();
+        fragmentEvent.setEvent("itemClick");
+        fragmentEvent.setAddressString(marker.getTitle());
+        view.sendFragmentEvent(fragmentEvent);
+    }
+
+    @Override
+    public void multipleMarkersDeselected(int markerPosition) {
+
+        String address = markersList.get(markerPosition).getTitle();
+
+        for(int i = markerPosition; i< markersList.size(); i++){
+            Marker marker = markersList.get(i);
+            MarkerInfo markerInfo = (MarkerInfo) marker.getTag();
+
+            markerInfo.setSelected(false);
+
+            if(markerInfo.isBusiness()){
+                markerInfo.setIconType("business");
+            }else{
+                markerInfo.setIconType("private");
+            }
+
+            view.changeMarkerIcon(marker);
+        }
+
+        markersList.subList(markerPosition, markersList.size()).clear();
+
+        if (markersList.size() > 0) {
+            previousSelectedMarker = markersList.get(markersList.size() -1);
+        } else {
+            previousSelectedMarker = null;
+        }
+        view.removePolyLine();
+
+        FragmentEvent fragmentEvent = new FragmentEvent();
+        fragmentEvent.setEvent("removeMultipleDrive");
+        fragmentEvent.setAddressString(address);
+        view.sendFragmentEvent(fragmentEvent);
+    }
+
+    @Override
+    public void activityEvent(ActivityEvent activityEvent) {
+
+        String event = activityEvent.getEvent();
+        Address address = activityEvent.getAddress();
+
+        switch (event) {
+            case "routeUpdated" : updateMarkers(activityEvent.getAddressList());
+                break;
+            case "addressAdded" : addMarkerToMap(address);
+                break;
+            case "addressRemoved" : removeMarkerFromMap(address);
+                break;
+        }
+    }
+
+    private void updateMarkers(List<Address> addressList) {
+        this.addressList = addressList;
+        view.removeAllMarkersFromMap();
+        markersList.clear();
+        setMarkers();
+    }
+
+    private void addMarkerToMap(Address address) {
+        if(address.isValid()){
+            view.markAddressOnMap(address);
+            view.moveMapCamera(address.getLat(), address.getLng());
+        }
+    }
+
+    private void removeMarkerFromMap(Address address) {
+        for(Marker marker : markersList){
+            if(marker.getTitle().equals(address.getAddress())){
+                marker.remove();
+                markersList.remove(marker);
+                return;
+            }
         }
     }
 }

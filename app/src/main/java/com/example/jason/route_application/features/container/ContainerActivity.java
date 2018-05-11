@@ -4,38 +4,42 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.jason.route_application.R;
 import com.example.jason.route_application.data.pojos.RouteInfoHolder;
-import com.example.jason.route_application.data.pojos.FragmentDelegation;
+import com.example.jason.route_application.data.pojos.ActivityEvent;
 import com.example.jason.route_application.data.pojos.Session;
-import com.example.jason.route_application.data.pojos.api.DriveRequest;
+import com.example.jason.route_application.data.pojos.FragmentEvent;
 import com.example.jason.route_application.features.addressDetails.AddressDetailsActivity;
 import com.example.jason.route_application.features.container.addressListFragment.AddressListFragment;
-import com.example.jason.route_application.features.container.routeListFragment.RouteListFragment;
+import com.example.jason.route_application.features.container.routeListFragment.DriveListFragment;
 import com.example.jason.route_application.features.container.mapFragment.MapFragment;
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import dagger.android.support.DaggerAppCompatActivity;
 
-public class ContainerActivity extends DaggerAppCompatActivity implements
-        MvpContainer.View,
-        AddressListFragment.AddressListListener,
-        MapFragment.MapListener,
-        RouteListFragment.RouteListListener{
+public class ContainerActivity extends DaggerAppCompatActivity implements MvpContainer.View{
 
     @Inject
     MvpContainer.Presenter presenter;
 
-    @BindView(R.id.container)
-    ViewPager viewPager;
+    @BindView(R.id.loading_screen)
+    ConstraintLayout loadingScreen;
+
+    @BindView(R.id.fragment_container)
+    ViewPager fragmentContainer;
     @BindView(R.id.private_completion)
     TextView privateCompletion;
     @BindView(R.id.business_completion)
@@ -58,7 +62,7 @@ public class ContainerActivity extends DaggerAppCompatActivity implements
     }
 
     private void onBackPressSnackbar(){
-        Snackbar snackbar = Snackbar.make(viewPager, "Press again to exit", Snackbar.LENGTH_SHORT);
+        Snackbar snackbar = Snackbar.make(fragmentContainer, "Press again to exit", Snackbar.LENGTH_SHORT);
         snackbar.addCallback(new Snackbar.Callback(){
             @Override
             public void onDismissed(Snackbar transientBottomBar, int event) {
@@ -71,13 +75,21 @@ public class ContainerActivity extends DaggerAppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
         setContentView(R.layout.activity_container);
         ButterKnife.bind(this);
         init();
     }
 
     private void init() {
-        presenter.getContainer(new Session(this));
+        loadingScreen.bringToFront();
+        presenter.setSession(new Session(this));
+        presenter.getContainer();
+    }
+
+    @OnClick(R.id.get_container_btn)
+    public void getContainerBtnClick(){
+        presenter.getContainer();
     }
 
     @Override
@@ -88,7 +100,7 @@ public class ContainerActivity extends DaggerAppCompatActivity implements
 
         Fragment addressListFragment = new AddressListFragment();
         Fragment MapFragment = new MapFragment();
-        Fragment routeListFragment = new RouteListFragment();
+        Fragment routeListFragment = new DriveListFragment();
 
         addressListFragment.setArguments(bundle);
         MapFragment.setArguments(bundle);
@@ -99,22 +111,23 @@ public class ContainerActivity extends DaggerAppCompatActivity implements
         containerSectionPagerAdapter.addFragment(MapFragment);
         containerSectionPagerAdapter.addFragment(routeListFragment);
 
-        viewPager.setAdapter(containerSectionPagerAdapter);
+        fragmentContainer.setAdapter(containerSectionPagerAdapter);
+        loadingScreen.setVisibility(View.GONE);
     }
 
     @OnClick(R.id.address_list_iv)
     public void showAddressList(){
-        viewPager.setCurrentItem(0);
+        fragmentContainer.setCurrentItem(0);
     }
 
     @OnClick(R.id.map_iv)
     public void showMap(){
-        viewPager.setCurrentItem(1);
+        fragmentContainer.setCurrentItem(1);
     }
 
     @OnClick(R.id.route_list_iv)
     public void showRouteList(){
-        viewPager.setCurrentItem(2);
+        fragmentContainer.setCurrentItem(2);
     }
 
     @SuppressLint("SetTextI18n")
@@ -129,39 +142,14 @@ public class ContainerActivity extends DaggerAppCompatActivity implements
         routeEndTime.setText(endTime);
     }
 
-    @Override
-    public void delegateRouteChange(FragmentDelegation delegation) {
-        EventBus.getDefault().post(delegation);
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onFragmentEvent(FragmentEvent fragmentEvent){
+        presenter.fragmentEvent(fragmentEvent);
     }
 
     @Override
-    public void onListItemClick(String address) {
-        presenter.onListItemClick(address);
-    }
-
-    @Override
-    public void onAddAddress(String address) {
-        presenter.getAddress(address);
-    }
-
-    @Override
-    public void onMarkerSelected(DriveRequest request) {
-        presenter.getDrive(request);
-    }
-
-    @Override
-    public void onDeselectMarker() {
-        presenter.removeDrive();
-    }
-
-    @Override
-    public void onDeselectMultipleMarkers(String destination) {
-        presenter.removeMultipleDrive(destination);
-    }
-
-    @Override
-    public void onGoButtonClick(String address) {
-        presenter.onGoButtonClick(address);
+    public void sendActivityEvent(ActivityEvent activityEvent) {
+        EventBus.getDefault().post(activityEvent);
     }
 
     @Override
@@ -185,6 +173,7 @@ public class ContainerActivity extends DaggerAppCompatActivity implements
 
     @Override
     public void closeActivity() {
+        EventBus.getDefault().unregister(this);
         finish();
     }
 }

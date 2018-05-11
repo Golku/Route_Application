@@ -1,12 +1,12 @@
 package com.example.jason.route_application.features.container.addressListFragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +15,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.jason.route_application.R;
-import com.example.jason.route_application.data.pojos.FragmentDelegation;
+import com.example.jason.route_application.data.pojos.ActivityEvent;
 import com.example.jason.route_application.data.pojos.RouteInfoHolder;
-import com.example.jason.route_application.features.container.ContainerActivity;
+import com.example.jason.route_application.data.pojos.FragmentEvent;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -34,10 +35,8 @@ public class AddressListFragment extends Fragment implements MvpAddressList.View
 
     private MvpAddressList.Presenter presenter;
 
-    private ContainerActivity containerActivityCallback;
-
     private AlertDialog alertDialog;
-    private TextView title;
+    private TextView dialogTitle;
     private EditText streetInput;
     private EditText postcodeLettersInput;
     private EditText postcodeNumbersInput;
@@ -45,25 +44,10 @@ public class AddressListFragment extends Fragment implements MvpAddressList.View
     private Button cancelDialogBtn;
     private Button addAddressBtn;
 
-    public interface AddressListListener{
-        void onListItemClick(String address);
-        void onAddAddress(String address);
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            containerActivityCallback = (ContainerActivity) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString()
-                    + " containerActivityCallback error");
-        }
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
         RouteInfoHolder routeInfoHolder = getArguments().getParcelable("routeInfoHolder");
         presenter = new AddressListPresenter(this, routeInfoHolder.getAddressList());
     }
@@ -83,14 +67,8 @@ public class AddressListFragment extends Fragment implements MvpAddressList.View
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
+    public void onDestroy() {
+        super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
 
@@ -103,7 +81,7 @@ public class AddressListFragment extends Fragment implements MvpAddressList.View
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
         View view = getLayoutInflater().inflate(R.layout.dialog_address_input, null);
 
-        title = view.findViewById(R.id.title_tv);
+        dialogTitle = view.findViewById(R.id.title_tv);
         streetInput = view.findViewById(R.id.street_input);
         postcodeNumbersInput = view.findViewById(R.id.postcode_numbers_input);
         postcodeLettersInput = view.findViewById(R.id.postcode_letters_input);
@@ -116,19 +94,25 @@ public class AddressListFragment extends Fragment implements MvpAddressList.View
     }
 
     @OnClick(R.id.address_input_btn)
+    public void addressInputBtnClick(){
+        presenter.showDialog("New address");
+    }
+
     @Override
-    public void showAddressInputDialog() {
+    public void showAddressInputDialog(String title) {
+        this.dialogTitle.setText(title);
         addAddressBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!streetInput.getText().toString().isEmpty()) {
-                    String address = streetInput.getText().toString()+", "+
-                            postcodeNumbersInput.getText().toString()+" "+
-                            postcodeLettersInput.getText().toString()+" "+
-                            cityInput.getText().toString()+", "+"Netherlands";
-                    containerActivityCallback.onAddAddress(address);
-                }else{
+                String address = streetInput.getText().toString()+", "+
+                        postcodeNumbersInput.getText().toString()+" "+
+                        postcodeLettersInput.getText().toString()+" "+
+                        cityInput.getText().toString()+", "+"Netherlands";
+                alertDialog.dismiss();
+                if(streetInput.getText().toString().isEmpty()){
                     showToast("Fill in a address");
+                }else{
+                    presenter.addAddress(address);
                 }
             }
         });
@@ -143,20 +127,18 @@ public class AddressListFragment extends Fragment implements MvpAddressList.View
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void delegate(FragmentDelegation delegation){
-        presenter.onDelegation(delegation);
+    public void onActivityEvent(ActivityEvent activityEvent){
+        presenter.activityEvent(activityEvent);
     }
 
     @Override
-    public void scrollToLastItem(int position) {
-        if(position>0){
-            recyclerView.smoothScrollToPosition(position-1);
-        }
+    public void sendFragmentEvent(FragmentEvent fragmentEvent) {
+        EventBus.getDefault().post(fragmentEvent);
     }
 
     @Override
-    public void listItemClick(String address) {
-        containerActivityCallback.onListItemClick(address);
+    public void scrollToItem(int position) {
+        recyclerView.smoothScrollToPosition(position);
     }
 
     @Override

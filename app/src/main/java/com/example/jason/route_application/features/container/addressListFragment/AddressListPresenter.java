@@ -1,10 +1,16 @@
 package com.example.jason.route_application.features.container.addressListFragment;
 
 import com.example.jason.route_application.data.pojos.Address;
-import com.example.jason.route_application.data.pojos.FragmentDelegation;
+import com.example.jason.route_application.data.pojos.ActivityEvent;
+import com.example.jason.route_application.data.pojos.FragmentEvent;
+
+import android.util.Log;
+
 import java.util.List;
 
 public class AddressListPresenter implements MvpAddressList.Presenter, AddressListAdapter.AdapterCallback{
+
+    private final String debugTag = "debugTag";
 
     private MvpAddressList.View view;
 
@@ -23,40 +29,58 @@ public class AddressListPresenter implements MvpAddressList.Presenter, AddressLi
     }
 
     @Override
-    public void onDelegation(FragmentDelegation delegation) {
+    public void showDialog(String title) {
+        view.showAddressInputDialog(title);
+    }
 
-        if(!delegation.getList().equals("address")){
-            return;
-        }
-
-        String operation = delegation.getOperation();
-
-        int position = delegation.getPosition();
-
-        switch (operation) {
-            case "add" : addItemToList(position);
-                break;
-            case "remove" : removeItemFromList(position);
-                break;
+    @Override
+    public void itemClick(Address address) {
+        if (address.isValid()) {
+            FragmentEvent fragmentEvent = new FragmentEvent();
+            fragmentEvent.setEvent("itemClick");
+            fragmentEvent.setAddressString(address.getAddress());
+            view.sendFragmentEvent(fragmentEvent);
+        }else{
+            showDialog(address.getAddress());
         }
     }
 
     @Override
-    public void onItemClick(Address address) {
-        if (address.isValid()) {
-            view.listItemClick(address.getAddress());
-        }else{
-            view.showAddressInputDialog(address.getAddress());
+    public void addAddress(String address) {
+        FragmentEvent fragmentEvent = new FragmentEvent();
+        fragmentEvent.setEvent("addAddress");
+        fragmentEvent.setAddressString(address);
+        view.sendFragmentEvent(fragmentEvent);
+    }
+
+    @Override
+    public void activityEvent(ActivityEvent activityEvent) {
+
+        String event = activityEvent.getEvent();
+        int position = activityEvent.getPosition();
+
+        switch (event) {
+            case "routeUpdated" : updateAddressList(activityEvent.getAddressList());
+                break;
+            case "addressAdded" : addItemToList(position);
+                break;
+            case "addressRemoved" : removeItemFromList(position);
+                break;
         }
+    }
+
+    private void updateAddressList(List<Address> addressList){
+        this.addressList = addressList;
+        showAddressList();
+        view.scrollToItem(addressList.size());
     }
 
     private void addItemToList(int position){
         adapter.notifyItemInserted(position);
-        view.scrollToLastItem(position);
+        view.scrollToItem(addressList.size());
     }
 
     private void removeItemFromList(int position){
         adapter.notifyItemRemoved(position);
-        view.scrollToLastItem(position);
     }
 }

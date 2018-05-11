@@ -4,7 +4,7 @@
     <!--activity_route_input-->
     <string name="selected_place.Activity_route_input">Selected Place:</string>
     <string name="enter_place_here.Activity_route_input">Enter Address Here</string>
-    <string name="address.Activity_route_input">Address</string>
+    <string name="addressString.Activity_route_input">Address</string>
     <string name="phone.Activity_route_input">Phone</string>
     <string name="add.Activity_route_input">Add</string>
     <string name="submit_route.Activity_route_input">Submit route</string>
@@ -19,7 +19,7 @@
     <string name="position.list_travel_information">1</string>
     <string name="duration.list_travel_information">duration</string>
     <string name="arrival_time.list_travel_information">arrival time</string>
-    <string name="invalid_address.invalid_addresses">invalid address</string>
+    <string name="invalid_address.invalid_addresses">invalid addressString</string>
     <string name="private.activity_route">Private:</string>
     <string name="business.activity_route">Business:</string>
     <string name="estimated_finish_time.activity_route">estimated finish time</string>
@@ -40,9 +40,9 @@
     <string name="comment.activity_comment_display">comment</string>
     <string name="cancel.reform_address_dialog">Cancel</string>
     <string name="change.reform_address_dialog">Change</string>
-    <string name="address.reform_address_dialog">Address</string>
-    <string name="correct_the_address.reform_address_dialog">Correct the address</string>
-    <string name="networkOperation.addressDetailsActivity">Fetching address information…</string>
+    <string name="addressString.reform_address_dialog">Address</string>
+    <string name="correct_the_address.reform_address_dialog">Correct the addressString</string>
+    <string name="networkOperation.addressDetailsActivity">Fetching addressString information…</string>
     <string name="route_status.activity_route_state">Fetching route state…</string>
     <string name="retry.activity_route_state">Retry</string>
     <string name="write_a_comment_here.activity_comment_input">Write a comment here</string>

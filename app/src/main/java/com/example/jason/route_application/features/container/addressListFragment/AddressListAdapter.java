@@ -26,7 +26,7 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
     }
 
     interface AdapterCallback{
-        void onItemClick(Address address);
+        void itemClick(Address address);
     }
 
     @NonNull
@@ -74,7 +74,7 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
         }
 
         public void onClick(View v) {
-            callback.onItemClick(addressList.get(getAdapterPosition()));
+            callback.itemClick(addressList.get(getAdapterPosition()));
         }
 
     }

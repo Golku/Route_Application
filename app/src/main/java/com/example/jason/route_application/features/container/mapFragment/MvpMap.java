@@ -1,7 +1,8 @@
 package com.example.jason.route_application.features.container.mapFragment;
 
+import com.example.jason.route_application.data.pojos.ActivityEvent;
 import com.example.jason.route_application.data.pojos.Address;
-import com.example.jason.route_application.data.pojos.api.DriveRequest;
+import com.example.jason.route_application.data.pojos.FragmentEvent;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -16,15 +17,15 @@ public interface MvpMap {
 
     interface View{
 
-        void addMarkersToMap(List<Address> addresses);
+        void markAddressOnMap(Address addresses);
 
-        void getDriveInformation(DriveRequest request);
+        void removeAllMarkersFromMap();
+
+        void moveMapCamera(double lat, double lng);
+
+        void sendFragmentEvent(FragmentEvent fragmentEvent);
 
         void getPolylineToMarker(LatLng start, LatLng end);
-
-        void deselectMarker();
-
-        void deselectMultipleMarker(String destination);
 
         void changeMarkerIcon(Marker marker);
 
@@ -39,9 +40,13 @@ public interface MvpMap {
 
         void setMarkers();
 
+        void markerClick(Marker marker);
+
+        void infoWindowClick(Marker marker);
+
         void multipleMarkersDeselected(int markerPosition);
 
-        void processMarker(Marker marker);
+        void activityEvent(ActivityEvent activityEvent);
     }
 
 }

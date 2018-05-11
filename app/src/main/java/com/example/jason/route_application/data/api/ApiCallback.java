@@ -2,7 +2,6 @@ package com.example.jason.route_application.data.api;
 
 import com.example.jason.route_application.data.pojos.Address;
 import com.example.jason.route_application.data.pojos.api.Container;
-import com.example.jason.route_application.data.pojos.api.Route;
 import com.example.jason.route_application.data.pojos.api.Drive;
 
 /**
@@ -16,11 +15,6 @@ public interface ApiCallback {
         void containerResponseFailure();
     }
 
-    interface RouteResponseCallback{
-        void routeResponse(Route response);
-        void routeResponseFailure();
-    }
-
     interface DriveResponseCallback {
         void driveResponse(Drive response);
         void driveResponseFailure();
@@ -30,5 +24,4 @@ public interface ApiCallback {
         void addressResponse(Address response);
         void addressResponseFailure();
     }
-
 }

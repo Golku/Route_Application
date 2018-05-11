@@ -18,6 +18,7 @@ public class Address implements Parcelable {
     private double lng;
     private int openingHours;
     private boolean business;
+    private boolean userLocation;
     private boolean valid;
 
     public Address(){
@@ -34,6 +35,7 @@ public class Address implements Parcelable {
         lng = in.readDouble();
         openingHours = in.readInt();
         business = in.readByte() != 0;
+        userLocation = in.readByte() != 0;
         valid = in.readByte() != 0;
     }
 
@@ -48,6 +50,7 @@ public class Address implements Parcelable {
         dest.writeDouble(lng);
         dest.writeInt(openingHours);
         dest.writeByte((byte) (business ? 1 : 0));
+        dest.writeByte((byte) (userLocation ? 1 : 0));
         dest.writeByte((byte) (valid ? 1 : 0));
     }
 
@@ -138,6 +141,14 @@ public class Address implements Parcelable {
 
     public void setBusiness(boolean business) {
         this.business = business;
+    }
+
+    public boolean isUserLocation() {
+        return userLocation;
+    }
+
+    public void setUserLocation(boolean userLocation) {
+        this.userLocation = userLocation;
     }
 
     public boolean isValid() {

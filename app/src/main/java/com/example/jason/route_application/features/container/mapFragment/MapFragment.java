@@ -6,11 +6,12 @@ import com.directions.route.RouteException;
 import com.directions.route.Routing;
 import com.directions.route.RoutingListener;
 import com.example.jason.route_application.R;
+import com.example.jason.route_application.data.pojos.ActivityEvent;
 import com.example.jason.route_application.data.pojos.Address;
 import com.example.jason.route_application.data.pojos.MarkerInfo;
 import com.example.jason.route_application.data.pojos.RouteInfoHolder;
-import com.example.jason.route_application.data.pojos.api.DriveRequest;
-import com.example.jason.route_application.features.container.ContainerActivity;
+import com.example.jason.route_application.data.pojos.FragmentEvent;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -24,13 +25,17 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-import android.content.Context;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,37 +61,16 @@ public class MapFragment extends Fragment implements
 
     private GoogleMap googleMap;
 
-    private ContainerActivity containerActivityCallback;
-
     private List<Polyline> polylines;
 
     private FrameLayout rootLayout;
 
     private static final int[] COLORS = new int[]{R.color.colorAccent};
 
-    public interface MapListener {
-
-        void onMarkerSelected(DriveRequest request);
-
-        void onDeselectMarker();
-
-        void onDeselectMultipleMarkers(String destination);
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            this.containerActivityCallback = (ContainerActivity) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString()
-                    + " containerActivityCallback error");
-        }
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
         RouteInfoHolder routeInfoHolder = getArguments().getParcelable("routeInfoHolder");
 
         presenter = new MapPresenter(this,
@@ -118,6 +102,12 @@ public class MapFragment extends Fragment implements
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
     public void onMapReady(GoogleMap googleMap) {
         MapsInitializer.initialize(getContext());
 
@@ -125,57 +115,72 @@ public class MapFragment extends Fragment implements
         this.googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         this.googleMap.setOnMarkerClickListener(this);
 
+        googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                presenter.infoWindowClick(marker);
+            }
+        });
+
         presenter.setMarkers();
     }
 
     @Override
-    public void addMarkersToMap(List<Address> addresses) {
-        //get phone location
-        Marker originMarker = googleMap.addMarker(
-                new MarkerOptions()
-                        .position(new LatLng(52.008234, 4.312999))
-                        .title("My Location")
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_origin)));
-        originMarker.setTag("origin");
+    public void markAddressOnMap(Address address) {
 
-        if (addresses != null) {
-            for (Address address : addresses) {
+        MarkerInfo markerInfo = new MarkerInfo();
 
-                if(!address.isValid()){
-                    return;
-                }
+        markerInfo.setSelected(false);
 
-                MarkerInfo markerInfo = new MarkerInfo();
-
-                markerInfo.setSelected(false);
-
-                if (address.isBusiness()) {
-                    markerInfo.setBusiness(true);
-                    markerInfo.setIconType("business");
-                } else {
-                    markerInfo.setBusiness(false);
-                    markerInfo.setIconType("private");
-                }
-
-                Marker marker = googleMap.addMarker(
-                        new MarkerOptions()
-                                .position(new LatLng(address.getLat(), address.getLng()))
-                                .title(address.getAddress()));
-                marker.setTag(markerInfo);
-
-                changeMarkerIcon(marker);
-            }
+        if (address.isBusiness()) {
+            markerInfo.setBusiness(true);
+            markerInfo.setIconType("business");
+        } else {
+            markerInfo.setBusiness(false);
+            markerInfo.setIconType("private");
         }
 
-        CameraPosition cameraPosition = CameraPosition.builder().target(new LatLng(52.008234, 4.312999)).zoom(9f).build();
+        if(address.isUserLocation()){
+            markerInfo.setIconType("origin");
+        }
+
+        Marker marker = googleMap.addMarker(
+                new MarkerOptions()
+                        .position(new LatLng(address.getLat(), address.getLng()))
+                        .title(address.getAddress()));
+        marker.setTag(markerInfo);
+
+        changeMarkerIcon(marker);
+    }
+
+    @Override
+    public void removeAllMarkersFromMap() {
+        googleMap.clear();
+    }
+
+    @Override
+    public void moveMapCamera(double lat, double lng) {
+        CameraPosition cameraPosition = CameraPosition.builder().target(new LatLng(lat, lng)).zoom(9f).build();
         googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        presenter.processMarker(marker);
+        presenter.markerClick(marker);
         marker.showInfoWindow();
         return true;
+    }
+
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onActivityEvent(ActivityEvent activityEvent){
+        presenter.activityEvent(activityEvent);
+    }
+
+    @Override
+    public void sendFragmentEvent(FragmentEvent fragmentEvent) {
+        EventBus.getDefault().post(fragmentEvent);
     }
 
     @Override
@@ -195,6 +200,9 @@ public class MapFragment extends Fragment implements
             case "selected":
                 iconName = "ic_marker_selected";
                 break;
+            case "origin":
+                iconName = "ic_marker_origin";
+                break;
         }
 
 //        iconName = "ic_" + String.valueOf(i + 1);
@@ -202,21 +210,6 @@ public class MapFragment extends Fragment implements
         int resID = res.getIdentifier(iconName, "drawable", getContext().getPackageName());
 
         marker.setIcon(BitmapDescriptorFactory.fromResource(resID));
-    }
-
-    @Override
-    public void getDriveInformation(DriveRequest request) {
-        containerActivityCallback.onMarkerSelected(request);
-    }
-
-    @Override
-    public void deselectMarker() {
-        containerActivityCallback.onDeselectMarker();
-    }
-
-    @Override
-    public void deselectMultipleMarker(String destination) {
-        containerActivityCallback.onDeselectMultipleMarkers(destination);
     }
 
     @Override
