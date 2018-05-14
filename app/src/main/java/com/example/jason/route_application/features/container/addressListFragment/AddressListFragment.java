@@ -3,6 +3,7 @@ package com.example.jason.route_application.features.container.addressListFragme
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -67,12 +68,6 @@ public class AddressListFragment extends Fragment implements MvpAddressList.View
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
-    }
-
-    @Override
     public void setupAdapter(AddressListAdapter adapter) {
         recyclerView.setAdapter(adapter);
     }
@@ -86,16 +81,11 @@ public class AddressListFragment extends Fragment implements MvpAddressList.View
         postcodeNumbersInput = view.findViewById(R.id.postcode_numbers_input);
         postcodeLettersInput = view.findViewById(R.id.postcode_letters_input);
         cityInput = view.findViewById(R.id.city_input);
-        addAddressBtn = view.findViewById(R.id.add_address_btn);
+        addAddressBtn = view.findViewById(R.id.address_input_btn);
         cancelDialogBtn = view.findViewById(R.id.cancel_dialog_btn);
 
         alertDialogBuilder.setView(view);
         alertDialog = alertDialogBuilder.create();
-    }
-
-    @OnClick(R.id.address_input_btn)
-    public void addressInputBtnClick(){
-        presenter.showDialog("New address");
     }
 
     @Override
@@ -145,5 +135,11 @@ public class AddressListFragment extends Fragment implements MvpAddressList.View
     public void showToast(String message) {
         Toast toast = Toast.makeText(getContext(), message, Toast.LENGTH_LONG);
         toast.show();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

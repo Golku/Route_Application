@@ -11,14 +11,13 @@
 
     <android.support.constraint.ConstraintLayout
 
-        android:id="@+id/constraintLayout"
+        android:id="@+id/info_bar_wrapper"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/layout_background"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        android:layout_height="100dp"
+        android:background="@drawable/info_bar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/menu_btn_wrapper">
 
         <ImageView
             android:id="@+id/private_icon"
@@ -29,7 +28,7 @@
             android:layout_marginTop="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_marker_private" />
+            app:srcCompat="@drawable/ic_marker_private"/>
 
         <TextView
             android:id="@+id/private_completion"
@@ -40,20 +39,18 @@
             android:layout_marginTop="4dp"
             android:textColor="@color/colorPrimaryDark"
             app:layout_constraintStart_toEndOf="@+id/private_icon"
-            app:layout_constraintTop_toTopOf="@+id/private_icon" />
+            app:layout_constraintTop_toTopOf="@+id/private_icon"/>
 
         <ImageView
             android:id="@+id/business_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/private_icon"
-            app:srcCompat="@drawable/ic_marker_business" />
+            app:srcCompat="@drawable/ic_marker_business"/>
 
         <TextView
             android:id="@+id/business_completion"
@@ -64,19 +61,22 @@
             android:layout_marginTop="4dp"
             android:textColor="@color/colorPrimaryDark"
             app:layout_constraintStart_toEndOf="@+id/business_icon"
-            app:layout_constraintTop_toTopOf="@+id/business_icon" />
+            app:layout_constraintTop_toTopOf="@+id/business_icon"/>
 
         <TextView
             android:id="@+id/end_time_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
             android:layout_marginTop="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
             android:text="Route end time"
             android:textColor="@color/colorPrimaryDark"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/private_completion"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <TextView
             android:id="@+id/route_end_time"
@@ -85,19 +85,81 @@
             android:layout_marginTop="8dp"
             android:textColor="@color/colorPrimaryDark"
             app:layout_constraintStart_toStartOf="@+id/end_time_tv"
-            app:layout_constraintTop_toBottomOf="@+id/end_time_tv" />
+            app:layout_constraintTop_toBottomOf="@+id/end_time_tv"/>
 
-        <Button
-            android:id="@+id/get_container_btn"
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/menu_btn_wrapper"
+        android:layout_width="80dp"
+        android:layout_height="100dp"
+        android:background="@drawable/drop_menu_btn"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/menu_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="80dp"
-            android:layout_marginStart="80dp"
-            android:layout_marginTop="24dp"
-            android:text="Button"
-            app:layout_constraintStart_toEndOf="@+id/private_completion"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:srcCompat="@drawable/menu_btn_ic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+    </android.support.constraint.ConstraintLayout>
 
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/menu_wrapper"
+        android:layout_width="170dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/menu_btn_wrapper">
+
+        <TextView
+            android:id="@+id/address_input_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:background="@drawable/menu_buttons"
+            android:text="Add address"
+            app:layout_constraintBottom_toTopOf="@+id/get_user_location_btn"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            android:id="@+id/get_user_location_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:background="@drawable/menu_buttons"
+            android:text="Refresh location"
+            app:layout_constraintBottom_toTopOf="@+id/refresh_info_btn"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            android:id="@+id/refresh_info_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+
+            android:padding="10dp"
+            android:background="@drawable/menu_buttons"
+            android:text="Refresh route info"
+            app:layout_constraintBottom_toTopOf="@+id/log_out_btn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            android:id="@+id/log_out_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Log out"
+            android:padding="10dp"
+            android:background="@drawable/menu_buttons"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
     </android.support.constraint.ConstraintLayout>
 
     <android.support.v4.view.ViewPager
@@ -108,7 +170,7 @@
         app:layout_constraintBottom_toTopOf="@+id/fragment_navigation_wrapper"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+        app:layout_constraintTop_toBottomOf="@+id/info_bar_wrapper">
 
     </android.support.v4.view.ViewPager>
 
@@ -137,19 +199,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/route_list_iv"
             app:layout_constraintStart_toEndOf="@+id/address_list_iv"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/map_ic" />
+            app:srcCompat="@drawable/map_ic"
+            app:layout_constraintEnd_toStartOf="@+id/drive_list_iv"/>
 
         <ImageView
-            android:id="@+id/route_list_iv"
+            android:id="@+id/drive_list_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
@@ -157,7 +217,7 @@
             android:layout_marginRight="64dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/route_list_ic" />
+            app:srcCompat="@drawable/route_list_ic"/>
     </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>

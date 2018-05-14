@@ -1,6 +1,7 @@
 package com.example.jason.route_application.data.pojos;
 
 import com.example.jason.route_application.data.pojos.Address;
+import com.example.jason.route_application.data.pojos.api.AddressChangeRequest;
 import com.example.jason.route_application.data.pojos.api.DriveRequest;
 
 public class FragmentEvent {
@@ -8,6 +9,7 @@ public class FragmentEvent {
     private String event;
     private String addressString;
     private Address address;
+    private AddressChangeRequest addressChangeRequest;
     private DriveRequest driveRequest;
 
     public String getEvent() {
@@ -32,6 +34,14 @@ public class FragmentEvent {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    public AddressChangeRequest getAddressChangeRequest() {
+        return addressChangeRequest;
+    }
+
+    public void setAddressChangeRequest(AddressChangeRequest addressChangeRequest) {
+        this.addressChangeRequest = addressChangeRequest;
     }
 
     public DriveRequest getDriveRequest() {

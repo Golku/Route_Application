@@ -60,6 +60,8 @@ public class AddressListPresenter implements MvpAddressList.Presenter, AddressLi
         int position = activityEvent.getPosition();
 
         switch (event) {
+            case "showAddressDialog" : showDialog("New Address");
+                break;
             case "routeUpdated" : updateAddressList(activityEvent.getAddressList());
                 break;
             case "addressAdded" : addItemToList(position);
@@ -68,6 +70,7 @@ public class AddressListPresenter implements MvpAddressList.Presenter, AddressLi
                 break;
         }
     }
+
 
     private void updateAddressList(List<Address> addressList){
         this.addressList = addressList;

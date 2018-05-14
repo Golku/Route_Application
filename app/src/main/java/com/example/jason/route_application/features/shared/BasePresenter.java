@@ -29,6 +29,10 @@ public abstract class BasePresenter {
         session.setLoginTime(currentTime);
     }
 
+    protected void endSession(Session session){
+        session.setActive(false);
+    }
+
     protected boolean verifySession(Session session){
         return session.getActive();
     }
@@ -36,6 +40,12 @@ public abstract class BasePresenter {
     protected boolean verifySessionTimeOut(Session session){
         Log.d(debugTag, "Remaining seconds: "+ String.valueOf(((session.getLoginTime() + TIME_OUT) - currentTime)/1000));
         return currentTime < (session.getLoginTime() + TIME_OUT);
+    }
+
+    protected void createActivityEvent(String event, MvpContainer.Presenter callback){
+        ActivityEvent activityEvent = new ActivityEvent();
+        activityEvent.setEvent(event);
+        callback.delegateActivityEvent(activityEvent);
     }
 
     protected void createActivityEvent(List<Address> addressList, List<Drive> driveList, MvpContainer.Presenter callback){

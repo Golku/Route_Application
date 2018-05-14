@@ -15,13 +15,20 @@ public interface ApiCallback {
         void containerResponseFailure();
     }
 
-    interface DriveResponseCallback {
-        void driveResponse(Drive response);
-        void driveResponseFailure();
-    }
-
     interface AddAddressCallback {
         void addressResponse(Address response);
         void addressResponseFailure();
+    }
+
+    interface AddressChangeCallback {
+        void addressChangeResponse(Address response);
+        void addressChangeFailure();
+
+    }
+
+    interface DriveResponseCallback {
+        void driveResponse(Drive response);
+        void driveResponseFailure();
+
     }
 }

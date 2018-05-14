@@ -38,6 +38,20 @@ public class ContainerActivity extends DaggerAppCompatActivity implements MvpCon
     @BindView(R.id.loading_screen)
     ConstraintLayout loadingScreen;
 
+    @BindView(R.id.menu_btn_wrapper)
+    ConstraintLayout menuBtnWrapper;
+    @BindView(R.id.menu_wrapper)
+    ConstraintLayout menuWrapper;
+
+    @BindView(R.id.address_input_btn)
+    TextView addressInputBtn;
+    @BindView(R.id.get_user_location_btn)
+    TextView getUserLocationBtn;
+    @BindView(R.id.refresh_info_btn)
+    TextView refreshInfoBtn;
+    @BindView(R.id.log_out_btn)
+    TextView logOutBtn;
+
     @BindView(R.id.fragment_container)
     ViewPager fragmentContainer;
     @BindView(R.id.private_completion)
@@ -49,6 +63,7 @@ public class ContainerActivity extends DaggerAppCompatActivity implements MvpCon
 
     private final String debugTag = "debugTag";
 
+    private boolean menuIsVisible;
     private boolean backPress = false;
 
     @Override
@@ -87,11 +102,6 @@ public class ContainerActivity extends DaggerAppCompatActivity implements MvpCon
         presenter.getContainer();
     }
 
-    @OnClick(R.id.get_container_btn)
-    public void getContainerBtnClick(){
-        presenter.getContainer();
-    }
-
     @Override
     public void setupFragments(RouteInfoHolder routeInfoHolder) {
 
@@ -115,19 +125,68 @@ public class ContainerActivity extends DaggerAppCompatActivity implements MvpCon
         loadingScreen.setVisibility(View.GONE);
     }
 
-    @OnClick(R.id.address_list_iv)
-    public void showAddressList(){
-        fragmentContainer.setCurrentItem(0);
+    @OnClick({R.id.address_list_iv, R.id.map_iv, R.id.drive_list_iv})
+    public void changeFragment(View view){
+        if(menuIsVisible){
+            hideMenu();
+        }
+        switch(view.getId()){
+            case R.id.address_list_iv: fragmentContainer.setCurrentItem(0);
+                break;
+            case R.id.map_iv: fragmentContainer.setCurrentItem(1);
+                break;
+            case R.id.drive_list_iv: fragmentContainer.setCurrentItem(2);
+                break;
+        }
     }
 
-    @OnClick(R.id.map_iv)
-    public void showMap(){
-        fragmentContainer.setCurrentItem(1);
+    @OnClick(R.id.menu_btn)
+    public void showMenuBtnClick(){
+
+        if(menuIsVisible){
+            hideMenu();
+        }else{
+            switch(fragmentContainer.getCurrentItem()){
+                case 0: addressInputBtn.setVisibility(View.VISIBLE);
+                        getUserLocationBtn.setVisibility(View.GONE);
+                    break;
+                case 1: addressInputBtn.setVisibility(View.GONE);
+                        getUserLocationBtn.setVisibility(View.VISIBLE);
+                    break;
+                case 2: addressInputBtn.setVisibility(View.GONE);
+                        getUserLocationBtn.setVisibility(View.GONE);
+                    break;
+            }
+            showMenu();
+        }
     }
 
-    @OnClick(R.id.route_list_iv)
-    public void showRouteList(){
-        fragmentContainer.setCurrentItem(2);
+    private void showMenu(){
+        menuWrapper.setVisibility(View.VISIBLE);
+        menuWrapper.bringToFront();
+        menuIsVisible = true;
+        menuBtnWrapper.setBackgroundResource(R.drawable.drop_menu_btn_selected);
+    }
+
+    private void hideMenu(){
+        menuWrapper.setVisibility(View.GONE);
+        menuIsVisible = false;
+        menuBtnWrapper.setBackgroundResource(R.drawable.drop_menu_btn);
+    }
+
+    @OnClick({R.id.address_input_btn, R.id.get_user_location_btn, R.id.refresh_info_btn, R.id.log_out_btn})
+    public void menuBtnClick(View view){
+        hideMenu();
+        switch(view.getId()){
+            case R.id.address_input_btn: presenter.showAddressDialog();
+                break;
+            case R.id.get_user_location_btn:
+                break;
+            case R.id.refresh_info_btn: presenter.getContainer();
+                break;
+            case R.id.log_out_btn: presenter.logOut();
+                break;
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -143,7 +202,7 @@ public class ContainerActivity extends DaggerAppCompatActivity implements MvpCon
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onFragmentEvent(FragmentEvent fragmentEvent){
+    public void receiveFragmentEvent(FragmentEvent fragmentEvent){
         presenter.fragmentEvent(fragmentEvent);
     }
 

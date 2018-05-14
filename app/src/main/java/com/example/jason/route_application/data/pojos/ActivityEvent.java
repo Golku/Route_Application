@@ -7,6 +7,7 @@ import java.util.List;
 public class ActivityEvent {
 
     private String event;
+    private int fragment;
     private Address address;
     private int position;
     private List<Address> addressList;
@@ -18,6 +19,14 @@ public class ActivityEvent {
 
     public void setEvent(String event) {
         this.event = event;
+    }
+
+    public int getFragment() {
+        return fragment;
+    }
+
+    public void setFragment(int fragment) {
+        this.fragment = fragment;
     }
 
     public Address getAddress() {
