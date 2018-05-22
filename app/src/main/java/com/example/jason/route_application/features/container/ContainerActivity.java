@@ -6,19 +6,19 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.jason.route_application.R;
+import com.example.jason.route_application.data.pojos.Address;
 import com.example.jason.route_application.data.pojos.Event;
 import com.example.jason.route_application.data.pojos.RouteInfoHolder;
 import com.example.jason.route_application.data.pojos.Session;
 import com.example.jason.route_application.features.addressDetails.AddressDetailsActivity;
 import com.example.jason.route_application.features.container.addressListFragment.AddressListFragment;
-import com.example.jason.route_application.features.container.routeListFragment.DriveListFragment;
+import com.example.jason.route_application.features.container.driveListFragment.DriveListFragment;
 import com.example.jason.route_application.features.container.mapFragment.MapFragment;
 import com.example.jason.route_application.features.login.LoginActivity;
 
@@ -223,7 +223,7 @@ public class ContainerActivity extends DaggerAppCompatActivity implements MvpCon
     }
 
     @Override
-    public void showAddressDetails(String address) {
+    public void showAddressDetails(Address address) {
         Intent i = new Intent (this, AddressDetailsActivity.class);
         i.putExtra("address", address);
         startActivity(i);

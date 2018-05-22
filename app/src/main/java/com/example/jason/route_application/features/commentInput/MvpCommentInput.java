@@ -22,7 +22,6 @@ public interface MvpCommentInput {
         void onFinishNetworkOperation();
 
         void showToast(String message);
-
     }
 
     interface Presenter{
@@ -30,7 +29,6 @@ public interface MvpCommentInput {
         void setUpInfo(String employeeId, Address address);
 
         void onAddCommentBtnClick(String comment);
-
     }
 
     interface Interactor{

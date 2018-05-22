@@ -52,14 +52,6 @@ public abstract class BasePresenter {
         callback.publishEvent(event);
     }
 
-    protected void createEvent(String receiver, String eventName, int position, MvpBasePresenter callback){
-        Event event = new Event();
-        event.setReceiver(receiver);
-        event.setEventName(eventName);
-        event.setPosition(position);
-        callback.publishEvent(event);
-    }
-
     protected void createEvent(String receiver, String eventName, String address, MvpBasePresenter callback){
         Event event = new Event();
         event.setReceiver(receiver);

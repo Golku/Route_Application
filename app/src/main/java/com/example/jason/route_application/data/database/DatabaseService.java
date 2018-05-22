@@ -31,12 +31,21 @@ public interface DatabaseService {
     );
 
     @FormUrlEncoded
+    @POST("changeAddressType.php")
+    Call<Void> changeAddressType(
+            @Field("street_name") String street,
+            @Field("post_code") String postCode,
+            @Field("city") String city,
+            @Field("user_id") String userId
+    );
+
+    @FormUrlEncoded
     @POST("addAddressComment.php")
     Call<CommentInputResponse> addCommentToAddress(
             @Field("street_name") String street,
             @Field("post_code") String postCode,
             @Field("city") String city,
-            @Field("employee_id") String employeeId,
+            @Field("user_id") String employeeId,
             @Field("message") String comment,
             @Field("date") String date
     );

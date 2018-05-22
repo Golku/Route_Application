@@ -121,7 +121,12 @@ public class MapPresenter extends BasePresenter implements
 
     @Override
     public void infoWindowClick(Marker marker) {
-        createEvent("container", "itemClick", marker.getTitle(), this);
+        for(Address address: addressList){
+            if(marker.getTitle().equals(address.getAddress())){
+                createEvent("container", "itemClick", address, this);
+                break;
+            }
+        }
     }
 
     @Override

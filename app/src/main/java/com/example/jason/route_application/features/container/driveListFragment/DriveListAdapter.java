@@ -1,4 +1,4 @@
-package com.example.jason.route_application.features.container.routeListFragment;
+package com.example.jason.route_application.features.container.driveListFragment;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.example.jason.route_application.R;
+import com.example.jason.route_application.data.pojos.Address;
 import com.example.jason.route_application.data.pojos.api.Drive;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public class DriveListAdapter extends RecyclerView.Adapter<DriveListAdapter.Cust
     }
 
     interface AdapterCallback{
-        void itemClick(String address);
+        void itemClick(Address address);
         void goButtonClick(String address);
     }
 
@@ -100,7 +101,7 @@ public class DriveListAdapter extends RecyclerView.Adapter<DriveListAdapter.Cust
         public void onClick(View v) {
 
             if(v == this.container){
-                callback.itemClick(routeList.get(this.getAdapterPosition()).getDestinationAddress().getAddress());
+                callback.itemClick(routeList.get(this.getAdapterPosition()).getDestinationAddress());
             }
             else if(v == this.goButton){
                 callback.goButtonClick(routeList.get(this.getAdapterPosition()).getDestinationAddress().getAddress());

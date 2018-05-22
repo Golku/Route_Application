@@ -44,7 +44,7 @@ public class AddressListPresenter extends BasePresenter implements
     @Override
     public void itemClick(Address address) {
         if (address.isValid()) {
-            createEvent("container", "itemClick", address.getAddress(),this);
+            createEvent("container", "itemClick", address,this);
         }else{
             newAddress = false;
             changeAddressPosition = addressList.indexOf(address);
@@ -54,7 +54,7 @@ public class AddressListPresenter extends BasePresenter implements
 
     @Override
     public void processAddress(String addressString) {
-        if(addressString.isEmpty()){
+        if(addressString.isEmpty()){//not working FIX THIS!!
             view.showToast("Fill in a address");
             return;
         }

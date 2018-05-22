@@ -39,6 +39,7 @@ import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -119,14 +120,14 @@ public class MapFragment extends Fragment implements
         builder.setMessage("Are you sure?")
                 .setTitle("Deselect multiple markers")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                presenter.multipleMarkersDeselected(markerPosition);
-            }
+                    public void onClick(DialogInterface dialog, int id) {
+                        presenter.multipleMarkersDeselected(markerPosition);
+                    }
                 }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User cancelled the dialog
             }
-                });
+        });
 
         AlertDialog dialog = builder.create();
         dialog.show();
@@ -142,7 +143,7 @@ public class MapFragment extends Fragment implements
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void receiveEvent(Event event){
+    public void receiveEvent(Event event) {
         presenter.eventReceived(event);
     }
 

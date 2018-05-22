@@ -1,6 +1,7 @@
 package com.example.jason.route_application.features.container;
 
 import com.example.jason.route_application.data.api.ApiCallback;
+import com.example.jason.route_application.data.pojos.Address;
 import com.example.jason.route_application.data.pojos.Event;
 import com.example.jason.route_application.data.pojos.RouteInfoHolder;
 import com.example.jason.route_application.data.pojos.Session;
@@ -27,7 +28,7 @@ public interface MvpContainer {
 
         void postEvent(Event event);
 
-        void showAddressDetails(String address);
+        void showAddressDetails(Address address);
 
         void navigateToDestination(String address);
 

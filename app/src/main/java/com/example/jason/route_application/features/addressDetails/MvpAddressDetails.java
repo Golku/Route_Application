@@ -2,6 +2,7 @@ package com.example.jason.route_application.features.addressDetails;
 
 import com.example.jason.route_application.data.database.DatabaseCallback;
 import com.example.jason.route_application.data.pojos.Address;
+import com.example.jason.route_application.data.pojos.Session;
 import com.example.jason.route_application.data.pojos.database.AddressInformation;
 import com.example.jason.route_application.data.pojos.CommentInformation;
 
@@ -12,33 +13,44 @@ import com.example.jason.route_application.data.pojos.CommentInformation;
 public interface MvpAddressDetails {
 
     interface View{
-        void setUpAddressInformation(Address address);
+
         void setUpAdapter(AddressInformation addressInformation);
-        void onGoogleLinkClick();
-        void onAddCommentButtonClick();
-        void showAddressInGoogle(Address address);
-        void showCommentDisplay(CommentInformation commentInformation);
-        void showCommentInput(Address address);
-        void updateMessageToUserTextView(boolean visible, String message);
-        void updateBusinessImageView(String business);
+
+        void updateMessageToUserTextView(String message);
+
         void onStartNetworkOperation();
+
         void onFinishNetworkOperation();
-        boolean isActive();
+
+        void showAddressInGoogle(Address address);
+
+        void showCommentDisplay(CommentInformation commentInformation);
+
+        void showCommentInput(Address address);
+
         void showToast(String message);
+
         void closeActivity();
     }
 
     interface Presenter{
-        void formatAddress(String address);
-        void updateTextViews();
+
+        void setInfo(Session session, Address address);
+
         void getAddressInformation();
-        void onGoogleLinkClick();
-        void onListItemClick(CommentInformation commentInformation);
-        void onAddCommentButtonClick();
+
+        void changeAddressType();
+
+        void googleLinkClick();
+
+        void addCommentButtonClick();
     }
 
     interface Interactor{
+
         void getAddressInformation(DatabaseCallback.AddressInformationCallBack callBack, Address address);
+
+        void changeAddressType(String userId, Address address);
     }
 
 }

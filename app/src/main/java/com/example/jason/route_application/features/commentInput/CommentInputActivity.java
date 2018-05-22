@@ -65,11 +65,6 @@ public class CommentInputActivity extends DaggerAppCompatActivity implements Mvp
     }
 
     @Override
-    public void closeActivity() {
-        finish();
-    }
-
-    @Override
     public void onStartNetworkOperation() {
         addCommentBtn.setEnabled(false);
         progressBar.setVisibility(View.VISIBLE);
@@ -88,5 +83,10 @@ public class CommentInputActivity extends DaggerAppCompatActivity implements Mvp
     public void showToast(String message) {
         Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
         toast.show();
+    }
+
+    @Override
+    public void closeActivity() {
+        finish();
     }
 }

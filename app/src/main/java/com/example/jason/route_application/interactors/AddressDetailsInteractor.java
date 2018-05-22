@@ -44,4 +44,27 @@ public class AddressDetailsInteractor implements MvpAddressDetails.Interactor {
             }
         });
     }
+
+    @Override
+    public void changeAddressType(String userId, Address address) {
+        Call<Void> call = databaseService.changeAddressType(
+                address.getStreet(),
+                address.getPostCode(),
+                address.getCity(),
+                userId
+        );
+
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+
+    }
 }

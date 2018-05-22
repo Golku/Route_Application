@@ -175,7 +175,7 @@ public class ContainerPresenter extends BasePresenter implements
                 getContainer();
                 break;
             case "itemClick":
-                view.showAddressDetails(event.getAddressString());
+                view.showAddressDetails(event.getAddress());
                 break;
             case "showMap":
                 showMap();

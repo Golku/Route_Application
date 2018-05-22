@@ -76,14 +76,14 @@
             android:id="@+id/addressTypeImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:contentDescription="@string/addressType.activity_address_details"
-            android:visibility="invisible"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_marker_private"
-            android:layout_marginLeft="8dp" />
+            app:srcCompat="@drawable/ic_marker_private" />
 
     </android.support.constraint.ConstraintLayout>
 
@@ -92,6 +92,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:visibility="visible"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -102,6 +103,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:text="Fetching address info"
         android:textColor="@color/colorPrimaryDark"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"

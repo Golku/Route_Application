@@ -24,10 +24,10 @@ public class CommentInformation implements Parcelable{
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(employeeId);
-        parcel.writeString(date);
-        parcel.writeString(comment);
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(employeeId);
+        dest.writeString(date);
+        dest.writeString(comment);
     }
 
     @Override

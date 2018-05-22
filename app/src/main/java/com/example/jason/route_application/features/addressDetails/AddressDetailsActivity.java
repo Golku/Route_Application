@@ -1,5 +1,7 @@
 package com.example.jason.route_application.features.addressDetails;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
@@ -14,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.jason.route_application.R;
 import com.example.jason.route_application.data.pojos.Address;
+import com.example.jason.route_application.data.pojos.Session;
 import com.example.jason.route_application.data.pojos.database.AddressInformation;
 import com.example.jason.route_application.data.pojos.CommentInformation;
 import com.example.jason.route_application.features.commentDisplay.CommentDisplayActivity;
@@ -49,14 +52,12 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements M
     ProgressBar progressBar;
 
     private boolean returning;
-    private boolean active;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_address_details);
         ButterKnife.bind(this);
-        active = true;
         returning = false;
         init();
     }
@@ -64,71 +65,70 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements M
     @Override
     protected void onResume() {
         super.onResume();
-        if(returning){
+        if (returning) {
             presenter.getAddressInformation();
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        active = false;
     }
 
     private void init() {
-        String address = getIntent().getStringExtra("address");
+        Address address = getIntent().getParcelableExtra("address");
 
-        //If this fails everything else fails in this view! FIX THIS!!
-        //This fails when the inputted address does not have the right format : street, postcode city, country
-
-        try {
-            presenter.formatAddress(address);
-            presenter.updateTextViews();
-            presenter.getAddressInformation();
-        } catch (NullPointerException | ArrayIndexOutOfBoundsException e) {
-            onFinishNetworkOperation();
-            showToast("Invalid Address");
-            closeActivity();
-        }
-
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
-    }
-
-    @Override
-    public void setUpAddressInformation(Address address) {
         streetTextView.setText(address.getStreet());
         postcodeTextView.setText(address.getPostCode());
         cityTextView.setText(address.getCity());
+
+        addressTypeImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                typeChangeConfirmation();
+            }
+        });
+
+        if (address.isBusiness()) {
+            addressTypeImageView.setImageResource(R.drawable.ic_marker_business);
+        }
+
+        presenter.setInfo(new Session(this), address);
+        presenter.getAddressInformation();
     }
 
     @Override
     public void setUpAdapter(AddressInformation addressInformation) {
-        recyclerView.setVisibility(View.VISIBLE);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        messageToUserTextView.setVisibility(View.GONE);
         AddressDetailsAdapter adapter = new AddressDetailsAdapter(addressInformation, this);
         recyclerView.setAdapter(adapter);
     }
 
+    private void typeChangeConfirmation() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Are you sure?")
+                .setTitle("Change address type")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        presenter.changeAddressType();
+                    }
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
     @OnClick(R.id.googleSearchBtn)
-    @Override
     public void onGoogleLinkClick() {
-        presenter.onGoogleLinkClick();
+        presenter.googleLinkClick();
     }
 
     @Override
     public void onListItemClick(CommentInformation commentInformation) {
-        presenter.onListItemClick(commentInformation);
+        showCommentDisplay(commentInformation);
     }
 
     @OnClick(R.id.addCommentBtn)
-    @Override
     public void onAddCommentButtonClick() {
-        presenter.onAddCommentButtonClick();
+        presenter.addCommentButtonClick();
     }
 
     @Override
@@ -140,26 +140,13 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements M
     }
 
     @Override
-    public void updateMessageToUserTextView(boolean visible, String message) {
-        if (visible) {
-            messageToUserTextView.setVisibility(View.VISIBLE);
-        } else {
-            messageToUserTextView.setVisibility(View.GONE);
-        }
+    public void updateMessageToUserTextView(String message) {
         messageToUserTextView.setText(message);
     }
 
     @Override
-    public void updateBusinessImageView(String business) {
-        addressTypeImageView.setVisibility(View.VISIBLE);
-        if (business.equals("yes")) {
-            addressTypeImageView.setImageResource(R.drawable.ic_marker_business);
-        }
-    }
-
-    @Override
     public void onStartNetworkOperation() {
-        messageToUserTextView.setText(R.string.networkOperation_addressDetailsActivity);
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -181,11 +168,6 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements M
         Intent i = new Intent(this, CommentInputActivity.class);
         i.putExtra("address", address);
         startActivity(i);
-    }
-
-    @Override
-    public boolean isActive() {
-        return active;
     }
 
     @Override

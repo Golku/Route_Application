@@ -1,5 +1,6 @@
-package com.example.jason.route_application.features.container.routeListFragment;
+package com.example.jason.route_application.features.container.driveListFragment;
 
+import com.example.jason.route_application.data.pojos.Address;
 import com.example.jason.route_application.data.pojos.Event;
 import com.example.jason.route_application.data.pojos.api.Drive;
 import com.example.jason.route_application.features.shared.BasePresenter;
@@ -40,8 +41,8 @@ public class DriveListPresenter extends BasePresenter implements
     }
 
     @Override
-    public void itemClick(String address) {
-        createEvent("container", "itemClick", this);
+    public void itemClick(Address address) {
+        createEvent("container", "itemClick", address,this);
     }
 
     @Override
