@@ -3,11 +3,9 @@ package com.example.jason.route_application.features.container.addressListFragme
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,16 +14,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.jason.route_application.R;
-import com.example.jason.route_application.data.pojos.ActivityEvent;
+import com.example.jason.route_application.data.pojos.Event;
 import com.example.jason.route_application.data.pojos.RouteInfoHolder;
-import com.example.jason.route_application.data.pojos.FragmentEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class AddressListFragment extends Fragment implements MvpAddressList.View{
 
@@ -90,22 +86,23 @@ public class AddressListFragment extends Fragment implements MvpAddressList.View
 
     @Override
     public void showAddressInputDialog(String title) {
+
         this.dialogTitle.setText(title);
+
         addAddressBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 String address = streetInput.getText().toString()+", "+
                         postcodeNumbersInput.getText().toString()+" "+
                         postcodeLettersInput.getText().toString()+" "+
-                        cityInput.getText().toString()+", "+"Netherlands";
+                        cityInput.getText().toString();
+
                 alertDialog.dismiss();
-                if(streetInput.getText().toString().isEmpty()){
-                    showToast("Fill in a address");
-                }else{
-                    presenter.addAddress(address);
-                }
+                presenter.processAddress(address);
             }
         });
+
         cancelDialogBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -117,13 +114,13 @@ public class AddressListFragment extends Fragment implements MvpAddressList.View
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onActivityEvent(ActivityEvent activityEvent){
-        presenter.activityEvent(activityEvent);
+    public void receiveEvent(Event event){
+        presenter.eventReceived(event);
     }
 
     @Override
-    public void sendFragmentEvent(FragmentEvent fragmentEvent) {
-        EventBus.getDefault().post(fragmentEvent);
+    public void postEvent(Event event) {
+        EventBus.getDefault().post(event);
     }
 
     @Override

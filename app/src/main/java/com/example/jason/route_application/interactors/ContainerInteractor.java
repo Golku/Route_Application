@@ -3,11 +3,12 @@ package com.example.jason.route_application.interactors;
 import com.example.jason.route_application.data.api.ApiCallback;
 import com.example.jason.route_application.data.api.ApiService;
 import com.example.jason.route_application.data.pojos.Address;
-import com.example.jason.route_application.data.pojos.api.AddressChangeRequest;
+import com.example.jason.route_application.data.pojos.api.ChangeAddressRequest;
 import com.example.jason.route_application.data.pojos.api.AddressRequest;
 import com.example.jason.route_application.data.pojos.api.Container;
 import com.example.jason.route_application.data.pojos.api.Drive;
 import com.example.jason.route_application.data.pojos.api.DriveRequest;
+import com.example.jason.route_application.data.pojos.api.RemoveAddressRequest;
 import com.example.jason.route_application.features.container.MvpContainer;
 
 import javax.inject.Inject;
@@ -63,7 +64,7 @@ public class ContainerInteractor implements MvpContainer.Interactor{
     }
 
     @Override
-    public void changeAddress(AddressChangeRequest request, final ApiCallback.AddressChangeCallback callback) {
+    public void changeAddress(ChangeAddressRequest request, final ApiCallback.AddressChangeCallback callback) {
         Call<Address> call = apiService.changeAddressRequest(request);
 
         call.enqueue(new Callback<Address>() {
@@ -75,6 +76,23 @@ public class ContainerInteractor implements MvpContainer.Interactor{
             @Override
             public void onFailure(Call<Address> call, Throwable t) {
                 callback.addressChangeFailure();
+            }
+        });
+    }
+
+    @Override
+    public void removeAddress(RemoveAddressRequest request) {
+        Call<Void> call = apiService.removeAddressRequest(request);
+
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
             }
         });
     }

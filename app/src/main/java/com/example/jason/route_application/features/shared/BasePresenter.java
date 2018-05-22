@@ -1,9 +1,11 @@
 package com.example.jason.route_application.features.shared;
 
-import com.example.jason.route_application.data.pojos.ActivityEvent;
 import com.example.jason.route_application.data.pojos.Address;
+import com.example.jason.route_application.data.pojos.Event;
 import com.example.jason.route_application.data.pojos.Session;
+import com.example.jason.route_application.data.pojos.api.ChangeAddressRequest;
 import com.example.jason.route_application.data.pojos.api.Drive;
+import com.example.jason.route_application.data.pojos.api.DriveRequest;
 import com.example.jason.route_application.features.container.MvpContainer;
 
 import android.util.Log;
@@ -17,13 +19,14 @@ public abstract class BasePresenter {
     private final long TIME_OUT = 3600000; //60 min
 //    private final long TIME_OUT = 120000; //120 sec
 //    private final long TIME_OUT = 60000; //60 sec
+
     private Long currentTime;
 
     protected BasePresenter() {
         this.currentTime = System.currentTimeMillis();
     }
 
-    protected void setSession(String username, Session session){
+    protected void beginSession(String username, Session session){
         session.setActive(true);
         session.setUsername(username);
         session.setLoginTime(currentTime);
@@ -42,32 +45,67 @@ public abstract class BasePresenter {
         return currentTime < (session.getLoginTime() + TIME_OUT);
     }
 
-    protected void createActivityEvent(String event, MvpContainer.Presenter callback){
-        ActivityEvent activityEvent = new ActivityEvent();
-        activityEvent.setEvent(event);
-        callback.delegateActivityEvent(activityEvent);
+    protected void createEvent(String receiver, String eventName, MvpBasePresenter callback){
+        Event event = new Event();
+        event.setReceiver(receiver);
+        event.setEventName(eventName);
+        callback.publishEvent(event);
     }
 
-    protected void createActivityEvent(List<Address> addressList, List<Drive> driveList, MvpContainer.Presenter callback){
-        ActivityEvent activityEvent = new ActivityEvent();
-        activityEvent.setEvent("routeUpdated");
-        activityEvent.setAddressList(addressList);
-        activityEvent.setDriveList(driveList);
-        callback.delegateActivityEvent(activityEvent);
+    protected void createEvent(String receiver, String eventName, int position, MvpBasePresenter callback){
+        Event event = new Event();
+        event.setReceiver(receiver);
+        event.setEventName(eventName);
+        event.setPosition(position);
+        callback.publishEvent(event);
     }
 
-    protected void createActivityEvent(String event, Address address, int position, MvpContainer.Presenter callback){
-        ActivityEvent activityEvent = new ActivityEvent();
-        activityEvent.setEvent(event);
-        activityEvent.setAddress(address);
-        activityEvent.setPosition(position);
-        callback.delegateActivityEvent(activityEvent);
+    protected void createEvent(String receiver, String eventName, String address, MvpBasePresenter callback){
+        Event event = new Event();
+        event.setReceiver(receiver);
+        event.setEventName(eventName);
+        event.setAddressString(address);
+        callback.publishEvent(event);
     }
 
-    protected void createActivityEvent(String event, int position, MvpContainer.Presenter callback){
-        ActivityEvent activityEvent = new ActivityEvent();
-        activityEvent.setEvent(event);
-        activityEvent.setPosition(position);
-        callback.delegateActivityEvent(activityEvent);
+    protected void createEvent(String receiver, String eventName, Address address, MvpBasePresenter callback){
+        Event event = new Event();
+        event.setReceiver(receiver);
+        event.setEventName(eventName);
+        event.setAddress(address);
+        callback.publishEvent(event);
+    }
+
+    protected void createEvent(String receiver, String eventName, Drive drive, MvpBasePresenter callback){
+        Event event = new Event();
+        event.setReceiver(receiver);
+        event.setEventName(eventName);
+        event.setDrive(drive);
+        callback.publishEvent(event);
+    }
+
+    protected void createEvent(String receiver, String eventName, ChangeAddressRequest request, MvpBasePresenter callback){
+        Event event = new Event();
+        event.setReceiver(receiver);
+        event.setEventName(eventName);
+        event.setChangeAddressRequest(request);
+        callback.publishEvent(event);
+    }
+
+    protected void createEvent(String receiver, String eventName, DriveRequest request, MvpBasePresenter callback){
+        Event event = new Event();
+        event.setReceiver(receiver);
+        event.setEventName(eventName);
+        event.setDriveRequest(request);
+        callback.publishEvent(event);
+    }
+
+    protected void createEvent(String receiver, String eventName, List<Address> addressList, List<Drive> driveList, MvpBasePresenter callback){
+        Event event = new Event();
+        event.setReceiver(receiver);
+        event.setEventName(eventName);
+        event.setAddressList(addressList);
+        event.setDriveList(driveList);
+        callback.publishEvent(event);
     }
 }

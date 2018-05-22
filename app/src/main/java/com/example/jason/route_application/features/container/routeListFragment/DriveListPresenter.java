@@ -1,18 +1,23 @@
 package com.example.jason.route_application.features.container.routeListFragment;
 
-import com.example.jason.route_application.data.pojos.ActivityEvent;
+import com.example.jason.route_application.data.pojos.Event;
 import com.example.jason.route_application.data.pojos.api.Drive;
-import com.example.jason.route_application.data.pojos.FragmentEvent;
+import com.example.jason.route_application.features.shared.BasePresenter;
+import com.example.jason.route_application.features.shared.MvpBasePresenter;
 
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
  * Created by Jason on 03-Apr-18.
  */
 
-public class DriveListPresenter implements MvpDriveList.Presenter, DriveListAdapter.AdapterCallback {
+public class DriveListPresenter extends BasePresenter implements
+        MvpBasePresenter,
+        MvpDriveList.Presenter,
+        DriveListAdapter.AdapterCallback {
 
     private final String debugTag = "debugTag";
 
@@ -20,10 +25,12 @@ public class DriveListPresenter implements MvpDriveList.Presenter, DriveListAdap
 
     private List<Drive> driveList;
     private DriveListAdapter adapter;
+    private SimpleDateFormat sdf;
 
     DriveListPresenter(MvpDriveList.View view, List<Drive> driveList) {
         this.view = view;
         this.driveList = driveList;
+        sdf = new SimpleDateFormat("kk:mm");
     }
 
     @Override
@@ -34,56 +41,93 @@ public class DriveListPresenter implements MvpDriveList.Presenter, DriveListAdap
 
     @Override
     public void itemClick(String address) {
-        FragmentEvent fragmentEvent = new FragmentEvent();
-        fragmentEvent.setEvent("itemClick");
-        fragmentEvent.setAddressString(address);
-        view.sendFragmentEvent(fragmentEvent);
+        createEvent("container", "itemClick", this);
     }
 
     @Override
     public void goButtonClick(String address) {
-        FragmentEvent fragmentEvent = new FragmentEvent();
-        fragmentEvent.setEvent("driveDirections");
-        fragmentEvent.setAddressString(address);
-        view.sendFragmentEvent(fragmentEvent);
+        createEvent("container", "driveDirections", address,this);
     }
 
     @Override
-    public void activityEvent(ActivityEvent activityEvent) {
+    public void eventReceived(Event event) {
 
-        String event = activityEvent.getEvent();
-        int position = activityEvent.getPosition();
+        if(!(event.getReceiver().equals("driveFragment") || event.getReceiver().equals("all"))){
+            return;
+        }
 
-        switch (event) {
-            case "routeUpdated" : updateDriveList(activityEvent.getDriveList());
+        Log.d(debugTag, "Event received on driveFragment: "+ event.getEventName());
+
+        switch (event.getEventName()) {
+            case "updateList" : updateList(event.getDriveList());
                 break;
-            case "driveAdded" : addItemToList(position);
+            case "addDrive" : addDrive(event.getDrive());
                 break;
-            case "driveRemoved" : removeItemFromList(position);
+            case "removeDrive" : removeDrive();
                 break;
-            case "multipleDriveRemoved" : removeMultipleItemsFromList();
+            case "RemoveMultipleDrive" : RemoveMultipleDrive(event.getAddressString());
                 break;
         }
     }
 
-    private void updateDriveList(List<Drive> driveList) {
+    private void updateList(List<Drive> driveList) {
         this.driveList = driveList;
         showDriveList();
-        view.scrollToItem(driveList.size());
     }
 
-    private void addItemToList(int position){
-        adapter.notifyItemInserted(position);
+    private void addDrive(Drive drive){
+
+        driveList.add(drive);
+
+        long deliveryTime;
+        long driveTime = drive.getDriveDurationInSeconds() * 1000;
+        long PACKAGE_DELIVERY_TIME = 120000;
+
+        if (driveList.size() > 1) {
+            Drive previousDrive = driveList.get(driveList.indexOf(drive) - 1);
+            deliveryTime = previousDrive.getDeliveryTimeInMillis() + driveTime + PACKAGE_DELIVERY_TIME;
+        } else {
+            long date = System.currentTimeMillis();
+            deliveryTime = date + driveTime + PACKAGE_DELIVERY_TIME;
+        }
+
+        String deliveryTimeString = sdf.format(deliveryTime);
+
+        drive.setDeliveryTimeInMillis(deliveryTime);
+        drive.setDeliveryTimeHumanReadable(deliveryTimeString);
+
+        adapter.notifyItemInserted(driveList.indexOf(drive));
         view.scrollToItem(driveList.size());
+
+        createEvent("container", "updateEndTime", this);
     }
 
-    private void removeItemFromList(int position){
+    private void removeDrive(){
+        int position = driveList.size() - 1;
+        driveList.remove(position);
         adapter.notifyItemRemoved(position);
         view.scrollToItem(driveList.size());
+
+        createEvent("container","updateEndTime",this);
     }
 
-    private void removeMultipleItemsFromList(){
+    private void RemoveMultipleDrive(String address){
+
+        for (Drive drive : driveList) {
+            if (address.equals(drive.getDestinationAddress().getAddress())) {
+                driveList.subList(driveList.indexOf(drive), driveList.size()).clear();
+                break;
+            }
+        }
+
         showDriveList();
         view.scrollToItem(driveList.size());
+
+        createEvent("container", "updateEndTime", this);
+    }
+
+    @Override
+    public void publishEvent(Event event) {
+        view.postEvent(event);
     }
 }

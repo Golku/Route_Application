@@ -6,22 +6,16 @@ import com.directions.route.RouteException;
 import com.directions.route.Routing;
 import com.directions.route.RoutingListener;
 import com.example.jason.route_application.R;
-import com.example.jason.route_application.data.pojos.ActivityEvent;
-import com.example.jason.route_application.data.pojos.Address;
-import com.example.jason.route_application.data.pojos.MarkerInfo;
+import com.example.jason.route_application.data.pojos.Event;
 import com.example.jason.route_application.data.pojos.RouteInfoHolder;
-import com.example.jason.route_application.data.pojos.FragmentEvent;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -29,19 +23,22 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,8 +49,10 @@ import java.util.List;
 public class MapFragment extends Fragment implements
         MvpMap.View,
         OnMapReadyCallback,
-        GoogleMap.OnMarkerClickListener,
         RoutingListener {
+
+    @BindView(R.id.mapView)
+    MapView mapView;
 
     private final String debugTag = "debugTag";
 
@@ -62,8 +61,6 @@ public class MapFragment extends Fragment implements
     private GoogleMap googleMap;
 
     private List<Polyline> polylines;
-
-    private FrameLayout rootLayout;
 
     private static final int[] COLORS = new int[]{R.color.colorAccent};
 
@@ -84,7 +81,7 @@ public class MapFragment extends Fragment implements
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
-        this.rootLayout = view.findViewById(R.id.root_layout);
+        ButterKnife.bind(this, view);
         return view;
     }
 
@@ -102,126 +99,56 @@ public class MapFragment extends Fragment implements
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
-    }
-
-    @Override
     public void onMapReady(GoogleMap googleMap) {
         MapsInitializer.initialize(getContext());
-
         this.googleMap = googleMap;
-        this.googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        this.googleMap.setOnMarkerClickListener(this);
-
-        googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-            @Override
-            public void onInfoWindowClick(Marker marker) {
-                presenter.infoWindowClick(marker);
-            }
-        });
-
-        presenter.setMarkers();
+        presenter.setMapData(googleMap);
     }
 
     @Override
-    public void markAddressOnMap(Address address) {
-
-        MarkerInfo markerInfo = new MarkerInfo();
-
-        markerInfo.setSelected(false);
-
-        if (address.isBusiness()) {
-            markerInfo.setBusiness(true);
-            markerInfo.setIconType("business");
-        } else {
-            markerInfo.setBusiness(false);
-            markerInfo.setIconType("private");
-        }
-
-        if(address.isUserLocation()){
-            markerInfo.setIconType("origin");
-        }
-
-        Marker marker = googleMap.addMarker(
-                new MarkerOptions()
-                        .position(new LatLng(address.getLat(), address.getLng()))
-                        .title(address.getAddress()));
-        marker.setTag(markerInfo);
-
-        changeMarkerIcon(marker);
-    }
-
-    @Override
-    public void removeAllMarkersFromMap() {
-        googleMap.clear();
-    }
-
-    @Override
-    public void moveMapCamera(double lat, double lng) {
-        CameraPosition cameraPosition = CameraPosition.builder().target(new LatLng(lat, lng)).zoom(9f).build();
-        googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-    }
-
-    @Override
-    public boolean onMarkerClick(Marker marker) {
-        presenter.markerClick(marker);
-        marker.showInfoWindow();
-        return true;
-    }
-
-
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onActivityEvent(ActivityEvent activityEvent){
-        presenter.activityEvent(activityEvent);
-    }
-
-    @Override
-    public void sendFragmentEvent(FragmentEvent fragmentEvent) {
-        EventBus.getDefault().post(fragmentEvent);
-    }
-
-    @Override
-    public void changeMarkerIcon(Marker marker) {
-        MarkerInfo markerInfo = (MarkerInfo) marker.getTag();
-
-        Resources res = this.getResources();
-        String iconName = null;
-
-        switch (markerInfo.getIconType()) {
-            case "private":
-                iconName = "ic_marker_private";
-                break;
-            case "business":
-                iconName = "ic_marker_business";
-                break;
-            case "selected":
-                iconName = "ic_marker_selected";
-                break;
-            case "origin":
-                iconName = "ic_marker_origin";
-                break;
-        }
-
+    public void changeMarkerIcon(Marker marker, String iconName) {
 //        iconName = "ic_" + String.valueOf(i + 1);
-
+        Resources res = this.getResources();
         int resID = res.getIdentifier(iconName, "drawable", getContext().getPackageName());
-
         marker.setIcon(BitmapDescriptorFactory.fromResource(resID));
     }
 
     @Override
     public void showSnackBar(final int markerPosition) {
-        Snackbar snackbar = Snackbar.make(rootLayout, "Deselect until here?", Snackbar.LENGTH_LONG);
-        snackbar.setAction("yes", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("Are you sure?")
+                .setTitle("Deselect multiple markers")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
                 presenter.multipleMarkersDeselected(markerPosition);
             }
-        });
-        snackbar.show();
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User cancelled the dialog
+            }
+                });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+//        Snackbar snackbar = Snackbar.make(mapView, "Deselect until here?", Snackbar.LENGTH_LONG);
+//        snackbar.setAction("yes", new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                presenter.multipleMarkersDeselected(markerPosition);
+//            }
+//        });
+//        snackbar.show();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void receiveEvent(Event event){
+        presenter.eventReceived(event);
+    }
+
+    @Override
+    public void postEvent(Event event) {
+        EventBus.getDefault().post(event);
     }
 
     @Override

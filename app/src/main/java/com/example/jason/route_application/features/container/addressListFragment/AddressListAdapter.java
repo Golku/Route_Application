@@ -3,6 +3,8 @@ package com.example.jason.route_application.features.container.addressListFragme
 import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +19,8 @@ import java.util.List;
 
 public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.CustomViewHolder>{
 
+    private final String debugTag = "debugTag";
+
     private List<Address> addressList;
     private AdapterCallback callback;
 
@@ -27,6 +31,8 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
 
     interface AdapterCallback{
         void itemClick(Address address);
+        void showAddress(Address address);
+        void removeAddress(Address address);
     }
 
     @NonNull
@@ -61,6 +67,8 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
         private TextView cityTv;
         private ProgressBar addressPb;
         private ImageView addressStatusIv;
+        private ImageView deleteAddressIv;
+        private ImageView showAddressIv;
         private ViewGroup addressWrapper;
 
         CustomViewHolder(View itemView) {
@@ -70,13 +78,22 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
             cityTv = itemView.findViewById(R.id.city_tv);
             addressPb = itemView.findViewById(R.id.address_pb);
             addressStatusIv = itemView.findViewById(R.id.address_status_iv);
+            deleteAddressIv = itemView.findViewById(R.id.delete_address_iv);
+            showAddressIv = itemView.findViewById(R.id.show_address_iv);
             addressWrapper.setOnClickListener(this);
+            deleteAddressIv.setOnClickListener(this);
+            showAddressIv.setOnClickListener(this);
         }
 
         public void onClick(View v) {
-            callback.itemClick(addressList.get(getAdapterPosition()));
+
+           if(v == addressWrapper){
+               callback.itemClick(addressList.get(getAdapterPosition()));
+           }else if(v == showAddressIv){
+               callback.showAddress(addressList.get(getAdapterPosition()));
+           }else if(v == deleteAddressIv){
+                callback.removeAddress(addressList.get(getAdapterPosition()));
+           }
         }
-
     }
-
 }

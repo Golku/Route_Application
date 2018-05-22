@@ -1,13 +1,10 @@
 package com.example.jason.route_application.features.container.mapFragment;
 
-import com.example.jason.route_application.data.pojos.ActivityEvent;
-import com.example.jason.route_application.data.pojos.Address;
-import com.example.jason.route_application.data.pojos.FragmentEvent;
-
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
-import java.util.List;
+import com.example.jason.route_application.data.pojos.Event;
 
 /**
  * Created by Jason on 3/28/2018.
@@ -17,17 +14,11 @@ public interface MvpMap {
 
     interface View{
 
-        void markAddressOnMap(Address addresses);
+        void changeMarkerIcon(Marker marker, String iconName);
 
-        void removeAllMarkersFromMap();
-
-        void moveMapCamera(double lat, double lng);
-
-        void sendFragmentEvent(FragmentEvent fragmentEvent);
+        void postEvent(Event event);
 
         void getPolylineToMarker(LatLng start, LatLng end);
-
-        void changeMarkerIcon(Marker marker);
 
         void showSnackBar(int markerPosition);
 
@@ -38,15 +29,13 @@ public interface MvpMap {
 
     interface Presenter{
 
-        void setMarkers();
-
-        void markerClick(Marker marker);
+        void setMapData(GoogleMap googleMap);
 
         void infoWindowClick(Marker marker);
 
         void multipleMarkersDeselected(int markerPosition);
 
-        void activityEvent(ActivityEvent activityEvent);
+        void eventReceived(Event event);
     }
 
 }

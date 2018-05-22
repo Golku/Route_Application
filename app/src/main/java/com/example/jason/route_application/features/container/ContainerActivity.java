@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -12,14 +13,15 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.jason.route_application.R;
+import com.example.jason.route_application.data.pojos.Event;
 import com.example.jason.route_application.data.pojos.RouteInfoHolder;
-import com.example.jason.route_application.data.pojos.ActivityEvent;
 import com.example.jason.route_application.data.pojos.Session;
-import com.example.jason.route_application.data.pojos.FragmentEvent;
 import com.example.jason.route_application.features.addressDetails.AddressDetailsActivity;
 import com.example.jason.route_application.features.container.addressListFragment.AddressListFragment;
 import com.example.jason.route_application.features.container.routeListFragment.DriveListFragment;
 import com.example.jason.route_application.features.container.mapFragment.MapFragment;
+import com.example.jason.route_application.features.login.LoginActivity;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -65,6 +67,7 @@ public class ContainerActivity extends DaggerAppCompatActivity implements MvpCon
 
     private boolean menuIsVisible;
     private boolean backPress = false;
+    private Handler handler = new Handler();
 
     @Override
     public void onBackPressed() {
@@ -72,19 +75,27 @@ public class ContainerActivity extends DaggerAppCompatActivity implements MvpCon
             closeActivity();
         }else{
             backPress = true;
-            onBackPressSnackbar();
+            onBackPressToast();
         }
     }
 
-    private void onBackPressSnackbar(){
-        Snackbar snackbar = Snackbar.make(fragmentContainer, "Press again to exit", Snackbar.LENGTH_SHORT);
-        snackbar.addCallback(new Snackbar.Callback(){
+    private void onBackPressToast(){
+        showToast("Press back again to exit.");
+        handler.postDelayed(new Runnable() {
             @Override
-            public void onDismissed(Snackbar transientBottomBar, int event) {
+            public void run() {
                 backPress = false;
             }
-        });
-        snackbar.show();
+        }, 2000);
+
+//        Snackbar snackbar = Snackbar.make(fragmentContainer, "Press again to exit", Snackbar.LENGTH_SHORT);
+//        snackbar.addCallback(new Snackbar.Callback(){
+//            @Override
+//            public void onDismissed(Snackbar transientBottomBar, int event) {
+//                backPress = false;
+//            }
+//        });
+//        snackbar.show();
     }
 
     @Override
@@ -98,7 +109,9 @@ public class ContainerActivity extends DaggerAppCompatActivity implements MvpCon
 
     private void init() {
         loadingScreen.bringToFront();
-        presenter.setSession(new Session(this));
+        presenter.setVariables(new Session(this),
+                R.id.map_iv,
+                R.id.drive_list_iv);
         presenter.getContainer();
     }
 
@@ -130,14 +143,12 @@ public class ContainerActivity extends DaggerAppCompatActivity implements MvpCon
         if(menuIsVisible){
             hideMenu();
         }
-        switch(view.getId()){
-            case R.id.address_list_iv: fragmentContainer.setCurrentItem(0);
-                break;
-            case R.id.map_iv: fragmentContainer.setCurrentItem(1);
-                break;
-            case R.id.drive_list_iv: fragmentContainer.setCurrentItem(2);
-                break;
-        }
+        presenter.changeFragment(view.getId());
+    }
+
+    @Override
+    public void showFragment(int position) {
+        fragmentContainer.setCurrentItem(position);
     }
 
     @OnClick(R.id.menu_btn)
@@ -202,13 +213,13 @@ public class ContainerActivity extends DaggerAppCompatActivity implements MvpCon
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void receiveFragmentEvent(FragmentEvent fragmentEvent){
-        presenter.fragmentEvent(fragmentEvent);
+    public void receiveEvent(Event event){
+        presenter.eventReceived(event);
     }
 
     @Override
-    public void sendActivityEvent(ActivityEvent activityEvent) {
-        EventBus.getDefault().post(activityEvent);
+    public void postEvent(Event event) {
+        EventBus.getDefault().post(event);
     }
 
     @Override
@@ -225,8 +236,14 @@ public class ContainerActivity extends DaggerAppCompatActivity implements MvpCon
     }
 
     @Override
+    public void showLoginScreen() {
+        Intent i = new Intent (this, LoginActivity.class);
+        startActivity(i);
+    }
+
+    @Override
     public void showToast(String message) {
-        Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
+        Toast toast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
         toast.show();
     }
 

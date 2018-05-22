@@ -2,16 +2,19 @@ package com.example.jason.route_application.features.container;
 
 import com.example.jason.route_application.data.api.ApiCallback;
 import com.example.jason.route_application.data.pojos.Address;
+import com.example.jason.route_application.data.pojos.Event;
 import com.example.jason.route_application.data.pojos.RouteInfoHolder;
-import com.example.jason.route_application.data.pojos.ActivityEvent;
-import com.example.jason.route_application.data.pojos.api.AddressChangeRequest;
+import com.example.jason.route_application.data.pojos.api.ChangeAddressRequest;
 import com.example.jason.route_application.data.pojos.api.AddressRequest;
 import com.example.jason.route_application.data.pojos.api.Container;
 import com.example.jason.route_application.data.pojos.Session;
 import com.example.jason.route_application.data.pojos.api.Drive;
 import com.example.jason.route_application.data.pojos.api.DriveRequest;
-import com.example.jason.route_application.data.pojos.FragmentEvent;
+import com.example.jason.route_application.data.pojos.api.RemoveAddressRequest;
 import com.example.jason.route_application.features.shared.BasePresenter;
+import com.example.jason.route_application.features.shared.MvpBasePresenter;
+
+import android.util.Log;
 
 import javax.inject.Inject;
 
@@ -24,11 +27,12 @@ import java.util.List;
  */
 
 public class ContainerPresenter extends BasePresenter implements
+        MvpBasePresenter,
         MvpContainer.Presenter,
         ApiCallback.ContainerResponseCallback,
         ApiCallback.AddAddressCallback,
         ApiCallback.AddressChangeCallback,
-        ApiCallback.DriveResponseCallback{
+        ApiCallback.DriveResponseCallback {
 
     private final String debugTag = "debugTag";
 
@@ -39,37 +43,29 @@ public class ContainerPresenter extends BasePresenter implements
     private Session session;
 
     private Container container;
-
     private List<Address> addressList;
-
     private List<Drive> driveList;
 
-    private int addressPosition;
-
-    private SimpleDateFormat sdf;
+    private int mapViewId;
+    private int driveViewId;
 
     @Inject
     public ContainerPresenter(MvpContainer.View view, MvpContainer.Interactor interactor) {
         this.view = view;
         this.interactor = interactor;
-        sdf = new SimpleDateFormat("kk:mm");
     }
 
-    //container setup
+    //container data
 
     @Override
-    public void setSession(Session session) {
+    public void setVariables(Session session, int mapViewId, int driveViewId) {
         this.session = session;
+        this.mapViewId = mapViewId;
+        this.driveViewId = driveViewId;
     }
 
     private void setupContainer(Container container) {
-
-        if (this.container != null) {
-            updateContainer(container);
-            return;
-        } else {
-            this.container = container;
-        }
+        this.container = container;
 
         setupAddressList();
         setupDriveList();
@@ -80,6 +76,17 @@ public class ContainerPresenter extends BasePresenter implements
         routeInfoHolder.setDriveList(driveList);
 
         view.setupFragments(routeInfoHolder);
+    }
+
+    private void updateContainer(Container container) {
+        this.container = container;
+
+        setupAddressList();
+        setupDriveList();
+        updateContainerInfo();
+        updateRouteEndTime();
+
+        createEvent("all", "updateList", addressList, driveList, this);
     }
 
     private void setupAddressList() {
@@ -101,17 +108,6 @@ public class ContainerPresenter extends BasePresenter implements
 //        for (Drive drive : driveList) {
 //            routeOrder.add(drive.getDestinationAddress().getAddress());
 //        }
-    }
-
-    private void updateContainer(Container container) {
-        this.container = container;
-
-        setupAddressList();
-        setupDriveList();
-        updateContainerInfo();
-        updateRouteEndTime();
-
-        createActivityEvent(addressList, driveList, this);
     }
 
     private void updateContainerInfo() {
@@ -138,149 +134,92 @@ public class ContainerPresenter extends BasePresenter implements
         }
     }
 
+    @Override
+    public void changeFragment(int id) {
+        int position = 0;
+        if (id == mapViewId) {
+            position = 1;
+        } else if (id == driveViewId) {
+            position = 2;
+        }
+        view.showFragment(position);
+    }
+
     //menu bottoms
 
     @Override
     public void logOut() {
         endSession(session);
+        view.showLoginScreen();
         view.closeActivity();
     }
 
     @Override
     public void showAddressDialog() {
-        createActivityEvent("showAddressDialog", this);
+        createEvent("addressFragment", "showDialog", this);
     }
 
     //fragment interaction
 
     @Override
-    public void fragmentEvent(FragmentEvent fragmentEvent) {
-        String event = fragmentEvent.getEvent();
+    public void eventReceived(Event event) {
 
-        switch (event) {
-            case "refreshInfo":
+        if (!event.getReceiver().equals("container")) {
+            return;
+        }
+
+        Log.d(debugTag, "Event received on container: "+ event.getEventName());
+
+        switch (event.getEventName()) {
+            case "updateContainer":
                 getContainer();
                 break;
             case "itemClick":
-                view.showAddressDetails(fragmentEvent.getAddressString());
+                view.showAddressDetails(event.getAddressString());
                 break;
-            case "addAddress":
-                getAddress(fragmentEvent.getAddressString());
+            case "showMap":
+                showMap();
                 break;
-            case "addressChange":
-                addressChange(fragmentEvent.getAddressChangeRequest());
+            case "getAddress":
+                getAddress(event.getAddressString());
+                break;
+            case "changeAddress":
+                changeAddress(event.getChangeAddressRequest());
                 break;
             case "removeAddress":
-                removeAddress(fragmentEvent.getAddress());
+                removeAddress(event.getAddress());
                 break;
             case "getDrive":
-                getDrive(fragmentEvent.getDriveRequest());
+                getDrive(event.getDriveRequest());
                 break;
-            case "removeDrive":
-                removeDrive();
-                break;
-            case "removeMultipleDrive":
-                removeMultipleDrive(fragmentEvent.getAddressString());
+            case "updateEndTime":
+                updateRouteEndTime();
                 break;
             case "driveDirections":
-                view.navigateToDestination(fragmentEvent.getAddressString());
+                view.navigateToDestination(event.getAddressString());
                 break;
         }
+    }
+
+    private void showMap() {
+        view.showFragment(1);
     }
 
     private void addAddress(Address address) {
-        boolean notFound = true;
-        for(Address it : addressList){
-            if(it.getAddress().equals(address.getAddress())){
-                it.setPackageCount(it.getPackageCount()+1);
-                notFound = false;
-            }
-        }
-        if(notFound){
-            addressList.add(address);
-            createActivityEvent("addressAdded", address, addressList.indexOf(address), this);
-        }
+        createEvent("addressFragment", "addAddress", address, this);
     }
 
-    private void changeAddress(Address address){
-        boolean notFound = true;
-        for(Address it : addressList){
-            if(it.getAddress().equals(address.getAddress())){
-                it.setPackageCount(it.getPackageCount()+1);
-                notFound = false;
-            }
-        }
-        if(notFound){
-            addressList.set(addressPosition, address);
-            createActivityEvent("addressChanged", address, addressList.indexOf(address), this);
-        }
-    }
-
-    private void removeAddress(Address address) {
-
-        int position = addressList.indexOf(address);
-
-        addressList.remove(address);
-
-        createActivityEvent("addressRemoved", address, position, this);
+    private void replaceAddress(Address address) {
+        createEvent("addressFragment","replaceAddress", address, this);
     }
 
     private void addDrive(Drive drive) {
-        driveList.add(drive);
-
-        long deliveryTime;
-        long driveTime = drive.getDriveDurationInSeconds() * 1000;
-        long PACKAGE_DELIVERY_TIME = 120000;
-
-        if (driveList.size() > 1) {
-            Drive previousDrive = driveList.get(driveList.indexOf(drive) - 1);
-            deliveryTime = previousDrive.getDeliveryTimeInMillis() + driveTime + PACKAGE_DELIVERY_TIME;
-        } else {
-            long date = System.currentTimeMillis();
-            deliveryTime = date + driveTime + PACKAGE_DELIVERY_TIME;
-        }
-
-        String deliveryTimeString = sdf.format(deliveryTime);
-
-        drive.setDeliveryTimeInMillis(deliveryTime);
-        drive.setDeliveryTimeHumanReadable(deliveryTimeString);
-
-        updateRouteEndTime();
-
-        createActivityEvent("driveAdded", driveList.indexOf(drive), this);
-    }
-
-    private void removeDrive() {
-        int position = driveList.size() - 1;
-        driveList.remove(position);
-
-        updateRouteEndTime();
-
-        createActivityEvent("driveRemoved", position, this);
-    }
-
-    private void removeMultipleDrive(String destination) {
-        int position = 0;
-
-        for (Drive drive : driveList) {
-            String driveDestination = drive.getDestinationAddress().getAddress();
-
-            if (destination.equals(driveDestination)) {
-                position = driveList.indexOf(drive);
-                break;
-            }
-        }
-
-        driveList.subList(position, driveList.size()).clear();
-
-        updateRouteEndTime();
-
-        createActivityEvent("multipleDriveRemoved", position, this);
+        createEvent("driveFragment", "addDrive", drive, this);
     }
 
     @Override
-    public void delegateActivityEvent(ActivityEvent activityEvent) {
-        view.sendActivityEvent(activityEvent);
+    public void publishEvent(Event event) {
+        view.postEvent(event);
     }
 
     //interactor request
@@ -295,14 +234,16 @@ public class ContainerPresenter extends BasePresenter implements
         interactor.addressRequest(request, this);
     }
 
-    private void addressChange(AddressChangeRequest request){
-        for(Address address: addressList){
-            if (address.getAddress().equals(request.getOldAddress())){
-                addressPosition = addressList.indexOf(address);
-                break;
-            }
-        }
+    private void changeAddress(ChangeAddressRequest request) {
+        request.setUsername(session.getUsername());
         interactor.changeAddress(request, this);
+    }
+
+    private void removeAddress(Address address) {
+        RemoveAddressRequest request = new RemoveAddressRequest();
+        request.setUsername(session.getUsername());
+        request.setAddress(address.getAddress());
+        interactor.removeAddress(request);
     }
 
     private void getDrive(DriveRequest request) {
@@ -317,7 +258,11 @@ public class ContainerPresenter extends BasePresenter implements
     @Override
     public void containerResponse(Container response) {
         if (response != null) {
-            setupContainer(response);
+            if (container != null) {
+                updateContainer(response);
+            } else {
+                setupContainer(response);
+            }
         }
     }
 
@@ -340,8 +285,8 @@ public class ContainerPresenter extends BasePresenter implements
 
     @Override
     public void addressChangeResponse(Address response) {
-        if(response != null){
-            changeAddress(response);
+        if (response != null) {
+            replaceAddress(response);
         }
     }
 

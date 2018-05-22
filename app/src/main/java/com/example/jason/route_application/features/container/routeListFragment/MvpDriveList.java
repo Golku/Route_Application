@@ -1,7 +1,6 @@
 package com.example.jason.route_application.features.container.routeListFragment;
 
-import com.example.jason.route_application.data.pojos.ActivityEvent;
-import com.example.jason.route_application.data.pojos.FragmentEvent;
+import com.example.jason.route_application.data.pojos.Event;
 
 /**
  * Created by Jason on 03-Apr-18.
@@ -13,7 +12,7 @@ public interface MvpDriveList {
 
         void setupAdapter(DriveListAdapter adapter);
 
-        void sendFragmentEvent(FragmentEvent fragmentEvent);
+        void postEvent(Event event);
 
         void scrollToItem(int position);
     }
@@ -22,7 +21,7 @@ public interface MvpDriveList {
 
         void showDriveList();
 
-        void activityEvent(ActivityEvent activityEvent);
+        void eventReceived(Event event);
     }
 
 }

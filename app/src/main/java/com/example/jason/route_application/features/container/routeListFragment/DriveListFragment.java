@@ -1,9 +1,8 @@
 package com.example.jason.route_application.features.container.routeListFragment;
 
 import com.example.jason.route_application.R;
+import com.example.jason.route_application.data.pojos.Event;
 import com.example.jason.route_application.data.pojos.RouteInfoHolder;
-import com.example.jason.route_application.data.pojos.ActivityEvent;
-import com.example.jason.route_application.data.pojos.FragmentEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -56,28 +55,28 @@ public class DriveListFragment extends Fragment implements MvpDriveList.View{
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
-    }
-
-    @Override
     public void setupAdapter(DriveListAdapter adapter) {
         recyclerView.setAdapter(adapter);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onActivityEvent(ActivityEvent activityEvent){
-        presenter.activityEvent(activityEvent);
+    public void receiveEvent(Event event){
+        presenter.eventReceived(event);
     }
 
     @Override
-    public void sendFragmentEvent(FragmentEvent fragmentEvent) {
-        EventBus.getDefault().post(fragmentEvent);
+    public void postEvent(Event event) {
+        EventBus.getDefault().post(event);
     }
 
     @Override
     public void scrollToItem(int position) {
         recyclerView.smoothScrollToPosition(position);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

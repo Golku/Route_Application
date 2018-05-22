@@ -1,7 +1,6 @@
 package com.example.jason.route_application.features.login;
 
 import com.example.jason.route_application.data.database.DatabaseCallback;
-import com.example.jason.route_application.data.pojos.Session;
 import com.example.jason.route_application.data.pojos.database.LoginResponse;
 import com.example.jason.route_application.features.shared.BasePresenter;
 
@@ -43,7 +42,7 @@ public class LoginPresenter extends BasePresenter implements MvpLogin.Presenter,
         if (response == null) {return;}
 
         if(response.isMatch()){
-            setSession(username, view.getSession());
+            beginSession(username, view.getSession());
             view.showContainer();
             view.closeActivity();
         }else{

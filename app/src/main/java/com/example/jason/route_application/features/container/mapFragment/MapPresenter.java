@@ -1,13 +1,20 @@
 package com.example.jason.route_application.features.container.mapFragment;
 
-import com.example.jason.route_application.data.pojos.ActivityEvent;
 import com.example.jason.route_application.data.pojos.Address;
+import com.example.jason.route_application.data.pojos.Event;
 import com.example.jason.route_application.data.pojos.MarkerInfo;
 import com.example.jason.route_application.data.pojos.api.DriveRequest;
-import com.example.jason.route_application.data.pojos.FragmentEvent;
+import com.example.jason.route_application.features.shared.BasePresenter;
+import com.example.jason.route_application.features.shared.MvpBasePresenter;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,29 +23,54 @@ import java.util.List;
  * Created by Jason on 3/28/2018.
  */
 
-public class MapPresenter implements MvpMap.Presenter {
+public class MapPresenter extends BasePresenter implements
+        MvpBasePresenter,
+        MvpMap.Presenter,
+        GoogleMap.OnMarkerClickListener{
 
-    private final String logTag = "logTagDebug";
+    private final String debugTag = "debugTag";
 
     private MvpMap.View view;
+
+    private GoogleMap googleMap;
 
     private LatLng userLocation;
 
     private List<Address> addressList;
-    private List<Marker> markersList;
+    private List<Marker> markers;
+    private List<Marker> selectedMarkers;
 
     private Marker previousSelectedMarker;
 
     MapPresenter(MvpMap.View view, List<Address> addressList, List<String> routeOrder) {
         this.view = view;
         this.addressList = addressList;
-        this.markersList = new ArrayList<>();
+        this.markers = new ArrayList<>();
+        this.selectedMarkers = new ArrayList<>();
         this.previousSelectedMarker = null;
     }
 
     @Override
-    public void setMarkers() {
+    public void setMapData(GoogleMap googleMap) {
+        this.googleMap = googleMap;
 
+        this.googleMap = googleMap;
+        this.googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        this.googleMap.setOnMarkerClickListener(this);
+
+        googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                infoWindowClick(marker);
+            }
+        });
+
+        setAddressListMarkers();
+
+        moveMapCamera(52.008234, 4.312999);
+    }
+
+    private void setAddressListMarkers(){
         //get phone location
         Address origin = new Address();
 
@@ -47,26 +79,60 @@ public class MapPresenter implements MvpMap.Presenter {
         origin.setLat(52.008234);
         origin.setLng(4.312999);
 
-        view.markAddressOnMap(origin);
+        Marker originMarker = googleMap.addMarker(
+                new MarkerOptions()
+                        .position(new LatLng(origin.getLat(), origin.getLng()))
+                        .title(origin.getAddress()));
+
+        view.changeMarkerIcon(originMarker, "ic_marker_origin");
 
         for(Address address : addressList){
             if(address.isValid()){
-                view.markAddressOnMap(address);
+                markAddress(address);
             }
         }
+    }
 
-        view.moveMapCamera(52.008234, 4.312999);
+    private void markAddress(Address address) {
+        MarkerInfo markerInfo = new MarkerInfo();
+        markerInfo.setAddress(address);
+        Marker marker = googleMap.addMarker(
+                new MarkerOptions()
+                        .position(new LatLng(address.getLat(), address.getLng()))
+                        .title(address.getAddress()));
+        marker.setTag(markerInfo);
+
+        String iconName;
+
+        if(address.isBusiness()){
+            iconName = "ic_marker_business";
+        }else{
+            iconName = "ic_marker_private";
+        }
+
+        markers.add(marker);
+        view.changeMarkerIcon(marker, iconName);
+    }
+
+    private void moveMapCamera(double lat, double lng) {
+        CameraPosition cameraPosition = CameraPosition.builder().target(new LatLng(lat, lng)).zoom(10f).build();
+        googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
     @Override
-    public void markerClick(Marker clickedMarker) {
+    public void infoWindowClick(Marker marker) {
+        createEvent("container", "itemClick", marker.getTitle(), this);
+    }
 
-        if(clickedMarker.getTitle().equals("My location")) {
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+
+        if(marker.getTitle().equals("My location")) {
             view.showToast("origin");
-            return;
+            return false;
         }
 
-        MarkerInfo markerInfo = (MarkerInfo) clickedMarker.getTag();
+        MarkerInfo markerInfo = (MarkerInfo) marker.getTag();
 
         String origin = null;
         String destination = null;
@@ -76,64 +142,64 @@ public class MapPresenter implements MvpMap.Presenter {
 
         if (previousSelectedMarker != null) {
 
-            if (clickedMarker.equals(previousSelectedMarker)) {
+            if (marker.equals(previousSelectedMarker)) {
 
-                markersList.remove(clickedMarker);
+                selectedMarkers.remove(marker);
 
                 markerInfo.setSelected(false);
 
-                if(markerInfo.isBusiness()){
-                    markerInfo.setIconType("business");
+                String iconName;
+
+                if(markerInfo.getAddress().isBusiness()){
+                    iconName = "ic_marker_business";
                 }else{
-                    markerInfo.setIconType("private");
+                    iconName = "ic_marker_private";
                 }
 
-                int routeSize = markersList.size();
+                int routeSize = selectedMarkers.size();
 
                 if (routeSize > 0) {
                     int lastMarkerIndex = routeSize - 1;
-                    previousSelectedMarker = markersList.get(lastMarkerIndex);
+                    previousSelectedMarker = selectedMarkers.get(lastMarkerIndex);
                 } else {
                     previousSelectedMarker = null;
                 }
 
                 view.removePolyLine();
-                view.changeMarkerIcon(clickedMarker);
+                view.changeMarkerIcon(marker, iconName);
                 deselectMarker();
 
             } else {
 
                 if (markerInfo.isSelected()) {
 
-                    view.showSnackBar(markersList.indexOf(clickedMarker));
+                    view.showSnackBar(selectedMarkers.indexOf(marker));
                 }else{
 
                     origin = previousSelectedMarker.getTitle();
-                    destination = clickedMarker.getTitle();
+                    destination = marker.getTitle();
                     start = previousSelectedMarker.getPosition();
-                    end = clickedMarker.getPosition();
+                    end = marker.getPosition();
 
                     markerInfo.setSelected(true);
-                    markerInfo.setIconType("selected");
 
-                    markersList.add(clickedMarker);
-                    previousSelectedMarker = clickedMarker;
-                    view.changeMarkerIcon(clickedMarker);
+                    selectedMarkers.add(marker);
+                    previousSelectedMarker = marker;
+                    view.changeMarkerIcon(marker, "ic_marker_selected");
                 }
             }
         } else {
             //use phone location for origin.
             origin = "Vrij-Harnasch 21, Den Hoorn";
-            destination = clickedMarker.getTitle();
+            destination = marker.getTitle();
             start = new LatLng(52.008234,4.312999);
-            end = clickedMarker.getPosition();
+            end = marker.getPosition();
 
             markerInfo.setSelected(true);
-            markerInfo.setIconType("selected");
 
-            markersList.add(clickedMarker);
-            previousSelectedMarker = clickedMarker;
-            view.changeMarkerIcon(clickedMarker);
+            selectedMarkers.add(marker);
+            previousSelectedMarker = marker;
+            view.changeMarkerIcon(marker, "ic_marker_selected");
         }
 
         if(origin != null && destination != null) {
@@ -143,101 +209,125 @@ public class MapPresenter implements MvpMap.Presenter {
             view.getPolylineToMarker(start, end);
             markerSelected(request);
         }
+
+        marker.showInfoWindow();
+        return true;
     }
 
     private void markerSelected(DriveRequest request){
-        FragmentEvent fragmentEvent = new FragmentEvent();
-        fragmentEvent.setEvent("getDrive");
-        fragmentEvent.setDriveRequest(request);
-        view.sendFragmentEvent(fragmentEvent);
+        createEvent("container", "getDrive", request, this);
     }
 
     private void deselectMarker(){
-        FragmentEvent fragmentEvent = new FragmentEvent();
-        fragmentEvent.setEvent("removeDrive");
-        view.sendFragmentEvent(fragmentEvent);
-    }
-
-    @Override
-    public void infoWindowClick(Marker marker) {
-        FragmentEvent fragmentEvent = new FragmentEvent();
-        fragmentEvent.setEvent("itemClick");
-        fragmentEvent.setAddressString(marker.getTitle());
-        view.sendFragmentEvent(fragmentEvent);
+        createEvent("driveFragment","removeDrive",this);
     }
 
     @Override
     public void multipleMarkersDeselected(int markerPosition) {
 
-        String address = markersList.get(markerPosition).getTitle();
+        String address = selectedMarkers.get(markerPosition).getTitle();
 
-        for(int i = markerPosition; i< markersList.size(); i++){
-            Marker marker = markersList.get(i);
+        for(int i = markerPosition; i< selectedMarkers.size(); i++){
+            Marker marker = selectedMarkers.get(i);
             MarkerInfo markerInfo = (MarkerInfo) marker.getTag();
+            String iconName;
 
             markerInfo.setSelected(false);
 
-            if(markerInfo.isBusiness()){
-                markerInfo.setIconType("business");
+            if(markerInfo.getAddress().isBusiness()){
+                iconName = "ic_marker_business";
             }else{
-                markerInfo.setIconType("private");
+                iconName = "ic_marker_private";
             }
 
-            view.changeMarkerIcon(marker);
+            view.changeMarkerIcon(marker, iconName);
         }
 
-        markersList.subList(markerPosition, markersList.size()).clear();
+        selectedMarkers.subList(markerPosition, selectedMarkers.size()).clear();
 
-        if (markersList.size() > 0) {
-            previousSelectedMarker = markersList.get(markersList.size() -1);
+        if (selectedMarkers.size() > 0) {
+            previousSelectedMarker = selectedMarkers.get(selectedMarkers.size() -1);
         } else {
             previousSelectedMarker = null;
         }
         view.removePolyLine();
 
-        FragmentEvent fragmentEvent = new FragmentEvent();
-        fragmentEvent.setEvent("removeMultipleDrive");
-        fragmentEvent.setAddressString(address);
-        view.sendFragmentEvent(fragmentEvent);
+        createEvent("driveFragment", "RemoveMultipleDrive", address, this);
+    }
+
+    private void removeAllMarkersFromMap() {
+        googleMap.clear();
     }
 
     @Override
-    public void activityEvent(ActivityEvent activityEvent) {
+    public void eventReceived(Event event) {
 
-        String event = activityEvent.getEvent();
-        Address address = activityEvent.getAddress();
+        if(!(event.getReceiver().equals("mapFragment") || event.getReceiver().equals("all"))){
+            return;
+        }
 
-        switch (event) {
-            case "routeUpdated" : updateMarkers(activityEvent.getAddressList());
+        Log.d(debugTag, "Event received on mapFragment: "+ event.getEventName());
+
+        switch (event.getEventName()) {
+            case "updateList" : updateMarkers(event.getAddressList());
                 break;
-            case "addressAdded" : addMarkerToMap(address);
+            case "showMarker" : showMarker(event.getAddress());
                 break;
-            case "addressRemoved" : removeMarkerFromMap(address);
+            case "markAddress" : addMarkerToMap(event.getAddress());
                 break;
+            case "removeMarker" : removeMarkerFromMap(event.getAddress());
+                break;
+        }
+    }
+
+    private void showMarker(Address address){
+        for(Marker marker: markers){
+            if(marker.getTitle().equals(address.getAddress())){
+                moveMapCamera(address.getLat(), address.getLng());
+                marker.showInfoWindow();
+                break;
+            }
         }
     }
 
     private void updateMarkers(List<Address> addressList) {
         this.addressList = addressList;
-        view.removeAllMarkersFromMap();
-        markersList.clear();
-        setMarkers();
+        removeAllMarkersFromMap();
+        markers.clear();
+        selectedMarkers.clear();
+        previousSelectedMarker = null;
+        setAddressListMarkers();
     }
 
     private void addMarkerToMap(Address address) {
         if(address.isValid()){
-            view.markAddressOnMap(address);
-            view.moveMapCamera(address.getLat(), address.getLng());
+            markAddress(address);
+            moveMapCamera(address.getLat(), address.getLng());
         }
     }
 
     private void removeMarkerFromMap(Address address) {
-        for(Marker marker : markersList){
+
+        for(Marker marker : markers){
+
             if(marker.getTitle().equals(address.getAddress())){
+
+                MarkerInfo markerInfo = (MarkerInfo) marker.getTag();
+
+                if(markerInfo.isSelected()){
+                    multipleMarkersDeselected(selectedMarkers.indexOf(marker));
+                }
+
                 marker.remove();
-                markersList.remove(marker);
-                return;
+                markers.remove(marker);
+
+                break;
             }
         }
+    }
+
+    @Override
+    public void publishEvent(Event event) {
+        view.postEvent(event);
     }
 }

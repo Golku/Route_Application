@@ -1,9 +1,14 @@
 package com.example.jason.route_application.data.pojos.api;
 
-public class AddressChangeRequest {
+public class ChangeAddressRequest {
     private String username;
     private String oldAddress;
     private String newAddress;
+
+    public ChangeAddressRequest(String oldAddress, String newAddress) {
+        this.oldAddress = oldAddress;
+        this.newAddress = newAddress;
+    }
 
     public String getUsername() {
         return username;

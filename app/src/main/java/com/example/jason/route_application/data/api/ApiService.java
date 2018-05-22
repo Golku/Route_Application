@@ -1,11 +1,12 @@
 package com.example.jason.route_application.data.api;
 
 import com.example.jason.route_application.data.pojos.Address;
-import com.example.jason.route_application.data.pojos.api.AddressChangeRequest;
+import com.example.jason.route_application.data.pojos.api.ChangeAddressRequest;
 import com.example.jason.route_application.data.pojos.api.AddressRequest;
 import com.example.jason.route_application.data.pojos.api.Container;
 import com.example.jason.route_application.data.pojos.api.Drive;
 import com.example.jason.route_application.data.pojos.api.DriveRequest;
+import com.example.jason.route_application.data.pojos.api.RemoveAddressRequest;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -26,7 +27,10 @@ public interface ApiService {
     Call<Address> addressRequest(@Body AddressRequest request);
 
     @POST("changeaddress")
-    Call<Address> changeAddressRequest(@Body AddressChangeRequest request);
+    Call<Address> changeAddressRequest(@Body ChangeAddressRequest request);
+
+    @POST("removeaddress")
+    Call<Void> removeAddressRequest(@Body RemoveAddressRequest request);
 
     @POST("drive")
     Call<Drive> driveRequest(@Body DriveRequest request);
