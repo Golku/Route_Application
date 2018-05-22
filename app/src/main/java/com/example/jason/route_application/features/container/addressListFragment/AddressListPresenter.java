@@ -1,15 +1,29 @@
 package com.example.jason.route_application.features.container.addressListFragment;
 
 import com.example.jason.route_application.data.pojos.Address;
-import com.example.jason.route_application.data.pojos.FragmentDelegation;
+import com.example.jason.route_application.data.pojos.Event;
+import com.example.jason.route_application.data.pojos.api.ChangeAddressRequest;
+import com.example.jason.route_application.features.shared.BasePresenter;
+import com.example.jason.route_application.features.shared.MvpBasePresenter;
+
+import android.util.Log;
+
 import java.util.List;
 
-public class AddressListPresenter implements MvpAddressList.Presenter, AddressListAdapter.AdapterCallback{
+public class AddressListPresenter extends BasePresenter implements
+        MvpBasePresenter,
+        MvpAddressList.Presenter,
+        AddressListAdapter.AdapterCallback{
+
+    private final String debugTag = "debugTag";
 
     private MvpAddressList.View view;
 
     private List<Address> addressList;
     private AddressListAdapter adapter;
+
+    private boolean newAddress;
+    private int changeAddressPosition;
 
     AddressListPresenter(MvpAddressList.View view, List<Address> addressList) {
         this.view = view;
@@ -23,40 +37,124 @@ public class AddressListPresenter implements MvpAddressList.Presenter, AddressLi
     }
 
     @Override
-    public void onDelegation(FragmentDelegation delegation) {
+    public void showDialog(String title) {
+        view.showAddressInputDialog(title);
+    }
 
-        if(!delegation.getList().equals("address")){
-            return;
-        }
-
-        String operation = delegation.getOperation();
-
-        int position = delegation.getPosition();
-
-        switch (operation) {
-            case "add" : addItemToList(position);
-                break;
-            case "remove" : removeItemFromList(position);
-                break;
+    @Override
+    public void itemClick(Address address) {
+        if (address.isValid()) {
+            createEvent("container", "itemClick", address.getAddress(),this);
+        }else{
+            newAddress = false;
+            changeAddressPosition = addressList.indexOf(address);
+            showDialog(address.getAddress());
         }
     }
 
     @Override
-    public void onItemClick(Address address) {
-        if (address.isValid()) {
-            view.listItemClick(address.getAddress());
+    public void processAddress(String addressString) {
+        if(addressString.isEmpty()){
+            view.showToast("Fill in a address");
+            return;
+        }
+
+        if (newAddress) {
+            getAddress(addressString+", Netherlands");
         }else{
-            view.showAddressInputDialog(address.getAddress());
+            changeAddress(addressString+", Netherlands");
         }
     }
 
-    private void addItemToList(int position){
-        adapter.notifyItemInserted(position);
-        view.scrollToLastItem(position);
+    @Override
+    public void showAddress(Address address) {
+        createEvent("container", "showMap", this);
+        createEvent("mapFragment", "showMarker", address, this);
     }
 
-    private void removeItemFromList(int position){
-        adapter.notifyItemRemoved(position);
-        view.scrollToLastItem(position);
+    private void getAddress(String address) {
+        createEvent("container", "getAddress", address,this);
+    }
+
+    private void changeAddress(String address){
+        ChangeAddressRequest request = new ChangeAddressRequest(addressList.get(changeAddressPosition).getAddress(), address);
+        createEvent("container", "changeAddress", request,this);
+    }
+
+    @Override
+    public void removeAddress(Address address) {
+        adapter.notifyItemRemoved(addressList.indexOf(address));
+        addressList.remove(address);
+        createEvent("container", "removeAddress", address,this);
+        createEvent("mapFragment", "removeMarker", address,this);
+    }
+
+    @Override
+    public void eventReceived(Event event) {
+
+        if(!(event.getReceiver().equals("addressFragment") || event.getReceiver().equals("all"))){
+            return;
+        }
+
+        Log.d(debugTag, "Event received on addressFragment: "+ event.getEventName());
+
+        switch (event.getEventName()) {
+            case "showDialog" :
+                newAddress = true;
+                showDialog("New Address");
+                break;
+            case "updateList" : updateList(event.getAddressList());
+                break;
+            case "addAddress" : addAddress(event.getAddress());
+                break;
+            case "replaceAddress" : replaceAddress(event.getAddress());
+                break;
+        }
+    }
+
+    private void updateList(List<Address> addressList){
+        this.addressList = addressList;
+        showAddressList();
+    }
+
+    private void addAddress(Address address){
+        boolean notFound = true;
+        for(Address it : addressList){
+            if(it.getAddress().equals(address.getAddress())){
+                it.setPackageCount(it.getPackageCount()+1);
+                notFound = false;
+                break;
+            }
+        }
+        if(notFound){
+            addressList.add(address);
+            adapter.notifyItemInserted(addressList.indexOf(address));
+            view.scrollToItem(addressList.size());
+            createEvent("mapFragment","markAddress", address, this);
+        }
+    }
+
+    private void replaceAddress(Address address){
+        boolean notFound = true;
+        for(Address it : addressList){
+            if(it.getAddress().equals(address.getAddress())){
+                it.setPackageCount(it.getPackageCount()+1);
+                addressList.remove(changeAddressPosition);
+                adapter.notifyItemRemoved(changeAddressPosition);
+                notFound = false;
+                break;
+            }
+        }
+        if(notFound){
+            addressList.set(changeAddressPosition, address);
+            adapter.notifyItemChanged(changeAddressPosition);
+            view.scrollToItem(changeAddressPosition);
+            createEvent("mapFragment","markAddress", address, this);
+        }
+    }
+
+    @Override
+    public void publishEvent(Event event) {
+        view.postEvent(event);
     }
 }

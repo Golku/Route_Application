@@ -3,11 +3,12 @@ package com.example.jason.route_application.interactors;
 import com.example.jason.route_application.data.api.ApiCallback;
 import com.example.jason.route_application.data.api.ApiService;
 import com.example.jason.route_application.data.pojos.Address;
+import com.example.jason.route_application.data.pojos.api.ChangeAddressRequest;
 import com.example.jason.route_application.data.pojos.api.AddressRequest;
 import com.example.jason.route_application.data.pojos.api.Container;
-import com.example.jason.route_application.data.pojos.api.Route;
 import com.example.jason.route_application.data.pojos.api.Drive;
 import com.example.jason.route_application.data.pojos.api.DriveRequest;
+import com.example.jason.route_application.data.pojos.api.RemoveAddressRequest;
 import com.example.jason.route_application.features.container.MvpContainer;
 
 import javax.inject.Inject;
@@ -46,23 +47,6 @@ public class ContainerInteractor implements MvpContainer.Interactor{
     }
 
     @Override
-    public void routeRequest(String username, final ApiCallback.RouteResponseCallback callback) {
-        Call<Route> call = apiService.routeRequest(username);
-
-        call.enqueue(new Callback<Route>() {
-            @Override
-            public void onResponse(Call<Route> call, Response<Route> response) {
-                callback.routeResponse(response.body());
-            }
-
-            @Override
-            public void onFailure(Call<Route> call, Throwable t) {
-                callback.routeResponseFailure();
-            }
-        });
-    }
-
-    @Override
     public void addressRequest(AddressRequest request, final ApiCallback.AddAddressCallback callback) {
         Call<Address> call = apiService.addressRequest(request);
 
@@ -75,6 +59,40 @@ public class ContainerInteractor implements MvpContainer.Interactor{
             @Override
             public void onFailure(Call<Address> call, Throwable t) {
                 callback.addressResponseFailure();
+            }
+        });
+    }
+
+    @Override
+    public void changeAddress(ChangeAddressRequest request, final ApiCallback.AddressChangeCallback callback) {
+        Call<Address> call = apiService.changeAddressRequest(request);
+
+        call.enqueue(new Callback<Address>() {
+            @Override
+            public void onResponse(Call<Address> call, Response<Address> response) {
+                callback.addressChangeResponse(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<Address> call, Throwable t) {
+                callback.addressChangeFailure();
+            }
+        });
+    }
+
+    @Override
+    public void removeAddress(RemoveAddressRequest request) {
+        Call<Void> call = apiService.removeAddressRequest(request);
+
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
             }
         });
     }

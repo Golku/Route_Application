@@ -15,19 +15,19 @@ import java.util.List;
  * Created by Jason on 07-Feb-18.
  */
 
-public class RouteListAdapter extends RecyclerView.Adapter<RouteListAdapter.CustomViewHolder>{
+public class DriveListAdapter extends RecyclerView.Adapter<DriveListAdapter.CustomViewHolder>{
 
     private List<Drive> routeList;
     private AdapterCallback callback;
 
-    RouteListAdapter(AdapterCallback callback, List<Drive> routeList) {
+    DriveListAdapter(AdapterCallback callback, List<Drive> routeList) {
         this.routeList = routeList;
         this.callback = callback;
     }
 
     interface AdapterCallback{
-        void onItemClick(String address);
-        void onGoButtonClick(String address);
+        void itemClick(String address);
+        void goButtonClick(String address);
     }
 
     List<Drive> getList(){
@@ -100,10 +100,10 @@ public class RouteListAdapter extends RecyclerView.Adapter<RouteListAdapter.Cust
         public void onClick(View v) {
 
             if(v == this.container){
-                callback.onItemClick(routeList.get(this.getAdapterPosition()).getDestinationAddress().getAddress());
+                callback.itemClick(routeList.get(this.getAdapterPosition()).getDestinationAddress().getAddress());
             }
             else if(v == this.goButton){
-                callback.onGoButtonClick(routeList.get(this.getAdapterPosition()).getDestinationAddress().getAddress());
+                callback.goButtonClick(routeList.get(this.getAdapterPosition()).getDestinationAddress().getAddress());
             }
         }
     }

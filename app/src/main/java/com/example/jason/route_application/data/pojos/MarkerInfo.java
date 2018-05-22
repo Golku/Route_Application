@@ -6,24 +6,15 @@ package com.example.jason.route_application.data.pojos;
 
 public class MarkerInfo {
 
-    private String iconType;
-    private boolean business;
     private boolean selected;
+    private Address address;
 
-    public String getIconType() {
-        return iconType;
+    public Address getAddress() {
+        return address;
     }
 
-    public void setIconType(String iconType) {
-        this.iconType = iconType;
-    }
-
-    public boolean isBusiness() {
-        return business;
-    }
-
-    public void setBusiness(boolean business) {
-        this.business = business;
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
     public boolean isSelected() {

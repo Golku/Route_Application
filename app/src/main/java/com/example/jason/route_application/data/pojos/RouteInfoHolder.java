@@ -13,7 +13,7 @@ public class RouteInfoHolder implements Parcelable{
     private boolean organized;
     private LatLng userLocation;
     private List<Address> addressList;
-    private List<Drive> routeList;
+    private List<Drive> driveList;
     private List<String> routeOrder;
 
     public RouteInfoHolder() {
@@ -75,12 +75,12 @@ public class RouteInfoHolder implements Parcelable{
         this.addressList = addressList;
     }
 
-    public List<Drive> getRouteList() {
-        return routeList;
+    public List<Drive> getDriveList() {
+        return driveList;
     }
 
-    public void setRouteList(List<Drive> routeList) {
-        this.routeList = routeList;
+    public void setDriveList(List<Drive> driveList) {
+        this.driveList = driveList;
     }
 
     public List<String> getRouteOrder() {

@@ -6,25 +6,25 @@ import com.directions.route.RouteException;
 import com.directions.route.Routing;
 import com.directions.route.RoutingListener;
 import com.example.jason.route_application.R;
-import com.example.jason.route_application.data.pojos.Address;
-import com.example.jason.route_application.data.pojos.MarkerInfo;
+import com.example.jason.route_application.data.pojos.Event;
 import com.example.jason.route_application.data.pojos.RouteInfoHolder;
-import com.example.jason.route_application.data.pojos.api.DriveRequest;
-import com.example.jason.route_application.features.container.ContainerActivity;
-import com.google.android.gms.maps.CameraUpdateFactory;
+
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-import android.content.Context;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -37,6 +37,8 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,8 +49,10 @@ import java.util.List;
 public class MapFragment extends Fragment implements
         MvpMap.View,
         OnMapReadyCallback,
-        GoogleMap.OnMarkerClickListener,
         RoutingListener {
+
+    @BindView(R.id.mapView)
+    MapView mapView;
 
     private final String debugTag = "debugTag";
 
@@ -56,37 +60,14 @@ public class MapFragment extends Fragment implements
 
     private GoogleMap googleMap;
 
-    private ContainerActivity containerActivityCallback;
-
     private List<Polyline> polylines;
 
-    private FrameLayout rootLayout;
-
     private static final int[] COLORS = new int[]{R.color.colorAccent};
-
-    public interface MapListener {
-
-        void onMarkerSelected(DriveRequest request);
-
-        void onDeselectMarker();
-
-        void onDeselectMultipleMarkers(String destination);
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            this.containerActivityCallback = (ContainerActivity) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString()
-                    + " containerActivityCallback error");
-        }
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
         RouteInfoHolder routeInfoHolder = getArguments().getParcelable("routeInfoHolder");
 
         presenter = new MapPresenter(this,
@@ -100,7 +81,7 @@ public class MapFragment extends Fragment implements
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
-        this.rootLayout = view.findViewById(R.id.root_layout);
+        ButterKnife.bind(this, view);
         return view;
     }
 
@@ -120,115 +101,54 @@ public class MapFragment extends Fragment implements
     @Override
     public void onMapReady(GoogleMap googleMap) {
         MapsInitializer.initialize(getContext());
-
         this.googleMap = googleMap;
-        this.googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        this.googleMap.setOnMarkerClickListener(this);
-
-        presenter.setMarkers();
+        presenter.setMapData(googleMap);
     }
 
     @Override
-    public void addMarkersToMap(List<Address> addresses) {
-        //get phone location
-        Marker originMarker = googleMap.addMarker(
-                new MarkerOptions()
-                        .position(new LatLng(52.008234, 4.312999))
-                        .title("My Location")
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_origin)));
-        originMarker.setTag("origin");
-
-        if (addresses != null) {
-            for (Address address : addresses) {
-
-                if(!address.isValid()){
-                    return;
-                }
-
-                MarkerInfo markerInfo = new MarkerInfo();
-
-                markerInfo.setSelected(false);
-
-                if (address.isBusiness()) {
-                    markerInfo.setBusiness(true);
-                    markerInfo.setIconType("business");
-                } else {
-                    markerInfo.setBusiness(false);
-                    markerInfo.setIconType("private");
-                }
-
-                Marker marker = googleMap.addMarker(
-                        new MarkerOptions()
-                                .position(new LatLng(address.getLat(), address.getLng()))
-                                .title(address.getAddress()));
-                marker.setTag(markerInfo);
-
-                changeMarkerIcon(marker);
-            }
-        }
-
-        CameraPosition cameraPosition = CameraPosition.builder().target(new LatLng(52.008234, 4.312999)).zoom(9f).build();
-        googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-    }
-
-    @Override
-    public boolean onMarkerClick(Marker marker) {
-        presenter.processMarker(marker);
-        marker.showInfoWindow();
-        return true;
-    }
-
-    @Override
-    public void changeMarkerIcon(Marker marker) {
-        MarkerInfo markerInfo = (MarkerInfo) marker.getTag();
-
-        Resources res = this.getResources();
-        String iconName = null;
-
-        switch (markerInfo.getIconType()) {
-            case "private":
-                iconName = "ic_marker_private";
-                break;
-            case "business":
-                iconName = "ic_marker_business";
-                break;
-            case "selected":
-                iconName = "ic_marker_selected";
-                break;
-        }
-
+    public void changeMarkerIcon(Marker marker, String iconName) {
 //        iconName = "ic_" + String.valueOf(i + 1);
-
+        Resources res = this.getResources();
         int resID = res.getIdentifier(iconName, "drawable", getContext().getPackageName());
-
         marker.setIcon(BitmapDescriptorFactory.fromResource(resID));
     }
 
     @Override
-    public void getDriveInformation(DriveRequest request) {
-        containerActivityCallback.onMarkerSelected(request);
-    }
-
-    @Override
-    public void deselectMarker() {
-        containerActivityCallback.onDeselectMarker();
-    }
-
-    @Override
-    public void deselectMultipleMarker(String destination) {
-        containerActivityCallback.onDeselectMultipleMarkers(destination);
-    }
-
-    @Override
     public void showSnackBar(final int markerPosition) {
-        Snackbar snackbar = Snackbar.make(rootLayout, "Deselect until here?", Snackbar.LENGTH_LONG);
-        snackbar.setAction("yes", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("Are you sure?")
+                .setTitle("Deselect multiple markers")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
                 presenter.multipleMarkersDeselected(markerPosition);
             }
-        });
-        snackbar.show();
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User cancelled the dialog
+            }
+                });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+//        Snackbar snackbar = Snackbar.make(mapView, "Deselect until here?", Snackbar.LENGTH_LONG);
+//        snackbar.setAction("yes", new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                presenter.multipleMarkersDeselected(markerPosition);
+//            }
+//        });
+//        snackbar.show();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void receiveEvent(Event event){
+        presenter.eventReceived(event);
+    }
+
+    @Override
+    public void postEvent(Event event) {
+        EventBus.getDefault().post(event);
     }
 
     @Override
