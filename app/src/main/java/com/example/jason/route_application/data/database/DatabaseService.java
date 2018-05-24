@@ -1,6 +1,7 @@
 package com.example.jason.route_application.data.database;
 
 import com.example.jason.route_application.data.pojos.database.AddressInformationResponse;
+import com.example.jason.route_application.data.pojos.database.AddressTypeResponse;
 import com.example.jason.route_application.data.pojos.database.CommentInputResponse;
 import com.example.jason.route_application.data.pojos.database.LoginResponse;
 
@@ -32,11 +33,11 @@ public interface DatabaseService {
 
     @FormUrlEncoded
     @POST("changeAddressType.php")
-    Call<Void> changeAddressType(
+    Call<AddressTypeResponse> changeAddressType(
             @Field("street_name") String street,
             @Field("post_code") String postCode,
             @Field("city") String city,
-            @Field("user_id") String userId
+            @Field("username") String username
     );
 
     @FormUrlEncoded
@@ -45,7 +46,7 @@ public interface DatabaseService {
             @Field("street_name") String street,
             @Field("post_code") String postCode,
             @Field("city") String city,
-            @Field("user_id") String employeeId,
+            @Field("username") String username,
             @Field("message") String comment,
             @Field("date") String date
     );

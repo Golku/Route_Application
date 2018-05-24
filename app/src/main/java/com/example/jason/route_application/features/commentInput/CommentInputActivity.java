@@ -24,9 +24,9 @@ public class CommentInputActivity extends DaggerAppCompatActivity implements Mvp
     @Inject
     CommentInputPresenter presenter;
 
-    @BindView(R.id.employeeNameTextView)
-    TextView employeeNameTextView;
-    @BindView(R.id.dateTextView)
+    @BindView(R.id.username_tv)
+    TextView usernameTv;
+    @BindView(R.id.date_tv)
     TextView dateTextView;
     @BindView(R.id.commentEditText)
     EditText commentEditText;
@@ -47,13 +47,12 @@ public class CommentInputActivity extends DaggerAppCompatActivity implements Mvp
 
     private void init(){
         Address address = getIntent().getParcelableExtra("address");
-        Session session = new Session(this);
-        presenter.setUpInfo(session.getUsername(), address);
+        presenter.setUpInfo(new Session(this), address);
     }
 
     @Override
     public void updateTextViews(String employeeId, String date) {
-        employeeNameTextView.setText(employeeId);
+        usernameTv.setText(employeeId);
         dateTextView.setText(date);
     }
 

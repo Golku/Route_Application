@@ -12,12 +12,12 @@ import butterknife.ButterKnife;
 
 public class CommentDisplayActivity extends AppCompatActivity {
 
-    @BindView(R.id.employeeNameTextView)
-    TextView employeeNameTextView;
-    @BindView(R.id.dateTextView)
-    TextView dateTextView;
-    @BindView(R.id.commentTextView)
-    TextView commentTextView;
+    @BindView(R.id.username_tv)
+    TextView usernameTv;
+    @BindView(R.id.date_tv)
+    TextView dateTv;
+    @BindView(R.id.comment_tv)
+    TextView comment_tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +29,8 @@ public class CommentDisplayActivity extends AppCompatActivity {
 
     private void init(){
         CommentInformation commentInformation = getIntent().getParcelableExtra("commentInformation");
-        employeeNameTextView.setText(commentInformation.getEmployeeId());
-        dateTextView.setText(commentInformation.getDate());
-        commentTextView.setText(commentInformation.getComment());
+        usernameTv.setText(commentInformation.getEmployeeId());
+        dateTv.setText(commentInformation.getDate());
+        comment_tv.setText(commentInformation.getComment());
     }
 }

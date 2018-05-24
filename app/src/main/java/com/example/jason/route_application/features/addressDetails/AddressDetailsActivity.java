@@ -6,14 +6,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.jason.route_application.R;
 import com.example.jason.route_application.data.pojos.Address;
 import com.example.jason.route_application.data.pojos.Session;
@@ -21,6 +19,8 @@ import com.example.jason.route_application.data.pojos.database.AddressInformatio
 import com.example.jason.route_application.data.pojos.CommentInformation;
 import com.example.jason.route_application.features.commentDisplay.CommentDisplayActivity;
 import com.example.jason.route_application.features.commentInput.CommentInputActivity;
+
+import org.greenrobot.eventbus.EventBus;
 
 import javax.inject.Inject;
 
@@ -50,6 +50,8 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements M
     FloatingActionButton addCommentBtn;
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
+    @BindView(R.id.typeChangeProgress_pb)
+    ProgressBar typeChangeProgress_pb;
 
     private boolean returning;
 
@@ -105,6 +107,8 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements M
                 .setTitle("Change address type")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        addressTypeImageView.setVisibility(View.INVISIBLE);
+                        typeChangeProgress_pb.setVisibility(View.VISIBLE);
                         presenter.changeAddressType();
                     }
                 }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -114,6 +118,16 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements M
         });
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    @Override
+    public void changeAddressType(boolean isBusiness) {
+
+        if(isBusiness){
+            addressTypeImageView.setImageResource(R.drawable.ic_marker_business);
+        }else{
+            addressTypeImageView.setImageResource(R.drawable.ic_marker_private);
+        }
     }
 
     @OnClick(R.id.googleSearchBtn)
@@ -145,13 +159,15 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements M
     }
 
     @Override
-    public void onStartNetworkOperation() {
+    public void networkOperationStarted() {
         progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
-    public void onFinishNetworkOperation() {
+    public void networkOperationFinish() {
         progressBar.setVisibility(View.GONE);
+        typeChangeProgress_pb.setVisibility(View.GONE);
+        addressTypeImageView.setVisibility(View.VISIBLE);
     }
 
     @Override

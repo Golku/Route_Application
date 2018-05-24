@@ -24,13 +24,13 @@ public class CommentInputInteractor implements MvpCommentInput.Interactor{
     }
 
     @Override
-    public void addCommentToAddress(final DatabaseCallback.CommentInputCallBack callback, Address address, String employeeId, String comment, String date) {
+    public void addCommentToAddress(Address address, String username, String comment, String date, final DatabaseCallback.CommentInputCallBack callback) {
 
         Call<CommentInputResponse> call = databaseService.addCommentToAddress(
                 address.getStreet(),
                 address.getPostCode(),
                 address.getCity(),
-                employeeId,
+                username,
                 comment,
                 date
         );

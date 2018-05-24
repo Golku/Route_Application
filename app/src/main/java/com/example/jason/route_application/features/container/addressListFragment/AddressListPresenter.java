@@ -103,12 +103,27 @@ public class AddressListPresenter extends BasePresenter implements
                 newAddress = true;
                 showDialog("New Address");
                 break;
+            case "addressTypeChange" : addressTypeChange(event.getAddress());
+                break;
             case "updateList" : updateList(event.getAddressList());
                 break;
             case "addAddress" : addAddress(event.getAddress());
                 break;
             case "replaceAddress" : replaceAddress(event.getAddress());
                 break;
+        }
+    }
+
+    private void addressTypeChange(Address address){
+        for(Address it: addressList){
+            if(it.getAddress().equals(address.getAddress())){
+                if(address.isBusiness()){
+                    it.setBusiness(true);
+                }else{
+                    it.setBusiness(false);
+                }
+                break;
+            }
         }
     }
 

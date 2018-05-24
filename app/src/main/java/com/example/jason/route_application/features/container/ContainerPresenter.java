@@ -17,8 +17,6 @@ import com.example.jason.route_application.features.shared.MvpBasePresenter;
 import android.util.Log;
 
 import javax.inject.Inject;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 

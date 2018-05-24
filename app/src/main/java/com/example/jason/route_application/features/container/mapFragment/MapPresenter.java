@@ -274,6 +274,8 @@ public class MapPresenter extends BasePresenter implements
         Log.d(debugTag, "Event received on mapFragment: "+ event.getEventName());
 
         switch (event.getEventName()) {
+            case "addressTypeChange" : addressTypeChange(event.getAddress());
+                break;
             case "updateList" : updateMarkers(event.getAddressList());
                 break;
             case "showMarker" : showMarker(event.getAddress());
@@ -285,11 +287,23 @@ public class MapPresenter extends BasePresenter implements
         }
     }
 
-    private void showMarker(Address address){
+    private void addressTypeChange(Address address){
         for(Marker marker: markers){
             if(marker.getTitle().equals(address.getAddress())){
-                moveMapCamera(address.getLat(), address.getLng());
-                marker.showInfoWindow();
+
+                MarkerInfo markerInfo = (MarkerInfo)marker.getTag();
+
+                if(!markerInfo.isSelected()){
+                    String iconName;
+
+                    if(address.isBusiness()){
+                        iconName = "ic_marker_business";
+                    }else{
+                        iconName = "ic_marker_private";
+                    }
+                    view.changeMarkerIcon(marker, iconName);
+                }
+
                 break;
             }
         }
@@ -302,6 +316,16 @@ public class MapPresenter extends BasePresenter implements
         selectedMarkers.clear();
         previousSelectedMarker = null;
         setAddressListMarkers();
+    }
+
+    private void showMarker(Address address){
+        for(Marker marker: markers){
+            if(marker.getTitle().equals(address.getAddress())){
+                moveMapCamera(address.getLat(), address.getLng());
+                marker.showInfoWindow();
+                break;
+            }
+        }
     }
 
     private void addMarkerToMap(Address address) {

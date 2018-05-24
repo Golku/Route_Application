@@ -60,6 +60,8 @@ public class DriveListPresenter extends BasePresenter implements
         Log.d(debugTag, "Event received on driveFragment: "+ event.getEventName());
 
         switch (event.getEventName()) {
+            case "addressTypeChange" : addressTypeChange(event.getAddress());
+                break;
             case "updateList" : updateList(event.getDriveList());
                 break;
             case "addDrive" : addDrive(event.getDrive());
@@ -68,6 +70,24 @@ public class DriveListPresenter extends BasePresenter implements
                 break;
             case "RemoveMultipleDrive" : RemoveMultipleDrive(event.getAddressString());
                 break;
+        }
+    }
+
+    private void addressTypeChange(Address address){
+
+        for(Drive drive: driveList){
+
+            if(drive.getDestinationAddress().getAddress().equals(address.getAddress())){
+
+                if(address.isBusiness()){
+                    drive.setDestinationIsABusiness(true);
+                }else{
+                    drive.setDestinationIsABusiness(false);
+                }
+
+                showDriveList();
+                break;
+            }
         }
     }
 

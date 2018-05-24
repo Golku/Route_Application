@@ -18,9 +18,11 @@ public interface MvpAddressDetails {
 
         void updateMessageToUserTextView(String message);
 
-        void onStartNetworkOperation();
+        void changeAddressType(boolean isBusiness);
 
-        void onFinishNetworkOperation();
+        void networkOperationStarted();
+
+        void networkOperationFinish();
 
         void showAddressInGoogle(Address address);
 
@@ -48,9 +50,9 @@ public interface MvpAddressDetails {
 
     interface Interactor{
 
-        void getAddressInformation(DatabaseCallback.AddressInformationCallBack callBack, Address address);
+        void getAddressInformation(Address address, DatabaseCallback.AddressInformationCallBack callback);
 
-        void changeAddressType(String userId, Address address);
+        void changeAddressType(String username, Address address, DatabaseCallback.AddressTypeChangeCallback callback);
     }
 
 }
