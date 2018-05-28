@@ -41,6 +41,24 @@ public interface DatabaseService {
     );
 
     @FormUrlEncoded
+    @POST("changeOpeningTime.php")
+    Call<Void> changeOpeningTime(
+            @Field("street_name") String street,
+            @Field("post_code") String postCode,
+            @Field("city") String city,
+            @Field("opening_time") int openingTime
+    );
+
+    @FormUrlEncoded
+    @POST("changeClosingTime.php")
+    Call<Void> changeClosingTime(
+            @Field("street_name") String street,
+            @Field("post_code") String postCode,
+            @Field("city") String city,
+            @Field("closing_time") int closingTime
+    );
+
+    @FormUrlEncoded
     @POST("addAddressComment.php")
     Call<CommentInputResponse> addCommentToAddress(
             @Field("street_name") String street,

@@ -16,9 +16,10 @@ public class Address implements Parcelable {
     private String country;
     private double lat;
     private double lng;
-    private int openingHours;
     private int packageCount;
     private boolean business;
+    private int openingTime;
+    private int closingTime;
     private boolean userInputted;
     private boolean userLocation;
     private boolean valid;
@@ -35,9 +36,10 @@ public class Address implements Parcelable {
         country = in.readString();
         lat = in.readDouble();
         lng = in.readDouble();
-        openingHours = in.readInt();
         packageCount = in.readInt();
         business = in.readByte() != 0;
+        openingTime = in.readInt();
+        closingTime = in.readInt();
         userInputted = in.readByte() != 0;
         userLocation = in.readByte() != 0;
         valid = in.readByte() != 0;
@@ -52,9 +54,10 @@ public class Address implements Parcelable {
         dest.writeString(country);
         dest.writeDouble(lat);
         dest.writeDouble(lng);
-        dest.writeInt(openingHours);
         dest.writeInt(packageCount);
         dest.writeByte((byte) (business ? 1 : 0));
+        dest.writeInt(openingTime);
+        dest.writeInt(closingTime);
         dest.writeByte((byte) (userInputted ? 1 : 0));
         dest.writeByte((byte) (userLocation ? 1 : 0));
         dest.writeByte((byte) (valid ? 1 : 0));
@@ -133,14 +136,6 @@ public class Address implements Parcelable {
         this.lng = lng;
     }
 
-    public int getOpeningHours() {
-        return openingHours;
-    }
-
-    public void setOpeningHours(int openingHours) {
-        this.openingHours = openingHours;
-    }
-
     public int getPackageCount() {
         return packageCount;
     }
@@ -155,6 +150,22 @@ public class Address implements Parcelable {
 
     public void setBusiness(boolean business) {
         this.business = business;
+    }
+
+    public int getOpeningTime() {
+        return openingTime;
+    }
+
+    public void setOpeningTime(int openingTime) {
+        this.openingTime = openingTime;
+    }
+
+    public int getClosingTime() {
+        return closingTime;
+    }
+
+    public void setClosingTime(int closingTime) {
+        this.closingTime = closingTime;
     }
 
     public boolean isUserInputted() {

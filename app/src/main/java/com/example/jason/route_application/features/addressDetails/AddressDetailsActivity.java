@@ -1,16 +1,20 @@
 package com.example.jason.route_application.features.addressDetails;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 import com.example.jason.route_application.R;
 import com.example.jason.route_application.data.pojos.Address;
@@ -19,8 +23,7 @@ import com.example.jason.route_application.data.pojos.database.AddressInformatio
 import com.example.jason.route_application.data.pojos.CommentInformation;
 import com.example.jason.route_application.features.commentDisplay.CommentDisplayActivity;
 import com.example.jason.route_application.features.commentInput.CommentInputActivity;
-
-import org.greenrobot.eventbus.EventBus;
+import com.example.jason.route_application.features.shared.DialogCreator;
 
 import javax.inject.Inject;
 
@@ -29,7 +32,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import dagger.android.support.DaggerAppCompatActivity;
 
-public class AddressDetailsActivity extends DaggerAppCompatActivity implements MvpAddressDetails.View, AddressDetailsAdapter.CommentListFunctions {
+public class AddressDetailsActivity extends DaggerAppCompatActivity implements
+        MvpAddressDetails.View,
+        AddressDetailsAdapter.CommentListFunctions,
+        TimePickerDialog.OnTimeSetListener{
 
     @Inject
     MvpAddressDetails.Presenter presenter;
@@ -52,7 +58,16 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements M
     ProgressBar progressBar;
     @BindView(R.id.typeChangeProgress_pb)
     ProgressBar typeChangeProgress_pb;
+    @BindView(R.id.opening_time_tv)
+    TextView openingTimeTv;
+    @BindView(R.id.closing_time_tv)
+    TextView closingTimeTv;
+    @BindView(R.id.change_opening_time_tv)
+    TextView changeOpeningTimeTv;
+    @BindView(R.id.change_closing_time_tv)
+    TextView changeClosingTimeTv;
 
+    private String workingHours;
     private boolean returning;
 
     @Override
@@ -87,6 +102,12 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements M
         });
 
         if (address.isBusiness()) {
+            openingTimeTv.setVisibility(View.VISIBLE);
+            changeOpeningTimeTv.setVisibility(View.VISIBLE);
+            closingTimeTv.setVisibility(View.VISIBLE);
+            changeClosingTimeTv.setVisibility(View.VISIBLE);
+            openingTimeTv.setText(presenter.convertTime(address.getOpeningTime()));
+            closingTimeTv.setText(presenter.convertTime(address.getClosingTime()));
             addressTypeImageView.setImageResource(R.drawable.ic_marker_business);
         }
 
@@ -121,18 +142,54 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements M
     }
 
     @Override
-    public void changeAddressType(boolean isBusiness) {
+    public void changeAddressType(Address address) {
 
-        if(isBusiness){
+        if(address.isBusiness()){
             addressTypeImageView.setImageResource(R.drawable.ic_marker_business);
+            openingTimeTv.setText(presenter.convertTime(address.getOpeningTime()));
+            closingTimeTv.setText(presenter.convertTime(address.getClosingTime()));
+            openingTimeTv.setVisibility(View.VISIBLE);
+            changeOpeningTimeTv.setVisibility(View.VISIBLE);
+            closingTimeTv.setVisibility(View.VISIBLE);
+            changeClosingTimeTv.setVisibility(View.VISIBLE);
         }else{
             addressTypeImageView.setImageResource(R.drawable.ic_marker_private);
+            openingTimeTv.setVisibility(View.GONE);
+            changeOpeningTimeTv.setVisibility(View.GONE);
+            closingTimeTv.setVisibility(View.GONE);
+            changeClosingTimeTv.setVisibility(View.GONE);
         }
     }
 
     @OnClick(R.id.googleSearchBtn)
     public void onGoogleLinkClick() {
         presenter.googleLinkClick();
+    }
+
+    @OnClick(R.id.change_opening_time_tv)
+    public void onChangeOpeningHoursClick(){
+        workingHours = "open";
+        DialogFragment timePicker = new DialogCreator();
+        timePicker.show(getSupportFragmentManager(), "Time Picker");
+    }
+
+    @OnClick(R.id.change_closing_time_tv)
+    public void onOChangeClosingHoursClick(){
+        workingHours = "close";
+        DialogFragment timePicker = new DialogCreator();
+        timePicker.show(getSupportFragmentManager(), "Time Picker");
+    }
+
+    @SuppressLint("SetTextI18n")
+    @Override
+    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        showToast("Hour: "+String.valueOf(hourOfDay)+" Minute: "+String.valueOf(minute));
+        switch (workingHours){
+            case "open" : openingTimeTv.setText(String.valueOf(hourOfDay)+":"+String.valueOf(minute));
+                break;
+            case "close" : closingTimeTv.setText(String.valueOf(hourOfDay)+":"+String.valueOf(minute));
+        }
+        presenter.changeOpeningHours(hourOfDay, minute, workingHours);
     }
 
     @Override

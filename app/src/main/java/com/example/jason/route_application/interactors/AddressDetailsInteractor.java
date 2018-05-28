@@ -67,4 +67,48 @@ public class AddressDetailsInteractor implements MvpAddressDetails.Interactor {
             }
         });
     }
+
+    @Override
+    public void changeOpeningTime(Address address, int openingTime) {
+        Call<Void> call = databaseService.changeOpeningTime(
+                address.getStreet(),
+                address.getPostCode(),
+                address.getCity(),
+                openingTime
+        );
+
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+    }
+
+    @Override
+    public void changeClosingTime(Address address, int closingTime) {
+        Call<Void> call = databaseService.changeClosingTime(
+                address.getStreet(),
+                address.getPostCode(),
+                address.getCity(),
+                closingTime
+        );
+
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+    }
 }

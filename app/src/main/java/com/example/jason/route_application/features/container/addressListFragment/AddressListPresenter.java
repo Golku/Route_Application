@@ -105,6 +105,10 @@ public class AddressListPresenter extends BasePresenter implements
                 break;
             case "addressTypeChange" : addressTypeChange(event.getAddress());
                 break;
+            case "openingTimeChange" : openingTimeChange(event.getAddress());
+                break;
+            case "closingTimeChange" : closingTimeChange(event.getAddress());
+                break;
             case "updateList" : updateList(event.getAddressList());
                 break;
             case "addAddress" : addAddress(event.getAddress());
@@ -122,6 +126,24 @@ public class AddressListPresenter extends BasePresenter implements
                 }else{
                     it.setBusiness(false);
                 }
+                break;
+            }
+        }
+    }
+
+    private void openingTimeChange(Address address) {
+        for(Address it: addressList){
+            if(it.getAddress().equals(address.getAddress())){
+                it.setOpeningTime(address.getOpeningTime());
+                break;
+            }
+        }
+    }
+
+    private void closingTimeChange(Address address) {
+        for(Address it: addressList){
+            if(it.getAddress().equals(address.getAddress())){
+                it.setClosingTime(address.getClosingTime());
                 break;
             }
         }

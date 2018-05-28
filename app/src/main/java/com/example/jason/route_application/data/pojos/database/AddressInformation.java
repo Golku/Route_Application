@@ -8,29 +8,11 @@ import java.util.ArrayList;
 
 public class AddressInformation {
 
-    private String id;
-    private int business;
     private int commentsCount;
 
     private ArrayList<String> employeeId;
     private ArrayList<String> comments;
     private ArrayList<String> dates;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public int getBusiness() {
-        return business;
-    }
-
-    public void setBusiness(int business) {
-        this.business = business;
-    }
 
     public int getCommentsCount() {
         return commentsCount;

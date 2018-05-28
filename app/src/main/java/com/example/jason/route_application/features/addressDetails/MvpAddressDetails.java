@@ -18,7 +18,7 @@ public interface MvpAddressDetails {
 
         void updateMessageToUserTextView(String message);
 
-        void changeAddressType(boolean isBusiness);
+        void changeAddressType(Address address);
 
         void networkOperationStarted();
 
@@ -41,7 +41,11 @@ public interface MvpAddressDetails {
 
         void getAddressInformation();
 
+        String convertTime(int timeInMinutes);
+
         void changeAddressType();
+
+        void changeOpeningHours(int hourOfDay, int minute, String workingHours);
 
         void googleLinkClick();
 
@@ -53,6 +57,10 @@ public interface MvpAddressDetails {
         void getAddressInformation(Address address, DatabaseCallback.AddressInformationCallBack callback);
 
         void changeAddressType(String username, Address address, DatabaseCallback.AddressTypeChangeCallback callback);
+
+        void changeOpeningTime(Address address, int openingTime);
+
+        void changeClosingTime(Address address, int closingTime);
     }
 
 }
