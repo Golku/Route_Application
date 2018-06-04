@@ -11,7 +11,7 @@ import java.util.List;
 public class RouteInfoHolder implements Parcelable{
 
     private boolean organized;
-    private LatLng userLocation;
+    private Address userLocation;
     private List<Address> addressList;
     private List<Drive> driveList;
     private List<String> routeOrder;
@@ -21,7 +21,7 @@ public class RouteInfoHolder implements Parcelable{
 
     private RouteInfoHolder(Parcel in) {
         organized = in.readByte() != 0;
-        userLocation = in.readParcelable(LatLng.class.getClassLoader());
+        userLocation = in.readParcelable(Address.class.getClassLoader());
         addressList = in.createTypedArrayList(Address.CREATOR);
         routeOrder = in.createStringArrayList();
     }
@@ -59,11 +59,11 @@ public class RouteInfoHolder implements Parcelable{
         this.organized = organized;
     }
 
-    public LatLng getUserLocation() {
+    public Address getUserLocation() {
         return userLocation;
     }
 
-    public void setUserLocation(LatLng userLocation) {
+    public void setUserLocation(Address userLocation) {
         this.userLocation = userLocation;
     }
 

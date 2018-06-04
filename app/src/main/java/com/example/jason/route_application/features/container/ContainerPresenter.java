@@ -1,6 +1,9 @@
 package com.example.jason.route_application.features.container;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import com.example.jason.route_application.data.api.ApiCallback;
+import com.example.jason.route_application.data.models.LocationManager;
 import com.example.jason.route_application.data.pojos.Address;
 import com.example.jason.route_application.data.pojos.Event;
 import com.example.jason.route_application.data.pojos.RouteInfoHolder;
@@ -14,6 +17,7 @@ import com.example.jason.route_application.data.pojos.api.RemoveAddressRequest;
 import com.example.jason.route_application.features.shared.BasePresenter;
 import com.example.jason.route_application.features.shared.MvpBasePresenter;
 
+import android.content.Context;
 import android.util.Log;
 
 import javax.inject.Inject;
@@ -44,6 +48,7 @@ public class ContainerPresenter extends BasePresenter implements
     private List<Address> addressList;
     private List<Drive> driveList;
 
+    private Context context;
     private int mapViewId;
     private int driveViewId;
 
@@ -56,8 +61,9 @@ public class ContainerPresenter extends BasePresenter implements
     //container data
 
     @Override
-    public void setVariables(Session session, int mapViewId, int driveViewId) {
+    public void setVariables(Session session, Context context,int mapViewId, int driveViewId) {
         this.session = session;
+        this.context = context;
         this.mapViewId = mapViewId;
         this.driveViewId = driveViewId;
     }
@@ -143,7 +149,24 @@ public class ContainerPresenter extends BasePresenter implements
         view.showFragment(position);
     }
 
+    @Override
+    public void updateUserLocation(String userAddress, LatLng userLocation) {
+        Address address = new Address();
+        address.setValid(true);
+        address.setAddress(userAddress);
+        address.setLat(userLocation.latitude);
+        address.setLng(userLocation.longitude);
+        address.setUserLocation(true);
+        createEvent("mapFragment", "markAddress", address ,this);
+    }
+
     //menu bottoms
+
+    @Override
+    public void getUserLocation() {
+        LocationManager locationManager = new LocationManager(context, this);
+        locationManager.getUserLocation();
+    }
 
     @Override
     public void logOut() {

@@ -23,7 +23,7 @@ import com.example.jason.route_application.data.pojos.database.AddressInformatio
 import com.example.jason.route_application.data.pojos.CommentInformation;
 import com.example.jason.route_application.features.commentDisplay.CommentDisplayActivity;
 import com.example.jason.route_application.features.commentInput.CommentInputActivity;
-import com.example.jason.route_application.features.shared.DialogCreator;
+import com.example.jason.route_application.data.models.DialogCreator;
 
 import javax.inject.Inject;
 

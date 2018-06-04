@@ -6,6 +6,7 @@ import com.directions.route.RouteException;
 import com.directions.route.Routing;
 import com.directions.route.RoutingListener;
 import com.example.jason.route_application.R;
+import com.example.jason.route_application.data.pojos.Address;
 import com.example.jason.route_application.data.pojos.Event;
 import com.example.jason.route_application.data.pojos.RouteInfoHolder;
 
@@ -72,13 +73,11 @@ public class MapFragment extends Fragment implements
         RouteInfoHolder routeInfoHolder = getArguments().getParcelable("routeInfoHolder");
 
         presenter = new MapPresenter(this,
-                routeInfoHolder.getAddressList(),
-                routeInfoHolder.getRouteOrder());
+                routeInfoHolder.getAddressList());
 
         polylines = new ArrayList<>();
     }
 
-    @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
@@ -103,25 +102,17 @@ public class MapFragment extends Fragment implements
     public void onMapReady(GoogleMap googleMap) {
         MapsInitializer.initialize(getContext());
         this.googleMap = googleMap;
-        presenter.setMapData(googleMap);
+        presenter.setMapData(googleMap, getContext());
     }
 
     @Override
-    public void changeMarkerIcon(Marker marker, String iconName) {
-//        iconName = "ic_" + String.valueOf(i + 1);
-        Resources res = this.getResources();
-        int resID = res.getIdentifier(iconName, "drawable", getContext().getPackageName());
-        marker.setIcon(BitmapDescriptorFactory.fromResource(resID));
-    }
-
-    @Override
-    public void showSnackBar(final int markerPosition) {
+    public void deselectedMultipleMarkers() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage("Are you sure?")
                 .setTitle("Deselect multiple markers")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        presenter.multipleMarkersDeselected(markerPosition);
+                        presenter.multipleMarkersDeselected();
                     }
                 }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
@@ -151,6 +142,8 @@ public class MapFragment extends Fragment implements
     public void postEvent(Event event) {
         EventBus.getDefault().post(event);
     }
+
+    //PolyLines
 
     @Override
     public void getPolylineToMarker(LatLng start, LatLng end) {

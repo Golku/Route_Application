@@ -4,7 +4,10 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
+import com.example.jason.route_application.data.pojos.Address;
 import com.example.jason.route_application.data.pojos.Event;
+
+import android.content.Context;
 
 /**
  * Created by Jason on 3/28/2018.
@@ -14,13 +17,11 @@ public interface MvpMap {
 
     interface View{
 
-        void changeMarkerIcon(Marker marker, String iconName);
+        void deselectedMultipleMarkers();
 
         void postEvent(Event event);
 
         void getPolylineToMarker(LatLng start, LatLng end);
-
-        void showSnackBar(int markerPosition);
 
         void removePolyLine();
 
@@ -29,11 +30,9 @@ public interface MvpMap {
 
     interface Presenter{
 
-        void setMapData(GoogleMap googleMap);
+        void setMapData(GoogleMap googleMap, Context context);
 
-        void infoWindowClick(Marker marker);
-
-        void multipleMarkersDeselected(int markerPosition);
+        void multipleMarkersDeselected();
 
         void eventReceived(Event event);
     }

@@ -1,5 +1,7 @@
 package com.example.jason.route_application.features.container;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import com.example.jason.route_application.data.api.ApiCallback;
 import com.example.jason.route_application.data.pojos.Address;
 import com.example.jason.route_application.data.pojos.Event;
@@ -9,6 +11,8 @@ import com.example.jason.route_application.data.pojos.api.ChangeAddressRequest;
 import com.example.jason.route_application.data.pojos.api.AddressRequest;
 import com.example.jason.route_application.data.pojos.api.DriveRequest;
 import com.example.jason.route_application.data.pojos.api.RemoveAddressRequest;
+
+import android.content.Context;
 
 /**
  * Created by Jason on 07-Feb-18.
@@ -41,13 +45,17 @@ public interface MvpContainer {
 
     interface Presenter{
 
-        void setVariables(Session session, int mapId, int driveId);
+        void setVariables(Session session, Context context,int mapViewId, int driveViewId);
 
         void getContainer();
 
         void changeFragment(int id);
 
         void showAddressDialog();
+
+        void getUserLocation();
+
+        void updateUserLocation(String userAddress, LatLng userLocation);
 
         void logOut();
 

@@ -1,5 +1,8 @@
 package com.example.jason.route_application.data.pojos;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.maps.android.clustering.ClusterItem;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -7,7 +10,7 @@ import android.os.Parcelable;
  * Created by Jason on 07-Feb-18.
  */
 
-public class Address implements Parcelable {
+public class Address implements Parcelable, ClusterItem{
 
     private String address;
     private String street;
@@ -22,10 +25,10 @@ public class Address implements Parcelable {
     private int closingTime;
     private boolean userInputted;
     private boolean userLocation;
+    private boolean selected;
     private boolean valid;
 
-    public Address(){
-
+    public Address() {
     }
 
     protected Address(Parcel in) {
@@ -42,6 +45,7 @@ public class Address implements Parcelable {
         closingTime = in.readInt();
         userInputted = in.readByte() != 0;
         userLocation = in.readByte() != 0;
+        selected = in.readByte() != 0;
         valid = in.readByte() != 0;
     }
 
@@ -60,6 +64,7 @@ public class Address implements Parcelable {
         dest.writeInt(closingTime);
         dest.writeByte((byte) (userInputted ? 1 : 0));
         dest.writeByte((byte) (userLocation ? 1 : 0));
+        dest.writeByte((byte) (selected ? 1 : 0));
         dest.writeByte((byte) (valid ? 1 : 0));
     }
 
@@ -79,6 +84,21 @@ public class Address implements Parcelable {
             return new Address[size];
         }
     };
+
+    @Override
+    public LatLng getPosition() {
+        return new LatLng(getLat(), getLng());
+    }
+
+    @Override
+    public String getTitle() {
+        return address;
+    }
+
+    @Override
+    public String getSnippet() {
+        return null;
+    }
 
     public String getAddress() {
         return address;
@@ -182,6 +202,14 @@ public class Address implements Parcelable {
 
     public void setUserLocation(boolean userLocation) {
         this.userLocation = userLocation;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 
     public boolean isValid() {
