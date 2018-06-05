@@ -12,6 +12,7 @@ import android.os.Parcelable;
 
 public class Address implements Parcelable, ClusterItem{
 
+    private boolean valid;
     private String address;
     private String street;
     private String postCode;
@@ -23,15 +24,15 @@ public class Address implements Parcelable, ClusterItem{
     private boolean business;
     private int openingTime;
     private int closingTime;
-    private boolean userInputted;
     private boolean userLocation;
     private boolean selected;
-    private boolean valid;
+    private boolean fetchingDriveInfo;
 
     public Address() {
     }
 
     protected Address(Parcel in) {
+        valid = in.readByte() != 0;
         address = in.readString();
         street = in.readString();
         postCode = in.readString();
@@ -43,14 +44,14 @@ public class Address implements Parcelable, ClusterItem{
         business = in.readByte() != 0;
         openingTime = in.readInt();
         closingTime = in.readInt();
-        userInputted = in.readByte() != 0;
         userLocation = in.readByte() != 0;
         selected = in.readByte() != 0;
-        valid = in.readByte() != 0;
+        fetchingDriveInfo = in.readByte() != 0;
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeByte((byte) (valid ? 1 : 0));
         dest.writeString(address);
         dest.writeString(street);
         dest.writeString(postCode);
@@ -62,10 +63,9 @@ public class Address implements Parcelable, ClusterItem{
         dest.writeByte((byte) (business ? 1 : 0));
         dest.writeInt(openingTime);
         dest.writeInt(closingTime);
-        dest.writeByte((byte) (userInputted ? 1 : 0));
         dest.writeByte((byte) (userLocation ? 1 : 0));
         dest.writeByte((byte) (selected ? 1 : 0));
-        dest.writeByte((byte) (valid ? 1 : 0));
+        dest.writeByte((byte) (fetchingDriveInfo ? 1 : 0));
     }
 
     @Override
@@ -85,19 +85,12 @@ public class Address implements Parcelable, ClusterItem{
         }
     };
 
-    @Override
-    public LatLng getPosition() {
-        return new LatLng(getLat(), getLng());
+    public boolean isValid() {
+        return valid;
     }
 
-    @Override
-    public String getTitle() {
-        return address;
-    }
-
-    @Override
-    public String getSnippet() {
-        return null;
+    public void setValid(boolean valid) {
+        this.valid = valid;
     }
 
     public String getAddress() {
@@ -188,14 +181,6 @@ public class Address implements Parcelable, ClusterItem{
         this.closingTime = closingTime;
     }
 
-    public boolean isUserInputted() {
-        return userInputted;
-    }
-
-    public void setUserInputted(boolean userInputted) {
-        this.userInputted = userInputted;
-    }
-
     public boolean isUserLocation() {
         return userLocation;
     }
@@ -212,11 +197,26 @@ public class Address implements Parcelable, ClusterItem{
         this.selected = selected;
     }
 
-    public boolean isValid() {
-        return valid;
+    public boolean isFetchingDriveInfo() {
+        return fetchingDriveInfo;
     }
 
-    public void setValid(boolean valid) {
-        this.valid = valid;
+    public void setFetchingDriveInfo(boolean fetchingDriveInfo) {
+        this.fetchingDriveInfo = fetchingDriveInfo;
+    }
+
+    @Override
+    public LatLng getPosition() {
+        return new LatLng(getLat(), getLng());
+    }
+
+    @Override
+    public String getTitle() {
+        return getAddress();
+    }
+
+    @Override
+    public String getSnippet() {
+        return null;
     }
 }

@@ -21,6 +21,8 @@ import android.content.Context;
 import android.util.Log;
 
 import javax.inject.Inject;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,10 +54,13 @@ public class ContainerPresenter extends BasePresenter implements
     private int mapViewId;
     private int driveViewId;
 
+    private SimpleDateFormat sdf;
+
     @Inject
     public ContainerPresenter(MvpContainer.View view, MvpContainer.Interactor interactor) {
         this.view = view;
         this.interactor = interactor;
+        sdf = new SimpleDateFormat("kk:mm");
     }
 
     //container data
@@ -183,6 +188,11 @@ public class ContainerPresenter extends BasePresenter implements
     //fragment interaction
 
     @Override
+    public void publishEvent(Event event) {
+        view.postEvent(event);
+    }
+
+    @Override
     public void eventReceived(Event event) {
 
         if (!event.getReceiver().equals("container")) {
@@ -235,12 +245,34 @@ public class ContainerPresenter extends BasePresenter implements
     }
 
     private void addDrive(Drive drive) {
-        createEvent("driveFragment", "addDrive", drive, this);
-    }
+        if(drive != null && drive.isValid()){
 
-    @Override
-    public void publishEvent(Event event) {
-        view.postEvent(event);
+            driveList.add(drive);
+
+            long deliveryTime;
+            long driveTime = drive.getDriveDurationInSeconds() * 1000;
+            long PACKAGE_DELIVERY_TIME = 120000;
+
+            if (driveList.size() > 1) {
+                Drive previousDrive = driveList.get(driveList.indexOf(drive) - 1);
+                deliveryTime = previousDrive.getDeliveryTimeInMillis() + driveTime + PACKAGE_DELIVERY_TIME;
+            } else {
+                long date = System.currentTimeMillis();
+                deliveryTime = date + driveTime + PACKAGE_DELIVERY_TIME;
+            }
+
+            String deliveryTimeString = sdf.format(deliveryTime);
+
+            drive.setDeliveryTimeInMillis(deliveryTime);
+            drive.setDeliveryTimeHumanReadable(deliveryTimeString);
+
+            createEvent("mapFragment", "driveSuccess", drive, this);
+            createEvent("driveFragment", "addDrive", drive, this);
+
+            updateRouteEndTime();
+        }else{
+            createEvent("mapFragment", "driveFailed",this);
+        }
     }
 
     //interactor request
@@ -271,7 +303,7 @@ public class ContainerPresenter extends BasePresenter implements
         interactor.driveRequest(request, this);
     }
 
-    //interactor callback
+    //interactor response
 
     //If the server has an error and sends back a routeResponse with a html page
     //the response processing will fail! FIX THIS!!!
@@ -318,13 +350,11 @@ public class ContainerPresenter extends BasePresenter implements
 
     @Override
     public void driveResponse(Drive response) {
-        if (response != null) {
-            addDrive(response);
-        }
+        addDrive(response);
     }
 
     @Override
     public void driveResponseFailure() {
-        view.showToast("Unable to fetch drive information from api");
+        addDrive(null);
     }
 }

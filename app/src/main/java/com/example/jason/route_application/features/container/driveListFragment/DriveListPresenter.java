@@ -26,12 +26,10 @@ public class DriveListPresenter extends BasePresenter implements
 
     private List<Drive> driveList;
     private DriveListAdapter adapter;
-    private SimpleDateFormat sdf;
 
     DriveListPresenter(MvpDriveList.View view, List<Drive> driveList) {
         this.view = view;
         this.driveList = driveList;
-        sdf = new SimpleDateFormat("kk:mm");
     }
 
     @Override
@@ -51,6 +49,11 @@ public class DriveListPresenter extends BasePresenter implements
     }
 
     @Override
+    public void publishEvent(Event event) {
+        view.postEvent(event);
+    }
+
+    @Override
     public void eventReceived(Event event) {
 
         if(!(event.getReceiver().equals("driveFragment") || event.getReceiver().equals("all"))){
@@ -64,9 +67,9 @@ public class DriveListPresenter extends BasePresenter implements
                 break;
             case "updateList" : updateList(event.getDriveList());
                 break;
-            case "addDrive" : addDrive(event.getDrive());
+            case "addDrive" : addDriveToList(event.getDrive());
                 break;
-            case "removeDrive" : removeDrive();
+            case "removeDrive" : removeDriveFromList();
                 break;
             case "RemoveMultipleDrive" : RemoveMultipleDrive(event.getAddressString());
                 break;
@@ -96,34 +99,12 @@ public class DriveListPresenter extends BasePresenter implements
         showDriveList();
     }
 
-    private void addDrive(Drive drive){
-
-        driveList.add(drive);
-
-        long deliveryTime;
-        long driveTime = drive.getDriveDurationInSeconds() * 1000;
-        long PACKAGE_DELIVERY_TIME = 120000;
-
-        if (driveList.size() > 1) {
-            Drive previousDrive = driveList.get(driveList.indexOf(drive) - 1);
-            deliveryTime = previousDrive.getDeliveryTimeInMillis() + driveTime + PACKAGE_DELIVERY_TIME;
-        } else {
-            long date = System.currentTimeMillis();
-            deliveryTime = date + driveTime + PACKAGE_DELIVERY_TIME;
-        }
-
-        String deliveryTimeString = sdf.format(deliveryTime);
-
-        drive.setDeliveryTimeInMillis(deliveryTime);
-        drive.setDeliveryTimeHumanReadable(deliveryTimeString);
-
+    private void addDriveToList(Drive drive){
         adapter.notifyItemInserted(driveList.indexOf(drive));
         view.scrollToItem(driveList.size());
-
-        createEvent("container", "updateEndTime", this);
     }
 
-    private void removeDrive(){
+    private void removeDriveFromList(){
         int position = driveList.size() - 1;
         driveList.remove(position);
         adapter.notifyItemRemoved(position);
@@ -145,10 +126,5 @@ public class DriveListPresenter extends BasePresenter implements
         view.scrollToItem(driveList.size());
 
         createEvent("container", "updateEndTime", this);
-    }
-
-    @Override
-    public void publishEvent(Event event) {
-        view.postEvent(event);
     }
 }

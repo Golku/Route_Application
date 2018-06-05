@@ -3,22 +3,18 @@ package com.example.jason.route_application.features.container.mapFragment;
 import com.example.jason.route_application.data.models.CustomClusterRenderer;
 import com.example.jason.route_application.data.pojos.Address;
 import com.example.jason.route_application.data.pojos.Event;
-import com.example.jason.route_application.data.pojos.MarkerInfo;
+import com.example.jason.route_application.data.pojos.api.Drive;
 import com.example.jason.route_application.data.pojos.api.DriveRequest;
 import com.example.jason.route_application.features.shared.BasePresenter;
 import com.example.jason.route_application.features.shared.MvpBasePresenter;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.clustering.ClusterManager;
-
 import android.content.Context;
 import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,9 +38,9 @@ public class MapPresenter extends BasePresenter implements
 
     private Address userLocation;
     private Address currentAddress;
+    private Address previousSelectedAddress;
     private List<Address> addressList;
     private List<Address> routeOrder;
-    private Address previousSelectedAddress;
 
     MapPresenter(MvpMap.View view, List<Address> addressList) {
         this.view = view;
@@ -74,8 +70,8 @@ public class MapPresenter extends BasePresenter implements
 
         clusterManager.addItem(userLocation);
 
-        for(Address address : addressList){
-            if(address.isValid()){
+        for (Address address : addressList) {
+            if (address.isValid()) {
                 clusterManager.addItem(address);
             }
         }
@@ -94,8 +90,8 @@ public class MapPresenter extends BasePresenter implements
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        for(Address address: addressList){
-            if(marker.getTitle().equals(address.getAddress())){
+        for (Address address : addressList) {
+            if (marker.getTitle().equals(address.getAddress())) {
                 createEvent("container", "itemClick", address, this);
                 break;
             }
@@ -105,22 +101,15 @@ public class MapPresenter extends BasePresenter implements
     @Override
     public boolean onMarkerClick(Marker marker) {
 
-        Address address = null;
+        Address address = findAddress(marker.getTitle());
 
-        for(Address it : addressList){
-            if(marker.getTitle().equals(it.getAddress())){
-                address = it;
-                break;
-            }
-        }
-
-        if(address == null){
+        if (address == null) {
             return false;
         }
 
-        if(address.isSelected()){
+        if (address.isSelected()) {
 
-            if(previousSelectedAddress.equals(address)){
+            if (previousSelectedAddress.equals(address)) {
 
                 address.setSelected(false);
                 routeOrder.remove(address);
@@ -132,16 +121,16 @@ public class MapPresenter extends BasePresenter implements
                 }
 
                 removeDrive();
-            }else{
+            } else {
                 currentAddress = address;
                 view.deselectedMultipleMarkers();
             }
-        }else{
+        } else {
 
-            address.setSelected(true);
-            routeOrder.add(address);
+            googleMap.setOnMarkerClickListener(null);
+            currentAddress = address;
+            address.setFetchingDriveInfo(true);
             getDrive(address);
-            previousSelectedAddress = address;
         }
 
         renderer.changeMarkerIcon(address);
@@ -149,7 +138,7 @@ public class MapPresenter extends BasePresenter implements
         return false;
     }
 
-    private void getDrive(Address address){
+    private void getDrive(Address address) {
 
         LatLng start;
         LatLng end;
@@ -166,17 +155,17 @@ public class MapPresenter extends BasePresenter implements
         view.getPolylineToMarker(start, end);
     }
 
-    private void removeDrive(){
-        createEvent("driveFragment","removeDrive",this);
+    private void removeDrive() {
+        createEvent("driveFragment", "removeDrive", this);
         view.removePolyLine();
     }
 
     @Override
-    public void multipleMarkersDeselected() {
+    public void multipleMarkersDeselected()  {
 
         int addressPosition = routeOrder.indexOf(currentAddress);
 
-        for(int i = addressPosition; i< routeOrder.size(); i++){
+        for (int i = addressPosition; i < routeOrder.size(); i++) {
             Address address = routeOrder.get(i);
             address.setSelected(false);
             renderer.changeMarkerIcon(address);
@@ -195,35 +184,53 @@ public class MapPresenter extends BasePresenter implements
         createEvent("driveFragment", "RemoveMultipleDrive", currentAddress.getAddress(), this);
     }
 
+    private Address findAddress(String addressString){
+        Address address = null;
+        for(Address it : addressList){
+            if(it.getAddress().equals(addressString)){
+                address = it;
+                break;
+            }
+        }
+        return address;
+    }
+
+    @Override
+    public void publishEvent(Event event) {
+        view.postEvent(event);
+    }
+
     @Override
     public void eventReceived(Event event) {
 
-        if(!(event.getReceiver().equals("mapFragment") || event.getReceiver().equals("all"))){
+        if (!(event.getReceiver().equals("mapFragment") || event.getReceiver().equals("all"))) {
             return;
         }
 
-        Log.d(debugTag, "Event received on mapFragment: "+ event.getEventName());
+        Log.d(debugTag, "Event received on mapFragment: " + event.getEventName());
 
         switch (event.getEventName()) {
-            case "addressTypeChange" : addressTypeChange(event.getAddress());
+            case "updateList":
+                updateMarkers(event.getAddressList());
                 break;
-            case "updateList" : updateMarkers(event.getAddressList());
+            case "addressTypeChange":
+                addressTypeChange(event.getAddress());
                 break;
-            case "showMarker" : showMarker(event.getAddress());
+            case "showMarker":
+                showMarker(event.getAddress());
                 break;
-            case "markAddress" : addMarkerToMap(event.getAddress());
+            case "markAddress":
+                addMarkerToMap(event.getAddress());
                 break;
-            case "removeMarker" : removeMarkerFromMap(event.getAddress());
+            case "removeMarker":
+                removeMarkerFromMap(event.getAddress());
                 break;
-        }
-    }
-
-    private void addressTypeChange(Address address){
-        for(Address it : addressList){
-            if(it.getAddress().equals(address.getAddress())){
-                renderer.changeMarkerIcon(it);
+            case "driveSuccess":
+                driveSuccess(event.getDrive());
                 break;
-            }
+            case "driveFailed":
+                driveFailed();
+                break;
         }
     }
 
@@ -236,8 +243,8 @@ public class MapPresenter extends BasePresenter implements
 
         clusterManager.addItem(userLocation);
 
-        for(Address address : addressList){
-            if(address.isValid()){
+        for (Address address : addressList) {
+            if (address.isValid()) {
                 clusterManager.addItem(address);
             }
         }
@@ -246,21 +253,25 @@ public class MapPresenter extends BasePresenter implements
         moveMapCamera(userLocation.getLat(), userLocation.getLng());
     }
 
-    private void showMarker(Address address){
-        if(address.isValid()){
-            Marker marker = renderer.getMarker(address);
+    private void addressTypeChange(Address address) {
+        renderer.changeMarkerIcon(findAddress(address.getAddress()));
+    }
+
+    private void showMarker(Address address) {
+        if (address.isValid()) {
+            Marker marker = renderer.getMarker(findAddress(address.getAddress()));
             moveMapCamera(address.getLat(), address.getLng());
             marker.showInfoWindow();
         }
     }
 
     private void addMarkerToMap(Address address) {
-        if(address.isValid()){
-            if(address.isUserLocation()){
+        if (address.isValid()) {
+            if (address.isUserLocation()) {
                 clusterManager.removeItem(userLocation);
                 userLocation = address;
-                if(routeOrder.size() == 0){
-                    previousSelectedAddress = userLocation;
+                if (routeOrder.size() == 0) {
+                    previousSelectedAddress = address;
                 }
             }
             clusterManager.addItem(address);
@@ -270,18 +281,31 @@ public class MapPresenter extends BasePresenter implements
     }
 
     private void removeMarkerFromMap(Address address) {
-
         clusterManager.removeItem(address);
         clusterManager.cluster();
 
-        if(address.isSelected()){
+        if (address.isSelected()) {
             currentAddress = address;
             multipleMarkersDeselected();
         }
     }
 
-    @Override
-    public void publishEvent(Event event) {
-        view.postEvent(event);
+    private void driveSuccess(Drive drive) {
+
+        Log.d(debugTag, "Drive: " + drive.getDeliveryTimeHumanReadable());
+
+        currentAddress.setFetchingDriveInfo(false);
+        googleMap.setOnMarkerClickListener(this);
+        currentAddress.setSelected(true);
+        routeOrder.add(currentAddress);
+        previousSelectedAddress = currentAddress;
+        renderer.changeMarkerIcon(currentAddress);
+    }
+
+    private void driveFailed() {
+        currentAddress.setFetchingDriveInfo(false);
+        googleMap.setOnMarkerClickListener(this);
+        renderer.changeMarkerIcon(currentAddress);
+        view.showToast("Failed to get drive");
     }
 }
