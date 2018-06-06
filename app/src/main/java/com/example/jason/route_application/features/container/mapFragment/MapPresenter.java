@@ -94,12 +94,7 @@ public class MapPresenter extends BasePresenter implements
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        for (Address address : addressList) {
-            if (marker.getTitle().equals(address.getAddress())) {
-                createEvent("container", "itemClick", address, this);
-                break;
-            }
-        }
+        createEvent("container", "itemClick", findAddress(marker.getTitle()), this);
     }
 
     @Override
@@ -138,8 +133,9 @@ public class MapPresenter extends BasePresenter implements
         }
 
         renderer.changeMarkerIcon(address);
+        marker.showInfoWindow();
 
-        return false;
+        return true;
     }
 
     private void getDrive(Address address) {
@@ -241,6 +237,7 @@ public class MapPresenter extends BasePresenter implements
     private void updateMarkers(List<Address> addressList) {
         this.addressList = addressList;
         routeOrder.clear();
+        arrivalTime.clear();
         clusterManager.clearItems();
         previousSelectedAddress = userLocation;
         view.removePolyLine();
@@ -296,27 +293,28 @@ public class MapPresenter extends BasePresenter implements
 
     private void driveSuccess(Drive drive) {
 
-        String[] parts = drive.getDeliveryTimeHumanReadable().split(":");
-        String part1 = parts[0];
-        String part2 = parts[1];
+        String[] deliveryTime = drive.getDeliveryTimeHumanReadable().split(":");
+        String hourString = deliveryTime[0];
+        String minuteString = deliveryTime[1];
 
-        int part1Int = Integer.parseInt(part1);
-        int part2Int = Integer.parseInt(part2);
+        int hour = Integer.parseInt(hourString);
+        int minute = Integer.parseInt(minuteString);
 
-        arrivalTime.put(currentAddress, ((part1Int*60) + part2Int));
+        arrivalTime.put(currentAddress, ((hour*60) + minute));
 
         currentAddress.setFetchingDriveInfo(false);
-        googleMap.setOnMarkerClickListener(this);
         currentAddress.setSelected(true);
         routeOrder.add(currentAddress);
         previousSelectedAddress = currentAddress;
         renderer.changeMarkerIcon(currentAddress);
+        googleMap.setOnMarkerClickListener(this);
     }
 
     private void driveFailed() {
         currentAddress.setFetchingDriveInfo(false);
-        googleMap.setOnMarkerClickListener(this);
         renderer.changeMarkerIcon(currentAddress);
+        view.removePolyLine();
+        googleMap.setOnMarkerClickListener(this);
         view.showToast("Failed to get drive");
     }
 }

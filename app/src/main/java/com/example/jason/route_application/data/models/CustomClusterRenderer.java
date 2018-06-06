@@ -8,9 +8,7 @@ import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 import com.example.jason.route_application.data.pojos.Address;
 import android.content.Context;
 import android.content.res.Resources;
-import android.util.Log;
 
-import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -19,13 +17,13 @@ public class CustomClusterRenderer extends DefaultClusterRenderer<Address> {
     private final String debugTag = "debugTag";
     private final Context context;
     private List<Address> routeOrder;
-    private Map<Address, Integer> arrivalTime;
+    private Map<Address, Integer> arrivalTimes;
 
-    public CustomClusterRenderer(Context context, GoogleMap map, ClusterManager<Address> clusterManager, List<Address> routeOrder, Map<Address, Integer> arrivalTime) {
+    public CustomClusterRenderer(Context context, GoogleMap map, ClusterManager<Address> clusterManager, List<Address> routeOrder, Map<Address, Integer> arrivalTimes) {
         super(context, map, clusterManager);
         this.context = context;
         this.routeOrder = routeOrder;
-        this.arrivalTime = arrivalTime;
+        this.arrivalTimes = arrivalTimes;
     }
 
     @Override
@@ -44,10 +42,16 @@ public class CustomClusterRenderer extends DefaultClusterRenderer<Address> {
 
             if(address.isSelected()){
 
-                int time = arrivalTime.get(address);
+                int openingTime = address.getOpeningTime();
+                int closingTime = address.getClosingTime();
+                int arrivalTime = arrivalTimes.get(address);
 
-                if(time > address.getClosingTime() && address.isBusiness()){
-                    iconName = "ic_red_marker_"+String.valueOf(routeOrder.indexOf(address)+1);
+                if(address.isBusiness() && openingTime>0 && closingTime>0){
+                    if(arrivalTime > address.getOpeningTime() && arrivalTime < address.getClosingTime()){
+                        iconName = "ic_marker_"+String.valueOf(routeOrder.indexOf(address)+1);
+                    }else{
+                        iconName = "ic_red_marker_"+String.valueOf(routeOrder.indexOf(address)+1);
+                    }
                 }else{
                     iconName = "ic_marker_"+String.valueOf(routeOrder.indexOf(address)+1);
                 }
