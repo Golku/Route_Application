@@ -81,7 +81,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_marker_private" />
+            app:srcCompat="@drawable/ic_private_marker" />
 
         <ProgressBar
             android:id="@+id/typeChangeProgress_pb"

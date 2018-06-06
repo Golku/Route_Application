@@ -108,7 +108,7 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements
             changeClosingTimeTv.setVisibility(View.VISIBLE);
             openingTimeTv.setText(presenter.convertTime(address.getOpeningTime()));
             closingTimeTv.setText(presenter.convertTime(address.getClosingTime()));
-            addressTypeImageView.setImageResource(R.drawable.ic_marker_business);
+            addressTypeImageView.setImageResource(R.drawable.ic_business_marker);
         }
 
         presenter.setInfo(new Session(this), address);
@@ -145,7 +145,7 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements
     public void changeAddressType(Address address) {
 
         if(address.isBusiness()){
-            addressTypeImageView.setImageResource(R.drawable.ic_marker_business);
+            addressTypeImageView.setImageResource(R.drawable.ic_business_marker);
             openingTimeTv.setText(presenter.convertTime(address.getOpeningTime()));
             closingTimeTv.setText(presenter.convertTime(address.getClosingTime()));
             openingTimeTv.setVisibility(View.VISIBLE);
@@ -153,7 +153,7 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements
             closingTimeTv.setVisibility(View.VISIBLE);
             changeClosingTimeTv.setVisibility(View.VISIBLE);
         }else{
-            addressTypeImageView.setImageResource(R.drawable.ic_marker_private);
+            addressTypeImageView.setImageResource(R.drawable.ic_private_marker);
             openingTimeTv.setVisibility(View.GONE);
             changeOpeningTimeTv.setVisibility(View.GONE);
             closingTimeTv.setVisibility(View.GONE);
