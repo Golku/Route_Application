@@ -16,7 +16,9 @@ import com.google.maps.android.clustering.ClusterManager;
 import android.content.Context;
 import android.util.Log;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Jason on 3/28/2018.
@@ -41,11 +43,13 @@ public class MapPresenter extends BasePresenter implements
     private Address previousSelectedAddress;
     private List<Address> addressList;
     private List<Address> routeOrder;
+    private Map<Address, Integer> arrivalTime;
 
     MapPresenter(MvpMap.View view, List<Address> addressList) {
         this.view = view;
         this.addressList = addressList;
-        this.routeOrder = new ArrayList<>();
+        routeOrder = new ArrayList<>();
+        arrivalTime = new HashMap<>();
 
         userLocation = new Address();
         userLocation.setUserLocation(true);
@@ -61,7 +65,7 @@ public class MapPresenter extends BasePresenter implements
     public void setMapData(GoogleMap googleMap, Context context) {
 
         clusterManager = new ClusterManager<>(context, googleMap);
-        renderer = new CustomClusterRenderer(context, googleMap, clusterManager, routeOrder);
+        renderer = new CustomClusterRenderer(context, googleMap, clusterManager, routeOrder, arrivalTime);
         clusterManager.setRenderer(renderer);
 
         googleMap.setOnCameraIdleListener(clusterManager);
@@ -292,7 +296,14 @@ public class MapPresenter extends BasePresenter implements
 
     private void driveSuccess(Drive drive) {
 
-        Log.d(debugTag, "Drive: " + drive.getDeliveryTimeHumanReadable());
+        String[] parts = drive.getDeliveryTimeHumanReadable().split(":");
+        String part1 = parts[0];
+        String part2 = parts[1];
+
+        int part1Int = Integer.parseInt(part1);
+        int part2Int = Integer.parseInt(part2);
+
+        arrivalTime.put(currentAddress, ((part1Int*60) + part2Int));
 
         currentAddress.setFetchingDriveInfo(false);
         googleMap.setOnMarkerClickListener(this);
