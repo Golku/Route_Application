@@ -80,8 +80,9 @@ public class DriveListAdapter extends RecyclerView.Adapter<DriveListAdapter.Cust
         private TextView durationTextView;
         private TextView estimatedArrivalTime;
         private ImageView addressType;
-        private ImageView goButton;
-        private ViewGroup container;
+
+        private ViewGroup itemWrapper;
+        private ImageView goIv;
 
         CustomViewHolder(View itemView) {
             super(itemView);
@@ -91,19 +92,20 @@ public class DriveListAdapter extends RecyclerView.Adapter<DriveListAdapter.Cust
             this.distanceTextView = itemView.findViewById(R.id.distanceTextView);
             this.durationTextView = itemView.findViewById(R.id.durationTextView);
             this.estimatedArrivalTime = itemView.findViewById(R.id.estimatedArrivalTimeTextView);
-            this.goButton = itemView.findViewById(R.id.goBtn);
             this.addressType = itemView.findViewById(R.id.addressTypeImageView);
-            this.container = itemView.findViewById(R.id.root_layout);
-            this.goButton.setOnClickListener(this);
-            this.container.setOnClickListener(this);
+            this.goIv = itemView.findViewById(R.id.go_iv);
+            this.itemWrapper = itemView.findViewById(R.id.item_wrapper);
+
+            this.itemWrapper.setOnClickListener(this);
+            this.goIv.setOnClickListener(this);
         }
 
         public void onClick(View v) {
 
-            if(v == this.container){
+            if(v == this.itemWrapper){
                 callback.itemClick(routeList.get(this.getAdapterPosition()).getDestinationAddress());
             }
-            else if(v == this.goButton){
+            else if(v == this.goIv){
                 callback.goButtonClick(routeList.get(this.getAdapterPosition()).getDestinationAddress().getAddress());
             }
         }
