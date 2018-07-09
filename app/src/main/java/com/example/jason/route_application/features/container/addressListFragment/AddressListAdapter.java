@@ -77,7 +77,7 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
             itemWrapper = itemView.findViewById(R.id.address_wrapper);
             streetTv = itemView.findViewById(R.id.street_tv);
             cityTv = itemView.findViewById(R.id.city_tv);
-            showOnMapBtn = itemView.findViewById(R.id.show_on_map_btn);
+            showOnMapBtn = itemView.findViewById(R.id.show_on_map_iv);
 
             itemWrapper.setOnClickListener(this);
             showOnMapBtn.setOnClickListener(this);
