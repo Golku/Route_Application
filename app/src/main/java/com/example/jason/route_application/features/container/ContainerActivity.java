@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -81,8 +82,6 @@ public class ContainerActivity extends DaggerAppCompatActivity implements MvpCon
 
     private boolean backPress = false;
 
-    private Handler handler = new Handler();
-
     @Override
     public void onBackPressed() {
         if (backPress) {
@@ -94,22 +93,15 @@ public class ContainerActivity extends DaggerAppCompatActivity implements MvpCon
     }
 
     private void onBackPressToast() {
-        showToast("Press back again to exit.");
-        handler.postDelayed(new Runnable() {
+
+        Snackbar snackbar = Snackbar.make(fragmentContainer, "Press again to exit", Snackbar.LENGTH_SHORT);
+        snackbar.addCallback(new Snackbar.Callback(){
             @Override
-            public void run() {
+            public void onDismissed(Snackbar transientBottomBar, int event) {
                 backPress = false;
             }
-        }, 2000);
-
-//        Snackbar snackbar = Snackbar.make(fragmentContainer, "Press again to exit", Snackbar.LENGTH_SHORT);
-//        snackbar.addCallback(new Snackbar.Callback(){
-//            @Override
-//            public void onDismissed(Snackbar transientBottomBar, int event) {
-//                backPress = false;
-//            }
-//        });
-//        snackbar.show();
+        });
+        snackbar.show();
     }
 
     @Override
