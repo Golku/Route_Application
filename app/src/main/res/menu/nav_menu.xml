@@ -2,7 +2,13 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="Address list"/>
-    <item android:title="Item"/>
-    <item android:title="Item"/>
+    <item
+        android:title="Address list"
+        android:icon="@drawable/list"/>
+    <item
+        android:title="Map"
+        android:icon="@drawable/places"/>
+    <item
+        android:title="Route list"
+        android:icon="@drawable/navigation"/>
 </menu>
