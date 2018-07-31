@@ -30,6 +30,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -55,6 +56,9 @@ public class MapFragment extends Fragment implements
 
     @BindView(R.id.mapView)
     MapView mapView;
+
+    @BindView(R.id.snack_bar_container)
+    CoordinatorLayout snackBarContainer;
 
     private final String debugTag = "debugTag";
 
@@ -107,30 +111,30 @@ public class MapFragment extends Fragment implements
 
     @Override
     public void deselectedMultipleMarkers() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("Are you sure?")
-                .setTitle("Deselect multiple markers")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        presenter.multipleMarkersDeselected();
-                    }
-                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // User cancelled the dialog
-            }
-        });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-
-//        Snackbar snackbar = Snackbar.make(mapView, "Deselect until here?", Snackbar.LENGTH_LONG);
-//        snackbar.setAction("yes", new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                presenter.multipleMarkersDeselected(markerPosition);
+//        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//        builder.setMessage("Are you sure?")
+//                .setTitle("Deselect multiple markers")
+//                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int id) {
+//                        presenter.multipleMarkersDeselected();
+//                    }
+//                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//            public void onClick(DialogInterface dialog, int id) {
+//                // User cancelled the dialog
 //            }
 //        });
-//        snackbar.show();
+//
+//        AlertDialog dialog = builder.create();
+//        dialog.show();
+
+        Snackbar snackbar = Snackbar.make(snackBarContainer, "Deselect until here?", Snackbar.LENGTH_SHORT);
+        snackbar.setAction("yes", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.multipleMarkersDeselected();
+            }
+        });
+        snackbar.show();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

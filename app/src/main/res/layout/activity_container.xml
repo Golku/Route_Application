@@ -8,7 +8,7 @@
     tools:context="com.example.jason.route_application.features.container.ContainerActivity">
 
     <include
-        android:visibility="gone"
+        android:visibility="visible"
         layout="@layout/loading_screen"/>
 
     <android.support.constraint.ConstraintLayout
@@ -123,6 +123,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:padding="10dp"
+            android:textColor="@color/colorPrimaryDark"
             android:background="@drawable/menu_buttons"
             android:text="Add address"
             app:layout_constraintBottom_toTopOf="@+id/get_user_location_btn"
@@ -135,6 +136,7 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:background="@drawable/menu_buttons"
+            android:textColor="@color/colorPrimaryDark"
             android:text="Refresh location"
             app:layout_constraintBottom_toTopOf="@+id/refresh_info_btn"
             app:layout_constraintStart_toStartOf="parent"
@@ -144,9 +146,9 @@
             android:id="@+id/refresh_info_btn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-
             android:padding="10dp"
             android:background="@drawable/menu_buttons"
+            android:textColor="@color/colorPrimaryDark"
             android:text="Refresh route info"
             app:layout_constraintBottom_toTopOf="@+id/log_out_btn"
             app:layout_constraintEnd_toEndOf="parent"
@@ -156,6 +158,7 @@
             android:id="@+id/log_out_btn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimaryDark"
             android:text="Log out"
             android:padding="10dp"
             android:background="@drawable/menu_buttons"
@@ -167,11 +170,12 @@
     <android.support.v4.view.ViewPager
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="0dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/info_bar_wrapper">
+        app:layout_constraintTop_toBottomOf="@+id/info_bar_wrapper"
+        app:layout_constraintBottom_toTopOf="@+id/nav_bar">
 
     </android.support.v4.view.ViewPager>
 

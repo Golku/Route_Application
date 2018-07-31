@@ -69,12 +69,12 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
         private ViewGroup itemWrapper;
         private TextView streetTv;
         private TextView cityTv;
-        private Button showOnMapBtn;
+        private ImageView showOnMapBtn;
 
 
         CustomViewHolder(View itemView) {
             super(itemView);
-            itemWrapper = itemView.findViewById(R.id.address_wrapper);
+            itemWrapper = itemView.findViewById(R.id.item_wrapper);
             streetTv = itemView.findViewById(R.id.street_tv);
             cityTv = itemView.findViewById(R.id.city_tv);
             showOnMapBtn = itemView.findViewById(R.id.show_on_map_iv);

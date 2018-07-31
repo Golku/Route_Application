@@ -5,11 +5,15 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,37 +46,26 @@ public class ContainerActivity extends DaggerAppCompatActivity implements MvpCon
 
     @Inject
     MvpContainer.Presenter presenter;
-
     @BindView(R.id.loading_screen)
     ConstraintLayout loadingScreen;
-
     @BindView(R.id.menu_btn_wrapper)
     ConstraintLayout menuBtnWrapper;
-
     @BindView(R.id.menu_wrapper)
     ConstraintLayout menuWrapper;
-
+    @BindView(R.id.nav_bar)
+    BottomNavigationView navBar;
+    @BindView(R.id.snack_bar_container)
+    CoordinatorLayout snackBarContainer;
     @BindView(R.id.address_input_btn)
     TextView addressInputBtn;
-
     @BindView(R.id.get_user_location_btn)
     TextView getUserLocationBtn;
-
     @BindView(R.id.refresh_info_btn)
     TextView refreshInfoBtn;
-
     @BindView(R.id.log_out_btn)
     TextView logOutBtn;
-
     @BindView(R.id.fragment_container)
     ViewPager fragmentContainer;
-
-    @BindView(R.id.private_completion)
-    TextView privateCompletion;
-
-    @BindView(R.id.business_completion)
-    TextView businessCompletion;
-
     @BindView(R.id.route_end_time)
     TextView routeEndTime;
 
@@ -93,8 +86,7 @@ public class ContainerActivity extends DaggerAppCompatActivity implements MvpCon
     }
 
     private void onBackPressToast() {
-
-        Snackbar snackbar = Snackbar.make(fragmentContainer, "Press again to exit", Snackbar.LENGTH_SHORT);
+        Snackbar snackbar = Snackbar.make(snackBarContainer, "Press again to exit", Snackbar.LENGTH_SHORT);
         snackbar.addCallback(new Snackbar.Callback(){
             @Override
             public void onDismissed(Snackbar transientBottomBar, int event) {
@@ -115,11 +107,33 @@ public class ContainerActivity extends DaggerAppCompatActivity implements MvpCon
 
     private void init() {
         loadingScreen.bringToFront();
-        presenter.setVariables(new Session(this),
-                this,
-                R.id.map_iv,
-                R.id.drive_list_iv);
+        presenter.setVariables(new Session(this), this);
         presenter.getContainer();
+
+        navBar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                if (menuIsVisible) {
+                    hideMenu();
+                }
+
+                switch(item.getItemId()){
+
+                    case R.id.nav_address:
+                        fragmentContainer.setCurrentItem(0);
+                        return true;
+                    case R.id.nav_map:
+                        fragmentContainer.setCurrentItem(1);
+                        return true;
+                    case R.id.nav_route:
+                        fragmentContainer.setCurrentItem(2);
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
     }
 
     @Override
@@ -145,20 +159,13 @@ public class ContainerActivity extends DaggerAppCompatActivity implements MvpCon
         loadingScreen.setVisibility(View.GONE);
     }
 
-    @OnClick({R.id.address_list_iv, R.id.map_iv, R.id.drive_list_iv})
-    public void changeFragment(View view) {
-        if (menuIsVisible) {
-            hideMenu();
-        }
-        presenter.changeFragment(view.getId());
-    }
-
     @Override
     public void showFragment(int position) {
+        navBar.setSelectedItemId(R.id.nav_map);
         fragmentContainer.setCurrentItem(position);
     }
 
-    @OnClick(R.id.menu_btn)
+    @OnClick(R.id.menu_btn_wrapper)
     public void showMenuBtnClick() {
 
         if (menuIsVisible) {
@@ -218,8 +225,8 @@ public class ContainerActivity extends DaggerAppCompatActivity implements MvpCon
     @SuppressLint("SetTextI18n")
     @Override
     public void updateDeliveryCompletion(int[] deliveryCompletion) {
-        privateCompletion.setText(String.valueOf(deliveryCompletion[0]) + "/" + String.valueOf(deliveryCompletion[1]) + " delivered");
-        businessCompletion.setText(String.valueOf(deliveryCompletion[2]) + "/" + String.valueOf(deliveryCompletion[3]) + " delivered");
+//        privateCompletion.setText(String.valueOf(deliveryCompletion[0]) + "/" + String.valueOf(deliveryCompletion[1]) + " delivered");
+//        businessCompletion.setText(String.valueOf(deliveryCompletion[2]) + "/" + String.valueOf(deliveryCompletion[3]) + " delivered");
     }
 
     @Override

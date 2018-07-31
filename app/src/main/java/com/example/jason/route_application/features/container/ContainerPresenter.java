@@ -1,7 +1,6 @@
 package com.example.jason.route_application.features.container;
 
 import com.google.android.gms.maps.model.LatLng;
-
 import com.example.jason.route_application.data.api.ApiCallback;
 import com.example.jason.route_application.data.models.LocationManager;
 import com.example.jason.route_application.data.pojos.Address;
@@ -16,12 +15,9 @@ import com.example.jason.route_application.data.pojos.api.DriveRequest;
 import com.example.jason.route_application.data.pojos.api.RemoveAddressRequest;
 import com.example.jason.route_application.features.shared.BasePresenter;
 import com.example.jason.route_application.features.shared.MvpBasePresenter;
-
 import android.content.Context;
 import android.util.Log;
-
 import javax.inject.Inject;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,8 +47,6 @@ public class ContainerPresenter extends BasePresenter implements
     private List<Drive> driveList;
 
     private Context context;
-    private int mapViewId;
-    private int driveViewId;
 
     private SimpleDateFormat sdf;
 
@@ -66,11 +60,9 @@ public class ContainerPresenter extends BasePresenter implements
     //container data
 
     @Override
-    public void setVariables(Session session, Context context,int mapViewId, int driveViewId) {
+    public void setVariables(Session session, Context context) {
         this.session = session;
         this.context = context;
-        this.mapViewId = mapViewId;
-        this.driveViewId = driveViewId;
     }
 
     private void setupContainer(Container container) {
@@ -141,17 +133,6 @@ public class ContainerPresenter extends BasePresenter implements
         } else {
             view.updateRouteEndTimeTv("");
         }
-    }
-
-    @Override
-    public void changeFragment(int id) {
-        int position = 0;
-        if (id == mapViewId) {
-            position = 1;
-        } else if (id == driveViewId) {
-            position = 2;
-        }
-        view.showFragment(position);
     }
 
     @Override

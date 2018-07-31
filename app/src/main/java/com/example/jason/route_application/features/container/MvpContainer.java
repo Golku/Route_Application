@@ -1,7 +1,6 @@
 package com.example.jason.route_application.features.container;
 
 import com.google.android.gms.maps.model.LatLng;
-
 import com.example.jason.route_application.data.api.ApiCallback;
 import com.example.jason.route_application.data.pojos.Address;
 import com.example.jason.route_application.data.pojos.Event;
@@ -45,11 +44,9 @@ public interface MvpContainer {
 
     interface Presenter{
 
-        void setVariables(Session session, Context context,int mapViewId, int driveViewId);
+        void setVariables(Session session, Context context);
 
         void getContainer();
-
-        void changeFragment(int id);
 
         void showAddressDialog();
 
