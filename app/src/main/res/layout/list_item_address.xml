@@ -38,6 +38,7 @@
             android:id="@+id/status_iv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="invisible"
             app:srcCompat="@drawable/invalid_ic"/>
     </LinearLayout>
 
