@@ -1,6 +1,8 @@
 package com.example.jason.route_application.features.container.addressListFragment;
 
 import android.annotation.SuppressLint;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
@@ -26,7 +28,6 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
 
     private List<Address> addressList;
     private AdapterCallback callback;
-    private int expandedItem = -1;
 
     AddressListAdapter(AdapterCallback callback, List<Address> addressList) {
         this.addressList = addressList;
@@ -37,6 +38,11 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
         void itemClick(Address address);
         void showAddress(Address address);
         void removeAddress(Address address);
+    }
+
+    void addTouchHelper(RecyclerView recyclerView){
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(createHelperCallback());
+        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
     @NonNull
@@ -52,8 +58,16 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
         Address address = addressList.get(position);
 
         if(address.isValid()){
+            holder.positionTv.setText(Integer.toString(position + 1));
             holder.streetTv.setText(address.getStreet());
             holder.cityTv.setText(address.getPostCode() +" "+ address.getCity());
+
+            if(address.isBusiness()){
+                holder.addressType.setImageResource(R.drawable.business_ic);
+            }else{
+                holder.addressType.setImageResource(R.drawable.home_ic);
+            }
+
         }else{
             holder.streetTv.setText(address.getAddress());
         }
@@ -67,18 +81,20 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
     class CustomViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private ViewGroup itemWrapper;
+        private TextView positionTv;
         private TextView streetTv;
         private TextView cityTv;
         private ImageView showOnMapBtn;
-
+        private ImageView addressType;
 
         CustomViewHolder(View itemView) {
             super(itemView);
             itemWrapper = itemView.findViewById(R.id.item_wrapper);
+            positionTv = itemView.findViewById(R.id.positionTextView);
             streetTv = itemView.findViewById(R.id.street_tv);
             cityTv = itemView.findViewById(R.id.city_tv);
             showOnMapBtn = itemView.findViewById(R.id.show_on_map_iv);
-
+            addressType = itemView.findViewById(R.id.address_type_iv);
             itemWrapper.setOnClickListener(this);
             showOnMapBtn.setOnClickListener(this);
         }
@@ -91,5 +107,23 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
                 callback.showAddress(addressList.get(getAdapterPosition()));
             }
         }
+    }
+
+    private ItemTouchHelper.Callback createHelperCallback(){
+
+        return new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+
+            //not used, as the first parameter above is 0
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(final RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                int position = viewHolder.getAdapterPosition();
+                callback.removeAddress(addressList.get(position));
+            }
+        };
     }
 }

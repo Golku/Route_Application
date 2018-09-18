@@ -60,9 +60,9 @@ public class DriveListAdapter extends RecyclerView.Adapter<DriveListAdapter.Cust
         holder.estimatedArrivalTime.setText(arrivalTime);
 
         if(drive.isDestinationIsABusiness()){
-            holder.addressType.setImageResource(R.drawable.ic_business_marker);
+            holder.addressType.setImageResource(R.drawable.business_ic);
         }else{
-            holder.addressType.setImageResource(R.drawable.ic_private_marker);
+            holder.addressType.setImageResource(R.drawable.home_ic);
         }
     }
 

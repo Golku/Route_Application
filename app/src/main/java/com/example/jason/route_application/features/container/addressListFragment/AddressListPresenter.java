@@ -126,6 +126,7 @@ public class AddressListPresenter extends BasePresenter implements
                 }else{
                     it.setBusiness(false);
                 }
+                showAddressList();
                 break;
             }
         }

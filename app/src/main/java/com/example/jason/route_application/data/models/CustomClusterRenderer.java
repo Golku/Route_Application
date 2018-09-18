@@ -37,7 +37,7 @@ public class CustomClusterRenderer extends DefaultClusterRenderer<Address> {
         Marker marker = getMarker(address);
 
         if(address.isFetchingDriveInfo()){
-            iconName = "ic_hourglass";
+            iconName = "time_ic";
         }else{
 
             if(address.isSelected()){
@@ -48,19 +48,19 @@ public class CustomClusterRenderer extends DefaultClusterRenderer<Address> {
 
                 if(address.isBusiness() && openingTime>0 && closingTime>0){
                     if(arrivalTime > address.getOpeningTime() && arrivalTime < address.getClosingTime()){
-                        iconName = "ic_pending_marker_"+String.valueOf(routeOrder.indexOf(address)+1);
+                        iconName = "ic_done_marker_"+String.valueOf(routeOrder.indexOf(address)+1);
                     }else{
                         iconName = "ic_invalid_marker_"+String.valueOf(routeOrder.indexOf(address)+1);
                     }
                 }else{
-                    iconName = "ic_pending_marker_"+String.valueOf(routeOrder.indexOf(address)+1);
+                    iconName = "ic_done_marker_"+String.valueOf(routeOrder.indexOf(address)+1);
                 }
 
             }else{
                 if(address.isBusiness()){
-                    iconName = "ic_business_marker";
+                    iconName = "business_ic";
                 }else{
-                    iconName = "ic_private_marker";
+                    iconName = "home_ic";
                 }
             }
         }

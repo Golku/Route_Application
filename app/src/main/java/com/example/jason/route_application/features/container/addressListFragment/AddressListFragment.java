@@ -65,6 +65,7 @@ public class AddressListFragment extends Fragment implements MvpAddressList.View
 
     @Override
     public void setupAdapter(AddressListAdapter adapter) {
+        adapter.addTouchHelper(recyclerView);
         recyclerView.setAdapter(adapter);
     }
 

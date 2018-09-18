@@ -135,9 +135,8 @@ public class AddressDetailsPresenter implements MvpAddressDetails.Presenter,
             event.setAddress(address);
 
             EventBus.getDefault().post(event);
-
-            view.showToast("Address modify");
         }
+
         view.changeAddressType(address);
         view.networkOperationFinish();
     }

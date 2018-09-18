@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root_layout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/overcast">
 
     <TextView
         android:id="@+id/title_tv"
@@ -17,7 +19,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <EditText
         android:id="@+id/street_input"
@@ -34,7 +36,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title_tv" />
+        app:layout_constraintTop_toBottomOf="@+id/title_tv"/>
 
     <EditText
         android:id="@+id/postcode_numbers_input"
@@ -49,7 +51,7 @@
         android:textColor="@color/colorPrimaryDark"
         android:textColorHint="@color/colorPrimary"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/street_input" />
+        app:layout_constraintTop_toBottomOf="@+id/street_input"/>
 
     <EditText
         android:id="@+id/postcode_letters_input"
@@ -65,7 +67,7 @@
         android:textColorHint="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/postcode_numbers_input"
-        app:layout_constraintTop_toBottomOf="@+id/street_input" />
+        app:layout_constraintTop_toBottomOf="@+id/street_input"/>
 
     <EditText
         android:id="@+id/city_input"
@@ -83,7 +85,7 @@
         android:textColorHint="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/postcode_numbers_input" />
+        app:layout_constraintTop_toBottomOf="@+id/postcode_numbers_input"/>
 
     <Button
         android:id="@+id/cancel_dialog_btn"
@@ -100,7 +102,7 @@
         app:layout_constraintEnd_toStartOf="@+id/address_input_btn"
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/city_input" />
+        app:layout_constraintTop_toBottomOf="@+id/city_input"/>
 
     <Button
         android:id="@+id/address_input_btn"
@@ -116,5 +118,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/cancel_dialog_btn"
-        app:layout_constraintTop_toBottomOf="@+id/city_input" />
+        app:layout_constraintTop_toBottomOf="@+id/city_input"/>
 </android.support.constraint.ConstraintLayout>

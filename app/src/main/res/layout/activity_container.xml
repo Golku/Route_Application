@@ -21,50 +21,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/menu_btn_wrapper">
 
-        <ImageView
-            android:id="@+id/private_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_private_marker"/>
-
-        <TextView
-            android:id="@+id/private_completion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="4dp"
-            android:textColor="@color/colorPrimaryDark"
-            app:layout_constraintStart_toEndOf="@+id/private_icon"
-            app:layout_constraintTop_toTopOf="@+id/private_icon"/>
-
-        <ImageView
-            android:id="@+id/business_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/private_icon"
-            app:srcCompat="@drawable/ic_business_marker"/>
-
-        <TextView
-            android:id="@+id/business_completion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="4dp"
-            android:textColor="@color/colorPrimaryDark"
-            app:layout_constraintStart_toEndOf="@+id/business_icon"
-            app:layout_constraintTop_toTopOf="@+id/business_icon"/>
-
         <TextView
             android:id="@+id/end_time_tv"
             android:layout_width="wrap_content"
@@ -72,13 +28,10 @@
             android:layout_marginTop="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
             android:text="Route end time"
             android:textColor="@color/colorPrimaryDark"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/private_completion"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"/>
 
         <TextView
             android:id="@+id/route_end_time"
