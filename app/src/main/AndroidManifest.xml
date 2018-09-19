@@ -22,7 +22,7 @@
             android:value="AIzaSyAycv4bRa_NI4gl7WwkgLGs4EDhn44G8DY"/>
 
         <activity android:name=".features.splash.SplashActivity"
-                  android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+                  android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -30,7 +30,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".features.login.LoginActivity"/>
+        <activity android:name=".features.login.LoginActivity"
+                  android:theme="@style/Theme.AppCompat.NoActionBar"/>
 
         <activity android:name=".features.container.ContainerActivity"
                   android:theme="@style/Theme.AppCompat.NoActionBar"/>

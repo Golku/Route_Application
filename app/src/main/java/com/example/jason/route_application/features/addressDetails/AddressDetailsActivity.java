@@ -66,6 +66,10 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements
     TextView changeOpeningTimeTv;
     @BindView(R.id.change_closing_time_tv)
     TextView changeClosingTimeTv;
+    @BindView(R.id.opening_time_holder)
+    TextView openingHoursHolder;
+    @BindView(R.id.closing_time_holder)
+    TextView closingHoursHolder;
 
     private String workingHours;
     private boolean returning;
@@ -107,9 +111,11 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements
             changeOpeningTimeTv.setVisibility(View.VISIBLE);
             closingTimeTv.setVisibility(View.VISIBLE);
             changeClosingTimeTv.setVisibility(View.VISIBLE);
-            openingTimeTv.setText("Opening time: "+presenter.convertTime(address.getOpeningTime()));
-            closingTimeTv.setText("Closing time: "+ presenter.convertTime(address.getClosingTime()));
-            addressTypeImageView.setImageResource(R.drawable.business_ic);
+            openingHoursHolder.setVisibility(View.VISIBLE);
+            closingHoursHolder.setVisibility(View.VISIBLE);
+            openingTimeTv.setText(presenter.convertTime(address.getOpeningTime()));
+            closingTimeTv.setText(presenter.convertTime(address.getClosingTime()));
+            addressTypeImageView.setImageResource(R.drawable.business_ic_white);
         }
 
         presenter.setInfo(new Session(this), address);
@@ -147,15 +153,19 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements
     public void changeAddressType(Address address) {
 
         if(address.isBusiness()){
-            addressTypeImageView.setImageResource(R.drawable.business_ic);
-            openingTimeTv.setText("Opening time: "+presenter.convertTime(address.getOpeningTime()));
-            closingTimeTv.setText("Closing time: "+presenter.convertTime(address.getClosingTime()));
+            addressTypeImageView.setImageResource(R.drawable.business_ic_white);
+            openingTimeTv.setText(presenter.convertTime(address.getOpeningTime()));
+            closingTimeTv.setText(presenter.convertTime(address.getClosingTime()));
+            openingHoursHolder.setVisibility(View.VISIBLE);
+            closingHoursHolder.setVisibility(View.VISIBLE);
             openingTimeTv.setVisibility(View.VISIBLE);
             changeOpeningTimeTv.setVisibility(View.VISIBLE);
             closingTimeTv.setVisibility(View.VISIBLE);
             changeClosingTimeTv.setVisibility(View.VISIBLE);
         }else{
-            addressTypeImageView.setImageResource(R.drawable.home_ic);
+            addressTypeImageView.setImageResource(R.drawable.home_ic_white);
+            openingHoursHolder.setVisibility(View.GONE);
+            closingHoursHolder.setVisibility(View.GONE);
             openingTimeTv.setVisibility(View.GONE);
             changeOpeningTimeTv.setVisibility(View.GONE);
             closingTimeTv.setVisibility(View.GONE);
@@ -186,9 +196,9 @@ public class AddressDetailsActivity extends DaggerAppCompatActivity implements
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         switch (workingHours){
-            case "open" : openingTimeTv.setText("Opening time: "+String.valueOf(hourOfDay)+":"+String.valueOf(minute));
+            case "open" : openingTimeTv.setText(String.valueOf(hourOfDay)+":"+String.valueOf(minute));
                 break;
-            case "close" : closingTimeTv.setText("Closing time: "+String.valueOf(hourOfDay)+":"+String.valueOf(minute));
+            case "close" : closingTimeTv.setText(String.valueOf(hourOfDay)+":"+String.valueOf(minute));
         }
         presenter.changeOpeningHours(hourOfDay, minute, workingHours);
     }

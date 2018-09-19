@@ -9,4 +9,6 @@
     <color name="warmGrey">#bcbabe</color>
     <color name="ice">#a1d6e2</color>
     <color name="glacierBlue">#1995AD</color>
+    <color name="colorAccentDefault">#f05a28</color>
+    <color name="colorBlack">#000000</color>
 </resources>

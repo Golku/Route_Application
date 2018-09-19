@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootLayout"
-    android:background="@color/white"
+    android:background="@color/overcast"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".features.addressDetails.AddressDetailsActivity">
@@ -30,7 +30,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/search_ic"/>
+            app:srcCompat="@drawable/search_ic_white"/>
 
         <TextView
             android:id="@+id/streetTextView"
@@ -43,7 +43,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:text="@string/street.activity_address_details"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="@color/white"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/addressTypeImageView"
             app:layout_constraintTop_toTopOf="@+id/subLayout"/>
@@ -56,7 +56,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="@string/postcode.activity_address_details"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="@color/white"
             app:layout_constraintStart_toEndOf="@+id/addressTypeImageView"
             app:layout_constraintTop_toBottomOf="@+id/streetTextView"/>
 
@@ -68,7 +68,7 @@
             android:layout_marginStart="5dp"
             android:layout_marginTop="8dp"
             android:text="@string/city.activity_address_details"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="@color/white"
             app:layout_constraintStart_toEndOf="@+id/postcodeTextView"
             app:layout_constraintTop_toBottomOf="@+id/streetTextView"/>
 
@@ -83,7 +83,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/home_ic"/>
+            app:srcCompat="@drawable/home_ic_white"/>
 
         <ProgressBar
             android:id="@+id/typeChangeProgress_pb"
@@ -92,10 +92,36 @@
             android:layout_height="24dp"
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
-            android:visibility="invisible"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <TextView
+            android:id="@+id/opening_time_holder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:textColor="@color/white"
+            android:text="Opening hours:"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@+id/postcodeTextView"
+            app:layout_constraintStart_toEndOf="@+id/addressTypeImageView"/>
+
+        <TextView
+            android:id="@+id/closing_time_holder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:textColor="@color/white"
+            android:text="Closing hours:"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@+id/opening_time_holder"
+            app:layout_constraintStart_toEndOf="@+id/addressTypeImageView"/>
 
         <TextView
             android:id="@+id/opening_time_tv"
@@ -104,12 +130,10 @@
             android:layout_marginTop="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
-            android:textColor="@color/colorPrimaryDark"
-            android:text="Opening hours"
+            android:textColor="@color/white"
             android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@+id/postcodeTextView"
-            app:layout_constraintStart_toEndOf="@+id/addressTypeImageView"
-            />
+            app:layout_constraintStart_toEndOf="@+id/opening_time_holder"/>
 
         <TextView
             android:id="@+id/closing_time_tv"
@@ -119,12 +143,12 @@
             android:layout_marginTop="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
-            android:textColor="@color/colorPrimaryDark"
-            android:text="Closing time"
+            android:textColor="@color/white"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/opening_time_tv"
-            app:layout_constraintStart_toEndOf="@+id/addressTypeImageView"/>
+            app:layout_constraintVertical_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/opening_time_holder"/>
 
         <TextView
             android:id="@+id/change_opening_time_tv"
@@ -201,8 +225,8 @@
         android:layout_marginRight="32dp"
         android:clickable="true"
         android:focusable="true"
-        app:backgroundTint="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/ic_1"/>
+        app:backgroundTint="@color/colorAccentDefault"
+        app:srcCompat="@drawable/add_ic"/>
 </android.support.constraint.ConstraintLayout>

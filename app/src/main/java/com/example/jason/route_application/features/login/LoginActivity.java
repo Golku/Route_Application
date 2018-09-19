@@ -5,6 +5,7 @@ import com.example.jason.route_application.data.pojos.Session;
 import com.example.jason.route_application.features.container.ContainerActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -26,7 +27,7 @@ public class LoginActivity extends DaggerAppCompatActivity implements MvpLogin.V
     @BindView(R.id.password_input)
     EditText passwordInput;
     @BindView(R.id.login_btn)
-    Button loginBtn;
+    CardView loginBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

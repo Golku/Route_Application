@@ -57,7 +57,16 @@ public class AddressDetailsPresenter implements MvpAddressDetails.Presenter,
         int hour = (int) timeFraction;
         int minute = (int) ((timeFraction - hour) * 60);
 
-        return String.valueOf(hour)+":"+String.valueOf(minute);
+        String zero;
+        int length = String.valueOf(minute).length();
+
+        if(length < 2){
+            zero = "0";
+        }else{
+            zero = "";
+        }
+
+        return String.valueOf(hour)+":"+(String.valueOf(minute)+zero);
     }
 
     @Override
