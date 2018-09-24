@@ -164,9 +164,9 @@ public class MapFragment extends Fragment implements
     public void onRoutingFailure(RouteException e) {
         if (e != null) {
 //            showToast(e.getMessage());
-            showToast("polyline error");
+//            showToast("polyline error");
         } else {
-            showToast("Routing failed");
+//            showToast("Routing failed");
         }
     }
 
