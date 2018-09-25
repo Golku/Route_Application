@@ -52,6 +52,8 @@ public interface MvpContainer {
 
         void getUserLocation();
 
+        void showDeliveredAddresses();
+
         void updateUserLocation(String userAddress, LatLng userLocation);
 
         void logOut();

@@ -155,6 +155,11 @@ public class ContainerPresenter extends BasePresenter implements
     }
 
     @Override
+    public void showDeliveredAddresses() {
+
+    }
+
+    @Override
     public void logOut() {
         endSession(session);
         view.showLoginScreen();

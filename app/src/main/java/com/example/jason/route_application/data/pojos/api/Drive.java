@@ -27,6 +27,8 @@ public class Drive{
     private long deliveryTimeInMillis;
     private String deliveryTimeHumanReadable;
 
+    private int done;
+
     public boolean isValid() {
         return valid;
     }
@@ -105,5 +107,13 @@ public class Drive{
 
     public void setDeliveryTimeHumanReadable(String deliveryTimeHumanReadable) {
         this.deliveryTimeHumanReadable = deliveryTimeHumanReadable;
+    }
+
+    public int getDone() {
+        return done;
+    }
+
+    public void setDone(int done) {
+        this.done = done;
     }
 }

@@ -24,6 +24,7 @@ public class DriveListPresenter extends BasePresenter implements
 
     private MvpDriveList.View view;
 
+    private List<Drive> completeDriveList;
     private List<Drive> driveList;
     private DriveListAdapter adapter;
 

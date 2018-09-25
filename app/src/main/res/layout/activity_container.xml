@@ -67,7 +67,7 @@
         android:id="@+id/menu_wrapper"
         android:layout_width="170dp"
         android:layout_height="0dp"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/menu_btn_wrapper">
 
@@ -75,49 +75,61 @@
             android:id="@+id/address_input_btn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:padding="15dp"
-            android:textColor="@color/white"
             android:background="@drawable/menu_buttons"
+            android:padding="15dp"
             android:text="Add address"
+            android:textColor="@color/white"
             app:layout_constraintBottom_toTopOf="@+id/get_user_location_btn"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/get_user_location_btn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:padding="15dp"
             android:background="@drawable/menu_buttons"
-            android:textColor="@color/white"
+            android:padding="15dp"
             android:text="Refresh location"
+            android:textColor="@color/white"
             app:layout_constraintBottom_toTopOf="@+id/refresh_info_btn"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/refresh_info_btn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:padding="15dp"
             android:background="@drawable/menu_buttons"
-            android:textColor="@color/white"
+            android:padding="15dp"
             android:text="Refresh route info"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="97dp" />
+
+        <TextView
+            android:id="@+id/show_delivered_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/menu_buttons"
+            android:padding="15dp"
+            android:text="Show delivered"
             app:layout_constraintBottom_toTopOf="@+id/log_out_btn"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/refresh_info_btn" />
 
         <TextView
             android:id="@+id/log_out_btn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:text="Log out"
-            android:padding="15dp"
             android:background="@drawable/menu_buttons"
+            android:padding="15dp"
+            android:text="Log out"
+            android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
     </android.support.constraint.ConstraintLayout>
 
     <android.support.v4.view.ViewPager
