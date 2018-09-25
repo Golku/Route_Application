@@ -50,6 +50,13 @@ public class DriveListPresenter extends BasePresenter implements
     }
 
     @Override
+    public void driveCompleted(Drive drive) {
+        drive.setDone(1);
+        adapter.notifyItemRemoved(driveList.indexOf(drive));
+        driveList.remove(drive);
+    }
+
+    @Override
     public void publishEvent(Event event) {
         view.postEvent(event);
     }

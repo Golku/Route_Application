@@ -1,6 +1,7 @@
 package com.example.jason.route_application.features.container.driveListFragment;
 
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,12 @@ public class DriveListAdapter extends RecyclerView.Adapter<DriveListAdapter.Cust
     interface AdapterCallback{
         void itemClick(Address address);
         void goButtonClick(String address);
+        void driveCompleted(Drive drive);
+    }
+
+    void addTouchHelper(RecyclerView recyclerView){
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(createHelperCallback());
+        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
     List<Drive> getList(){
@@ -109,5 +116,23 @@ public class DriveListAdapter extends RecyclerView.Adapter<DriveListAdapter.Cust
                 callback.goButtonClick(routeList.get(this.getAdapterPosition()).getDestinationAddress().getAddress());
             }
         }
+    }
+
+    private ItemTouchHelper.Callback createHelperCallback(){
+
+        return new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+
+            //not used, as the first parameter above is 0
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(final RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                int position = viewHolder.getAdapterPosition();
+                callback.driveCompleted(routeList.get(position));
+            }
+        };
     }
 }
