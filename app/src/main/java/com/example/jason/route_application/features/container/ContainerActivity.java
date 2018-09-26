@@ -187,6 +187,7 @@ public class ContainerActivity extends DaggerAppCompatActivity implements MvpCon
                 case 2:
                     addressInputBtn.setVisibility(View.GONE);
                     getUserLocationBtn.setVisibility(View.GONE);
+                    showDeliveredBtn.setVisibility(View.VISIBLE);
                     break;
             }
             showMenu();
@@ -206,7 +207,7 @@ public class ContainerActivity extends DaggerAppCompatActivity implements MvpCon
         menuBtnWrapper.setBackgroundResource(R.drawable.drop_menu_btn);
     }
 
-    @OnClick({R.id.address_input_btn, R.id.get_user_location_btn, R.id.refresh_info_btn, R.id.log_out_btn})
+    @OnClick({R.id.address_input_btn, R.id.get_user_location_btn, R.id.refresh_info_btn, R.id.log_out_btn, R.id.show_delivered_btn})
     public void menuBtnClick(View view) {
         hideMenu();
         switch (view.getId()) {

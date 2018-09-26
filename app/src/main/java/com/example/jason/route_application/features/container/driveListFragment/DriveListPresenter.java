@@ -28,9 +28,10 @@ public class DriveListPresenter extends BasePresenter implements
     private List<Drive> driveList;
     private DriveListAdapter adapter;
 
-    DriveListPresenter(MvpDriveList.View view, List<Drive> driveList) {
+    DriveListPresenter(MvpDriveList.View view, List<Drive> completeDriveList, List<Drive> driveList) {
         this.view = view;
         this.driveList = driveList;
+        this.completeDriveList = completeDriveList;
     }
 
     @Override
@@ -54,6 +55,8 @@ public class DriveListPresenter extends BasePresenter implements
         drive.setDone(1);
         adapter.notifyItemRemoved(driveList.indexOf(drive));
         driveList.remove(drive);
+
+//        createEvent("container","updateEndTime",this);
     }
 
     @Override

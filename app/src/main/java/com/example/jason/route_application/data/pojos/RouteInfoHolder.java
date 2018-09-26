@@ -14,6 +14,7 @@ public class RouteInfoHolder implements Parcelable{
     private Address userLocation;
     private List<Address> addressList;
     private List<Drive> driveList;
+    private List<Drive> completeDriveList;
     private List<String> routeOrder;
 
     public RouteInfoHolder() {
@@ -81,6 +82,14 @@ public class RouteInfoHolder implements Parcelable{
 
     public void setDriveList(List<Drive> driveList) {
         this.driveList = driveList;
+    }
+
+    public List<Drive> getCompleteDriveList() {
+        return completeDriveList;
+    }
+
+    public void setCompleteDriveList(List<Drive> completeDriveList) {
+        this.completeDriveList = completeDriveList;
     }
 
     public List<String> getRouteOrder() {

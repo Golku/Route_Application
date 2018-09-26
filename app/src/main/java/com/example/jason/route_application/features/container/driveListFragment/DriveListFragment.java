@@ -38,7 +38,7 @@ public class DriveListFragment extends Fragment implements MvpDriveList.View{
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
         RouteInfoHolder routeInfoHolder = getArguments().getParcelable("routeInfoHolder");
-        presenter = new DriveListPresenter(this, routeInfoHolder.getDriveList());
+        presenter = new DriveListPresenter(this, routeInfoHolder.getCompleteDriveList(),routeInfoHolder.getDriveList());
     }
 
     @Override

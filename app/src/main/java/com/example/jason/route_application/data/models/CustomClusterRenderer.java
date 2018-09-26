@@ -48,12 +48,12 @@ public class CustomClusterRenderer extends DefaultClusterRenderer<Address> {
 
                 if(address.isBusiness() && openingTime>0 && closingTime>0){
                     if(arrivalTime > address.getOpeningTime() && arrivalTime < address.getClosingTime()){
-                        iconName = "ic_done_marker_"+String.valueOf(routeOrder.indexOf(address)+1);
+                        iconName = "ic_pending_marker_"+String.valueOf(routeOrder.indexOf(address)+1);
                     }else{
                         iconName = "ic_invalid_marker_"+String.valueOf(routeOrder.indexOf(address)+1);
                     }
                 }else{
-                    iconName = "ic_done_marker_"+String.valueOf(routeOrder.indexOf(address)+1);
+                    iconName = "ic_pending_marker_"+String.valueOf(routeOrder.indexOf(address)+1);
                 }
 
             }else{
