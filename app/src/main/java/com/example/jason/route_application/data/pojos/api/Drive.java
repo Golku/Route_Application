@@ -13,6 +13,8 @@ public class Drive{
 
     private boolean valid;
 
+    private int position;
+
     private Address originAddress;
     private Address destinationAddress;
 
@@ -35,6 +37,14 @@ public class Drive{
 
     public void setValid(boolean valid) {
         this.valid = valid;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 
     public Address getOriginAddress() {

@@ -230,7 +230,6 @@ public class ContainerActivity extends DaggerAppCompatActivity implements MvpCon
         }
     }
 
-    @SuppressLint("SetTextI18n")
     @Override
     public void updateDeliveryCompletion(int[] deliveryCompletion) {
 //        privateCompletion.setText(String.valueOf(deliveryCompletion[0]) + "/" + String.valueOf(deliveryCompletion[1]) + " delivered");

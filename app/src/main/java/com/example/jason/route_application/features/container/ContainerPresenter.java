@@ -44,7 +44,6 @@ public class ContainerPresenter extends BasePresenter implements
 
     private Container container;
     private List<Address> addressList;
-    private List<Drive> completeDriveList;
     private List<Drive> driveList;
 
     private Context context;
@@ -76,7 +75,6 @@ public class ContainerPresenter extends BasePresenter implements
         RouteInfoHolder routeInfoHolder = new RouteInfoHolder();
         routeInfoHolder.setAddressList(addressList);
         routeInfoHolder.setDriveList(driveList);
-        routeInfoHolder.setCompleteDriveList(completeDriveList);
 
         view.setupFragments(routeInfoHolder);
     }
@@ -101,7 +99,6 @@ public class ContainerPresenter extends BasePresenter implements
     }
 
     private void setupDriveList() {
-        completeDriveList = new ArrayList<>();
         driveList = new ArrayList<>();
 
         if (container.getDriveList() != null) {
@@ -159,7 +156,7 @@ public class ContainerPresenter extends BasePresenter implements
 
     @Override
     public void showDeliveredAddresses() {
-        view.showToast("Show delivered addresses");
+        createEvent("driveFragment", "showCompletedDrives", this);
     }
 
     @Override
@@ -250,8 +247,10 @@ public class ContainerPresenter extends BasePresenter implements
                 deliveryTime = date + driveTime + PACKAGE_DELIVERY_TIME;
             }
 
+
             String deliveryTimeString = sdf.format(deliveryTime);
 
+            drive.setPosition(driveList.size());
             drive.setDeliveryTimeInMillis(deliveryTime);
             drive.setDeliveryTimeHumanReadable(deliveryTimeString);
 

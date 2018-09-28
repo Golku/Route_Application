@@ -19,18 +19,18 @@ import java.util.List;
 
 public class DriveListAdapter extends RecyclerView.Adapter<DriveListAdapter.CustomViewHolder>{
 
-    private List<Drive> routeList;
+    private List<Drive> driveList;
     private AdapterCallback callback;
 
-    DriveListAdapter(AdapterCallback callback, List<Drive> routeList) {
-        this.routeList = routeList;
+    public DriveListAdapter(AdapterCallback callback, List<Drive> driveList) {
+        this.driveList = driveList;
         this.callback = callback;
     }
 
     interface AdapterCallback{
         void itemClick(Address address);
         void goButtonClick(String address);
-        void driveCompleted(Drive drive);
+        void completeDrive(Drive drive);
     }
 
     void addTouchHelper(RecyclerView recyclerView){
@@ -39,7 +39,7 @@ public class DriveListAdapter extends RecyclerView.Adapter<DriveListAdapter.Cust
     }
 
     List<Drive> getList(){
-        return this.routeList;
+        return this.driveList;
     }
 
     @Override
@@ -51,15 +51,14 @@ public class DriveListAdapter extends RecyclerView.Adapter<DriveListAdapter.Cust
     @Override
     public void onBindViewHolder(CustomViewHolder holder, int position) {
 
-        Drive drive = routeList.get(position);
+        Drive drive = driveList.get(position);
 
-        String positionTracker = Integer.toString(position + 1);
         String city = drive.getDestinationAddress().getPostCode() + " " + drive.getDestinationAddress().getCity();
         String distance = "Distance: "+drive.getDriveDistanceHumanReadable();
         String duration = "Duration: "+drive.getDriveDurationHumanReadable();
         String arrivalTime = drive.getDeliveryTimeHumanReadable();
 
-        holder.positionTextView.setText(positionTracker);
+        holder.positionTextView.setText(String.valueOf(drive.getPosition()));
         holder.streetTextView.setText(drive.getDestinationAddress().getStreet());
         holder.cityTextView.setText(city);
         holder.distanceTextView.setText(distance);
@@ -71,11 +70,15 @@ public class DriveListAdapter extends RecyclerView.Adapter<DriveListAdapter.Cust
         }else{
             holder.addressType.setImageResource(R.drawable.home_ic);
         }
+
+        if(drive.getDone() == 1){
+            holder.itemView.setAlpha(0.5f);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return routeList.size();
+        return driveList.size();
     }
 
     class CustomViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -110,10 +113,10 @@ public class DriveListAdapter extends RecyclerView.Adapter<DriveListAdapter.Cust
         public void onClick(View v) {
 
             if(v == this.itemWrapper){
-                callback.itemClick(routeList.get(this.getAdapterPosition()).getDestinationAddress());
+                callback.itemClick(driveList.get(this.getAdapterPosition()).getDestinationAddress());
             }
             else if(v == this.goIv){
-                callback.goButtonClick(routeList.get(this.getAdapterPosition()).getDestinationAddress().getAddress());
+                callback.goButtonClick(driveList.get(this.getAdapterPosition()).getDestinationAddress().getAddress());
             }
         }
     }
@@ -131,7 +134,7 @@ public class DriveListAdapter extends RecyclerView.Adapter<DriveListAdapter.Cust
             @Override
             public void onSwiped(final RecyclerView.ViewHolder viewHolder, int swipeDir) {
                 int position = viewHolder.getAdapterPosition();
-                callback.driveCompleted(routeList.get(position));
+                callback.completeDrive(driveList.get(position));
             }
         };
     }

@@ -15,6 +15,8 @@ public interface MvpDriveList {
         void postEvent(Event event);
 
         void scrollToItem(int position);
+
+        void showToast(String message);
     }
 
     interface Presenter{

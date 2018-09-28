@@ -16,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,7 +39,7 @@ public class DriveListFragment extends Fragment implements MvpDriveList.View{
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
         RouteInfoHolder routeInfoHolder = getArguments().getParcelable("routeInfoHolder");
-        presenter = new DriveListPresenter(this, routeInfoHolder.getCompleteDriveList(),routeInfoHolder.getDriveList());
+        presenter = new DriveListPresenter(this, routeInfoHolder.getDriveList());
     }
 
     @Override
@@ -73,6 +74,12 @@ public class DriveListFragment extends Fragment implements MvpDriveList.View{
     @Override
     public void scrollToItem(int position) {
         recyclerView.smoothScrollToPosition(position);
+    }
+
+    @Override
+    public void showToast(String message) {
+        Toast toast = Toast.makeText(getContext(), message, Toast.LENGTH_LONG);
+        toast.show();
     }
 
     @Override
