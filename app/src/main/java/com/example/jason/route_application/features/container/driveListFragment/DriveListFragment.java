@@ -57,6 +57,7 @@ public class DriveListFragment extends Fragment implements MvpDriveList.View{
 
     @Override
     public void setupAdapter(DriveListAdapter adapter) {
+        adapter.addContext(this.getContext());
         adapter.addTouchHelper(recyclerView);
         recyclerView.setAdapter(adapter);
     }

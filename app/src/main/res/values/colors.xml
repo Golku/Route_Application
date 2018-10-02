@@ -11,4 +11,6 @@
     <color name="glacierBlue">#1995AD</color>
     <color name="colorAccentDefault">#f05a28</color>
     <color name="colorBlack">#000000</color>
+    <color name="red">#ea0000</color>
+    <color name="green">#0ba900</color>
 </resources>

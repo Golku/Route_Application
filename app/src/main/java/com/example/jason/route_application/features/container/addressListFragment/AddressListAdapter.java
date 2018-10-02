@@ -1,10 +1,15 @@
 package com.example.jason.route_application.features.container.addressListFragment;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.RectF;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
@@ -28,6 +33,7 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
 
     private List<Address> addressList;
     private AdapterCallback callback;
+    private Context context;
 
     AddressListAdapter(AdapterCallback callback, List<Address> addressList) {
         this.addressList = addressList;
@@ -38,6 +44,10 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
         void itemClick(Address address);
         void showAddress(Address address);
         void removeAddress(Address address);
+    }
+
+    public void addContext(Context context){
+        this.context = context;
     }
 
     void addTouchHelper(RecyclerView recyclerView){
@@ -123,6 +133,51 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
             public void onSwiped(final RecyclerView.ViewHolder viewHolder, int swipeDir) {
                 int position = viewHolder.getAdapterPosition();
                 callback.removeAddress(addressList.get(position));
+            }
+
+            @Override
+            public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+
+                if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+
+                    View itemView = viewHolder.itemView;
+
+                    float height = (float) itemView.getBottom() - (float) itemView.getTop();
+                    float width = height / 3;
+
+                    Paint backgroundPaint = new Paint();
+                    Paint textPaint = new Paint();
+                    Bitmap icon;
+
+                    if (dX > 0) {
+
+                        backgroundPaint.setColor(ResourcesCompat.getColor(context.getResources(), R.color.red, null));
+
+                        textPaint.setColor(ResourcesCompat.getColor(context.getResources(), R.color.white, null));
+                        textPaint.setTextSize(80f);
+
+                        RectF background = new RectF((float) itemView.getLeft(), (float) itemView.getTop(), dX, (float) itemView.getBottom());
+                        c.drawRect(background, backgroundPaint);
+
+                        c.drawText("X Delete",
+                                (float) itemView.getLeft() + width,
+                                (float) itemView.getTop() + (height*(float)0.6),
+                                textPaint);
+
+//                        icon = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.ic_delete_white_24dp);
+//                        RectF iconDest = new RectF((float) itemView.getLeft() + width, (float) itemView.getTop() + width, (float) itemView.getLeft() + 2 * width, (float) itemView.getBottom() - width);
+//                        c.drawBitmap(icon, null, iconDest, p);
+
+
+//                        Log.d("debug", "Top: "+itemView.getTop());
+//                        Log.d("debug", "Bottom: "+itemView.getBottom());
+//                        Log.d("debug", "Left: "+itemView.getLeft());
+//                        Log.d("debug", "Right: "+itemView.getRight());
+//                        Log.d("debug", "Height: "+height);
+                    }
+
+                    super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+                }
             }
         };
     }

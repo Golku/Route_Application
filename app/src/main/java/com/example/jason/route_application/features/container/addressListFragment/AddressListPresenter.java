@@ -25,6 +25,9 @@ public class AddressListPresenter extends BasePresenter implements
     private boolean newAddress;
     private int changeAddressPosition;
 
+    private int deletedItemPosition;
+    private Address deletedAddress;
+
     AddressListPresenter(MvpAddressList.View view, List<Address> addressList) {
         this.view = view;
         this.addressList = addressList;
@@ -83,10 +86,23 @@ public class AddressListPresenter extends BasePresenter implements
 
     @Override
     public void removeAddress(Address address) {
+        deletedItemPosition = addressList.indexOf(address);
+        deletedAddress = address;
         adapter.notifyItemRemoved(addressList.indexOf(address));
         addressList.remove(address);
-        createEvent("container", "removeAddress", address,this);
+        view.addressDeleted(deletedItemPosition, address);
         createEvent("mapFragment", "removeMarker", address,this);
+    }
+
+    @Override
+    public void restoreAddress() {
+        addressList.add(deletedItemPosition, deletedAddress);
+        adapter.notifyItemInserted(deletedItemPosition);
+    }
+
+    @Override
+    public void removeAddressFromContainer(Address address) {
+        createEvent("container", "removeAddress", address,this);
     }
 
     @Override

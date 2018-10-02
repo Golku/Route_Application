@@ -3,6 +3,7 @@ package com.example.jason.route_application.features.container.addressListFragme
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +15,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.jason.route_application.R;
+import com.example.jason.route_application.data.pojos.Address;
 import com.example.jason.route_application.data.pojos.Event;
 import com.example.jason.route_application.data.pojos.RouteInfoHolder;
 
@@ -65,6 +67,7 @@ public class AddressListFragment extends Fragment implements MvpAddressList.View
 
     @Override
     public void setupAdapter(AddressListAdapter adapter) {
+        adapter.addContext(this.getContext());
         adapter.addTouchHelper(recyclerView);
         recyclerView.setAdapter(adapter);
     }
@@ -112,6 +115,25 @@ public class AddressListFragment extends Fragment implements MvpAddressList.View
         });
 
         alertDialog.show();
+    }
+
+    @Override
+    public void addressDeleted(final int position, final Address address) {
+        Snackbar snackbar = Snackbar.make(recyclerView, "Address deleted", Snackbar.LENGTH_LONG);
+        snackbar.setAction("Undo", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.restoreAddress();
+                recyclerView.smoothScrollToPosition(position);
+            }
+        });
+        snackbar.addCallback(new Snackbar.Callback(){
+            @Override
+            public void onDismissed(Snackbar transientBottomBar, int event) {
+                presenter.removeAddressFromContainer(address);
+            }
+        });
+        snackbar.show();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

@@ -1,7 +1,15 @@
 package com.example.jason.route_application.features.container.driveListFragment;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.RectF;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +29,7 @@ public class DriveListAdapter extends RecyclerView.Adapter<DriveListAdapter.Cust
 
     private List<Drive> driveList;
     private AdapterCallback callback;
+    private Context context;
 
     public DriveListAdapter(AdapterCallback callback, List<Drive> driveList) {
         this.driveList = driveList;
@@ -33,7 +42,11 @@ public class DriveListAdapter extends RecyclerView.Adapter<DriveListAdapter.Cust
         void completeDrive(Drive drive);
     }
 
-    void addTouchHelper(RecyclerView recyclerView){
+    public void addContext(Context context){
+        this.context = context;
+    }
+
+    public void addTouchHelper(RecyclerView recyclerView){
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(createHelperCallback());
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
@@ -135,6 +148,50 @@ public class DriveListAdapter extends RecyclerView.Adapter<DriveListAdapter.Cust
             public void onSwiped(final RecyclerView.ViewHolder viewHolder, int swipeDir) {
                 int position = viewHolder.getAdapterPosition();
                 callback.completeDrive(driveList.get(position));
+            }
+
+            @Override
+            public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+
+                if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+
+                    View itemView = viewHolder.itemView;
+
+                    float height = (float) itemView.getBottom() - (float) itemView.getTop();
+                    float width = height / 3;
+
+                    Paint backgroundPaint = new Paint();
+                    Paint textPaint = new Paint();
+                    Bitmap icon;
+
+                    if (dX > 0) {
+
+                        backgroundPaint.setColor(ResourcesCompat.getColor(context.getResources(), R.color.green, null));
+
+                        textPaint.setColor(ResourcesCompat.getColor(context.getResources(), R.color.white, null));
+                        textPaint.setTextSize(80);
+
+                        RectF background = new RectF((float) itemView.getLeft(), (float) itemView.getTop(), dX, (float) itemView.getBottom());
+                        c.drawRect(background, backgroundPaint);
+
+                        c.drawText("✔ Done",
+                                (float) itemView.getLeft() + width,
+                                (float) itemView.getTop() + (height*(float)0.6),
+                                textPaint);
+
+//                        icon = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.ic_delete_white_24dp);
+//                        RectF iconDest = new RectF((float) itemView.getLeft() + width, (float) itemView.getTop() + width, (float) itemView.getLeft() + 2 * width, (float) itemView.getBottom() - width);
+//                        c.drawBitmap(icon, null, iconDest, p);
+
+//                        Log.d("debug", "Top: "+itemView.getTop());
+//                        Log.d("debug", "Bottom: "+itemView.getBottom());
+//                        Log.d("debug", "Left: "+itemView.getLeft());
+//                        Log.d("debug", "Right: "+itemView.getRight());
+//                        Log.d("debug", "Height: "+height);
+                    }
+
+                    super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+                }
             }
         };
     }
