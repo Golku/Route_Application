@@ -64,8 +64,6 @@ public class ContainerActivity extends DaggerAppCompatActivity implements MvpCon
     TextView refreshInfoBtn;
     @BindView(R.id.log_out_btn)
     TextView logOutBtn;
-    @BindView(R.id.show_delivered_btn)
-    TextView showDeliveredBtn;
     @BindView(R.id.fragment_container)
     ViewPager fragmentContainer;
     @BindView(R.id.route_end_time)
@@ -176,18 +174,15 @@ public class ContainerActivity extends DaggerAppCompatActivity implements MvpCon
             switch (fragmentContainer.getCurrentItem()) {
                 case 0:
                     getUserLocationBtn.setVisibility(View.GONE);
-                    showDeliveredBtn.setVisibility(View.GONE);
                     addressInputBtn.setVisibility(View.VISIBLE);
                     break;
                 case 1:
                     addressInputBtn.setVisibility(View.GONE);
-                    showDeliveredBtn.setVisibility(View.GONE);
                     getUserLocationBtn.setVisibility(View.VISIBLE);
                     break;
                 case 2:
                     addressInputBtn.setVisibility(View.GONE);
                     getUserLocationBtn.setVisibility(View.GONE);
-                    showDeliveredBtn.setVisibility(View.VISIBLE);
                     break;
             }
             showMenu();
@@ -207,7 +202,7 @@ public class ContainerActivity extends DaggerAppCompatActivity implements MvpCon
         menuBtnWrapper.setBackgroundResource(R.drawable.drop_menu_btn);
     }
 
-    @OnClick({R.id.address_input_btn, R.id.get_user_location_btn, R.id.refresh_info_btn, R.id.log_out_btn, R.id.show_delivered_btn})
+    @OnClick({R.id.address_input_btn, R.id.get_user_location_btn, R.id.refresh_info_btn, R.id.log_out_btn})
     public void menuBtnClick(View view) {
         hideMenu();
         switch (view.getId()) {
@@ -220,9 +215,6 @@ public class ContainerActivity extends DaggerAppCompatActivity implements MvpCon
                 break;
             case R.id.refresh_info_btn:
                 presenter.getContainer();
-                break;
-            case R.id.show_delivered_btn:
-                presenter.showDeliveredAddresses();
                 break;
             case R.id.log_out_btn:
                 presenter.logOut();

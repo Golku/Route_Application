@@ -30,6 +30,7 @@ public class DriveListPresenter extends BasePresenter implements
     DriveListPresenter(MvpDriveList.View view, List<Drive> driveList) {
         this.view = view;
         listHandler = new DriveListHandler(driveList, this);
+        listHandler.createAdapter();
     }
 
     @Override
@@ -50,7 +51,8 @@ public class DriveListPresenter extends BasePresenter implements
     @Override
     public void completeDrive(Drive drive) {
         listHandler.driveCompleted(drive);
-//        createEvent("container","updateEndTime",this);
+        showDriveList();
+        createEvent("mapFragment","driveCompleted", drive.getDestinationAddress(),this);
     }
 
     @Override
@@ -76,12 +78,11 @@ public class DriveListPresenter extends BasePresenter implements
                 listHandler.updateList(event.getDriveList());
                 showDriveList();
                 break;
-            case "showCompletedDrives":
-                listHandler.showCompletedDrives();
-                break;
             case "addDrive":
                 listHandler.addDriveToList(event.getDrive());
                 view.scrollToItem(listHandler.getListSize());
+                createEvent("mapFragment", "driveSuccess", event.getDrive(), this);
+                createEvent("container", "updateEndTime", this);
                 break;
             case "removeDrive":
                 listHandler.removeDriveFromList();
@@ -91,6 +92,7 @@ public class DriveListPresenter extends BasePresenter implements
             case "RemoveMultipleDrive":
                 listHandler.removeMultipleDrive(event.getAddressString());
                 view.scrollToItem(listHandler.getListSize());
+                showDriveList();
                 createEvent("container", "updateEndTime", this);
                 break;
         }

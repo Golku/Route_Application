@@ -40,21 +40,17 @@ public class ContainerPresenter extends BasePresenter implements
 
     private MvpContainer.Interactor interactor;
 
+    private Context context;
     private Session session;
-
     private Container container;
+
     private List<Address> addressList;
     private List<Drive> driveList;
-
-    private Context context;
-
-    private SimpleDateFormat sdf;
 
     @Inject
     public ContainerPresenter(MvpContainer.View view, MvpContainer.Interactor interactor) {
         this.view = view;
         this.interactor = interactor;
-        sdf = new SimpleDateFormat("kk:mm");
     }
 
     //container data
@@ -155,11 +151,6 @@ public class ContainerPresenter extends BasePresenter implements
     }
 
     @Override
-    public void showDeliveredAddresses() {
-        createEvent("driveFragment", "showCompletedDrives", this);
-    }
-
-    @Override
     public void logOut() {
         endSession(session);
         view.showLoginScreen();
@@ -232,32 +223,7 @@ public class ContainerPresenter extends BasePresenter implements
 
     private void addDrive(Drive drive) {
         if(drive != null && drive.isValid()){
-
-            driveList.add(drive);
-
-            long deliveryTime;
-            long driveTime = drive.getDriveDurationInSeconds() * 1000;
-            long PACKAGE_DELIVERY_TIME = 120000;
-
-            if (driveList.size() > 1) {
-                Drive previousDrive = driveList.get(driveList.indexOf(drive) - 1);
-                deliveryTime = previousDrive.getDeliveryTimeInMillis() + driveTime + PACKAGE_DELIVERY_TIME;
-            } else {
-                long date = System.currentTimeMillis();
-                deliveryTime = date + driveTime + PACKAGE_DELIVERY_TIME;
-            }
-
-
-            String deliveryTimeString = sdf.format(deliveryTime);
-
-            drive.setPosition(driveList.size());
-            drive.setDeliveryTimeInMillis(deliveryTime);
-            drive.setDeliveryTimeHumanReadable(deliveryTimeString);
-
-            createEvent("mapFragment", "driveSuccess", drive, this);
             createEvent("driveFragment", "addDrive", drive, this);
-
-            updateRouteEndTime();
         }else{
             createEvent("mapFragment", "driveFailed",this);
         }

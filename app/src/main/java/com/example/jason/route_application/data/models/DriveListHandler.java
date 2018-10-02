@@ -5,25 +5,21 @@ import com.example.jason.route_application.data.pojos.api.Drive;
 import com.example.jason.route_application.features.container.driveListFragment.DriveListAdapter;
 import com.example.jason.route_application.features.container.driveListFragment.DriveListPresenter;
 
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class DriveListHandler {
 
     private List<Drive> driveList;
-    private List<Drive> completedDrives;
     private DriveListAdapter adapter;
     private DriveListPresenter callback;
-    private boolean completeDrivesVisible;
 
     public DriveListHandler(List<Drive> driveList, DriveListPresenter callback) {
         this.driveList = driveList;
         this.callback = callback;
-        completedDrives = new ArrayList<>();
-        completeDrivesVisible = false;
     }
 
-    private void createAdapter(){
+    public void createAdapter(){
         adapter = new DriveListAdapter(callback, driveList);
     }
 
@@ -40,16 +36,6 @@ public class DriveListHandler {
         return driveList.size();
     }
 
-    public void showCompletedDrives() {
-
-        if(completeDrivesVisible){
-            completeDrivesVisible = false;
-        }else{
-            completeDrivesVisible = true;
-        }
-
-    }
-
     public void addressTypeChange(Address address) {
 
         for (Drive drive : driveList) {
@@ -58,26 +44,44 @@ public class DriveListHandler {
 
                 if (address.isBusiness()) {
                     drive.setDestinationIsABusiness(true);
+                    drive.getDestinationAddress().setBusiness(true);
                 } else {
                     drive.setDestinationIsABusiness(false);
+                    drive.getDestinationAddress().setBusiness(false);
                 }
 
                 break;
             }
         }
-
-        createAdapter();
     }
 
     public void addDriveToList(Drive drive) {
+        driveList.add(drive);
+
+        long deliveryTime;
+        long driveTime = drive.getDriveDurationInSeconds() * 1000;
+        long PACKAGE_DELIVERY_TIME = 120000;
+        SimpleDateFormat sdf = new SimpleDateFormat("kk:mm");
+
+        if (driveList.size() > 1) {
+            Drive previousDrive = driveList.get(driveList.indexOf(drive) - 1);
+            deliveryTime = previousDrive.getDeliveryTimeInMillis() + driveTime + PACKAGE_DELIVERY_TIME;
+        } else {
+            long date = System.currentTimeMillis();
+            deliveryTime = date + driveTime + PACKAGE_DELIVERY_TIME;
+        }
+
+        String deliveryTimeString = sdf.format(deliveryTime);
+
+        drive.setPosition(driveList.size());
+        drive.setDeliveryTimeInMillis(deliveryTime);
+        drive.setDeliveryTimeHumanReadable(deliveryTimeString);
+
         adapter.notifyItemInserted(driveList.indexOf(drive));
     }
 
     public void driveCompleted(Drive drive){
         drive.setDone(1);
-        completedDrives.add(drive);
-        adapter.notifyItemRemoved(driveList.indexOf(drive));
-        driveList.remove(drive);
     }
 
     public void removeDriveFromList() {
@@ -94,7 +98,5 @@ public class DriveListHandler {
                 break;
             }
         }
-
-        createAdapter();
     }
 }

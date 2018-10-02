@@ -65,6 +65,10 @@ public class CustomClusterRenderer extends DefaultClusterRenderer<Address> {
             }
         }
 
+        if(address.isCompleted()){
+            iconName = "ic_done_marker_"+String.valueOf(routeOrder.indexOf(address)+1);
+        }
+
         if(address.isUserLocation()){
             iconName = "ic_marker_origin";
         }

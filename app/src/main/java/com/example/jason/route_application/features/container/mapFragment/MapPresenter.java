@@ -111,6 +111,7 @@ public class MapPresenter extends BasePresenter implements
             if (previousSelectedAddress.equals(address)) {
 
                 address.setSelected(false);
+                address.setCompleted(false);
                 routeOrder.remove(address);
 
                 if (routeOrder.size() > 0) {
@@ -168,6 +169,7 @@ public class MapPresenter extends BasePresenter implements
         for (int i = addressPosition; i < routeOrder.size(); i++) {
             Address address = routeOrder.get(i);
             address.setSelected(false);
+            address.setCompleted(false);
             renderer.changeMarkerIcon(address);
         }
 
@@ -230,6 +232,9 @@ public class MapPresenter extends BasePresenter implements
                 break;
             case "driveFailed":
                 driveFailed();
+                break;
+            case "driveCompleted":
+                driveCompleted(event.getAddress());
                 break;
         }
     }
@@ -316,5 +321,15 @@ public class MapPresenter extends BasePresenter implements
         view.removePolyLine();
         googleMap.setOnMarkerClickListener(this);
         view.showToast("Failed to get drive");
+    }
+
+    private void driveCompleted(Address address) {
+        for (Address it: routeOrder) {
+            if (it.getAddress().equals(address.getAddress())) {
+                it.setCompleted(true);
+                renderer.changeMarkerIcon(it);
+                break;
+            }
+        }
     }
 }

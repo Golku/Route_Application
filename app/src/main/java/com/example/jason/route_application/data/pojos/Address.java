@@ -26,6 +26,7 @@ public class Address implements Parcelable, ClusterItem{
     private int closingTime;
     private boolean userLocation;
     private boolean selected;
+    private boolean completed;
     private boolean fetchingDriveInfo;
 
     public Address() {
@@ -46,6 +47,7 @@ public class Address implements Parcelable, ClusterItem{
         closingTime = in.readInt();
         userLocation = in.readByte() != 0;
         selected = in.readByte() != 0;
+        completed = in.readByte() != 0;
         fetchingDriveInfo = in.readByte() != 0;
     }
 
@@ -65,6 +67,7 @@ public class Address implements Parcelable, ClusterItem{
         dest.writeInt(closingTime);
         dest.writeByte((byte) (userLocation ? 1 : 0));
         dest.writeByte((byte) (selected ? 1 : 0));
+        dest.writeByte((byte) (completed ? 1 : 0));
         dest.writeByte((byte) (fetchingDriveInfo ? 1 : 0));
     }
 
@@ -195,6 +198,14 @@ public class Address implements Parcelable, ClusterItem{
 
     public void setSelected(boolean selected) {
         this.selected = selected;
+    }
+
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
     }
 
     public boolean isFetchingDriveInfo() {
