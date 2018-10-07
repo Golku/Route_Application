@@ -46,7 +46,7 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
         void removeAddress(Address address);
     }
 
-    public void addContext(Context context){
+    void addContext(Context context){
         this.context = context;
     }
 
